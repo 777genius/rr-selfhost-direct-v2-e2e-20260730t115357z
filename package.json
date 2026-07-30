@@ -1,0 +1,8 @@
+{
+  "name": "reviewrouter-direct-v2-e2e-fixture",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}
