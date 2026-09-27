@@ -39,6 +39,15 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Checkout ReviewRouter runtime
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+        uses: actions/checkout@v6
+        with:
+          repository: 777genius/review-router
+          ref: 39a84eaccf2522c3d0ed3a96cb9433d27eab5b75
+          path: .reviewrouter-runtime
+          persist-credentials: false
+
       - name: Skip fork pull requests
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
         shell: bash
@@ -122,8 +131,8 @@ jobs:
 
       - name: Run ReviewRouter
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-        uses: 777genius/review-router@39a84eaccf2522c3d0ed3a96cb9433d27eab5b75
-
+        shell: bash
+        run: node .reviewrouter-runtime/dist/index.js
         env:
           GITHUB_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
