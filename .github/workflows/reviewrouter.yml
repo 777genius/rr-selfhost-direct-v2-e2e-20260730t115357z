@@ -4,132 +4,112 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
   workflow_dispatch:
-    inputs:
-      pr_number:
-        description: Pull request number
-        required: true
-        type: string
 
 permissions:
   contents: read
-  issues: write
   pull-requests: write
-  statuses: write
-
-concurrency:
-  group: reviewrouter-${{ github.event.pull_request.number || inputs.pr_number || github.ref }}
-  cancel-in-progress: false
+  issues: write
+  id-token: write
 
 jobs:
   review:
     name: review
-    runs-on: ubuntu-24.04
-    timeout-minutes: ${{ fromJSON(vars.REVIEW_ROUTER_TIMEOUT_MINUTES || '60') }}
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.pull_request.head.repo.full_name == github.repository && (github.event.pull_request.draft == false || vars.REVIEW_ROUTER_REVIEW_DRAFTS == 'true')) }}
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false }}
+    env:
+      REVIEWROUTER_API_URL: "https://reviewrouter.site"
+      REVIEWROUTER_ACTION_VERSION: "39a84eaccf2522c3d0ed3a96cb9433d27eab5b75"
+      REVIEWROUTER_OIDC_AUDIENCE: "reviewrouter"
+      REVIEWROUTER_RUNTIME_CONFIG_MODE: "static"
+      REVIEWROUTER_STATIC_CONFIG_FALLBACK: "true"
+      REVIEW_AUTH_MODE: "openrouter-api"
+      REVIEW_PROVIDERS: "openrouter/openai/gpt-4.1-mini"
+      REVIEWROUTER_COMMENT_TOKEN_MODE: "github-token"
+      CODEX_AUTH_JSON_PRESENT: ${{ secrets.CODEX_AUTH_JSON != '' && '1' || '0' }}
+      OPENAI_API_KEY_PRESENT: ${{ secrets.OPENAI_API_KEY != '' && '1' || '0' }}
+      OPENROUTER_API_KEY_PRESENT: ${{ secrets.OPENROUTER_API_KEY != '' && '1' || '0' }}
+      CLAUDE_CODE_OAUTH_TOKEN_PRESENT: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN != '' && '1' || '0' }}
+      MIMO_TOKEN_PLAN_API_KEY_PRESENT: ${{ secrets.MIMO_TOKEN_PLAN_API_KEY != '' && '1' || '0' }}
+      REVIEW_ROUTER_MEMORY_ENABLED: "true"
+      REVIEW_ROUTER_MEMORY_PROTOCOL_VERSION: "1"
+      REVIEW_ROUTER_MEMORY_BUNDLE_ENDPOINT: "/api/action/v1/memory"
     steps:
-      - name: Resolve pull request
-        id: pr
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr_number }}
-        run: |
-          set -euo pipefail
-          pr_json="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER")"
-          head_sha="$(jq -r '.head.sha' <<<"$pr_json")"
-          head_repo="$(jq -r '.head.repo.full_name' <<<"$pr_json")"
-          changed_lines="$(jq -r '(.additions // 0) + (.deletions // 0)' <<<"$pr_json")"
-          {
-            if [ "$head_repo" != "$GITHUB_REPOSITORY" ]; then
-              echo "skip_reason=fork"
-            fi
-            echo "number=$PR_NUMBER"
-            echo "head_sha=$head_sha"
-            echo "changed_lines=$changed_lines"
-          } >> "$GITHUB_OUTPUT"
-
-      - name: Size guard
-        id: size_guard
-        if: ${{ steps.pr.outputs.skip_reason != 'fork' }}
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ steps.pr.outputs.number }}
-          HEAD_SHA: ${{ steps.pr.outputs.head_sha }}
-          CHANGED_LINES: ${{ steps.pr.outputs.changed_lines }}
-          MAX_CHANGED_LINES: ${{ vars.REVIEW_ROUTER_MAX_CHANGED_LINES || '250000' }}
-        run: |
-          set -euo pipefail
-          echo "skip=false" >> "$GITHUB_OUTPUT"
-          if [ "$MAX_CHANGED_LINES" = "0" ] || [ "$CHANGED_LINES" -le "$MAX_CHANGED_LINES" ]; then
-            exit 0
-          fi
-
-          echo "skip=true" >> "$GITHUB_OUTPUT"
-          run_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-          marker="<!-- reviewrouter:size-guard:$HEAD_SHA -->"
-          body_file="$(mktemp)"
-          cat > "$body_file" <<BODY
-          $marker
-
-          ## Review skipped ⚠️
-
-          ReviewRouter did not start Codex because this PR is larger than the configured safety limit.
-
-          | Field | Value |
-          |---|---:|
-          | Changed lines | $CHANGED_LINES |
-          | Configured limit | $MAX_CHANGED_LINES |
-          | Model calls | 0 |
-
-          <sub>No Codex tokens were consumed. Split the PR or raise REVIEW_ROUTER_MAX_CHANGED_LINES if this repository should review larger changes.</sub>
-          BODY
-          existing_id="$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" --paginate --jq ".[] | select(.body | contains(\"$marker\")) | .id" | tail -n 1 || true)"
-          body="$(cat "$body_file")"
-          if [ -n "$existing_id" ]; then
-            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$existing_id" -f body="$body" >/dev/null
-          else
-            gh api "repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" -f body="$body" >/dev/null
-          fi
-          gh api "repos/$GITHUB_REPOSITORY/statuses/$HEAD_SHA" \
-            -f state=failure \
-            -f context=ReviewRouter \
-            -f description="Review skipped: PR exceeds configured safety limit." \
-            -f target_url="$run_url" >/dev/null
-
-      - name: Stop after size guard
-        if: ${{ steps.size_guard.outputs.skip == 'true' }}
-        shell: bash
-        run: exit 1
-
       - name: Checkout pull request code
-        if: ${{ steps.pr.outputs.skip_reason != 'fork' }}
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v6
         with:
-          ref: ${{ steps.pr.outputs.head_sha }}
-          fetch-depth: 0
           persist-credentials: false
 
-      - name: Setup Node.js
-        if: ${{ steps.pr.outputs.skip_reason != 'fork' }}
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - name: Skip fork pull requests
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+        shell: bash
+        run: |
+          echo "ReviewRouter skipped this fork pull request because secret-backed provider execution is disabled by default."
+
+      - name: Setup Node.js for Codex CLI
+        if: ${{ (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.type != 'Bot')) && (env.CODEX_AUTH_JSON_PRESENT == '1' && false || env.OPENAI_API_KEY_PRESENT == '1' && false || env.OPENROUTER_API_KEY_PRESENT == '1' && true || env.MIMO_TOKEN_PLAN_API_KEY_PRESENT == '1' && false) }}
+        uses: actions/setup-node@v6
         with:
-          node-version: 24.18.0
+          node-version: "24"
 
       - name: Install Codex CLI
-        if: ${{ steps.pr.outputs.skip_reason != 'fork' }}
+        if: ${{ (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.type != 'Bot')) && (env.CODEX_AUTH_JSON_PRESENT == '1' && false || env.OPENAI_API_KEY_PRESENT == '1' && false || env.OPENROUTER_API_KEY_PRESENT == '1' && true || env.MIMO_TOKEN_PLAN_API_KEY_PRESENT == '1' && false) }}
         shell: bash
-        run: npm install -g @openai/codex@0.146.0
+        run: npm install -g @openai/codex@0.147.0
 
-      - name: Restore Codex OAuth config
-        if: ${{ steps.pr.outputs.skip_reason != 'fork' }}
+
+      - name: Install Claude Code CLI
+        if: ${{ (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.type != 'Bot')) && env.CLAUDE_CODE_OAUTH_TOKEN_PRESENT == '1' && false }}
+        shell: bash
+        run: |
+          curl -fsSL https://claude.ai/install.sh | bash -s stable
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/claude" --version
+
+      - name: Restore Codex subscription auth
+        if: ${{ (github.event_name != 'pull_request' || (github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.type != 'Bot')) && env.CODEX_AUTH_JSON_PRESENT == '1' && false }}
         shell: bash
         env:
           CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
           CODEX_CONFIG_TOML: ${{ secrets.CODEX_CONFIG_TOML }}
         run: |
           set -euo pipefail
-          test -n "$CODEX_AUTH_JSON"
+          if [ -z "${CODEX_AUTH_JSON:-}" ]; then
+            echo "::error::CODEX_AUTH_JSON secret is missing. reseed auth.json from a trusted machine or switch this repository to OpenAI API-key mode."
+            exit 1
+          fi
+          node - <<'NODE'
+          const payload = process.env.CODEX_AUTH_JSON || '';
+          const fail = (message) => {
+            console.error('::error::' + message);
+            process.exit(1);
+          };
+          const warn = (message) => {
+            console.error('::warning::' + message);
+          };
+          let auth;
+          try {
+            auth = JSON.parse(payload);
+          } catch (error) {
+            fail('CODEX_AUTH_JSON is not valid JSON. reseed auth.json from a trusted machine. ' + error.message);
+          }
+          if (auth.auth_mode !== 'chatgpt') {
+            fail('CODEX_AUTH_JSON auth_mode must be chatgpt. reseed auth.json with Codex CLI subscription login or switch this repo to API-key mode.');
+          }
+          if (!auth.tokens || typeof auth.tokens.refresh_token !== 'string' || auth.tokens.refresh_token.length === 0) {
+            fail('CODEX_AUTH_JSON tokens.refresh_token is missing. Run codex login on a trusted machine and reseed auth.json.');
+          }
+          if (!auth.last_refresh) {
+            warn('CODEX_AUTH_JSON last_refresh is missing. If Codex later fails with an auth error, run codex login on a trusted machine and reseed auth.json.');
+          } else {
+            const refreshedAt = Date.parse(auth.last_refresh);
+            const maxAgeDays = 30;
+            if (!Number.isFinite(refreshedAt)) {
+              warn('CODEX_AUTH_JSON last_refresh is not parseable. If Codex later fails with an auth error, run codex login on a trusted machine and reseed auth.json.');
+            } else if ((Date.now() - refreshedAt) / 86400000 > maxAgeDays) {
+              warn('CODEX_AUTH_JSON last_refresh is older than 30 days. If Codex later fails with an auth error, run codex login on a trusted machine and reseed auth.json.');
+            }
+          }
+          NODE
           export CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
           mkdir -p "$CODEX_HOME"
           chmod 700 "$CODEX_HOME"
@@ -141,28 +121,14 @@ jobs:
           fi
 
       - name: Run ReviewRouter
-        if: ${{ steps.pr.outputs.skip_reason != 'fork' }}
-        uses: 777genius/review-router@9865137c5c864d70cd204e8dcd2f0c6987abb009 # v1.0.50 legacy direct runtime
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+        uses: 777genius/review-router@39a84eaccf2522c3d0ed3a96cb9433d27eab5b75
+
         env:
-          CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
-          REVIEW_ROUTER_LEDGER_KEY: ${{ secrets.REVIEW_ROUTER_LEDGER_KEY }}
-        with:
           GITHUB_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ steps.pr.outputs.number }}
-          CODEX_MODEL: ${{ vars.REVIEW_CODEX_MODEL || 'gpt-5.6-sol' }}
-          CODEX_REASONING_EFFORT: medium
-          CODEX_HEALTHCHECK_MODE: binary
-          CODEX_AGENTIC_CONTEXT: "true"
-          FAIL_ON_NO_HEALTHY_PROVIDERS: "true"
-          INLINE_MAX_COMMENTS: "5"
-          INLINE_MIN_SEVERITY: major
-          MIN_CONFIDENCE: "0.6"
-          CONSENSUS_REQUIRED_FOR_CRITICAL: "false"
-          UPDATE_PR_DESCRIPTION: "true"
-          FAIL_ON_CRITICAL: "true"
-          FAIL_ON_MAJOR: "false"
-          ENABLE_AST_ANALYSIS: "true"
-          ENABLE_SECURITY: "true"
-          ENABLE_AI_DETECTION: "false"
-          LEARNING_ENABLED: "false"
-          GRAPH_ENABLED: "false"
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
+          CODEX_CONFIG_TOML: ${{ secrets.CODEX_CONFIG_TOML }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
