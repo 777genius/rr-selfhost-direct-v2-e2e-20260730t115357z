@@ -22,6 +22,8 @@ jobs:
       REVIEWROUTER_OIDC_AUDIENCE: "reviewrouter"
       REVIEWROUTER_RUNTIME_CONFIG_MODE: "static"
       REVIEWROUTER_STATIC_CONFIG_FALLBACK: "true"
+      BUDGET_MAX_USD: "1"
+      FAIL_ON_NO_HEALTHY_PROVIDERS: "true"
       REVIEW_AUTH_MODE: "openrouter-api"
       REVIEW_PROVIDERS: "openrouter/openai/gpt-4.1-mini"
       REVIEWROUTER_COMMENT_TOKEN_MODE: "github-token"
