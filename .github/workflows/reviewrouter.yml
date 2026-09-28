@@ -1,0 +1,62 @@
+name: ReviewRouter
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  merge_group:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Pull request number for manual reruns"
+        required: false
+        type: string
+
+permissions: {}
+
+
+jobs:
+  review:
+    name: review
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+    uses: 777genius/review-router/.github/workflows/reviewrouter-reusable.yml@39a84eaccf2522c3d0ed3a96cb9433d27eab5b75
+    with:
+      runtime_ref: 39a84eaccf2522c3d0ed3a96cb9433d27eab5b75
+      api_url: "https://rr-provider-e2e.invalid"
+      runtime_config_mode: oidc
+      static_runtime_env_json: |-
+        {
+          "REVIEWROUTER_CONFIG_SCHEMA_VERSION": "2",
+          "REVIEW_AUTH_MODE": "openrouter-api",
+          "REVIEW_PROVIDERS": "openrouter/openrouter/openai/gpt-4.1-mini",
+          "REQUIRED_HEALTHY_PROVIDERS": "openrouter/openrouter/openai/gpt-4.1-mini",
+          "SYNTHESIS_MODEL": "openrouter/openrouter/openai/gpt-4.1-mini",
+          "PROVIDER_LIMIT": "1",
+          "PROVIDER_MAX_PARALLEL": "1",
+          "INLINE_MIN_AGREEMENT": "1",
+          "INLINE_MAX_COMMENTS": "50",
+          "INLINE_MIN_SEVERITY": "minor",
+          "TARGET_TOKENS_PER_BATCH": "50000",
+          "FAIL_ON_SEVERITY": "critical",
+          "CODEX_REASONING_EFFORT": "xhigh",
+          "CODEX_AGENTIC_CONTEXT": "true",
+          "CODEX_FAST_MODE": "false",
+          "REVIEW_ROUTER_REVIEW_INVESTIGATION_RECORDING_ENABLED": "1",
+          "REVIEW_ROUTER_REVIEW_INVESTIGATION_SHADOW_ENABLED": "1",
+          "REVIEW_ROUTER_REVIEW_INVESTIGATION_CONTEXT_CRITIC_ENABLED": "1",
+          "REVIEW_ROUTER_REVIEW_INVESTIGATION_VERIFIED_CLEAN_ENABLED": "1",
+          "REVIEW_ROUTER_REVIEW_INVESTIGATION_CROSS_REVISION_REPLAY_ENABLED": "0",
+          "REVIEW_ROUTER_REVIEW_INVESTIGATION_PRODUCTION_EFFECTS_ENABLED": "1",
+          "BUDGET_MAX_USD": "1"
+        }
+      pr_number: ${{ github.event.pull_request.number || inputs.pr_number }}
+    secrets:
+      REVIEW_ROUTER_LEDGER_KEY: ${{ secrets.REVIEW_ROUTER_LEDGER_KEY }}
+      CODEX_AUTH_JSON: ${{ secrets.CODEX_AUTH_JSON }}
+      CODEX_CONFIG_TOML: ${{ secrets.CODEX_CONFIG_TOML }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
