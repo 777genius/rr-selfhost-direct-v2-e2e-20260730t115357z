@@ -65,7 +65,7 @@ try {
     env.CLAUDE_CONFIG_DIR = join(home, 'claude'); await mkdir(env.CLAUDE_CONFIG_DIR);
     Object.assign(env, { ANTHROPIC_BASE_URL: `${broker}/anthropic`, ANTHROPIC_AUTH_TOKEN: capability, CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1', DISABLE_TELEMETRY: '1', DISABLE_ERROR_REPORTING: '1' });
     // Read-only tool allowlist; CLI/protocol compatibility still needs an operator canary.
-    raw = await execute('claude', ['--print', '--verbose', '--output-format', 'stream-json', '--model', model, '--tools', 'Read,Glob,Grep', '--allowedTools', 'Read,Glob,Grep', '--strict-mcp-config', '--mcp-config', '{"mcpServers":{}}', '--', prompt], collect);
+    raw = await execute('claude', ['--print', '--verbose', '--output-format', 'stream-json', '--permission-mode', 'default', '--model', model, '--tools', 'Read,Glob,Grep', '--allowedTools', 'Read,Glob,Grep', '--strict-mcp-config', '--mcp-config', '{"mcpServers":{}}', '--', prompt], collect);
     review = events.findLast(e => e.type === 'result')?.result ?? '';
     await writeFile(join(home, 'review.txt'), review, { mode: 0o600 });
   }

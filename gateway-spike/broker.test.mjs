@@ -89,6 +89,10 @@ test('native Messages tool-use bytes and required headers, HTTP errors and trunc
   assert.equal(r.inferenceRequests[0].path, '/anthropic/v1/messages');
   assert.equal(r.inferenceRequests[0].headers['anthropic-version'], '2023-06-01');
   assert.equal(r.inferenceRequests[0].headers['anthropic-beta'], 'fixture-beta');
+  const beta = await r.post('/anthropic/v1/messages?beta=true', g.capability, { model: g.model, max_tokens: 64, messages: [{ role: 'user', content: 'review' }], stream: true }, { 'anthropic-version': '2023-06-01', 'anthropic-beta': 'fixture-beta' });
+  assert.equal(beta.status, 200); assert.deepEqual(Buffer.from(await beta.arrayBuffer()), messages);
+  assert.equal(r.inferenceRequests.at(-1).path, '/anthropic/v1/messages');
+  for (const query of ['?beta=false', '?beta=true&key_id=other']) assert.equal((await r.post('/anthropic/v1/messages' + query, g.capability, { model: g.model })).status, 404);
   const e = await r.infer(g, { metadata: { test_mode: 'http-error' } }); assert.equal(e.status, 422); assert.equal(await e.text(), '{"error":"rejected"}');
   const truncated = await r.infer(g, { metadata: { test_mode: 'truncate' } }); await assert.rejects(truncated.text());
 });

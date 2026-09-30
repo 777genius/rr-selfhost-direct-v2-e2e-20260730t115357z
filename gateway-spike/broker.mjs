@@ -4,7 +4,7 @@ import { readFile, appendFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import { oidcVerifier } from './oidc.mjs';
 const MAX_BODY = 2 * 1024 * 1024;
-const routes = { '/openai/v1/responses': 'responses', '/anthropic/v1/messages': 'messages' };
+const routes = { '/openai/v1/responses': 'responses', '/anthropic/v1/messages': 'messages', '/anthropic/v1/messages?beta=true': 'messages' };
 const allowed = new Set(['mimo:responses', 'openrouter:responses', 'mimo:messages']);
 const fields = {
   responses: new Set('model input instructions tools tool_choice parallel_tool_calls max_output_tokens temperature top_p stream stream_options reasoning text include previous_response_id store truncation metadata service_tier prompt_cache_key prompt_cache_retention safety_identifier context_management client_metadata'.split(' ')),
