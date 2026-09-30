@@ -1,0 +1,13 @@
+{
+  "claimed_tag": "v0.2.11",
+  "claimed_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "pin_verified": false,
+  "limitation": "Staged source has no git metadata or signed operator provenance; hashes identify inspected files only.",
+  "files": {
+    "backend/internal/server/routes/admin.go": "c179426009552691c53c614fc157f32bcc58811ba3033fcbb7f0aa5ae563bc8e",
+    "backend/internal/handler/admin/account_handler.go": "88f14887c0c3d5bf6aaa953dadfc53d5043c81fe5036c33a30ebb8ea1c14edde",
+    "backend/internal/handler/admin/account_data.go": "74813d5bf027950a76bfaa8bd2ccc1cad682cdc4c6f03a44247f2a3545576ecf",
+    "backend/ent/schema/account.go": "dfc1cd50c5d0736234fe5c5553f49a12e8153801a7a06a9ccd6ffa4dc7917ff2",
+    "deploy/config.example.yaml": "4b0b360da6f592d5b30ef2edeb5906e3a7bbf9327ab07f4c0f09f26ac0b99920"
+  }
+}

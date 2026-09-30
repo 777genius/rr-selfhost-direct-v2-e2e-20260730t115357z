@@ -1,0 +1,41 @@
+name: Sub2API private native adoption canary
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: One planned provider canary; inspect effects before any new run
+        required: true
+        type: choice
+        options: [mimo, openrouter]
+      agent:
+        description: Pinned sealed client (Claude supports MiMo only)
+        required: true
+        default: codex
+        type: choice
+        options: [codex, claude]
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  canary:
+    runs-on: [self-hosted, rr-sub2-spike-20260930]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Verify key independent contracts
+        run: node --test sub2api-spike/*.test.mjs
+      - name: One sealed fixture native review
+        working-directory: sub2api-spike
+        env:
+          SPIKE_PROVIDER: ${{ inputs.provider }}
+          SPIKE_AGENT: ${{ inputs.agent }}
+        run: node run-client.mjs "$SPIKE_PROVIDER" "$SPIKE_AGENT"
+      - name: Publish normalized client evidence only
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: rr-sub2-spike-20260930-${{ inputs.provider }}-${{ inputs.agent }}
+          path: sub2api-spike/evidence/result.json
+          if-no-files-found: error
+          retention-days: 7
