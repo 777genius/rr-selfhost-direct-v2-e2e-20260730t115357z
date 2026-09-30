@@ -28,3 +28,16 @@ Tests must fail for a real observable regression: forged/expired/wrong repo/work
 This is a standalone spike, not website/vault migration, customer workflow rollout, release or proof of universal model compatibility. Existing Codex subscription pool remains unchanged. Self-hosted Actions proves runner isolation and real GitHub OIDC but does not prove internet-facing TLS ingress or the SaaS UI flow. Production design needs existing OIDC integration, workspace key custody/rotation, per-run limits, audited metadata, dual-mode workflows, revocation and migration of old repo secrets after a successful canary.
 
 Actual isolated hosting scope: review-router-gateway-spike/poc-20260930, separate controller and registry. Review roles use gpt-6.1-sol; no Astra under updated owner instructions.
+
+## Completion checkpoint
+
+- [x] Pinned OSS gateway, OIDC broker and 14 behavioral contracts.
+- [x] Actual Codex/MiMo review, source-reading tools and correct financial finding.
+- [x] Actual Codex/OpenRouter review, source-reading tools and correct financial finding.
+- [x] Actual Claude Code/MiMo review using native Messages and successful Read evidence.
+- [x] Independent hosted exact-code/delta reviews; owner-identity integration.
+- [x] Master-key custody scan: zero matches in complete runner filesystems, config/logs and published evidence.
+- [x] Reconciled virtual keys, logged out admin, removed own containers/networks/secret copies, disabled spike workflow.
+- [x] Saved normalized evidence and REPORT.md with measured LOC/time and dependency-safe production plan.
+
+Standalone spike complete. Product UI/vault migration, public edge, tenant lifecycle and existing subscription-pool regression remain separate work, estimated in REPORT.md.

@@ -1,0 +1,37 @@
+[
+  {
+    "mode": "tool",
+    "status": 200,
+    "types": [
+      "response.created",
+      "response.output_item.added",
+      "response.function_call_arguments.delta",
+      "response.function_call_arguments.done",
+      "response.output_item.done",
+      "response.completed"
+    ],
+    "bytes": 4143,
+    "tool_roundtrip": true
+  },
+  {
+    "mode": "failure",
+    "status": 400,
+    "types": [],
+    "bytes": 376,
+    "failure_preserved": false
+  },
+  {
+    "mode": "truncated",
+    "status": 502,
+    "types": [],
+    "bytes": 484,
+    "no_false_completed": true
+  },
+  {
+    "mode": "http-error",
+    "status": 503,
+    "types": [],
+    "bytes": 393,
+    "error_status_preserved": true
+  }
+]

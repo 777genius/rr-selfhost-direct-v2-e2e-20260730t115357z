@@ -1,0 +1,9 @@
+{
+  "provider_master_key_matches": 0,
+  "runner_containers_scanned": 14,
+  "runner_mounts": 0,
+  "runner_public_ports": 0,
+  "scan_inputs": 76,
+  "uncompressed_bytes_scanned": 34997994267,
+  "scope": "complete exported runner filesystems, runner configuration and logs; all 14 Actions logs; three normalized artifacts; source bundle; own broker/gateway logs; registration logs"
+}
