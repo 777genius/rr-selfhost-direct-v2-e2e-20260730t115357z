@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
-import { financialEvidence } from './evidence.mjs';
+import { financialEvidence, parseFindingDocument } from './evidence.mjs';
 if (Number(process.versions.node.split('.')[0]) !== 24) throw Error('Node 24 required');
 const [provider, agent = 'codex'] = process.argv.slice(2);
 if (!['mimo', 'openrouter'].includes(provider) || !['codex', 'claude'].includes(agent) || (agent === 'claude' && provider !== 'mimo')) throw Error('Unsupported provider/agent combination');
@@ -70,7 +70,7 @@ try {
     await writeFile(join(home, 'review.txt'), review, { mode: 0o600 });
   }
   await writeFile(join(home, 'events.jsonl'), raw, { mode: 0o600 });
-  phase = 'evidence'; let parsed; try { parsed = JSON.parse(review.trim().replace(/^```(?:json)?\s*\n([\s\S]*)\n```$/, '$1')); } catch { throw Error('Malformed final JSON'); }
+  phase = 'evidence'; let parsed; try { parsed = parseFindingDocument(review); } catch { throw Error('Malformed final JSON'); }
   const numeric = parsed.findings?.find(f => f.file === 'wallet.mjs' && f.function === 'withdraw' && f.example?.amount < 0)?.example;
   if (!numeric) throw Error('Missing numeric example');
   const expression = `import { withdraw } from './wallet.mjs'; const x = ${JSON.stringify(numeric)}; const a = {balance:x.initial_balance}; const out=withdraw(a,x.amount); if(out.balance!==x.final_balance || a.balance!==x.final_balance) process.exit(1); console.log(JSON.stringify({reproduced:true}));`;

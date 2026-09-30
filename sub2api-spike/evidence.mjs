@@ -1,5 +1,9 @@
 import { normalizeEvidence } from '../gateway-spike/evidence.mjs';
 export { normalizeEvidence };
+export function parseFindingDocument(review) {
+  const parsed = JSON.parse(review.trim().replace(/^```(?:json)?\s*\n([\s\S]*)\n```$/, '$1'));
+  return Array.isArray(parsed) ? { findings: parsed } : parsed;
+}
 // Transport evidence remains separate from genuine client tool/financial proof.
 export async function nativeEvents(response, protocol, { maxBytes = 2 * 1024 * 1024 } = {}) {
   if (!response.ok || !response.headers.get('content-type')?.includes('text/event-stream')) throw Error('Native HTTP failure');
@@ -25,7 +29,7 @@ export async function nativeEvents(response, protocol, { maxBytes = 2 * 1024 * 1
   return events;
 }
 export function financialEvidence(agent, events, review, provider) {
-  const normalized = normalizeEvidence(agent, events, review, provider);
+  const normalized = normalizeEvidence(agent, events, JSON.stringify(parseFindingDocument(review)), provider);
   const exactRulesRead = command => typeof command === 'string' && (/^cat BUSINESS_RULES\.md$/.test(command.trim()) || /^\/bin\/(?:bash|sh|zsh) -(?:lc|c) (['"])cat BUSINESS_RULES\.md\1$/.test(command.trim()));
   const rulesRead = agent === 'codex' ? events.some(e => e.type === 'item.completed' && e.item?.type === 'command_execution' && exactRulesRead(e.item.command) && e.item.exit_code === 0 && e.item.status === 'completed' && e.item.aggregated_output?.includes('strictly positive') && e.item.aggregated_output?.includes('withdraw')) : events.some(e => e.type === 'user' && e.message?.content?.some(b => b.type === 'tool_result' && !b.is_error && JSON.stringify(b.content).includes('strictly positive') && events.some(a => a.type === 'assistant' && a.message?.content?.some(t => t.type === 'tool_use' && t.id === b.tool_use_id && t.name === 'Read' && /BUSINESS_RULES\.md$/.test(t.input?.file_path ?? '')))));
   const terminal = agent === 'codex' ? events.some(e => e.type === 'turn.completed') : events.some(e => e.type === 'result' && e.subtype === 'success' && !e.is_error);

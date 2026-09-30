@@ -7,6 +7,7 @@ test('A06 successful separate shell-wrapped rules read validates actual source a
   const review = JSON.stringify({ findings: [{ file: 'wallet.mjs', function: 'withdraw', summary: 'negative withdrawal increases balance', example: { initial_balance: 100, amount: -10, final_balance: 110 } }] });
   const events = [command("/bin/bash -lc 'cat wallet.mjs'", 'export function withdraw\naccount.balance -= amount'), command("/bin/bash -lc 'cat BUSINESS_RULES.md'", 'A withdrawal must be strictly positive'), { type: 'turn.completed' }];
   assert.equal(financialEvidence('codex', events, review, 'mimo').rules_read_verified, true);
+  assert.equal(financialEvidence('codex', events, JSON.stringify(JSON.parse(review).findings), 'mimo').terminal_verified, true);
   events[1].item.aggregated_output = 'file read failed'; assert.throws(() => financialEvidence('codex', events, review, 'mimo'));
 });
 // Regression: malformed output or synthetic terminal/tool-only event counted as review.

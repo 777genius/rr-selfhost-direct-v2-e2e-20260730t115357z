@@ -72,9 +72,10 @@ export function createMock({ controlToken, identities = {}, maxRecords = 30000 }
       const tool = scenario === 'tool';
       let frames = protocol === 'responses' ? responses(tool, scenario === 'failed') : messages(tool, scenario === 'failed');
       if (scenario === 'error') frames = ['event: error\ndata: {"type":"error","error":{"type":"api_error","message":"synthetic"}}\n\n'];
+      if (scenario === 'credential-error') frames = [`event: error\ndata: ${JSON.stringify({ type: 'error', error: { type: 'api_error', message: 'synthetic diagnostic: ' + auth } })}\n\n`];
       if (scenario === 'truncated') frames = frames.slice(0, -1);
       if (scenario === 'malformed') frames = [frames[0], 'event: broken\ndata: {invalid-json}\n\n'];
-      if (scenario === 'reset-after') frames = frames.slice(0, 4);
+      if (scenario === 'reset-after') frames = frames.slice(0, 5);
       if (scenario === 'slow-body' || scenario === 'hold') {
         await write(frames.shift());
         await wait(rule.delay_ms ?? 6000);
@@ -89,7 +90,7 @@ export function createMock({ controlToken, identities = {}, maxRecords = 30000 }
         const bytes = Buffer.from(frame);
         for (let i = 0; i < bytes.length && !res.destroyed; i += 7) await write(bytes.subarray(i, i + 7));
       }
-      if (scenario === 'reset-after') return req.socket.destroy();
+      if (scenario === 'reset-after') { await wait(150); return req.socket.destroy(); }
       if (!res.destroyed) res.end();
       async function write(chunk) {
         if (res.destroyed) return;

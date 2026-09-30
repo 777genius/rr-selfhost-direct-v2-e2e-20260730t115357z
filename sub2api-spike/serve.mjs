@@ -30,4 +30,4 @@ if (config.customer) {
   // Kept on private CONTROL network in operator topology. Never exposed to runner.
   testCustomerServer({ adapter, identities: config.customer.identities, testOnly: config.customer.testOnly }).listen(8788, config.customer.listenHost);
 }
-for (const signal of ['SIGTERM', 'SIGINT']) process.on(signal, () => { server.close(); server.closeAllConnections(); process.exit(0); });
+for (const signal of ['SIGTERM', 'SIGINT']) process.on(signal, () => { server.close(() => process.exit(0)); server.closeAllConnections(); });
