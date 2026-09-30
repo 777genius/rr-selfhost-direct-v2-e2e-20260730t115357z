@@ -1,0 +1,13 @@
+{
+  "ownerID": "13103045",
+  "workflowSHA": "REPLACE_WITH_APPROVED_40_HEX_WORKFLOW_COMMIT",
+  "ledgerPath": "/state/grant-ledger.jsonl",
+  "ttlSeconds": 900,
+  "adminURL": "http://bifrost-control:8080",
+  "inferenceURL": "http://bifrost-control:8080",
+  "providers": {
+    "mimo:responses": { "alias": "mimo-responses", "keyID": "REPLACE_WITH_DBKEY_UUID", "model": "mimo-v2.6-pro" },
+    "openrouter:responses": { "alias": "openrouter-responses", "keyID": "REPLACE_WITH_DBKEY_UUID", "model": "openai/gpt-4.1-mini" },
+    "mimo:messages": { "alias": "mimo-messages", "keyID": "REPLACE_WITH_DBKEY_UUID", "model": "mimo-v2.6-pro" }
+  }
+}

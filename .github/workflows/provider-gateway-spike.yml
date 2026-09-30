@@ -1,0 +1,43 @@
+name: Provider gateway live spike
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: Planned provider canary (inspect before retry)
+        required: true
+        type: choice
+        options: [mimo, openrouter]
+      agent:
+        description: Installed client (Claude supports MiMo only)
+        required: true
+        default: codex
+        type: choice
+        options: [codex, claude]
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  canary:
+    runs-on: [self-hosted, rr-gateway-spike-20260930]
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Verify security and both protocol transports locally
+        run: node --test gateway-spike/*.test.mjs
+      - name: Run isolated review and normalize evidence
+        working-directory: gateway-spike
+        env:
+          SPIKE_PROVIDER: ${{ inputs.provider }}
+          SPIKE_AGENT: ${{ inputs.agent }}
+        run: |
+          node --version
+          node run-client.mjs "$SPIKE_PROVIDER" "$SPIKE_AGENT"
+      - name: Publish normalized evidence only
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: gateway-spike-${{ inputs.provider }}-${{ inputs.agent }}
+          path: evidence/result.json
+          if-no-files-found: error
+          retention-days: 7

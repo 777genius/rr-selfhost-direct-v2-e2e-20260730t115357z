@@ -1,0 +1,40 @@
+{
+  "client": {
+    "enable_logging": false,
+    "disable_content_logging": true,
+    "enforce_governance_header": true,
+    "allow_direct_keys": false
+  },
+  "providers": {
+    "mimo-responses": {
+      "keys": [],
+      "network_config": { "base_url": "https://token-plan-sgp.xiaomimimo.com", "default_request_timeout_in_seconds": 120, "max_retries": 0 },
+      "custom_provider_config": {
+        "base_provider_type": "openai",
+        "is_key_less": false,
+        "allowed_requests": { "responses": true, "responses_stream": true },
+        "request_path_overrides": { "responses": "/v1/responses", "responses_stream": "/v1/responses" }
+      }
+    },
+    "openrouter-responses": {
+      "keys": [],
+      "network_config": { "base_url": "https://openrouter.ai/api", "default_request_timeout_in_seconds": 120, "max_retries": 0 },
+      "custom_provider_config": {
+        "base_provider_type": "openai",
+        "is_key_less": false,
+        "allowed_requests": { "responses": true, "responses_stream": true },
+        "request_path_overrides": { "responses": "/v1/responses", "responses_stream": "/v1/responses" }
+      }
+    },
+    "mimo-messages": {
+      "keys": [],
+      "network_config": { "base_url": "https://token-plan-sgp.xiaomimimo.com", "default_request_timeout_in_seconds": 120, "max_retries": 0 },
+      "custom_provider_config": {
+        "base_provider_type": "anthropic",
+        "is_key_less": false,
+        "allowed_requests": { "chat_completion": true, "chat_completion_stream": true },
+        "request_path_overrides": { "chat_completion": "/anthropic/v1/messages", "chat_completion_stream": "/anthropic/v1/messages" }
+      }
+    }
+  }
+}
