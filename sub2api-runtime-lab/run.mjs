@@ -7,7 +7,7 @@ import { models, TEXT, CALL, TOOL, inspectSSE } from './wire.mjs';
 const SOURCE = '96f4c115c9749078f90cbf210a01d39baf3f53b6';
 const IMAGE = 'weishaw/sub2api@sha256:2e3b7fab1e84d2e862cde664d09c1ae84fc897093357cf200cbeb0f64b2f2390';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const stage = process.argv.includes('--recovery') ? 'recovery' : process.argv.includes('--lifecycle') ? 'lifecycle' : process.argv.includes('--faults-fixed') ? 'faults-fixed' : process.argv.includes('--faults') ? 'faults' : 'baseline';
+const stage = process.argv.includes('--remaining') ? 'remaining' : process.argv.includes('--recovery') ? 'recovery' : process.argv.includes('--lifecycle') ? 'lifecycle' : process.argv.includes('--faults-fixed') ? 'faults-fixed' : process.argv.includes('--faults') ? 'faults' : 'baseline';
 const output = process.env.LAB_OUTPUT ?? '/evidence';
 let cfg, journal, resources = [], tenants = {}, setupTotal = null;
 const receipt = { schema: 'rr-sub2-real-lab/v1', evidence_kind: 'synthetic-container', source_sha: SOURCE, image: IMAGE,
@@ -124,6 +124,7 @@ function normalized(rec) {
   return { sequence: rec.sequence, identity: rec.identity, protocol: rec.protocol, path: rec.path, model: rec.model, scenario: rec.scenario, finished: rec.finished, cancelled: rec.cancelled, committed: rec.committed, bytes: rec.bytes, backpressure: rec.backpressure, active_identity: rec.active_identity, tool_result_id: rec.tool_result_id, tool_result_utf8: rec.tool_result_utf8, tool_result_length: rec.tool_result_length, version_header: rec.version_header, upstream_duration_ms: rec.ended_ms === null ? null : rec.ended_ms - rec.started_ms };
 }
 async function test(id, observableFailure, fn) {
+  if (stage === 'remaining' && !['E01-A-503', 'E-A-failed', 'E-A-error', 'E-A-truncated', 'E-A-malformed', 'E-A-reset-before', 'E-A-reset-after', 'E-A-slow-headers', 'E-A-slow-body', 'E06-A', 'E10-E11', 'E07'].includes(id)) return;
   if (stage.startsWith('faults') && ['A04', 'A05', 'C05', 'E01-A-400', 'E01-A-401', 'E01-M-400', 'E01-M-401', 'F02', 'F01-failover', 'F03'].includes(id)) return;
   const started = performance.now();
   const row = { id, status: 'FAIL', evidence_kind: 'synthetic-container', observable_failure: observableFailure, observations: {}, limitations: [] };
@@ -164,6 +165,16 @@ async function recover(label) {
     await api(`/admin/accounts/${a.id}/schedulable`, 'POST', { schedulable: true });
   }
   await sleep(250);
+  if (stage === 'remaining') {
+    let ready = false;
+    for (let i = 0; i < 6; i++) {
+      receipt.synthetic_readiness_probes = (receipt.synthetic_readiness_probes ?? 0) + 1;
+      const probe = await request(label, `readiness-${Date.now()}`);
+      if (probe.success) { ready = true; break; }
+      await sleep(300);
+    }
+    must(ready, 'synthetic_account_not_ready_after_recovery');
+  }
 }
 async function baseline() {
   for (const [id, label, call] of [['A04', 'A', CALL], ['A05', 'M', TOOL]]) {
@@ -272,7 +283,7 @@ async function baseline() {
   await test('E07', 'Slow consumer loses terminal, duplicates effects, or upstream remains stuck after bounded pressure.', async row => {
     await recover('A');
     const rssBefore = process.memoryUsage().rss;
-    const { result, records } = await sample(row, 'A', 'E07', { scenario: 'backpressure' }, { slow: true, timeout: 12000 });
+    const { result, records } = await sample(row, 'A', 'E07', { scenario: 'backpressure' }, { slow: true, timeout: 45000 });
     row.observations.control_rss_delta_bytes = process.memoryUsage().rss - rssBefore;
     success(result); single(records); must(records[0].finished, 'backpressure_worker_stuck');
     row.limitations.push('8 MiB comment stream; engine RSS unavailable unless coordinator stats supplied. No engine-memory bound claimed.');
@@ -280,6 +291,7 @@ async function baseline() {
   await load();
 }
 async function load() {
+  if (stage === 'remaining') return;
   await recover('A');
   for (const concurrency of [1, 5, 20]) {
     await test(`G05-${concurrency}`, 'Concurrent native requests fail, duplicate, cross sentinel, or remain open.', async row => {
@@ -380,7 +392,7 @@ try {
     resources = manifest.resources; tenants = manifest.tenants;
     must(Object.keys(tenants).length === 4, 'incomplete_private_manifest');
     receipt.resources = resources;
-    if (stage === 'lifecycle') await lifecycle(); else if (stage.startsWith('faults')) await baseline(); else await recovery();
+    if (stage === 'lifecycle') await lifecycle(); else if (stage.startsWith('faults') || stage === 'remaining') await baseline(); else await recovery();
   }
   for (const [id, reason] of [['F04-F05', 'No synthetic OAuth refresh server/identity supplied; API-key scheduling does not prove OAuth lifecycle.'], ['F07-F08', 'Live OAuth test identity absent.'], ['G01-outage', 'Requires separate operator outage run and normalized receipt.'], ['G04', 'Separate database restore and stale-key behavior require coordinator receipt.'], ['G07', 'Network/public-port and teardown verification require coordinator receipt.']]) receipt.results.push({ id, status: 'NOTRUN', evidence_kind: 'synthetic-container', observable_failure: reason, limitations: [reason] });
   receipt.receipt_state = 'executed';

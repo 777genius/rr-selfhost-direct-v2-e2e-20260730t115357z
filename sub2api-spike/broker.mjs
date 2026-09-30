@@ -5,6 +5,7 @@ import { unlinkSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
+import { nativeErrorFilter } from './native-errors.mjs';
 import { atomicJSON, loadJSON, serial, readJSON, send, bearer, fault } from './util.mjs';
 const paths = new Map([['/v1/responses', 'responses'], ['/openai/v1/responses', 'responses'], ['/v1/messages', 'messages'], ['/anthropic/v1/messages', 'messages']]);
 const routing = new Set(['account_id', 'account', 'group', 'group_id', 'key', 'api_key', 'baseURL', 'base_url', 'provider', 'workspace', 'workspace_id', 'upstream_url']);
@@ -64,6 +65,10 @@ export async function createBroker({ ledgerPath, verifyOIDC, scopes, resolveWork
       const cancel = () => { if (!res.writableFinished) controller.abort(); }; res.once('close', cancel);
       try {
         const body = await readJSON(req); denyRouting(body);
+        // This bounded capability authorizes native streaming Responses/Messages.
+        // A caller cannot switch to a different, unsanitized response mode.
+        if (body.stream !== undefined && body.stream !== true) throw fault(400, 'stream_required');
+        body.stream = true;
         if (body.model !== undefined && body.model !== g.scope.model) throw fault(400, 'model_denied');
         body.model = g.scope.model;
         if (controller.signal.aborted || g.closed || !await isWorkspaceActive(g.workspace)) throw fault(401, 'capability_denied');
@@ -82,8 +87,11 @@ export async function createBroker({ ledgerPath, verifyOIDC, scopes, resolveWork
           code = 'upstream_http_error'; send(res, upstream.status, { error: { type: code, status: upstream.status } }); return;
         }
         const type = upstream.headers.get('content-type') ?? 'application/octet-stream';
+        if (!type.includes('text/event-stream')) { await upstream.body?.cancel(); throw fault(502, 'native_stream_required'); }
         res.writeHead(upstream.status, { 'content-type': type, 'cache-control': 'no-store' });
-        await pipeline(Readable.fromWeb(upstream.body), res, { signal: controller.signal });
+        const source = Readable.fromWeb(upstream.body);
+        if (type.includes('text/event-stream')) await pipeline(source, nativeErrorFilter(), res, { signal: controller.signal });
+        else await pipeline(source, res, { signal: controller.signal });
       } finally { clearTimeout(timer); res.off('close', cancel); controller.abort(); g.controllers.delete(controller); g.active--; active--; }
     } catch (e) {
       code = e.code && e.status ? e.code : 'transport_failure';

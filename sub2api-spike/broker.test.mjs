@@ -44,6 +44,20 @@ test('A04 native structured content cannot change server-pinned identity', async
   assert.deepEqual(observed.body.input, input); assert.deepEqual(observed.body.metadata, { account: 'customer' });
   assert.equal(observed.headers.authorization, 'Bearer synthetic-private-a'); assert.equal(observed.body.model, 'mimo-v2.6-pro');
 });
+// Regression: upstream diagnostic in an HTTP200 failed terminal exposes its credential.
+for (const protocol of ['responses', 'messages']) test(`D05 native ${protocol} failed SSE removes upstream diagnostics`, async t => {
+  const r = await rig(t, { mock: { mode: 'terminal-error' } }); const g = await (await r.grant(protocol)).json();
+  const response = await r.request(g.capability, {}, `/v1/${protocol}`); const text = await response.text();
+  assert.equal(response.status, 200); assert.ok(text.includes('Upstream request failed')); assert.ok(!text.includes('synthetic_failure'));
+  assert.ok(!text.includes('synthetic-provider-credential-sentinel'));
+  await assert.rejects(nativeEvents(new Response(text, { headers: { 'content-type': 'text/event-stream' } }), protocol));
+  assert.equal(r.upstream.metrics.requests, 1);
+});
+test('D05 capability denies an unfiltered nonstream response mode before upstream effects', async t => {
+  const r = await rig(t); const g = await (await r.grant()).json();
+  assert.equal((await r.request(g.capability, { stream: false })).status, 400); assert.equal(r.upstream.metrics.requests, 0);
+  await nativeEvents(await r.request(g.capability), 'responses'); assert.equal(r.upstream.observations[0].body.stream, true);
+});
 // Regression: body cap or request/concurrent reservation occurs after provider effects.
 test('B09 body request and concurrency limits before effects', async t => {
   const r = await rig(t, { mock: { mode: 'slow-body', delayMs: 250 }, broker: { maxRequests: 2 } }); const g = await (await r.grant()).json();
@@ -81,7 +95,7 @@ for (const protocol of ['responses', 'messages']) test(`${protocol === 'response
   const id = protocol === 'responses' ? first.find(e => e.type === 'response.output_item.added').item.call_id : first.find(e => e.type === 'content_block_start').content_block.id;
   const body = protocol === 'responses' ? { input: [{ type: 'function_call_output', call_id: id, output: '金🙂 tool result' }] } : { messages: [{ role: 'user', content: [{ type: 'tool_result', tool_use_id: id, content: '金🙂 tool result' }] }] };
   const second = await nativeEvents(await r.request(g.capability, body, path), protocol);
-  assert.ok(JSON.stringify(second).includes('金🙂 tool result')); assert.ok(JSON.stringify(second).includes(id)); assert.deepEqual(r.upstream.observations[1].body, { ...body, model: 'mimo-v2.6-pro' });
+  assert.ok(JSON.stringify(second).includes('金🙂 tool result')); assert.ok(JSON.stringify(second).includes(id)); assert.deepEqual(r.upstream.observations[1].body, { ...body, stream: true, model: 'mimo-v2.6-pro' });
   assert.equal(r.upstream.observations[0].path, path); assert.equal(r.upstream.observations[0].headers['anthropic-version'], '2023-06-01'); assert.equal(r.upstream.observations[0].headers['anthropic-beta'], 'synthetic-beta'); assert.equal(r.upstream.metrics.requests, 2);
 });
 // Regression: UTF-8/SSE chunk boundaries corrupt large tool/final payloads.
@@ -97,7 +111,7 @@ test('E01 E09 E12 D02 D08 HTTP errors sanitized with status and count intact', a
 });
 // Regression: failed/truncated/malformed SSE is counted as successful native work.
 for (const [id, mode, protocol] of [['E02', 'terminal-error', 'responses'], ['E03', 'terminal-error', 'messages'], ['E04', 'truncate', 'responses'], ['E04', 'malformed', 'messages']]) test(`${id} ${mode} ${protocol} fails terminal validator`, async t => {
-  const r = await rig(t, { mock: { mode } }); const g = await (await r.grant(protocol)).json(); await assert.rejects(nativeEvents(await r.request(g.capability, {}, `/v1/${protocol}`), protocol)); assert.equal(r.upstream.metrics.requests, 1);
+  const r = await rig(t, { mock: { mode } }); const g = await (await r.grant(protocol)).json(); await assert.rejects(async () => nativeEvents(await r.request(g.capability, {}, `/v1/${protocol}`), protocol)); assert.equal(r.upstream.metrics.requests, 1);
 });
 // Regression: uncertain/reset/timeout triggers duplicate paid request or hangs.
 for (const mode of ['reset', 'slow-headers', 'slow-body', 'partial-reset']) test(`E05 E11 ${mode} bounded failure zero automatic retries`, async t => {
