@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "provider": "openrouter",
+  "agent": "codex",
+  "tool_read_verified": true,
+  "finding": {
+    "file": "fixture/wallet.mjs",
+    "issue": "negative withdrawal increases balance"
+  },
+  "result": "passed",
+  "rules_read_verified": true,
+  "terminal_verified": true,
+  "id": "A02",
+  "evidence_kind": "real-Actions",
+  "independent_numeric_reproduction": true,
+  "workflow_sha": "222c6d89900e06e38586100ca2d1cfb978a915a7",
+  "run_id": "36775051456",
+  "run_attempt": "1",
+  "node": "v24.21.0",
+  "client_version": "0.159.2",
+  "transport": "responses"
+}

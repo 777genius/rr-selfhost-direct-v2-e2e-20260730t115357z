@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "meaning": "Defect reproduction assertions passed; no E2E claim",
+  "node": "v24.21.0",
+  "sockets": 0,
+  "provider_requests": 0,
+  "facts": [
+    {
+      "id": "R01",
+      "observed": "Claude Messages beta=true -> 404 route_denied; no upstream effect"
+    },
+    {
+      "id": "R03",
+      "observed": "Legitimate tool_use.input.account/workspace -> 400 routing_denied"
+    },
+    {
+      "id": "R08",
+      "observed": "Broker streams HTTP200 SSE error credential sentinel unchanged; engine redaction not exercised"
+    },
+    {
+      "id": "R02",
+      "observed": "Actual engine Messages URL beta=true makes mock emit Responses SSE"
+    },
+    {
+      "id": "R06",
+      "observed": "partial-reset constructs response.completed before destroying connection; wire delivery unproven"
+    },
+    {
+      "id": "R05",
+      "observed": "Successful shell-wrapped rules read rejected; same plain command accepted"
+    },
+    {
+      "id": "R07",
+      "observed": "Synthetic-only same-UID child with stripped env can read parent OIDC token via procfs; no real credentials examined"
+    },
+    {
+      "id": "R09",
+      "observed": "Receipt validator accepts arbitrary syntactically valid harness SHA; expected checkpoint equality is not checked"
+    }
+  ]
+}

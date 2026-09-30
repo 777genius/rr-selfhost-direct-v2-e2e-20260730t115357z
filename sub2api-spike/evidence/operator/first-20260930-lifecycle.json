@@ -1,0 +1,197 @@
+{
+  "schema": "rr-sub2-real-lab/v1",
+  "evidence_kind": "synthetic-container",
+  "source_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "image": "weishaw/sub2api@sha256:2e3b7fab1e84d2e862cde664d09c1ae84fc897093357cf200cbeb0f64b2f2390",
+  "node": "v24.21.0",
+  "stage": "lifecycle",
+  "run_mode": "standard",
+  "model_mapping": {
+    "responses": "gpt-4.1",
+    "messages": "claude-sonnet-4-5"
+  },
+  "started_at": "2026-09-30T20:49:27.592Z",
+  "real_actions_e2e": false,
+  "live_oauth": "NOTRUN",
+  "receipt_state": "executed",
+  "results": [
+    {
+      "id": "G02-active-restart",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Own engine restart hides stream failure or causes duplicate upstream effects.",
+      "observations": {
+        "downstream": {
+          "http_status": null,
+          "transport": "connection_error",
+          "terminal": false,
+          "failed": false,
+          "malformed": false,
+          "success": false,
+          "calls": [],
+          "utf8": false,
+          "event_types": [],
+          "bytes": 0,
+          "duration_ms": 1668
+        },
+        "upstream_requests": 1,
+        "upstream": [
+          {
+            "sequence": 567,
+            "identity": "A",
+            "protocol": "responses",
+            "path": "/v1/responses",
+            "model": "gpt-4.1",
+            "scenario": "hold",
+            "finished": false,
+            "cancelled": true,
+            "committed": true,
+            "bytes": 211,
+            "backpressure": 0,
+            "active_identity": 1,
+            "tool_result_id": null,
+            "tool_result_utf8": false,
+            "tool_result_length": 0,
+            "version_header": null,
+            "upstream_duration_ms": 1650
+          }
+        ]
+      },
+      "limitations": [
+        "Coordinator must attach normalized container restart timestamps to establish cause."
+      ],
+      "duration_ms": 2007
+    },
+    {
+      "id": "F04-F05",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "No synthetic OAuth refresh server/identity supplied; API-key scheduling does not prove OAuth lifecycle.",
+      "limitations": [
+        "No synthetic OAuth refresh server/identity supplied; API-key scheduling does not prove OAuth lifecycle."
+      ]
+    },
+    {
+      "id": "F07-F08",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Live OAuth test identity absent.",
+      "limitations": [
+        "Live OAuth test identity absent."
+      ]
+    },
+    {
+      "id": "G01-outage",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Requires separate operator outage run and normalized receipt.",
+      "limitations": [
+        "Requires separate operator outage run and normalized receipt."
+      ]
+    },
+    {
+      "id": "G04",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Separate database restore and stale-key behavior require coordinator receipt.",
+      "limitations": [
+        "Separate database restore and stale-key behavior require coordinator receipt."
+      ]
+    },
+    {
+      "id": "G07",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Network/public-port and teardown verification require coordinator receipt.",
+      "limitations": [
+        "Network/public-port and teardown verification require coordinator receipt."
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "kind": "groups",
+      "id": 4
+    },
+    {
+      "kind": "accounts",
+      "id": 3
+    },
+    {
+      "kind": "users",
+      "id": 4
+    },
+    {
+      "kind": "keys",
+      "id": 3,
+      "user_id": 4
+    },
+    {
+      "kind": "groups",
+      "id": 5
+    },
+    {
+      "kind": "accounts",
+      "id": 4
+    },
+    {
+      "kind": "users",
+      "id": 5
+    },
+    {
+      "kind": "keys",
+      "id": 4,
+      "user_id": 5
+    },
+    {
+      "kind": "groups",
+      "id": 6
+    },
+    {
+      "kind": "accounts",
+      "id": 5
+    },
+    {
+      "kind": "users",
+      "id": 6
+    },
+    {
+      "kind": "keys",
+      "id": 5,
+      "user_id": 6
+    },
+    {
+      "kind": "groups",
+      "id": 7
+    },
+    {
+      "kind": "accounts",
+      "id": 6
+    },
+    {
+      "kind": "accounts",
+      "id": 7
+    },
+    {
+      "kind": "users",
+      "id": 7
+    },
+    {
+      "kind": "keys",
+      "id": 6,
+      "user_id": 7
+    }
+  ],
+  "limitations": [
+    "Synthetic upstream fixtures are gateway fault evidence, not real Actions or agent-review proof.",
+    "Live OAuth refresh/rotation/revocation and production pool regression remain unproven.",
+    "Client RSS is not engine RSS. Engine RSS requires coordinator-supplied Docker stats."
+  ],
+  "run_id": "first-20260930",
+  "config_mode": "private-admin-auth; synthetic-user-keys; standard; trusted-HTTP-mock-only",
+  "pin_evidence": "operator must confirm deployed digest/source; constants are expected pins",
+  "ended_at": "2026-09-30T20:49:29.605Z",
+  "mock_total_upstream_requests": 567,
+  "mock_active_at_end": 0,
+  "mock_record_overflow": false
+}

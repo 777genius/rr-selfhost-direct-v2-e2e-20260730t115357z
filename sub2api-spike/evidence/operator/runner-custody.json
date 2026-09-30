@@ -1,0 +1,45 @@
+{
+  "id": "D01",
+  "status": "PASS",
+  "evidence_kind": "live-container",
+  "runner_filesystem_exports": [
+    {
+      "runner": 1,
+      "files": 22022,
+      "bytes": 2441506970,
+      "provider_master_hits": 0,
+      "config_env_logs_scanned": true
+    },
+    {
+      "runner": 2,
+      "files": 27503,
+      "bytes": 2524191276,
+      "provider_master_hits": 0,
+      "config_env_logs_scanned": true
+    },
+    {
+      "runner": 3,
+      "files": 22022,
+      "bytes": 2441506049,
+      "provider_master_hits": 0,
+      "config_env_logs_scanned": true
+    },
+    {
+      "runner": 4,
+      "files": 27505,
+      "bytes": 2522017506,
+      "provider_master_hits": 0,
+      "config_env_logs_scanned": true
+    }
+  ],
+  "private_capture_and_actions_log_files": 682,
+  "capture_bytes": 12005174,
+  "capture_provider_master_hits": 0,
+  "provider_master_values_or_hashes_output": false,
+  "duration_s": 26.21,
+  "limits": [
+    "Snapshots after terminal run, not a continuous process-memory dump.",
+    "Successful client temp home intentionally deleted; Docker config/logs/full residual filesystem and mounted work remain scanned.",
+    "This does not claim absence of run-scoped capability/OIDC tokens or engine-side secrets."
+  ]
+}

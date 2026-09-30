@@ -1,0 +1,473 @@
+{
+  "method": "48 purposively selected issues: supplied narrative/metadata inspected with secret/config blocks excluded from published evidence; all 66 staged comments interpreted separately; external screenshots not fetched. No raw user payload exported.",
+  "issues": [
+    {
+      "number": 7774,
+      "kind": "defect_report",
+      "attribution": "engine_provider_interaction",
+      "version": "v0.2.4–v0.2.11 (reporter)",
+      "assessment": "active_report",
+      "summary": "Grok Responses: пустой completed без output/usage принят клиентом как успех. Репортёр связывает это с платформенным условием защиты OpenAI; нестабильность upstream и отсутствие защиты шлюза различаются.",
+      "scenario": "A06/E02/E10: пустой completed не доказывает review; проверить committed heartbeat, запрет повторного платного эффекта."
+    },
+    {
+      "number": 7708,
+      "kind": "defect_report",
+      "attribution": "engine_provider_interaction",
+      "version": "v0.2.4",
+      "assessment": "active_report",
+      "summary": "HTTP 200 содержит SSE invalid_encrypted_content для encrypted function output; очистка reasoning при HTTP 400 не охватывает этот случай. Первая причина порчи истории неизвестна.",
+      "scenario": "A04/E02/E11: ошибка внутри 200 должна завершить review неуспехом; сохранить tool results, ограничить replay."
+    },
+    {
+      "number": 7700,
+      "kind": "defect_report",
+      "attribution": "engine_provider_interaction",
+      "version": "v0.2.4",
+      "assessment": "active_report",
+      "summary": "Codex multi-turn: HTTP 400 thinking_signature_invalid, повторное продолжение снова ломается. Минимальный стабильный reproducer отсутствует; упомянутое расширение распознавания ошибки не равно доказанному восстановлению.",
+      "scenario": "A04/E01/E11: отличать 400 от SSE 200, не удалять нормальные инструменты и не повторять бесконечно."
+    },
+    {
+      "number": 7633,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "v0.2.8",
+      "assessment": "release_source_fix_support",
+      "summary": "OAuth Messages теряет structured-output beta при legacy output_format; репортёр приводит API-key контроль и рабочий output_config.format. v0.2.9 заявляет сохранение beta; соответствующий request-boundary тест присутствует, но здесь не запускался.",
+      "scenario": "A06/A09: проверить фактический beta header и JSON в native Messages, без fallback к платному маршруту."
+    },
+    {
+      "number": 7629,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "build based on v0.2.8",
+      "assessment": "release_fix_claim",
+      "summary": "Chat→Responses не ставит type=message у role input; StepFun отвергает историю с 400. Репортёр заявляет локальный контроль; v0.2.9 описывает исправление role items. Это мост, а не разрешение заменить наш native lane.",
+      "scenario": "A04/A07: отдельно проверять bridge, native tool IDs и запрет тихой смены протокола."
+    },
+    {
+      "number": 7637,
+      "kind": "defect_report",
+      "attribution": "engine_provider_interaction",
+      "version": "not reported",
+      "assessment": "closed_unverified",
+      "summary": "Antigravity буферизует thoughtSignature/message_start до смыслового вывода; при большой картинке TTFT больше 30 секунд клиент отключается. Закрытие completed само по себе не доказывает keepalive fix.",
+      "scenario": "A10/E05/E06/E10: bounded TTFT, cancellation; heartbeat не разрешает поздний failover."
+    },
+    {
+      "number": 7285,
+      "kind": "defect_report",
+      "attribution": "provider_compatibility",
+      "version": "Sub2API not reported; Codex 0.154",
+      "assessment": "active_report",
+      "summary": "DeepSeek принимает Responses additional_tools с 200, но игнорирует их: shell не исполняется, вызов появляется текстом. HTTP capability probe недостаточен; рабочий chat bridge у репортёра зависит от других патчей.",
+      "scenario": "A01/A02/A04/A07: реальное чтение файлов и исполнение tool, честный отказ unsupported; не считать текст tool-call событием."
+    },
+    {
+      "number": 4245,
+      "kind": "defect_report",
+      "attribution": "engine_configuration",
+      "version": "not reported",
+      "assessment": "closed_unverified",
+      "summary": "Root /responses работает, но /models отдаёт HTML/404, Codex использует bundled metadata. Репортёр описывает A/B с ETag и cache; /v1 является обходом, не доказательством общего исправления.",
+      "scenario": "A09: проверить /models content type, ETag, auth и group isolation вместе с native inference."
+    },
+    {
+      "number": 5542,
+      "kind": "defect_report",
+      "attribution": "engine_provider_interaction",
+      "version": "v0.1.173; latest tag also mentioned",
+      "assessment": "active_report",
+      "summary": "OpenAI OAuth 401 переводит единственный аккаунт в unschedulable, клиент получает 502; ручной refresh восстанавливает запрос. Privacy 403 отделён от inference 401; автоматическое обновление на pin не проверено.",
+      "scenario": "F04/F05/E09: revoked/expired token, bounded refresh и reconnect; не переносить бесконтрольно запрос на другой pool."
+    },
+    {
+      "number": 1381,
+      "kind": "support_or_weak_report",
+      "attribution": "unknown_provider_or_engine",
+      "version": "v0.1.105",
+      "assessment": "unknown",
+      "summary": "Короткий invalid_grant без шагов и логов гонки. Заголовок про конкуренцию refresh — гипотеза, не установленная причина; комментариев нет.",
+      "scenario": "F04/F05: single-use refresh при конкурентных background/request обновлениях, без утверждения воспроизведения issue."
+    },
+    {
+      "number": 1035,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "v0.1.95; commit 3cc407bc",
+      "assessment": "source_mitigation_support",
+      "summary": "Репортёр описывает разные lock paths background и inline Claude refresh, потребляющие одноразовый token. На supplied pin обе ветви используют OAuthRefreshAPI с reread и общим lock; Redis failure всё ещё деградирует до local mutex.",
+      "scenario": "F04/G01: два процесса + Redis outage + rotating refresh; local mutex не обеспечивает межпроцессную исключительность."
+    },
+    {
+      "number": 4414,
+      "kind": "support_or_weak_report",
+      "attribution": "unknown_provider_or_engine",
+      "version": "v0.1.156 (title)",
+      "assessment": "closed_unverified",
+      "summary": "Лишь 502 с сообщением reused refresh token; ни таймлайна конкуренции, ни подтверждённого patch. Закрыто completed, но причинная связь с #1035 не установлена.",
+      "scenario": "F04/F05: повторное потребление одноразового refresh должно остановить аккаунт и требовать reconnect."
+    },
+    {
+      "number": 3757,
+      "kind": "defect_report",
+      "attribution": "engine_configuration_protocol_interaction",
+      "version": "v0.1.145; latest tag mentioned",
+      "assessment": "closed_unverified",
+      "summary": "Antigravity exchange/refresh успешны, inference по нескольким путям всё равно 401. Scope, endpoint, project ID и stale cache не разделены контролем; refresh HTTP 200 не доказывает работоспособный identity.",
+      "scenario": "F05/F08: после refresh наблюдать upstream identity и реальный native запрос, не только admin success."
+    },
+    {
+      "number": 3707,
+      "kind": "defect_report",
+      "attribution": "engine_provider_interaction",
+      "version": "around v0.1.144; commit b650bdd6",
+      "assessment": "closed_unverified",
+      "summary": "Отозванный до expires_at token может не попасть в refresh; прежний patch лечил eligibility, не expiry gate. Репортёр честно отделяет source inference от live проверки токена; закрытие не разрешает считать весь lifecycle исправленным.",
+      "scenario": "F05/E09: revoke до expiry, cache/snapshot invalidation и bounded recovery."
+    },
+    {
+      "number": 3647,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "v0.1.142",
+      "assessment": "closed_unverified",
+      "summary": "Codex Session imports разных account в одном workspace совпадают по workspace/user identity и обновляют первый account. Репортёр заявляет локальный token-fingerprint patch; это не maintainer fix evidence.",
+      "scenario": "C06/C08: два test identity в одном provider workspace не сливаются; импорт после delete не оживляет чужое binding."
+    },
+    {
+      "number": 7000,
+      "kind": "support_question",
+      "attribution": "provider_policy",
+      "version": "not reported",
+      "assessment": "provider_dependence",
+      "summary": "Вопрос о настройке Codex fingerprint для снижения банов, тело только screenshot. Не доказаны ни ban incident, ни эффективность маскировки; официальная политика провайдера остаётся независимой зависимостью.",
+      "scenario": "F07/E09: test-only identity, ban/revoke выдаёт честный отказ; не обещать отсутствие блокировок."
+    },
+    {
+      "number": 7758,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "v0.2.10; commit 2f3fed2fd",
+      "assessment": "source_risk_support",
+      "summary": "Scheduler metadata теряет capability/base_url: Seedance фильтруется, ограниченный embeddings account может считаться универсальным. На supplied source whitelist не содержит обоих полей; это source corroboration, не исполненный seedance reproducer.",
+      "scenario": "A07/C05/F01: production cache roundtrip сохраняет eligibility и выбранный разрешённый upstream."
+    },
+    {
+      "number": 7757,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "not reported",
+      "assessment": "active_report",
+      "summary": "Antigravity /responses не закрепляет account по session_id, тогда как другие платформы в том же OpenWebUI работают. PR обещан репортёром; merge/transport proof отсутствует.",
+      "scenario": "A04/F02: разные multi-turn sessions, distinct upstream sentinels, affinity по Responses."
+    },
+    {
+      "number": 7574,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "not reported",
+      "assessment": "active_report",
+      "summary": "Pause единственного OpenAI account не останавливает назначения прежней sticky-сессии; concurrency=3, fingerprint device+session. Не ясно, относятся ли screenshots к новым запросам или уже открытой работе.",
+      "scenario": "F06/C04: отличить in-flight stream от нового turn после disable и проверить новый admission."
+    },
+    {
+      "number": 7506,
+      "kind": "defect_report",
+      "attribution": "engine_provider_interaction",
+      "version": "v0.2.7-based; Codex 0.154.0",
+      "assessment": "active_report",
+      "summary": "Encrypted agent_message от backend A не переносится на B/C при смене account. Репортёр показывает ограничения своих контролей; plain-text 3×3 не доказывает native lifecycle. Молчаливое удаление истории недопустимо.",
+      "scenario": "A04/F02/E10/E11: реальная encrypted collaboration история, failover и продолжение; запрет false-green от plaintext fixture."
+    },
+    {
+      "number": 7225,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "v0.2.4",
+      "assessment": "release_source_fix_support",
+      "summary": "Anthropic RPM=10 пропадает в sched:meta, reported 28–29 forwards/min. v0.2.8 release и source сохраняют три RPM поля; upstream test проверяет schedulability после projection, но ещё нужен live cache admission.",
+      "scenario": "F03/G05: Redis serialization плюс фактический request count, не проверка наличия поля alone."
+    },
+    {
+      "number": 7458,
+      "kind": "defect_report",
+      "attribution": "engine_provider_interaction",
+      "version": "v0.2.5; v0.2.7/main inspected by reporter",
+      "assessment": "active_report",
+      "summary": "Role-only SSE commit запрещает failover при последующем overloaded, особенно для тела меньше 64KB. Числа 48h принадлежат одному репортёру, не fleet failure rate; семантический stream commit важнее HTTP status.",
+      "scenario": "E02/E10/E11: early role/heartbeat, overload до и после output; считать реальные upstream effects."
+    },
+    {
+      "number": 6992,
+      "kind": "enhancement_with_defect_hypothesis",
+      "attribution": "engine_design",
+      "version": "main 96e440… (reporter); no release version",
+      "assessment": "design_tradeoff",
+      "summary": "Sticky account при saturation получает WaitPlan, свободный второй account простаивает. Soft sticky помогает throughput, но encrypted/previous_response state может запретить миграцию; предложенные изменения — требования, не измеренная регрессия pin.",
+      "scenario": "F02/F03/G05: bounded queue, cancellation release, одновременно affinity и fairness для переносимых запросов."
+    },
+    {
+      "number": 6319,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "not reported",
+      "assessment": "release_fix_claim",
+      "summary": "Clear runtime block только в одном процессе; другой экземпляр ждёт прежнего cooldown. v0.2.4 говорит о persistent cooldown как источнике истины; DB failure containment нужно проверить отдельно.",
+      "scenario": "F01/G01/G06: reset account в процессе A, admission в B и затем потеря DB."
+    },
+    {
+      "number": 6169,
+      "kind": "security_report",
+      "attribution": "engine",
+      "version": "v0.1.181 and earlier (reporter)",
+      "assessment": "source_risk_support",
+      "summary": "Image download URL потенциально позволяет private/metadata fetch. Supplied helper делает Get(downloadURL) без локального validator; достижимость входа, shared client transport и redirects требуют boundary проверки. Публичный severity репортёра не заменяет exploit proof.",
+      "scenario": "D07/B12: deny images и arbitrary URLs на нашем broker; DNS/redirect/private target тесты перед включением."
+    },
+    {
+      "number": 6112,
+      "kind": "security_report",
+      "attribution": "engine_configuration",
+      "version": "v0.1.179 (reporter)",
+      "assessment": "source_risk_support",
+      "summary": "Legacy forwarded-IP режим доверяет CF-Connecting-IP впереди nginx headers. Source default=true, legacy precedence сохранён; trusted proxy mode и stripping на private edge обязательны. Ни brute force, ни эксплуатация здесь не запускались.",
+      "scenario": "B12/D04: spoof CF/XFF с runner не меняет authorization; edge strips headers, explicit trusted proxies."
+    },
+    {
+      "number": 3086,
+      "kind": "security_report",
+      "attribution": "unknown_engine_or_configuration",
+      "version": "not reported",
+      "assessment": "closed_unverified",
+      "summary": "Пользователь будто использует private group без permission после public→exclusive. Только screenshots и предположение; cache invalidation или существующий API-key binding не установлены, closure не доказательство tenant isolation.",
+      "scenario": "C02/C05/C09: revoke group membership, старый key и новый grant, наблюдать forbidden upstream sentinel."
+    },
+    {
+      "number": 6548,
+      "kind": "enhancement_with_defect_hypothesis",
+      "attribution": "engine_design",
+      "version": "not reported",
+      "assessment": "active_report",
+      "summary": "No available accounts возвращает внутреннюю причину и 503 api_error вместо ожидаемого overload. Это раскрытие topology и возможное усиление retries, но не доказанная утечка credential bytes.",
+      "scenario": "D02/D08/E01: provider error с synthetic secret, sanitization и bounded retries клиента."
+    },
+    {
+      "number": 4469,
+      "kind": "enhancement",
+      "attribution": "security_control_design",
+      "version": "new version; not specified",
+      "assessment": "design_tradeoff",
+      "summary": "Просьба убрать 2FA перед account export. Наличие неудобства не означает vulnerability; для privatebackend export должен остаться operator-only и не попадать в UI.",
+      "scenario": "C03/C07/D06: member/UI не экспортирует credentials, admin boundary отдельно."
+    },
+    {
+      "number": 4002,
+      "kind": "support_or_weak_report",
+      "attribution": "unknown_configuration_or_engine",
+      "version": "not reported",
+      "assessment": "historical_reporter_fix_claim",
+      "summary": "Backup S3 снова работает после повторной установки secret, ломается после update. Потеря persistence только гипотеза; нет доказательств утечки или установленного хранения этого secret.",
+      "scenario": "G04/D06/D09: separate-instance backup/restore, custody ключей и переживание обновления."
+    },
+    {
+      "number": 3712,
+      "kind": "support_or_weak_report",
+      "attribution": "engine_configuration",
+      "version": "not reported",
+      "assessment": "unknown",
+      "summary": "Первый human OIDC login требует email verification при выключенном флаге. Это пользовательская регистрация с invite, не GitHub Actions issuer/audience/workflow authorization.",
+      "scenario": "H06/B01–B07: наш verifier проверяет signed workload claims отдельно от встроенного human SSO."
+    },
+    {
+      "number": 6610,
+      "kind": "support_or_weak_report",
+      "attribution": "unknown_security_incident",
+      "version": "not reported",
+      "assessment": "unknown",
+      "summary": "Автор сообщает о множестве атак и денежных потерях, но детали находятся в screenshots/video. Не удалось установить attack vector или связь с engine; это приоритет triage, не подтверждённый breach.",
+      "scenario": "C02/D04/D08: закрытый admin network, workspace capability и аудит без credentials."
+    },
+    {
+      "number": 7770,
+      "kind": "defect_report",
+      "attribution": "engine_design",
+      "version": "v0.2.11; reported exact requested pin",
+      "assessment": "source_risk_support",
+      "summary": "Две Sub2API цепочки учитывают priority/default по-разному: OAuth сохраняет priority, внешний API-key снижает tier. Reported paired ledgers не являются официальным provider bill; существующие отдельные unit rules не покрывают compositional consistency.",
+      "scenario": "H05/E11: tier propagation при chained proxy, trusted metadata и exact-once debit; не доверять caller price."
+    },
+    {
+      "number": 7205,
+      "kind": "defect_report",
+      "attribution": "unknown_engine_or_provider",
+      "version": "not reported",
+      "assessment": "active_report",
+      "summary": "После sticky failover входные token якобы учитываются как cache и занижают цену. Объяснение AI и screenshots не доказывают причину; нужны authoritative usage и ledger pairs.",
+      "scenario": "H05/E10/E11: смена account с разными cache counters, actual debit и upstream count."
+    },
+    {
+      "number": 7002,
+      "kind": "defect_report",
+      "attribution": "engine_design",
+      "version": "not reported",
+      "assessment": "partial_mitigation_remaining_risk",
+      "summary": "Long stream допущен по положительному balance, финальная сумма уводит в минус. v0.2.11 добавляет inflight reservation; source всё ещё допускает final overdraft и unpriced fail-open. Это существенная mitigation, не доказанный hard spend cap.",
+      "scenario": "H05/G01/G05/E06: неизвестная цена, actual>estimate, long stream, Redis loss, multi-request final debit."
+    },
+    {
+      "number": 5188,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "main c043c247 (reporter)",
+      "assessment": "source_mitigation_support",
+      "summary": "Refund pending/restart race: repeated refund, double deduction, lost finalize. На supplied source stale-caller и rollback-after-debit DB tests существуют; это покрывает часть заявлений, не весь payment-provider crash lifecycle.",
+      "scenario": "H05/G02: не включать встроенный payment/refund в наш UI; если понадобится, crash/reconcile и single debit отдельно."
+    },
+    {
+      "number": 6515,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "not reported",
+      "assessment": "active_report",
+      "summary": "Messages upstream billing_model_source будто выбирает requested Model вместо UpstreamModel. Репортёр сравнивает OpenAI путь; наличие выбора в UI не доказывает его использование во всех native paths.",
+      "scenario": "H05/A05: model mapping меняет actual upstream identity и цену, не caller-controlled billing override."
+    },
+    {
+      "number": 6646,
+      "kind": "support_or_weak_report",
+      "attribution": "unknown_provider_or_engine",
+      "version": "not reported",
+      "assessment": "closed_unverified",
+      "summary": "Astra стоимость приблизительно 70% ожидаемой по обратной оценке quota. Автор сам исключает точный root cause: нет per-request usage, версии или официального bill; не принимать 0.7 за поправочный коэффициент.",
+      "scenario": "H05: separate input/cache-read/cache-write/output counters, compare normalized authoritative receipt."
+    },
+    {
+      "number": 7034,
+      "kind": "support_or_weak_report",
+      "attribution": "unknown_engine_or_configuration",
+      "version": "not reported",
+      "assessment": "unknown",
+      "summary": "Заголовок сообщает отрицательный balance; тело screenshot. Согласуется с допустимым overdraft, но не доказывает отдельный bug или размер потерь.",
+      "scenario": "H05/G05: concurrency из малого balance, reservation и финальная запись в DB."
+    },
+    {
+      "number": 7582,
+      "kind": "support_or_weak_report",
+      "attribution": "unknown_provider_or_engine",
+      "version": "v0.2.8 (title)",
+      "assessment": "unknown",
+      "summary": "Codex web-search якобы не тарифицируется, отличие от другого шлюза приведено screenshots. Неизвестен actual provider usage и pricing mode, доказанного общего billing defect нет.",
+      "scenario": "H05: search effect count, provider native usage и ровно одна запись ledger."
+    },
+    {
+      "number": 7030,
+      "kind": "defect_report",
+      "attribution": "engine_recovery",
+      "version": "v0.2.3; v0.2.4 file compared",
+      "assessment": "source_risk_support",
+      "summary": "После потери schema_migrations повтор 026 комментирует error_rate, удалённый replacement schema 033; startup зациклен. Оба SQL механизма видны в source. Это аварийный partial restore, не любое обычное обновление.",
+      "scenario": "G04/G02: сохранить migration ledger, full restore в отдельной DB, запрет downgrade без совместимого backup."
+    },
+    {
+      "number": 6412,
+      "kind": "defect_report",
+      "attribution": "engine_deployment",
+      "version": "v0.1.169",
+      "assessment": "closed_unverified",
+      "summary": "После host restart Postgres в recovery, InitEnt завершает процесс; Docker restart позже восстанавливает. Compose depends_on не гарантирует first startup существующего container; permanent SQL errors нельзя маскировать бесконечным retry.",
+      "scenario": "G01/G02/G07: delay DB readiness, bounded retry; invalid credential/checksum fail fast."
+    },
+    {
+      "number": 6232,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "v0.1.183; backend unmodified (reporter)",
+      "assessment": "source_mitigation_support",
+      "summary": "Два gateway держат channel whitelist/pricing до 10 минут после update. Supplied source теперь broadcasts invalidate via pub/sub и имеет two-instance service test; отключение pub/sub/Redis ещё оставляет uncertainty.",
+      "scenario": "G06/C05/H05: два gateway после model/group/price update, missed notification и retry/TTL."
+    },
+    {
+      "number": 6780,
+      "kind": "defect_report",
+      "attribution": "unknown_engine_or_deployment",
+      "version": "v0.2.2 (title)",
+      "assessment": "closed_unverified",
+      "summary": "После upgrade user API-key и subscription списки не загружаются, rollback не помогает. Backend error и DB mismatch не раскрыты; screenshot не свидетельствует потере данных или исправлению.",
+      "scenario": "G04/H04: migration + user/admin contract smoke на cloned DB, не только server healthy."
+    },
+    {
+      "number": 7146,
+      "kind": "support_question",
+      "attribution": "deployment_configuration",
+      "version": "not reported",
+      "assessment": "unknown",
+      "summary": "Docker не стартует после machine reboot; пользователь также спрашивает о переносе данных. Без compose restart policy/volume evidence engine regression не установлен.",
+      "scenario": "G07/G04: owned resource restart policy, data persistence и separate restore rehearsal."
+    },
+    {
+      "number": 6877,
+      "kind": "support_question",
+      "attribution": "off_project",
+      "version": "not reported",
+      "assessment": "off_project_support",
+      "summary": "Первоначально DB-version/password жалоба; staged comments направляют автора к другому проекту, автор соглашается. Исключён из Sub2API defect signals; сохраняется в appendix как пример ошибочного keyword отбора.",
+      "scenario": "G04/H04: совместимость schema до rollback; recovery admin доступен только operator."
+    },
+    {
+      "number": 1009,
+      "kind": "defect_report",
+      "attribution": "deployment_packaging",
+      "version": "v0.1.99",
+      "assessment": "closed_unverified",
+      "summary": "Backup вызов падает: pg_dump отсутствует в PATH, конкретный stacktrace и fresh Docker install. Историческое закрытие без release/comment доказательства не подтверждает наличие бинаря в pinned image.",
+      "scenario": "G04: pinned container реально создаёт и восстанавливает backup; source Dockerfile alone недостаточно."
+    },
+    {
+      "number": 2108,
+      "kind": "support_or_weak_report",
+      "attribution": "deployment_capacity",
+      "version": "not reported",
+      "assessment": "unknown",
+      "summary": "Reported 3.8GB RAM, 7.4GB DB/logs и exit137 при R2 backup. Текст предлагает объяснение, не memory profile; размер DB не равен обязательному RSS при streaming.",
+      "scenario": "G04/G05: bounded backup RSS, log retention и cancel; не выдавать предположение за measured OOM."
+    },
+    {
+      "number": 2337,
+      "kind": "defect_report",
+      "attribution": "engine_protocol_bridge",
+      "version": "not reported",
+      "assessment": "active_report",
+      "summary": "Messages→OpenAI bridge будто теряет tool_use_id/tool_call_id после двух и более turns: простой grep работает, full-file reads дают 400. Reporter рекомендует native Anthropic как обход; не смешивать эту bridge failure с native Messages availability.",
+      "scenario": "A04/A05: два параллельных tools, result в обратном порядке, три turns; сохранить ID association и content order, reject unmatched results."
+    },
+    {
+      "number": 6146,
+      "kind": "defect_report",
+      "attribution": "engine",
+      "version": "main 03e8ab413 (reporter)",
+      "assessment": "source_mitigation_support",
+      "summary": "После custom→function→custom restoration fc item ID отравляет историю и следующий turn получает 400 вместо ctc; аналогично tool_search tsc. Supplied source теперь re-prefixes известные IDs при restore. Это scoped source mitigation; call_id отдельно от item id, runtime replay не проверен.",
+      "scenario": "A04/A10/E11: JSON, added/done/completed SSE и next-turn history; item ID namespaces и call/result association отдельно, Unicode и split chunks."
+    },
+    {
+      "number": 6185,
+      "kind": "defect_report",
+      "attribution": "unknown_session_state_or_provider",
+      "version": "v0.1.181 and v0.1.182; Grok Build 1.0.5",
+      "assessment": "closed_unverified",
+      "summary": "После parallel vision tool results Grok Responses продолжает посторонний task при корректной local history; official direct control будто работает. Reported unrelated task не доказывает actual cross-tenant data source, но требует isolation triage. Закрытие completed не подтверждает фикса.",
+      "scenario": "G06/C05/A04: две synthetic workspaces с distinct prompt/account sentinels, parallel tools и previous_response_id; отсутствие crossover после restart/cache reuse."
+    },
+    {
+      "number": 6402,
+      "kind": "defect_report",
+      "attribution": "engine_client_compatibility",
+      "version": "v0.1.183/main; Desktop 26.825.51511; CLI 0.151.0-alpha.7.2",
+      "assessment": "closed_unverified",
+      "summary": "Desktop delegation bootstrap function_call_output без call_id отвергается HTTP handler до inference. Это специальный bootstrap, обычным orphan tool outputs по-прежнему нужен 400. WS101 с последующим fallback не обход; supplied WS compatibility test не доказывает HTTP Desktop fix.",
+      "scenario": "A08/A09: real Desktop delegation если scope includes it; explicit unsupported error вместо fabricated call_id/успеха, strict обычный tool context."
+    }
+  ]
+}

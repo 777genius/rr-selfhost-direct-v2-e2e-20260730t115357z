@@ -1,0 +1,357 @@
+{
+  "schema": "rr-sub2-real-lab/v1",
+  "evidence_kind": "synthetic-container",
+  "source_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "image": "weishaw/sub2api@sha256:2e3b7fab1e84d2e862cde664d09c1ae84fc897093357cf200cbeb0f64b2f2390",
+  "node": "v24.21.0",
+  "stage": "recovery",
+  "run_mode": "standard",
+  "model_mapping": {
+    "responses": "gpt-4.1",
+    "messages": "claude-sonnet-4-5"
+  },
+  "started_at": "2026-09-30T21:28:29.491Z",
+  "real_actions_e2e": false,
+  "live_oauth": "NOTRUN",
+  "receipt_state": "executed",
+  "results": [
+    {
+      "id": "G01-recovery",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Recovered engine loses synthetic group/account/key persistence or crosses tenant.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 200,
+              "transport": null,
+              "terminal": true,
+              "failed": false,
+              "malformed": false,
+              "calls": [],
+              "utf8": true,
+              "event_types": [
+                "response.created",
+                "response.in_progress",
+                "response.output_item.added",
+                "response.content_part.added",
+                "response.output_text.delta",
+                "response.output_text.done",
+                "response.content_part.done",
+                "response.output_item.done",
+                "response.completed"
+              ],
+              "success": true,
+              "bytes": 2358,
+              "duration_ms": 55
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 25,
+                "identity": "A",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "ok",
+                "finished": true,
+                "cancelled": false,
+                "committed": true,
+                "bytes": 2358,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 2
+              }
+            ],
+            "background_requests": 0
+          },
+          {
+            "downstream": {
+              "http_status": 200,
+              "transport": null,
+              "terminal": true,
+              "failed": false,
+              "malformed": false,
+              "calls": [],
+              "utf8": true,
+              "event_types": [
+                "response.created",
+                "response.in_progress",
+                "response.output_item.added",
+                "response.content_part.added",
+                "response.output_text.delta",
+                "response.output_text.done",
+                "response.content_part.done",
+                "response.output_item.done",
+                "response.completed"
+              ],
+              "success": true,
+              "bytes": 2358,
+              "duration_ms": 45
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 26,
+                "identity": "B",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "ok",
+                "finished": true,
+                "cancelled": false,
+                "committed": true,
+                "bytes": 2358,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 1
+              }
+            ],
+            "background_requests": 0
+          },
+          {
+            "downstream": {
+              "http_status": 200,
+              "transport": null,
+              "terminal": true,
+              "failed": false,
+              "malformed": false,
+              "calls": [],
+              "utf8": true,
+              "event_types": [
+                "message_start",
+                "content_block_start",
+                "content_block_delta",
+                "content_block_stop",
+                "message_delta",
+                "message_stop"
+              ],
+              "success": true,
+              "bytes": 773,
+              "duration_ms": 29
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 27,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "ok",
+                "finished": true,
+                "cancelled": false,
+                "committed": true,
+                "bytes": 773,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 2
+              }
+            ],
+            "background_requests": 0
+          },
+          {
+            "downstream": {
+              "http_status": 200,
+              "transport": null,
+              "terminal": true,
+              "failed": false,
+              "malformed": false,
+              "calls": [],
+              "utf8": true,
+              "event_types": [
+                "response.created",
+                "response.in_progress",
+                "response.output_item.added",
+                "response.content_part.added",
+                "response.output_text.delta",
+                "response.output_text.done",
+                "response.content_part.done",
+                "response.output_item.done",
+                "response.completed"
+              ],
+              "success": true,
+              "bytes": 2358,
+              "duration_ms": 37
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 28,
+                "identity": "S1",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "ok",
+                "finished": true,
+                "cancelled": false,
+                "committed": true,
+                "bytes": 2358,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 3
+              }
+            ],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [
+        "Recovery must be paired with coordinator outage and restore timestamps; this alone is a persistence read/forward probe."
+      ],
+      "duration_ms": 2234
+    },
+    {
+      "id": "F04-F05",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "No synthetic OAuth refresh server/identity supplied; API-key scheduling does not prove OAuth lifecycle.",
+      "limitations": [
+        "No synthetic OAuth refresh server/identity supplied; API-key scheduling does not prove OAuth lifecycle."
+      ]
+    },
+    {
+      "id": "F07-F08",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Live OAuth test identity absent.",
+      "limitations": [
+        "Live OAuth test identity absent."
+      ]
+    },
+    {
+      "id": "G01-outage",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Requires separate operator outage run and normalized receipt.",
+      "limitations": [
+        "Requires separate operator outage run and normalized receipt."
+      ]
+    },
+    {
+      "id": "G04",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Separate database restore and stale-key behavior require coordinator receipt.",
+      "limitations": [
+        "Separate database restore and stale-key behavior require coordinator receipt."
+      ]
+    },
+    {
+      "id": "G07",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Network/public-port and teardown verification require coordinator receipt.",
+      "limitations": [
+        "Network/public-port and teardown verification require coordinator receipt."
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "kind": "groups",
+      "id": 4
+    },
+    {
+      "kind": "accounts",
+      "id": 3
+    },
+    {
+      "kind": "users",
+      "id": 4
+    },
+    {
+      "kind": "keys",
+      "id": 3,
+      "user_id": 4
+    },
+    {
+      "kind": "groups",
+      "id": 5
+    },
+    {
+      "kind": "accounts",
+      "id": 4
+    },
+    {
+      "kind": "users",
+      "id": 5
+    },
+    {
+      "kind": "keys",
+      "id": 4,
+      "user_id": 5
+    },
+    {
+      "kind": "groups",
+      "id": 6
+    },
+    {
+      "kind": "accounts",
+      "id": 5
+    },
+    {
+      "kind": "users",
+      "id": 6
+    },
+    {
+      "kind": "keys",
+      "id": 5,
+      "user_id": 6
+    },
+    {
+      "kind": "groups",
+      "id": 7
+    },
+    {
+      "kind": "accounts",
+      "id": 6
+    },
+    {
+      "kind": "accounts",
+      "id": 7
+    },
+    {
+      "kind": "users",
+      "id": 7
+    },
+    {
+      "kind": "keys",
+      "id": 6,
+      "user_id": 7
+    }
+  ],
+  "limitations": [
+    "Synthetic upstream fixtures are gateway fault evidence, not real Actions or agent-review proof.",
+    "Live OAuth refresh/rotation/revocation and production pool regression remain unproven.",
+    "Client RSS is not engine RSS. Engine RSS requires coordinator-supplied Docker stats."
+  ],
+  "run_id": "first-20260930",
+  "config_mode": "private-admin-auth; synthetic-user-keys; standard; trusted-HTTP-mock-only",
+  "pin_evidence": "operator must confirm deployed digest/source; constants are expected pins",
+  "ended_at": "2026-09-30T21:28:31.729Z",
+  "mock_total_upstream_requests": 28,
+  "mock_active_at_end": 0,
+  "mock_record_overflow": false
+}

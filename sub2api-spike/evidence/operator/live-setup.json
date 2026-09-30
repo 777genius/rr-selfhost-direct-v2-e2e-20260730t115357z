@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "evidence_kind": "actual-private-admin",
+  "status": "PASS",
+  "provider_account_count": 3,
+  "planned_automatic_responses_probes": 2,
+  "live_inference_dispatches": 0,
+  "source": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "phase": "done",
+  "at": "2026-09-30T20:43:33.836Z"
+}

@@ -1,0 +1,12 @@
+Observable regressions identified before authoring verification checks:
+
+1. A duplicated issue, included PR, wrong window endpoint or conflated closed age can make a plausible but wrong census. Independently recompute real 3935-record counts, date intervals and partitions from staged input; do not reuse analyzer helpers.
+2. A cited comment/source path can drift or be absent while the report still claims corroboration. Resolve all 52 issue citations, comment IDs/URLs and 17 inspected source-file hashes against staged data; reconcile fetched comments with snapshot counts.
+3. An analyzer can vary outputs with wall-clock time or directory context. Execute it twice in separate scratch directories over the actual complete staged corpus and compare artifacts byte for byte.
+4. Public issue/comment/release fields can contain HTML and provider secrets. Replace fields in a copy of the real corpus with hostile HTML and synthetic credential markers, run the actual CLI, and inspect all produced files for absence of those strings. No downstream engine success is inferred from this synthetic safety test.
+5. Duplicate numbers, PR markers and an invalid issue URL can silently corrupt aggregation or render an unsafe citation. Run CLI with each malformed complete corpus and require a nonzero exit before it publishes any report.
+6. A dashboard can inflate source inspection into live PASS or hide pending evidence. Check generated artifact fields and authored source classifications, count >=40 unique reviews and ensure every review says independently_reproduced=false, maintainer_fix_confirmed=false; dashboard live status remains NOT RUN.
+
+These verify the audit pipeline at its actual CLI/file boundary. Upstream transport/lifecycle tests are additional scenario proposals, not executed audit tests.
+
+Continuation regression identified before the new check: source fingerprints were recalculated from whatever bytes happened to be staged. Replacing an inspected helper could therefore leave its old authored observation attached to a new hash while the CLI still succeeded. Bind each source observation to the bytes actually inspected; run the real CLI against a scratch copy with one source file changed and require rejection before publishing. Similarly, a changed comments snapshot must not automatically inherit the earlier “interpreted” claim or reuse authored comment findings without an explicit freshness marker.

@@ -1,0 +1,14 @@
+✔ A06 malformed and fabricated financial success fail inherited validator (0.957092ms)
+✔ A10 E04 streamed UTF8 and missing native terminal rejected (4.776505ms)
+✔ B01 signed new workflow accepted; baseline verifier remains strict (5.917527ms)
+✔ B02 forged signature unknown key invalid algorithm denied (14.197719ms)
+✔ B03 B04 B05 immutable identity scope and time denial (10.347507ms)
+✔ receipt provenance false green and secret field rejection at file boundary (30.443724ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 122.266023

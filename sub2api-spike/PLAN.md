@@ -135,3 +135,7 @@ Every result records ID, input/expected behavior, actual behavior, status PASS/F
 6. Integrate issue findings and an independent result review into a Russian browser report with filters by status/evidence kind and explicit critical blockers. Do not publish raw upstream payloads, credentials or public issue bodies containing user-posted secrets.
 
 Stop live inference on custody/tenant isolation failure, duplicate/uncertain effects, unsupported native path or infrastructure pressure. Continue independent synthetic and issue analysis. A spike cannot prove indefinite stability: the verdict is bounded to tested version/protocol/client combinations and measured workload.
+
+## Итог исполнения, 2026-10-01
+
+Execution завершён. Actual issues ownership по уточнению координатора: `sub2api-issues-audit/`, native lab: `sub2api-runtime-lab/`, independent review: `sub2api-review/`. Реальные admin/Docker/key loading/actions выполнял trusted coordinator; workers не получали master keys. Итог и ограничения: [REPORT.md](REPORT.md), [77-row ledger](results.json). 58 bounded PASS /5 FAIL /14 NOT RUN не являются процентом production readiness. Все собственные runtime containers/key copies удалены, workflow disabled, оригиналы root-only ключей сохранены.

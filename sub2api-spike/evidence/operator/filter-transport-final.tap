@@ -1,0 +1,37 @@
+✔ B06 concurrent grants idempotent before upstream effects (144.016334ms)
+✔ B07 revoked grant denies replay and provider rescope (62.922096ms)
+✔ A07 A08 B08 B12 pinned model routes headers and unsupported scopes (60.457993ms)
+✔ A03 A09 exact Claude beta query preserves native Messages (50.042294ms)
+✔ A04 native structured content cannot change server-pinned identity (48.170201ms)
+✔ D05 native responses failed SSE removes upstream diagnostics (49.315488ms)
+✔ D05 native messages failed SSE removes upstream diagnostics (49.434201ms)
+✔ D05 capability denies an unfiltered nonstream response mode before upstream effects (47.777892ms)
+✔ B09 body request and concurrency limits before effects (309.988919ms)
+✔ B10 G03 restart denies stale capabilities replay and ledger failure (91.661514ms)
+✔ B11 E06 active stream expiry aborts upstream releases capacity (231.510258ms)
+✔ B11 E06 active stream revoke aborts upstream releases capacity (107.933194ms)
+✔ C04 membership removal blocks new grants and work (46.11334ms)
+✔ A04 A09 native responses two-turn wire preservation (48.170384ms)
+✔ A05 A09 native messages two-turn wire preservation (47.821838ms)
+✔ A10 E07 large unicode chunks retain bounded transport integrity (67.583199ms)
+✔ E01 E09 E12 D02 D08 HTTP errors sanitized with status and count intact (58.197498ms)
+✔ E02 terminal-error responses fails terminal validator (45.924822ms)
+✔ E03 terminal-error messages fails terminal validator (45.941167ms)
+✔ E04 truncate responses fails terminal validator (45.464525ms)
+✔ E04 malformed messages fails terminal validator (46.069225ms)
+✔ E05 E11 reset bounded failure zero automatic retries (45.970899ms)
+✔ E05 E11 slow-headers bounded failure zero automatic retries (148.993991ms)
+✔ E05 E11 slow-body bounded failure zero automatic retries (148.490106ms)
+✔ E05 E11 partial-reset bounded failure zero automatic retries (46.420144ms)
+✔ G06 two concurrent tenant identities select distinct private keys (67.176404ms)
+✔ E06 client stream cancellation aborts upstream and allows next request (599.011425ms)
+✔ F02 server session stable per grant and isolated across tenants (91.259188ms)
+✔ C08 F06 server account-authority revocation cancels only owned workspace (73.162413ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3020.946444

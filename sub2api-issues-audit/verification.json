@@ -1,0 +1,72 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "independent_full_census",
+      "status": "PASS",
+      "records": 3935,
+      "windows_days": [
+        30,
+        90
+      ]
+    },
+    {
+      "id": "citations_and_fingerprints",
+      "status": "PASS",
+      "reviewed_issues": 52,
+      "staged_comments": 66,
+      "source_files": 17,
+      "limitation": "Snapshot count agreement; no independent pagination/commit authentication."
+    },
+    {
+      "id": "real_corpus_cli_determinism",
+      "status": "PASS",
+      "runs": 2
+    },
+    {
+      "id": "hostile_corpus_cli_no_public_payload_export",
+      "status": "PASS",
+      "records_mutated": 3935,
+      "surfaces": [
+        "title",
+        "body",
+        "author",
+        "label",
+        "release body",
+        "comment body/author"
+      ]
+    },
+    {
+      "id": "invalid_full_census_fails_before_publication",
+      "status": "PASS",
+      "cases": 3
+    },
+    {
+      "id": "authored_evidence_freshness",
+      "status": "PASS",
+      "source_drift_rejected_before_publication": true,
+      "changed_comment_conclusions_withheld": true,
+      "observed_before_fix": {
+        "source_drift_exit_code": 0,
+        "reports_published": true
+      }
+    },
+    {
+      "id": "bounded_claims_and_dashboard",
+      "status": "PASS",
+      "limitation": "No upstream tests/live security/E2E run by this verification."
+    }
+  ],
+  "duration_seconds": 5.826,
+  "python_version": "3.12.3",
+  "inputs": {
+    "issues.json": "64429e77142ad78e7ed8ed9695c2e0322a082b4208b5776cc2a9d8f8901e9259",
+    "releases.json": "1d7bf9984869d1dcaa42125ce39cfb7820f6384cc0d79e055607816e9d1df0c7",
+    "comments.json": "5b5558138677203dabb12ee883c658510b119277cac8c3d94daff110ab9ad744"
+  },
+  "output_sha256": {
+    "findings.json": "590ac9ca57971fbea8a1d5f3313805fc83109ae2b607cfe26153d2be96a0caf2",
+    "AUDIT.md": "c580a474b99e0bf20ae36cdf7ff2438538bcdc7cee386109fa42e5cb6541e9b0",
+    "dashboard.json": "ec94d77cf5f1dfe2e1e738efbc05a74391250a2a44d7bcdd9412f645f8505b09"
+  }
+}

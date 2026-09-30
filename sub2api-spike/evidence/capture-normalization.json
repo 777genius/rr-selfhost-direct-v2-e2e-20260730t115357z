@@ -1,0 +1,8 @@
+[
+  {
+    "file": "filter-final-tests.tap",
+    "original_capture_sha256": "f071faa819594c709537bcd24bbaf85ae8c20ce0e30fe205b6cd472f9ea42e7b",
+    "published_sha256": "d57d4472f98fa32be18fce53bb6d619efb047173ce250fdcc66bcd4821a1c4e0",
+    "transformation": "Trailing spaces removed only; original capture retained on host receipts, FAIL/expected/observed values unchanged."
+  }
+]

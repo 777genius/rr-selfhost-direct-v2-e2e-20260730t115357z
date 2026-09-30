@@ -1,0 +1,22 @@
+{
+  "resources": [
+    {
+      "resource": "engine",
+      "reachable": false
+    },
+    {
+      "resource": "postgres",
+      "reachable": false
+    },
+    {
+      "resource": "redis",
+      "reachable": false
+    }
+  ],
+  "broker_reachable": true,
+  "id": "D04",
+  "evidence_kind": "live-container",
+  "status": "PASS",
+  "no_published_ports": true,
+  "limit": "Disposable nonroot probe on same runner bridge. Real terminal runners inspected for matching networks/mount isolation; live agent network request not replayed."
+}

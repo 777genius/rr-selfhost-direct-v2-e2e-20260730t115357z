@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "evidence_kind": "synthetic-container",
+  "status": "PASS",
+  "stage": "done",
+  "node": "v24.21.0",
+  "upstream_requests": 0,
+  "duration_ms": 703,
+  "results": [
+    {
+      "id": "C01",
+      "status": "PASS",
+      "upstream_requests": 0,
+      "limitation": "Actual admin API only; not native gateway, real Actions, OAuth or membership/SSO proof."
+    },
+    {
+      "id": "C02",
+      "status": "PASS",
+      "upstream_requests": 0,
+      "limitation": "Actual admin API only; not native gateway, real Actions, OAuth or membership/SSO proof."
+    },
+    {
+      "id": "C03",
+      "status": "PASS",
+      "upstream_requests": 0,
+      "limitation": "Actual admin API only; not native gateway, real Actions, OAuth or membership/SSO proof."
+    },
+    {
+      "id": "C07",
+      "status": "PASS",
+      "upstream_requests": 0,
+      "limitation": "Actual admin API only; not native gateway, real Actions, OAuth or membership/SSO proof."
+    },
+    {
+      "id": "D05",
+      "status": "PASS",
+      "upstream_requests": 0,
+      "limitation": "Actual admin API only; not native gateway, real Actions, OAuth or membership/SSO proof."
+    }
+  ],
+  "exposed_fields": [
+    "base_url"
+  ],
+  "limitation": "Actual admin API only; not native gateway, real Actions, OAuth or membership/SSO proof."
+}

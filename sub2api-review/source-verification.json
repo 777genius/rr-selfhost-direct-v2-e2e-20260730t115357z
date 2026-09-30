@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "reviewed_files": 4208,
+  "changed_files": [],
+  "before_sha256": "7b3d7da58d27949ddb6b45ef23d323618cdc5ffeb4c9ad3e5ea7fcd7be869829",
+  "after_sha256": "7b3d7da58d27949ddb6b45ef23d323618cdc5ffeb4c9ad3e5ea7fcd7be869829",
+  "reviewed_source_unchanged": true,
+  "git_commit_identity_verified": false,
+  "git_limitation": "Linked-worktree gitdir unavailable; coordinator must check checkpoint-to-manifest correspondence."
+}
