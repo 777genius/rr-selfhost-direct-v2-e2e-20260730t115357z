@@ -7,7 +7,7 @@ const MAX_BODY = 2 * 1024 * 1024;
 const routes = { '/openai/v1/responses': 'responses', '/anthropic/v1/messages': 'messages' };
 const allowed = new Set(['mimo:responses', 'openrouter:responses', 'mimo:messages']);
 const fields = {
-  responses: new Set('model input instructions tools tool_choice parallel_tool_calls max_output_tokens temperature top_p stream stream_options reasoning text include previous_response_id store truncation metadata service_tier prompt_cache_key prompt_cache_retention safety_identifier context_management'.split(' ')),
+  responses: new Set('model input instructions tools tool_choice parallel_tool_calls max_output_tokens temperature top_p stream stream_options reasoning text include previous_response_id store truncation metadata service_tier prompt_cache_key prompt_cache_retention safety_identifier context_management client_metadata'.split(' ')),
   messages: new Set('model messages max_tokens system tools tool_choice temperature top_p top_k stream stop_sequences metadata thinking context_management output_config service_tier'.split(' ')),
 };
 const error = (status, message) => Object.assign(Error(message), { status });
@@ -101,6 +101,8 @@ export async function createBroker(config, { clock = Date.now, jwks, fetcher = f
         const b = await body(req);
         if (g.revoked || clock() >= g.expires) throw error(401, 'Capability closed');
         if (b.model !== `${g.provider.alias}/${g.provider.model}` || Object.keys(b).some(k => !fields[g.protocol].has(k))) throw error(403, 'Routing mismatch');
+        // Codex 0.159.2 sends local client metadata; it never controls upstream routing.
+        if (g.protocol === 'responses') delete b.client_metadata;
         const headers = { 'content-type': 'application/json', 'x-bf-vk': g.value };
         if (g.protocol === 'messages') for (const h of ['anthropic-version', 'anthropic-beta']) if (req.headers[h]) headers[h] = req.headers[h];
         const up = await fetcher(new URL(g.protocol === 'responses' ? '/v1/responses' : '/anthropic/v1/messages', inferenceBase), { method: 'POST', headers, body: JSON.stringify(b), signal: controller.signal, redirect: 'error' });

@@ -92,6 +92,17 @@ test('native Messages tool-use bytes and required headers, HTTP errors and trunc
   const e = await r.infer(g, { metadata: { test_mode: 'http-error' } }); assert.equal(e.status, 422); assert.equal(await e.text(), '{"error":"rejected"}');
   const truncated = await r.infer(g, { metadata: { test_mode: 'truncate' } }); await assert.rejects(truncated.text());
 });
+// Red on the real CLI's client_metadata extension, or if it can change upstream routing.
+test('Codex client metadata is accepted and discarded before upstream dispatch', async t => {
+  const r = await rig(t), g = await r.grant();
+  const response = await r.infer(g, { client_metadata: { client: 'codex', provider: 'other', base_url: 'http://evil', key_id: 'other' } });
+  assert.equal(response.status, 200); await response.text();
+  assert.equal(r.inferenceRequests.length, 1);
+  assert.equal(r.inferenceRequests[0].body.model, g.model);
+  assert.equal(r.inferenceRequests[0].body.client_metadata, undefined);
+  assert.equal((await r.infer(g, { base_url: 'http://evil' })).status, 403);
+  assert.equal(r.inferenceRequests.length, 1);
+});
 test('expiry, explicit revoke and durable replay denial', async t => {
   const r = await rig(t), g = await r.grant(); await r.broker.revoke(g.capability);
   assert.equal((await r.infer(g)).status, 401); assert.equal((await r.post('/grant', jwt(), { provider: 'mimo', protocol: 'responses' })).status, 403);
