@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, writeFile, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, readFile, rm, stat } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,10 +9,11 @@ const [provider, agent = 'codex'] = process.argv.slice(2);
 if (!['mimo', 'openrouter'].includes(provider) || !['codex', 'claude'].includes(agent) || (agent === 'claude' && provider !== 'mimo')) throw Error('Unsupported provider/agent combination');
 const broker = 'http://broker:8787';
 const home = await mkdtemp(join(tmpdir(), 'gateway-spike-client-'));
-const fixture = resolve(dirname(fileURLToPath(import.meta.url)), 'fixture');
+const sourceFixture = resolve(dirname(fileURLToPath(import.meta.url)), 'fixture');
+const fixture = '/opt/rr-gateway-spike-fixture'; // Operator-pinned read-only snapshot in the disposable runner image.
 const env = { PATH: process.env.PATH, LANG: 'C.UTF-8', HOME: home, TMPDIR: home };
-let phase = 'version', completed = false;
-const prompt = 'Review the implementation and business rules in this directory. Actually read wallet.mjs and BUSINESS_RULES.md with tools. For Codex use the simple command cat wallet.mjs to read the implementation; for Claude use Read. Identify material financial correctness issues. Do not modify files. Return only JSON with a findings array. Each finding has file, function, summary, and example containing numeric initial_balance, amount, and final_balance. Use an empty findings array if there are no issues. Choose your own concrete example for each issue.';
+let phase = 'fixture', completed = false;
+const prompt = 'Review the implementation and business rules in this directory. Actually read wallet.mjs and BUSINESS_RULES.md with tools. For Codex read the implementation in a separate tool call running exactly cat wallet.mjs, then read rules with cat BUSINESS_RULES.md; do not combine the commands. For Claude use Read. Identify material financial correctness issues. Do not modify files. Return only JSON with a findings array. Each finding has file, function, summary, and example containing numeric initial_balance, amount, and final_balance. Use an empty findings array if there are no issues. Choose your own concrete example for each issue.';
 function execute(binary, args, onLine = () => {}) {
   return new Promise((resolvePromise, reject) => {
     const p = spawn(binary, args, { cwd: fixture, env, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -29,6 +30,14 @@ function execute(binary, args, onLine = () => {}) {
   });
 }
 try {
+  if (process.getuid() === 0) throw Error('Unprivileged disposable runner required');
+  const directory = await stat(fixture);
+  if (directory.uid !== 0 || directory.mode & 0o222) throw Error('Fixture directory must be sealed');
+  for (const file of ['wallet.mjs', 'BUSINESS_RULES.md']) {
+    const info = await stat(join(fixture, file));
+    if (info.uid !== 0 || info.mode & 0o222 || !(await readFile(join(fixture, file))).equals(await readFile(join(sourceFixture, file)))) throw Error('Sealed fixture must match checked-out source');
+  }
+  phase = 'version';
   const version = (await execute(agent, ['--version'])).trim();
   const expected = agent === 'codex' ? '0.159.2' : '2.1.285';
   if (!version.includes(expected)) throw Error('Installed client version does not match pinned canary');
@@ -49,7 +58,8 @@ try {
     env.CODEX_HOME = join(home, 'codex'); env.SPIKE_RUN_CAPABILITY = capability; await mkdir(env.CODEX_HOME);
     const config = `model = ${JSON.stringify(model)}\nmodel_provider = "spike"\nweb_search = "disabled"\n[model_providers.spike]\nname = "Run gateway"\nbase_url = "${broker}/openai/v1"\nenv_key = "SPIKE_RUN_CAPABILITY"\nwire_api = "responses"\nrequires_openai_auth = false\nrequest_max_retries = 0\nstream_max_retries = 0\nsupports_websockets = false\n`;
     await writeFile(join(env.CODEX_HOME, 'config.toml'), config, { mode: 0o600 });
-    raw = await execute('codex', ['--ask-for-approval', 'never', 'exec', '--sandbox', 'read-only', '--skip-git-repo-check', '--json', '--output-last-message', join(home, 'review.txt'), prompt], collect);
+    // Outer disposable container is the sandbox; fixture is root-owned and immutable to this UID.
+    raw = await execute('codex', ['--ask-for-approval', 'never', 'exec', '--sandbox', 'danger-full-access', '--skip-git-repo-check', '--json', '--output-last-message', join(home, 'review.txt'), prompt], collect);
     review = await readFile(join(home, 'review.txt'), 'utf8');
   } else {
     env.CLAUDE_CONFIG_DIR = join(home, 'claude'); await mkdir(env.CLAUDE_CONFIG_DIR);

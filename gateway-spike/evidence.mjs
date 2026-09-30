@@ -1,7 +1,7 @@
 // Only fixed vocabulary escapes the ephemeral client home; no raw agent transcript.
 export function normalizeEvidence(agent, events, review, provider) {
   let read = false, failed = false;
-  const readCommand = command => typeof command === 'string' && (/^cat wallet\.mjs$/.test(command.trim()) || /^\/bin\/(?:bash|sh|zsh) -lc ['"]cat wallet\.mjs['"]$/.test(command.trim()));
+  const readCommand = command => typeof command === 'string' && (/^cat wallet\.mjs$/.test(command.trim()) || /^\/bin\/(?:bash|sh|zsh) -(?:lc|c) ['"]cat wallet\.mjs['"]$/.test(command.trim()));
   for (const e of events) {
     if (agent === 'codex') {
       if (e.type === 'turn.failed' || e.type === 'error') failed = true;

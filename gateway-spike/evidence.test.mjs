@@ -11,6 +11,7 @@ test('finding alone, failed/incomplete tool execution and terminal error cannot 
 test('Codex evidence emits fixed normalized fields without transcript or review contents', () => {
   const e = normalizeEvidence('codex', [command], review, 'mimo');
   assert.deepEqual(e, { schema: 1, provider: 'mimo', agent: 'codex', tool_read_verified: true, finding: { file: 'fixture/wallet.mjs', issue: 'negative withdrawal increases balance' }, result: 'passed' });
+  assert.equal(normalizeEvidence('codex', [{...command,item:{...command.item,command:"/bin/bash -c 'cat wallet.mjs'"}}], review, 'mimo').tool_read_verified, true);
 });
 // Red when an echo command or a non-finding narrative can masquerade as a read/finding.
 test('echo-only output and denials cannot prove a discovered financial bug', () => {
