@@ -11,35 +11,40 @@ const broker = 'http://broker:8787';
 const home = await mkdtemp(join(tmpdir(), 'gateway-spike-client-'));
 const fixture = resolve(dirname(fileURLToPath(import.meta.url)), 'fixture');
 const env = { PATH: process.env.PATH, LANG: 'C.UTF-8', HOME: home, TMPDIR: home };
-const prompt = 'Review the implementation and business rules in this directory. Actually read the files with tools. Identify material financial correctness issues with affected file and a concrete example. Do not modify files. Report findings in plain text.';
+let phase = 'version', completed = false;
+const prompt = 'Review the implementation and business rules in this directory. Actually read wallet.mjs and BUSINESS_RULES.md with tools. For Codex use the simple command cat wallet.mjs to read the implementation; for Claude use Read. Identify material financial correctness issues. Do not modify files. Return only JSON with a findings array. Each finding has file, function, summary, and example containing numeric initial_balance, amount, and final_balance. Use an empty findings array if there are no issues. Choose your own concrete example for each issue.';
 function execute(binary, args, onLine = () => {}) {
   return new Promise((resolvePromise, reject) => {
     const p = spawn(binary, args, { cwd: fixture, env, stdio: ['ignore', 'pipe', 'pipe'] });
-    let output = '', pending = '', size = 0;
+    let output = '', pending = '', diagnostic = '', size = 0;
     const timer = setTimeout(() => { p.kill('SIGTERM'); setTimeout(() => p.kill('SIGKILL'), 5000).unref(); }, 12 * 60 * 1000); timer.unref();
     p.stdout.on('data', b => { size += b.length; if (size > 16 * 1024 * 1024) { p.kill('SIGKILL'); reject(Error('Agent output too large')); return; } output += b; pending += b; const lines = pending.split('\n'); pending = lines.pop(); for (const line of lines) onLine(line); });
-    // Drain but never print raw CLI diagnostics (may contain prompts or headers).
-    p.stderr.resume(); p.on('error', e => { clearTimeout(timer); reject(e); });
-    p.on('close', code => { clearTimeout(timer); if (pending) onLine(pending); if (code !== 0) reject(Error('Agent command failed; inspect ephemeral runtime privately')); else resolvePromise(output); });
+    // Retain failures privately in the disposable runner, never in Actions logs/artifacts.
+    p.stderr.on('data', b => { if (diagnostic.length < 65536) diagnostic += b.toString().slice(0, 65536 - diagnostic.length); });
+    p.on('error', e => { clearTimeout(timer); reject(e); });
+    p.on('close', async code => { clearTimeout(timer); if (pending) onLine(pending); if (code !== 0) {
+      try { await writeFile(join(home, 'private-events.jsonl'), output, { mode: 0o600 }); await writeFile(join(home, 'private-stderr.txt'), diagnostic, { mode: 0o600 }); } catch {}
+      reject(Error('Agent command failed; inspect ephemeral runtime privately'));
+    } else resolvePromise(output); });
   });
 }
 try {
   const version = (await execute(agent, ['--version'])).trim();
   const expected = agent === 'codex' ? '0.159.2' : '2.1.285';
   if (!version.includes(expected)) throw Error('Installed client version does not match pinned canary');
-  const oidcURL = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
+  phase = 'oidc'; const oidcURL = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
   if (oidcURL.protocol !== 'https:' || !oidcURL.hostname.endsWith('.actions.githubusercontent.com') || !process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN) throw Error('Missing trusted GitHub OIDC runtime');
   oidcURL.searchParams.set('audience', 'review-router-gateway-spike');
   const oidc = await fetch(oidcURL, { headers: { authorization: `Bearer ${process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN}` }, signal: AbortSignal.timeout(10000), redirect: 'error' });
   if (!oidc.ok) throw Error('GitHub OIDC failed');
   const { value } = await oidc.json();
-  const grant = await fetch(`${broker}/grant`, { method: 'POST', headers: { authorization: `Bearer ${value}`, 'content-type': 'application/json' }, body: JSON.stringify({ provider, protocol: agent === 'codex' ? 'responses' : 'messages' }), signal: AbortSignal.timeout(15000), redirect: 'error' });
+  phase = 'grant'; const grant = await fetch(`${broker}/grant`, { method: 'POST', headers: { authorization: `Bearer ${value}`, 'content-type': 'application/json' }, body: JSON.stringify({ provider, protocol: agent === 'codex' ? 'responses' : 'messages' }), signal: AbortSignal.timeout(15000), redirect: 'error' });
   if (!grant.ok) throw Error('Broker grant failed');
   const { capability, model } = await grant.json();
   if (!/^[A-Za-z0-9_-]{43}$/.test(capability) || typeof model !== 'string') throw Error('Invalid grant response');
   console.log(`::add-mask::${capability}`);
   const events = []; const collect = line => { try { events.push(JSON.parse(line)); } catch { /* Non-JSON diagnostic is never evidence. */ } };
-  let raw, review;
+  phase = 'agent'; let raw, review;
   if (agent === 'codex') {
     env.CODEX_HOME = join(home, 'codex'); env.SPIKE_RUN_CAPABILITY = capability; await mkdir(env.CODEX_HOME);
     const config = `model = ${JSON.stringify(model)}\nmodel_provider = "spike"\nweb_search = "disabled"\n[model_providers.spike]\nname = "Run gateway"\nbase_url = "${broker}/openai/v1"\nenv_key = "SPIKE_RUN_CAPABILITY"\nwire_api = "responses"\nrequires_openai_auth = false\nrequest_max_retries = 0\nstream_max_retries = 0\nsupports_websockets = false\n`;
@@ -55,10 +60,11 @@ try {
     await writeFile(join(home, 'review.txt'), review, { mode: 0o600 });
   }
   await writeFile(join(home, 'events.jsonl'), raw, { mode: 0o600 });
-  const evidence = { ...normalizeEvidence(agent, events, review, provider), client_version: expected, transport: agent === 'codex' ? 'responses' : 'messages' };
+  phase = 'evidence'; const evidence = { ...normalizeEvidence(agent, events, review, provider), client_version: expected, transport: agent === 'codex' ? 'responses' : 'messages' };
   const output = resolve('..', 'evidence'); // Fixed workspace sibling when workflow uses gateway-spike cwd.
   await mkdir(output, { recursive: true }); await writeFile(join(output, 'result.json'), JSON.stringify(evidence, null, 2) + '\n');
   console.log('Verified tool read and financial finding; normalized evidence saved.');
+  completed = true;
 } catch {
-  console.error('Spike failed; no raw transcript published. Operator must inspect private runtime before retry.'); process.exitCode = 1;
-} finally { await rm(home, { recursive: true, force: true }); }
+  console.error(`Spike failed at ${phase}; no raw transcript published. Operator must inspect private disposable runtime before retry.`); process.exitCode = 1;
+} finally { if (completed) await rm(home, { recursive: true, force: true }); }
