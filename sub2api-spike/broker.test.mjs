@@ -20,12 +20,29 @@ test('B07 revoked grant denies replay and provider rescope', async t => {
 // Regression: caller URL/model/group/header steers another identity or admin route.
 test('A07 A08 B08 B12 pinned model routes headers and unsupported scopes', async t => {
   const r = await rig(t); const g = await (await r.grant()).json();
-  for (const body of [{ model: 'wrong' }, { group_id: 2 }, { baseURL: 'http://169.254.169.254' }, { input: [{ account_id: 2 }] }]) assert.equal((await r.request(g.capability, body)).status, 400);
+  for (const body of [{ model: 'wrong' }, { group_id: 2 }, { baseURL: 'http://169.254.169.254' }, { account_id: 2 }]) assert.equal((await r.request(g.capability, body)).status, 400);
   for (const path of ['/admin/accounts', '/v1/chat/completions', '/v1/responses?group=2', '/v1/messages', '/debug']) assert.equal((await r.request(g.capability, {}, path)).status, 404);
   assert.equal((await r.grant('responses', { run_id: '124' }, { provider: 'unknown' })).status, 400);
   assert.equal(r.upstream.metrics.requests, 0);
   await nativeEvents(await r.request(g.capability, {}, '/v1/responses', { 'x-api-key': 'synthetic-caller', 'x-group-id': '2', 'x-forwarded-for': '127.0.0.1' }), 'responses');
   const o = r.upstream.observations[0]; assert.equal(o.body.model, 'mimo-v2.6-pro'); assert.equal(o.headers.authorization, 'Bearer synthetic-private-a'); for (const k of ['x-api-key', 'x-group-id', 'x-forwarded-for']) assert.equal(o.headers[k], undefined);
+});
+// Regression: Claude SDK's feature query is blocked or arbitrary queries gain access.
+test('A03 A09 exact Claude beta query preserves native Messages', async t => {
+  const r = await rig(t); const g = await (await r.grant('messages')).json();
+  await nativeEvents(await r.request(g.capability, {}, '/anthropic/v1/messages?beta=true'), 'messages');
+  assert.equal(r.upstream.observations[0].path, '/v1/messages?beta=true');
+  for (const path of ['/anthropic/v1/messages?beta=true&group=2', '/anthropic/v1/messages?beta=false', '/v1/responses?beta=true']) assert.equal((await r.request(g.capability, {}, path)).status, 404);
+  assert.equal(r.upstream.metrics.requests, 1);
+});
+// Regression: business data and tool schema property names are mistaken for routing.
+test('A04 native structured content cannot change server-pinned identity', async t => {
+  const r = await rig(t); const g = await (await r.grant()).json();
+  const input = [{ role: 'user', content: [{ type: 'input_text', text: 'account data' }], account: { group_id: 9, workspace: 'b' } }];
+  await nativeEvents(await r.request(g.capability, { input, metadata: { account: 'customer' } }), 'responses');
+  const observed = r.upstream.observations[0];
+  assert.deepEqual(observed.body.input, input); assert.deepEqual(observed.body.metadata, { account: 'customer' });
+  assert.equal(observed.headers.authorization, 'Bearer synthetic-private-a'); assert.equal(observed.body.model, 'mimo-v2.6-pro');
 });
 // Regression: body cap or request/concurrent reservation occurs after provider effects.
 test('B09 body request and concurrency limits before effects', async t => {

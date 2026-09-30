@@ -24,7 +24,7 @@ export function mockUpstream({ mode = 'native', delayMs = 500, identity = 'synth
       res.writeHead(200, { 'content-type': 'text/event-stream' });
       if (selected === 'slow-body') { res.write(': waiting\n\n'); await new Promise(r => setTimeout(r, controlledDelay)); if (res.destroyed) return; }
       if (selected === 'malformed') { res.end('event: response.completed\ndata: {broken\n\n'); return; }
-      const messages = req.url === '/v1/messages';
+      const messages = new URL(req.url, 'http://synthetic').pathname === '/v1/messages';
       if (selected === 'terminal-error') { const type = messages ? 'error' : 'response.failed'; res.end(`event: ${type}\ndata: ${JSON.stringify({ type, error: { type: 'synthetic_failure' } })}\n\n`); return; }
       const toolResult = messages ? body.messages?.flatMap(m => Array.isArray(m.content) ? m.content : []).find(b => b.type === 'tool_result') : body.input?.find?.(b => b.type === 'function_call_output');
       const content = JSON.stringify({ identity, model: body.model, toolResult: toolResult ?? null, unicode: 'Кошелёк 金額 🙂', padding: selected === 'large' ? '金🙂'.repeat(50000) : '' });

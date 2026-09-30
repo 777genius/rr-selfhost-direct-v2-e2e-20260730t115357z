@@ -2,6 +2,13 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { financialEvidence, nativeEvents } from './evidence.mjs';
 import { withdraw } from '../gateway-spike/fixture/wallet.mjs';
+test('A06 successful separate shell-wrapped rules read validates actual source and finding', () => {
+  const command = (cmd, text) => ({ type: 'item.completed', item: { type: 'command_execution', command: cmd, exit_code: 0, status: 'completed', aggregated_output: text } });
+  const review = JSON.stringify({ findings: [{ file: 'wallet.mjs', function: 'withdraw', summary: 'negative withdrawal increases balance', example: { initial_balance: 100, amount: -10, final_balance: 110 } }] });
+  const events = [command("/bin/bash -lc 'cat wallet.mjs'", 'export function withdraw\naccount.balance -= amount'), command("/bin/bash -lc 'cat BUSINESS_RULES.md'", 'A withdrawal must be strictly positive'), { type: 'turn.completed' }];
+  assert.equal(financialEvidence('codex', events, review, 'mimo').rules_read_verified, true);
+  events[1].item.aggregated_output = 'file read failed'; assert.throws(() => financialEvidence('codex', events, review, 'mimo'));
+});
 // Regression: malformed output or synthetic terminal/tool-only event counted as review.
 test('A06 malformed and fabricated financial success fail inherited validator', () => {
   for (const review of ['{bad', '{"findings":[]}', '{"findings":[{"file":"wallet.mjs"}]}']) assert.throws(() => financialEvidence('codex', [], review, 'mimo'));

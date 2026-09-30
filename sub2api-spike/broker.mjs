@@ -8,7 +8,7 @@ import { pipeline } from 'node:stream/promises';
 import { atomicJSON, loadJSON, serial, readJSON, send, bearer, fault } from './util.mjs';
 const paths = new Map([['/v1/responses', 'responses'], ['/openai/v1/responses', 'responses'], ['/v1/messages', 'messages'], ['/anthropic/v1/messages', 'messages']]);
 const routing = new Set(['account_id', 'account', 'group', 'group_id', 'key', 'api_key', 'baseURL', 'base_url', 'provider', 'workspace', 'workspace_id', 'upstream_url']);
-function denyRouting(x) { if (!x || typeof x !== 'object') return; for (const [k,v] of Object.entries(x)) { if (routing.has(k)) throw fault(400, 'routing_denied'); if (k !== 'tools') denyRouting(v); } }
+function denyRouting(x) { if (!x || typeof x !== 'object') return; for (const k of Object.keys(x)) if (routing.has(k)) throw fault(400, 'routing_denied'); }
 export async function createBroker({ ledgerPath, verifyOIDC, scopes, resolveWorkspace, isWorkspaceActive = () => true, timeoutMs = 60000, ttlMs = 900000, maxRequests = 32, maxConcurrent = 2, globalConcurrent = 40, log = () => {} }) {
   if (!(ttlMs > 0 && ttlMs <= 900000 && maxRequests > 0 && maxRequests <= 32 && maxConcurrent > 0 && maxConcurrent <= 2 && timeoutMs > 0)) throw Error('Invalid limits');
   // Exclusive process lock. Crash leaves it present: fail closed until the
@@ -28,7 +28,9 @@ export async function createBroker({ ledgerPath, verifyOIDC, scopes, resolveWork
     const started = Date.now(); let code = 'ok';
     try {
       if (poisoned) throw fault(503, 'ledger_unavailable');
-      const url = new URL(req.url, 'http://broker'); if (url.search) throw fault(404, 'route_denied');
+      const url = new URL(req.url, 'http://broker');
+      // Claude's native SDK uses this exact feature query. It grants no routing authority.
+      if (url.search && !(url.pathname === '/anthropic/v1/messages' && url.search === '?beta=true')) throw fault(404, 'route_denied');
       if (url.pathname === '/grant' && req.method === 'POST') {
         let claims; try { claims = await verifyOIDC(bearer(req)); } catch { throw fault(401, 'oidc_denied'); }
         const input = await readJSON(req, 4096);
@@ -72,7 +74,7 @@ export async function createBroker({ ledgerPath, verifyOIDC, scopes, resolveWork
         headers.session_id = g.session; headers['x-claude-code-session-id'] = g.session;
         if (g.requests >= maxRequests) throw fault(429, 'request_limit');
         g.requests++;
-        const upstream = await fetch(`${g.scope.baseURL}/v1/${g.scope.protocol}`, { method: 'POST', headers, body: JSON.stringify(body), signal: controller.signal, redirect: 'error' });
+        const upstream = await fetch(`${g.scope.baseURL}/v1/${g.scope.protocol}${url.search}`, { method: 'POST', headers, body: JSON.stringify(body), signal: controller.signal, redirect: 'error' });
         if (!upstream.ok) {
           await upstream.body?.cancel();
           const retry = upstream.headers.get('retry-after');

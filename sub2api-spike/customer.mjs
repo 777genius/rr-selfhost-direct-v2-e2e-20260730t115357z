@@ -64,7 +64,7 @@ export async function customerAdapter({ statePath, admin, workspaces, credential
         // Persist intention BEFORE remote create. An ambiguous failure remains
         // recovery_required: no automatic create retry or authority publication.
         try {
-          const a = await admin.call('POST', '/accounts', { name: `rr-sub2-spike-20260930-${id}`, platform: profile.platform, type: 'apikey', credentials: { api_key: credential, base_url: profile.baseURL }, extra: profile.platform === 'openai' ? { openai_responses_mode: 'force_responses', openai_passthrough: true } : { anthropic_passthrough: true }, group_ids: [group], concurrency: 2, priority: 1, rate_multiplier: 1 });
+          const a = await admin.call('POST', '/accounts', { name: `rr-sub2-spike-20260930-${id}`, platform: profile.platform, type: 'apikey', credentials: { api_key: credential, base_url: profile.baseURL, model_mapping: { [profile.model]: profile.model } }, extra: profile.platform === 'openai' ? { openai_responses_mode: 'force_responses', openai_passthrough: true } : { anthropic_passthrough: true }, group_ids: [group], concurrency: 2, priority: 1, rate_multiplier: 1 });
           if (!Number.isSafeInteger(a.id) || a.id < 1) throw fault(502, 'invalid_account_id');
           b.upstreamID = a.id; b.state = 'active'; await save(); return publicAccount(a, b);
         } catch (e) { b.state = 'recovery_required'; await save(); throw e; }
