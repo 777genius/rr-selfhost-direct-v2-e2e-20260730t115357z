@@ -1,0 +1,20 @@
+{
+  "new_15_leaf_case_ids": [
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object",
+    "TestOAuthBulkAffectedIDsControls/zero",
+    "TestOAuthBulkAffectedIDsControls/all",
+    "TestOAuthBulkAffectedIDsControls/mixed_missing",
+    "TestOAuthBulkReturningCursorFailures/query",
+    "TestOAuthBulkReturningCursorFailures/scan",
+    "TestOAuthBulkReturningCursorFailures/iteration",
+    "TestOAuthBulkReturningCursorFailures/close"
+  ],
+  "schema": "oauth-final-additional-identities/v1"
+}

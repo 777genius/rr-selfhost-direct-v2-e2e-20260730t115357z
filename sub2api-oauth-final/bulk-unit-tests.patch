@@ -1,0 +1,216 @@
+--- a/backend/internal/repository/account_repo_temp_unsched_test.go
++++ b/backend/internal/repository/account_repo_temp_unsched_test.go
+@@ -376,6 +376,7 @@
+ func (r rowsAffectedResult) RowsAffected() (int64, error) { return int64(r), nil }
+ 
+ type recordingSQLExecutor struct {
++	queryDB     *sql.DB
+ 	result      sql.Result
+ 	err         error
+ 	afterExec   func()
+@@ -396,5 +397,10 @@
+ }
+ 
+ func (e *recordingSQLExecutor) QueryContext(ctx context.Context, query string, args ...any) (*sql.Rows, error) {
++	if e.queryDB != nil {
++		e.execQueries = append(e.execQueries, query)
++		e.execArgs = append(e.execArgs, append([]any(nil), args...))
++		return e.queryDB.QueryContext(ctx, query, args...)
++	}
+ 	return nil, sql.ErrNoRows
+ }
+--- a/backend/internal/repository/account_repo_codex_fingerprint_seed_test.go
++++ b/backend/internal/repository/account_repo_codex_fingerprint_seed_test.go
+@@ -16,7 +16,7 @@
+ )
+ 
+ func TestBulkUpdateEnsuresCodexFingerprintSeedWithPerRowSQL(t *testing.T) {
+-	exec := &recordingSQLExecutor{result: rowsAffectedResult(0)}
++	exec := oauthBulkRecordingSQL(t)
+ 	repo := newAccountRepositoryWithSQL(nil, exec, nil)
+ 
+ 	_, err := repo.BulkUpdate(context.Background(), []int64{27, 28}, service.AccountBulkUpdate{
+@@ -76,7 +76,7 @@
+ 	t.Cleanup(func() { _ = client.Close() })
+ 
+ 	mock.ExpectBegin()
+-	mock.ExpectExec(`(?s)UPDATE accounts SET extra = .*gen_random_uuid\(\)::text.*WHERE id = ANY\(\$2\)`).
++	mock.ExpectQuery(`(?s)UPDATE accounts SET extra = .*gen_random_uuid\(\)::text.*WHERE id = ANY\(\$2\)`).
+ 		WithArgs(sqlmock.AnyArg(), `{27,28}`).
+ 		WillReturnError(errors.New("update failed"))
+ 	mock.ExpectRollback()
+@@ -102,9 +102,9 @@
+ 	t.Cleanup(func() { _ = client.Close() })
+ 
+ 	mock.ExpectBegin()
+-	mock.ExpectExec(`(?s)UPDATE accounts SET extra = .*gen_random_uuid\(\)::text.*WHERE id = ANY\(\$2\)`).
++	mock.ExpectQuery(`(?s)UPDATE accounts SET extra = .*gen_random_uuid\(\)::text.*WHERE id = ANY\(\$2\)`).
+ 		WithArgs(sqlmock.AnyArg(), `{27,28}`).
+-		WillReturnResult(sqlmock.NewResult(0, 2))
++		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(int64(27)).AddRow(int64(28))).RowsWillBeClosed()
+ 	mock.ExpectExec(regexp.QuoteMeta("INSERT INTO scheduler_outbox")).
+ 		WillReturnError(errors.New("outbox failed"))
+ 	mock.ExpectRollback()
+--- a/backend/internal/repository/account_repo_ollama_cloud_usage_test.go
++++ b/backend/internal/repository/account_repo_ollama_cloud_usage_test.go
+@@ -238,7 +238,7 @@
+ }
+ 
+ func TestBulkUpdateOllamaIdentityCleanupIsValueConditional(t *testing.T) {
+-	exec := &recordingSQLExecutor{result: rowsAffectedResult(1)}
++	exec := oauthBulkRecordingSQL(t, 17)
+ 	repo := newAccountRepositoryWithSQL(nil, exec, nil)
+ 
+ 	_, err := repo.BulkUpdate(context.Background(), []int64{17}, service.AccountBulkUpdate{
+--- a/backend/internal/repository/account_repo_opencode_go_usage_test.go
++++ b/backend/internal/repository/account_repo_opencode_go_usage_test.go
+@@ -276,7 +276,7 @@
+ }
+ 
+ func TestBulkUpdateOpenCodeGoIdentityCleanupIsValueConditional(t *testing.T) {
+-	exec := &recordingSQLExecutor{result: rowsAffectedResult(1)}
++	exec := oauthBulkRecordingSQL(t, 17)
+ 	repo := newAccountRepositoryWithSQL(nil, exec, nil)
+ 
+ 	_, err := repo.BulkUpdate(context.Background(), []int64{17}, service.AccountBulkUpdate{
+@@ -302,7 +302,7 @@
+ // 行在代理变化时会先命中 OpenCode 分支而遮蔽 Ollama 快照清理。这里断言 OpenCode 分支
+ // 的 WHEN 携带 opencode 正则（与 Ollama 正则互斥），真实行为由 integration 测试覆盖。
+ func TestBulkUpdateOpenCodeGoEligiblePredicateIncludesBaseURL(t *testing.T) {
+-	exec := &recordingSQLExecutor{result: rowsAffectedResult(1)}
++	exec := oauthBulkRecordingSQL(t, 17)
+ 	repo := newAccountRepositoryWithSQL(nil, exec, nil)
+ 
+ 	proxyID := int64(9)
+@@ -333,7 +333,7 @@
+ // 缺失/为 null 时 regex(NULL) 为 NULL，NOT NULL 仍为 NULL 会令 WHEN 不命中而残留
+ // OpenCode 状态；IS NOT TRUE 把 NULL 视为不匹配。
+ func TestBulkUpdateOpenCodeGoBaseURLClauseIsNullSafe(t *testing.T) {
+-	exec := &recordingSQLExecutor{result: rowsAffectedResult(1)}
++	exec := oauthBulkRecordingSQL(t, 17)
+ 	repo := newAccountRepositoryWithSQL(nil, exec, nil)
+ 
+ 	_, err := repo.BulkUpdate(context.Background(), []int64{17}, service.AccountBulkUpdate{
+@@ -418,7 +418,7 @@
+ }
+ 
+ func TestBulkUpdateOpenCodeGoProxyChangeClearsSnapshotOnly(t *testing.T) {
+-	exec := &recordingSQLExecutor{result: rowsAffectedResult(1)}
++	exec := oauthBulkRecordingSQL(t, 17)
+ 	repo := newAccountRepositoryWithSQL(nil, exec, nil)
+ 
+ 	proxyID := int64(9)
+--- a/backend/internal/repository/account_repo_upstream_billing_probe_update_test.go
++++ b/backend/internal/repository/account_repo_upstream_billing_probe_update_test.go
+@@ -286,7 +286,7 @@
+ }
+ 
+ func TestBulkUpdateNilProbeRemovesKeyInsteadOfWritingJSONNull(t *testing.T) {
+-	exec := &recordingSQLExecutor{result: rowsAffectedResult(1)}
++	exec := oauthBulkRecordingSQL(t, 27)
+ 	repo := newAccountRepositoryWithSQL(nil, exec, nil)
+ 
+ 	_, err := repo.BulkUpdate(context.Background(), []int64{27}, service.AccountBulkUpdate{
+@@ -299,7 +299,7 @@
+ }
+ 
+ func TestBulkUpdateDisablingProbeRemovesSnapshot(t *testing.T) {
+-	exec := &recordingSQLExecutor{result: rowsAffectedResult(1)}
++	exec := oauthBulkRecordingSQL(t, 27)
+ 	repo := newAccountRepositoryWithSQL(nil, exec, nil)
+ 
+ 	_, err := repo.BulkUpdate(context.Background(), []int64{27}, service.AccountBulkUpdate{
+@@ -323,9 +323,9 @@
+ 
+ 	enabled := true
+ 	mock.ExpectBegin()
+-	mock.ExpectExec(`(?s)UPDATE accounts SET extra = .* WHERE id = ANY\(\$2\) AND deleted_at IS NULL AND type = \$3`).
++	mock.ExpectQuery(`(?s)UPDATE accounts SET extra = .* WHERE id = ANY\(\$2\) AND deleted_at IS NULL AND type = \$3`).
+ 		WithArgs(sqlmock.AnyArg(), `{27,28}`, service.AccountTypeAPIKey).
+-		WillReturnResult(sqlmock.NewResult(0, 1))
++		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(int64(27))).RowsWillBeClosed()
+ 	mock.ExpectRollback()
+ 
+ 	repo := newAccountRepositoryWithSQL(client, db, nil)
+@@ -458,9 +458,9 @@
+ 
+ 	name := "renamed"
+ 	mock.ExpectBegin()
+-	mock.ExpectExec(`(?s)UPDATE accounts SET name = \$1.*WHERE id = ANY\(\$2\)`).
++	mock.ExpectQuery(`(?s)UPDATE accounts SET name = \$1.*WHERE id = ANY\(\$2\)`).
+ 		WithArgs(name, `{27,28}`).
+-		WillReturnResult(sqlmock.NewResult(0, 2))
++		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(int64(27)).AddRow(int64(28))).RowsWillBeClosed()
+ 	mock.ExpectExec(regexp.QuoteMeta("INSERT INTO scheduler_outbox")).WillReturnError(errors.New("outbox failed"))
+ 	mock.ExpectRollback()
+ 
+--- /dev/null
++++ b/backend/internal/repository/oauth_bulk_sql_cursor_test.go
+@@ -0,0 +1,67 @@
++package repository
++
++import (
++	"context"
++	"errors"
++	"testing"
++
++	"entgo.io/ent/dialect"
++	entsql "entgo.io/ent/dialect/sql"
++	sqlmock "github.com/DATA-DOG/go-sqlmock"
++	dbent "github.com/Wei-Shaw/sub2api/ent"
++	"github.com/Wei-Shaw/sub2api/internal/service"
++	"github.com/stretchr/testify/require"
++)
++
++// Adapt SQL shape recorders to the real RETURNING cursor without weakening
++// any existing SQL/argument/value assertion. They remain unit shape checks.
++func oauthBulkRecordingSQL(t *testing.T, ids ...int64) *recordingSQLExecutor {
++	t.Helper()
++	db, mock, err := sqlmock.New()
++	require.NoError(t, err)
++	rows := sqlmock.NewRows([]string{"id"})
++	for _, id := range ids {
++		rows.AddRow(id)
++	}
++	mock.ExpectQuery(`(?s)^UPDATE accounts SET .* RETURNING id$`).WillReturnRows(rows).RowsWillBeClosed()
++	t.Cleanup(func() {
++		require.NoError(t, mock.ExpectationsWereMet())
++		mock.ExpectClose()
++		require.NoError(t, db.Close())
++	})
++	return &recordingSQLExecutor{result: rowsAffectedResult(len(ids)), queryDB: db}
++}
++
++// Inject failures at each cursor boundary: none may reach publication or commit.
++func TestOAuthBulkReturningCursorFailures(t *testing.T) {
++	for _, mode := range []string{"query", "scan", "iteration", "close"} {
++		t.Run(mode, func(t *testing.T) {
++			db, mock, err := sqlmock.New()
++			require.NoError(t, err)
++			client := dbent.NewClient(dbent.Driver(entsql.OpenDB(dialect.Postgres, db)))
++			t.Cleanup(func() { mock.ExpectClose(); require.NoError(t, client.Close()) })
++			mock.ExpectBegin()
++			q := mock.ExpectQuery(`(?s)^UPDATE accounts SET .* RETURNING id$`)
++			injected := errors.New("synthetic cursor failure")
++			switch mode {
++			case "query":
++				q.WillReturnError(injected)
++			case "scan":
++				q.WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow("invalid-id")).RowsWillBeClosed()
++			case "iteration":
++				q.WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(int64(27)).RowError(0, injected)).RowsWillBeClosed()
++			case "close":
++				q.WillReturnRows(sqlmock.NewRows([]string{"id"}).CloseError(injected)).RowsWillBeClosed()
++			}
++			mock.ExpectRollback()
++			name := "synthetic"
++			n, err := newAccountRepositoryWithSQL(client, db, nil).BulkUpdate(context.Background(), []int64{27}, service.AccountBulkUpdate{Name: &name})
++			require.Error(t, err)
++			require.Zero(t, n)
++			if mode != "scan" {
++				require.ErrorIs(t, err, injected)
++			}
++			require.NoError(t, mock.ExpectationsWereMet())
++		})
++	}
++}

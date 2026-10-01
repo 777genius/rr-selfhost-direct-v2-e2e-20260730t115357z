@@ -1,0 +1,1325 @@
+{
+  "schema": "oauth-fork-w9-case-inventory/v1",
+  "expected_cases": 160,
+  "retained_cases": 78,
+  "added_cases": 82,
+  "cases": [
+    {
+      "case_id": "TestOAuthLabLifecycle/normal_8_concurrent",
+      "frozen_baseline_status": "PASS",
+      "invariant": "Eight successful gateway requests share exactly one issuer consumption and persist R1.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/background_then_request",
+      "frozen_baseline_status": "PASS",
+      "invariant": "A request joins a real background owner and selects the persisted successor.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/request_then_background",
+      "frozen_baseline_status": "PASS",
+      "invariant": "Background contention never consumes the request owner token again.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/reconnect_while_refresh",
+      "frozen_baseline_status": "FAIL",
+      "invariant": "Reconnect durable/cache identity wins the older refresh completion CAS.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/disable_while_refresh",
+      "frozen_baseline_status": "FAIL",
+      "invariant": "Disable survives late completion and excludes scheduling and bearer work.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/lock_ttl_expiry",
+      "frozen_baseline_status": "FAIL",
+      "invariant": "Actual lease expiry cannot authorize a consumed-token replay.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/redis_outage_process_local_8",
+      "frozen_baseline_status": "PASS",
+      "invariant": "Eight same-process requests remain successful with one consumption during observed Redis outage.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/redis_outage_two_process_race",
+      "frozen_baseline_status": "FAIL",
+      "invariant": "Two Redis-error processes contend on PostgreSQL and consume exactly once.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/revocation_request_path",
+      "frozen_baseline_status": "FAIL",
+      "invariant": "Confirmed terminal failure denies bearer work and durable scheduling.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/revocation_background_path",
+      "frozen_baseline_status": "PASS",
+      "invariant": "Background terminal exclusion persists without unconditional stale writes.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/issuer_rotation_lost_db_commit_ack",
+      "frozen_baseline_status": "PASS",
+      "invariant": "Actual completion commit acknowledgement loss reconciles exact durable result, with one consumption.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/issuer_rotation_db_write_rejected",
+      "frozen_baseline_status": "FAIL",
+      "invariant": "Real rejected post-consumption write retains pending uncertainty and prevents replay.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkContracts/mixed_redis_good_owner",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "invariant": "Redis-success owner and Redis-error contender share PostgreSQL ownership.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkContracts/mixed_redis_bad_owner",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "invariant": "Redis-error owner and Redis-success contender share PostgreSQL ownership.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkContracts/crash_after_consume_no_expiry_replay",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "invariant": "Actual killed-owner unsuccessful exit plus observed lease expiry cannot replay consumed R0.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkContracts/reconnect_same_clock",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "invariant": "DB revision beats reconnect with equal caller token clock.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkContracts/reconnect_reversed_clock",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "invariant": "DB revision beats reconnect with reversed caller token clock.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkContracts/stale_admin_disable_after_refresh",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "invariant": "Stale full account disable preserves concurrently committed R1.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkContracts/primed_cache_direct_disable",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "invariant": "A real cache read paused across a committed disable returns no bearer; direct disabled selection also denies.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkContracts/invalid_grant_reconnect_wins",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "invariant": "Late terminal reply cannot quarantine or overwrite newer reconnect.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkContracts/late_cache_publish_and_delete_tombstone",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "invariant": "Late full/meta/access writes cannot roll back newer state or resurrect deleted payloads.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkContracts/cache_exact_integer_revision",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "invariant": "Adjacent revisions above 2^53 stay distinct in real full and filtered meta cache payloads.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkContracts/redis_owner_compare_delete",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "invariant": "Expired predecessor compare-delete preserves the actual successor handle and positive TTL.",
+      "frozen_w2_execution": "PASS",
+      "historical_w3_execution": "NO RESULT: panic terminated run",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/usage_during_consumed_response",
+      "finding": "F5",
+      "invariant": "Paused actual issuer + real UpdateExtra preserves complete document/revision, durably saves successor/usage, clears admission block, one consumption.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "FAIL",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/usage_preserves_proxy_barrier",
+      "finding": "F5",
+      "invariant": "Paused consumed response plus real proxy routing mutation fences successor, retains known protected result and never replays.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "FAIL",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/usage_preserves_group_barrier",
+      "finding": "F5",
+      "invariant": "Paused consumed response plus real group routing mutation fences successor, retains known protected result and never replays.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "FAIL",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/usage_preserves_extra_routing_barrier",
+      "finding": "F5",
+      "invariant": "Paused consumed response plus real extra_routing routing mutation fences successor, retains known protected result and never replays.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "FAIL",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/two_ids_one_consumption",
+      "finding": "F2",
+      "invariant": "Two real account IDs and two worker processes share one unique keyed PostgreSQL domain; one issuer consumption and protected second row.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "FAIL",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/delete_reimport_uncertain",
+      "finding": "F2",
+      "invariant": "Actual worker death after consumption plus deletion/lease expiry; another imported ID remains pending and never POSTs or reaches resource.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "FAIL",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/completed_nonrotating_transition",
+      "finding": "F2",
+      "invariant": "Actual PostgreSQL exact completed same-identity result explicitly permits later claim; repository transition oracle, no issuer reuse claim.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "FAIL",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/keyed_identity_hmac_and_completed_redaction",
+      "finding": "F2",
+      "invariant": "Independent Go standard HMAC vs SQL identity; obsolete documents redact after real reconnect, keyed consumed evidence retained.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "NO RESULT: run terminated before case",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/validation_cas_reconnect",
+      "finding": "F4",
+      "invariant": "Actual PostgreSQL access-only metadata CAS rejects a reconnect and preserves replacement document.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "NO RESULT: run terminated before case",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/forward_stale_selection_and_coherent_control",
+      "finding": "F1",
+      "invariant": "Actual Forward stale selected row denies before HTTP; successful control builds bearer/identity/proxy/FedRAMP tuple seen at transport and real local resource; old pointer immutable.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "NO RESULT: run terminated before case",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/websocket_ingress_stale_selection_denied",
+      "finding": "F1",
+      "invariant": "Fresh enabled real WS reaches production pre-dial callback; stale revision/full document and wrong bearer return exact containment + unwrapped protected reason before callback and zero HTTP/WS calls; disabled fresh rejects config while disabled stale rejects protected state.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "NO RESULT: run terminated before case",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "FAIL",
+      "subcases": [
+        "enabled_fresh_control",
+        "enabled_stale_selection",
+        "enabled_wrong_bearer",
+        "disabled_fresh_control",
+        "disabled_stale_guard_precedes_config"
+      ],
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/spark_parent_paused",
+      "finding": "F3",
+      "invariant": "Actual scheduler and bearer allow independent shadow only for paused/global-rate-limited/overloaded parent; deny disabled/pending/shared cooldown.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "NO RESULT: run terminated before case",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "FAIL: actual scheduler regression",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/spark_parent_rate_limited",
+      "finding": "F3",
+      "invariant": "Actual scheduler and bearer allow independent shadow only for paused/global-rate-limited/overloaded parent; deny disabled/pending/shared cooldown.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "NO RESULT: run terminated before case",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "FAIL: actual scheduler regression",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/spark_parent_overloaded",
+      "finding": "F3",
+      "invariant": "Actual scheduler and bearer allow independent shadow only for paused/global-rate-limited/overloaded parent; deny disabled/pending/shared cooldown.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "NO RESULT: run terminated before case",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "FAIL: actual scheduler regression",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/spark_parent_disabled",
+      "finding": "F3",
+      "invariant": "Actual scheduler and bearer allow independent shadow only for paused/global-rate-limited/overloaded parent; deny disabled/pending/shared cooldown.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "NO RESULT: run terminated before case",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/spark_parent_pending",
+      "finding": "F3",
+      "invariant": "Actual scheduler and bearer allow independent shadow only for paused/global-rate-limited/overloaded parent; deny disabled/pending/shared cooldown.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "NO RESULT: run terminated before case",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/spark_parent_shared_cooldown",
+      "finding": "F3",
+      "invariant": "Actual scheduler and bearer allow independent shadow only for paused/global-rate-limited/overloaded parent; deny disabled/pending/shared cooldown.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "NO RESULT: run terminated before case",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkRemediation/two_id_unique_claim_contention",
+      "finding": "F2",
+      "invariant": "Two actual PostgreSQL INSERT lock waiters on one reusable keyed domain; exactly one claim wins; only that owner reaches paused real issuer and durably saves successor. Setup is an explicit repository nonrotating transition.",
+      "frozen_baseline_status": "NO BASELINE RECEIPT",
+      "frozen_w2_execution": "NO W2 RECEIPT",
+      "historical_w3_execution": "NO RESULT: run terminated before case",
+      "current_execution": "NOT RUN",
+      "historical_w4_execution": "PASS",
+      "historical_w5_execution": "PASS: exact frozen pair only",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6WSHandlerTuple/expired",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "One synthetic own rotation admits private successor; shared selection immutable",
+      "finding": "R1",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6WSHandlerTuple/near_expiry",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Near expiry own refresh admits successor",
+      "finding": "R1",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6WSHandlerTuple/unexpired",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Fresh unexpired tuple admits without issuer work",
+      "finding": "R1",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6WSHandlerTuple/reconnect",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Committed reconnect after bind denies before admission",
+      "finding": "R1",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6WSHandlerTuple/disable",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Committed disable after bind denies before admission",
+      "finding": "R1",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6WSHandlerTuple/wrong_bearer",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Wrong supplied bearer on bound context denies",
+      "finding": "R1",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6WSHandlerTuple/shadow_parent_refresh",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Paused direct parent may refresh for independent child, preserving child ID/quota",
+      "finding": "R1",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6CanonicalIdentity/tab_newline",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Equivalent ASCII whitespace HTTP forms and SQL identities; uncertainty/delete/reimport no replay",
+      "finding": "R2",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6CanonicalIdentity/nbsp",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "NBSP alias same wire client and durable domain",
+      "finding": "R2",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6CanonicalIdentity/unicode_complete",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Complete Go Unicode whitespace set matches SQL and actual HTTP forms",
+      "finding": "R2",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6CanonicalIdentity/default_client",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Missing client and all-whitespace client use identical fallback, no replay",
+      "finding": "R2",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6CanonicalIdentity/unsupported_types",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Eight numeric/bool/array/object documents deny in SQL and provider with no issuer calls",
+      "finding": "R2",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6ProxyExpiryBoundary/expiry_crosses_hydration",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Test SQL adapter pauses real hydration/final validation; actual proxy repo commits past expiry; protected with zero upstream effects",
+      "finding": "R3",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6ProxyExpiryBoundary/future_control",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Unchanged future expiry proxy admits without upstream dial",
+      "finding": "R3",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW6UpgradeRefusal",
+      "frozen_baseline_status": "NOT RUN",
+      "current_execution": "NOT RUN",
+      "invariant": "Actual PG executes new migration with pending history, requires SQLSTATE55000, rollback preserves pending",
+      "finding": "R2",
+      "historical_w6_execution": "PASS: exact frozen W6 pair only",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/client_id/numeric",
+      "invariant": "Healthy scheduling with legacy corruption and pending history",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/client_id/boolean",
+      "invariant": "Healthy scheduling with legacy corruption and pending history",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/client_id/array",
+      "invariant": "Healthy scheduling with legacy corruption and pending history",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/client_id/object",
+      "invariant": "Healthy scheduling with legacy corruption and pending history",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/numeric",
+      "invariant": "Healthy scheduling with legacy corruption and pending history",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/boolean",
+      "invariant": "Healthy scheduling with legacy corruption and pending history",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/array",
+      "invariant": "Healthy scheduling with legacy corruption and pending history",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/object",
+      "invariant": "Healthy scheduling with legacy corruption and pending history",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/numeric",
+      "invariant": "Reject all management write boundaries without persistence/issuer effects",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/boolean",
+      "invariant": "Reject all management write boundaries without persistence/issuer effects",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/array",
+      "invariant": "Reject all management write boundaries without persistence/issuer effects",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/object",
+      "invariant": "Reject all management write boundaries without persistence/issuer effects",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/numeric",
+      "invariant": "Reject all management write boundaries without persistence/issuer effects",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/boolean",
+      "invariant": "Reject all management write boundaries without persistence/issuer effects",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/array",
+      "invariant": "Reject all management write boundaries without persistence/issuer effects",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/object",
+      "invariant": "Reject all management write boundaries without persistence/issuer effects",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/missing",
+      "invariant": "Supported/default identities and native provider fields retained; absent refresh excludes scheduling",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/null",
+      "invariant": "Supported/default identities and native provider fields retained; absent refresh excludes scheduling",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/empty",
+      "invariant": "Supported/default identities and native provider fields retained; absent refresh excludes scheduling",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/unicode_default",
+      "invariant": "Supported/default identities and native provider fields retained; absent refresh excludes scheduling",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/string",
+      "invariant": "Supported/default identities and native provider fields retained; absent refresh excludes scheduling",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/other_provider",
+      "invariant": "Supported/default identities and native provider fields retained; absent refresh excludes scheduling",
+      "current_execution": "NOT RUN",
+      "historical_w7_execution": "PASS: exact frozen W7 only",
+      "historical_w8_execution": "PASS: exact W8 only"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/numeric",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/boolean",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/array",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/object",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/numeric",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/boolean",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/array",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/object",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/missing",
+      "invariant": "Supported identity client semantics and exact refresh bytes; native business document retained.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/null",
+      "invariant": "Supported identity client semantics and exact refresh bytes; native business document retained.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/empty",
+      "invariant": "Supported identity client semantics and exact refresh bytes; native business document retained.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/unicode",
+      "invariant": "Supported identity client semantics and exact refresh bytes; native business document retained.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/string",
+      "invariant": "Supported identity client semantics and exact refresh bytes; native business document retained.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/numeric",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/boolean",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/array",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/object",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/numeric",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/boolean",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/array",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/object",
+      "invariant": "Observed real admin B row-lock/advisory barrier and A UPDATE blocked by B; A rejects/zero mutation; committed B document/revision unchanged; sibling and converted account schedule; zero issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/numeric",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/boolean",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/array",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/object",
+      "invariant": "Actual repository stable OAuth rejection or native document retention, no issuer calls.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/missing",
+      "invariant": "Supported identity client semantics and exact refresh bytes; native business document retained.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/null",
+      "invariant": "Supported identity client semantics and exact refresh bytes; native business document retained.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/empty",
+      "invariant": "Supported identity client semantics and exact refresh bytes; native business document retained.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/unicode",
+      "invariant": "Supported identity client semantics and exact refresh bytes; native business document retained.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/string",
+      "invariant": "Supported identity client semantics and exact refresh bytes; native business document retained.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/client_id/numeric",
+      "invariant": "Supported bulk patch cannot mutate an invalid inherited OAuth identity document; credentials/revision unchanged.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/client_id/boolean",
+      "invariant": "Supported bulk patch cannot mutate an invalid inherited OAuth identity document; credentials/revision unchanged.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/client_id/array",
+      "invariant": "Supported bulk patch cannot mutate an invalid inherited OAuth identity document; credentials/revision unchanged.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/client_id/object",
+      "invariant": "Supported bulk patch cannot mutate an invalid inherited OAuth identity document; credentials/revision unchanged.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/refresh_token/numeric",
+      "invariant": "Supported bulk patch cannot mutate an invalid inherited OAuth identity document; credentials/revision unchanged.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/refresh_token/boolean",
+      "invariant": "Supported bulk patch cannot mutate an invalid inherited OAuth identity document; credentials/revision unchanged.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/refresh_token/array",
+      "invariant": "Supported bulk patch cannot mutate an invalid inherited OAuth identity document; credentials/revision unchanged.",
+      "current_execution": "NOT RUN"
+    },
+    {
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/refresh_token/object",
+      "invariant": "Supported bulk patch cannot mutate an invalid inherited OAuth identity document; credentials/revision unchanged.",
+      "current_execution": "NOT RUN"
+    }
+  ],
+  "additional_unit_test": {
+    "name": "TestOAuthForkSchedulerMetadataProjection",
+    "execution": "NOT RUN",
+    "invariant": "Serialized metadata contains all seven existing scheduler credential fields plus exact revision; excludes bearer/unknown fields and leaves source map unchanged."
+  },
+  "additional_unit_tests": [
+    {
+      "name": "TestOAuthForkSchedulerMetadataProjection",
+      "w3_execution": "NOT RUN",
+      "oracle": "Serialized metadata contains all seven existing scheduler credential fields plus exact revision; excludes bearer/unknown fields and leaves source map unchanged."
+    },
+    {
+      "name": "TestOAuthForkManualValidationHTTP",
+      "subcases": [
+        "valid_pat",
+        "invalid_pat",
+        "reconnect_during_pat",
+        "access_only_enrichment"
+      ],
+      "w3_execution": "NOT RUN",
+      "oracle": "Real synthetic whoami/enrichment HTTP boundary; invalid/reconnect denied, metadata preserved, no empty refresh POST. Service CAS fixture only; actual PG CAS separate."
+    },
+    {
+      "name": "TestOAuthForkWSReuseCredentialTuple",
+      "subcases": [
+        "bearer",
+        "identity",
+        "fedramp",
+        "proxy",
+        "revision"
+      ],
+      "w3_execution": "NOT RUN",
+      "oracle": "Connection pool compatibility changes for each auth/routing component independent of fingerprint settings."
+    },
+    {
+      "name": "TestOAuthForkEmptyRefreshHTTPBoundary",
+      "w3_execution": "NOT RUN",
+      "oracle": "Actual OAuth issuer HTTP parser control POST succeeds once; whitespace-only refresh token fails before any issuer HTTP."
+    }
+  ],
+  "execution_note": "Old 41 identities and original 23 oracles retained byte-identically to executed W5 tests; 15 new real boundary cases authored but NOT RUN. Historical root W5 PASS does not transfer.",
+  "replacement_go_execution": "NOT RUN",
+  "original_cases": 23,
+  "new_concurrency_cases": 16,
+  "new_controls": 66
+}

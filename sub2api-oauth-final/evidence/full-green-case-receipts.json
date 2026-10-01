@@ -1,0 +1,4806 @@
+{
+  "receipts": [
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 218,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 1,
+      "synthetic_identity_id": "6b85101f-961c-48fb-9884-74781e08fe5d"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 203,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 4,
+      "synthetic_identity_id": "3e2dda29-b8ef-4f8a-96a5-3c6d17906e01"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 190,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 7,
+      "synthetic_identity_id": "2bb12f41-ccbc-4e14-aa0b-71db32e1222b"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 216,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 10,
+      "synthetic_identity_id": "22de3d9a-e567-4624-8ca7-ea289acb9675"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 293,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 13,
+      "synthetic_identity_id": "50d44e8d-98bc-4c80-b458-593e39215223"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 219,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 16,
+      "synthetic_identity_id": "8eef46aa-4237-499c-ab97-7691b5c29363"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 183,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 19,
+      "synthetic_identity_id": "b519847e-1732-4d72-ab8c-f8b621980eec"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 130,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 22,
+      "synthetic_identity_id": "b652017a-046f-49e6-b290-7493dd2e6ae5"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthBulkAffectedIDsControls/zero",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "empty",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 194,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 25,
+      "synthetic_identity_id": "7065a7d5-2e38-42db-9349-3871445e42ad"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthBulkAffectedIDsControls/all",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "empty",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "disabled"
+      },
+      "duration_ms": 58,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 27,
+      "synthetic_identity_id": "fa7815f9-47db-4143-9f38-fd07dc6fa246"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthBulkAffectedIDsControls/mixed_missing",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "empty",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "disabled"
+      },
+      "duration_ms": 52,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 29,
+      "synthetic_identity_id": "95e5f130-fadb-4427-a889-ae308ac211f9"
+    },
+    {
+      "barriers": [
+        "two_real_postgresql_identity_insert_lock_waiters"
+      ],
+      "case_id": "TestOAuthForkRemediation/two_id_unique_claim_contention",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 1,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 59,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 5,
+      "synthetic_account_id": 35,
+      "synthetic_identity_id": "f1b22be3-0213-4b4f-8224-1b5e64caf889"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkRemediation/completed_nonrotating_transition",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 17,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 7,
+      "synthetic_account_id": 41,
+      "synthetic_identity_id": "c6958797-893b-4bd3-b84c-e80ace2690a8"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkRemediation/validation_cas_reconnect",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "unknown",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 25,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 8,
+      "synthetic_account_id": 43,
+      "synthetic_identity_id": "c748d89b-d587-49c1-8407-3af706f1d1c3"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkRemediation/forward_stale_selection_and_coherent_control",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 49,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 8,
+      "synthetic_account_id": 44,
+      "synthetic_identity_id": "0f1826d2-022a-4895-a076-2e1a947fa5b9"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkRemediation/websocket_ingress_stale_selection_denied",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 51,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 8,
+      "synthetic_account_id": 45,
+      "synthetic_identity_id": "39475da5-2f72-4643-924c-49fc8e4c53e1"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkRemediation/spark_parent_paused",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": false,
+        "status": "active"
+      },
+      "duration_ms": 54,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 8,
+      "synthetic_account_id": 46,
+      "synthetic_identity_id": "1f040535-d5fd-429f-bfec-4fb093af83cf"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkRemediation/spark_parent_rate_limited",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 43,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 8,
+      "synthetic_account_id": 48,
+      "synthetic_identity_id": "e06031fb-8d24-46c9-8ef7-5c4604df0788"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkRemediation/spark_parent_overloaded",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 51,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 8,
+      "synthetic_account_id": 50,
+      "synthetic_identity_id": "ef27842d-eba4-46d1-b4bb-e90076f30a56"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkRemediation/spark_parent_disabled",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "disabled"
+      },
+      "duration_ms": 36,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 8,
+      "synthetic_account_id": 52,
+      "synthetic_identity_id": "a7d8ea6b-6049-4b5d-b5cd-b71d0b01d209"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkRemediation/spark_parent_pending",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 2028,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 8,
+      "synthetic_account_id": 54,
+      "synthetic_identity_id": "a427d56f-699b-49cd-8af6-e0f15f5f4e17"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkRemediation/spark_parent_shared_cooldown",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 25,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 8,
+      "synthetic_account_id": 56,
+      "synthetic_identity_id": "53c6251f-0978-4c47-a546-2011cafecc20"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkContracts/late_cache_publish_and_delete_tombstone",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "reread_ok": false
+      },
+      "duration_ms": 20,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 7,
+      "synthetic_account_id": 66,
+      "synthetic_identity_id": "f836d367-fe38-4fad-bee1-8a3dea61f4a5"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkContracts/cache_exact_integer_revision",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 13,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 7,
+      "synthetic_account_id": 67,
+      "synthetic_identity_id": "5fb52cab-0061-4b30-9529-019249501950"
+    },
+    {
+      "barriers": [
+        "lease_expired"
+      ],
+      "case_id": "TestOAuthForkContracts/redis_owner_compare_delete",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 107,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 7,
+      "synthetic_account_id": 68,
+      "synthetic_identity_id": "6e826214-5fdd-4b57-a00e-5fac2a177f72"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6WSHandlerTuple/expired",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 1,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 78,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 1,
+      "synthetic_account_id": 69,
+      "synthetic_identity_id": "8421cb21-e70c-4686-a483-dddca3be4edd"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6WSHandlerTuple/near_expiry",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 1,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 55,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 2,
+      "synthetic_account_id": 70,
+      "synthetic_identity_id": "779c6acb-5811-4b14-a686-00ae7f74c66e"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6WSHandlerTuple/unexpired",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 46,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 2,
+      "synthetic_account_id": 71,
+      "synthetic_identity_id": "ac5e15ef-d3bb-4b3e-9185-8e47c96056c3"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6WSHandlerTuple/reconnect",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 1,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 50,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 3,
+      "synthetic_account_id": 72,
+      "synthetic_identity_id": "9031f3e2-91be-4d2c-ab45-aeb52ceaac11"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6WSHandlerTuple/disable",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 1,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "disabled"
+      },
+      "duration_ms": 56,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 4,
+      "synthetic_account_id": 73,
+      "synthetic_identity_id": "1120e083-2486-4924-b83a-27048b6a1f5a"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6WSHandlerTuple/wrong_bearer",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 1,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 41,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 5,
+      "synthetic_account_id": 74,
+      "synthetic_identity_id": "afbf56b4-372c-4186-b05e-5dae332ff52b"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6WSHandlerTuple/shadow_parent_refresh",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 1,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": false,
+        "status": "active"
+      },
+      "duration_ms": 68,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 6,
+      "synthetic_account_id": 75,
+      "synthetic_identity_id": "872f03ea-8005-4524-bffc-5ed77df6d6e9"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6CanonicalIdentity/tab_newline",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "reread_ok": false
+      },
+      "duration_ms": 4102,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 77,
+      "synthetic_identity_id": "9d589f81-6ff4-4d74-bec1-f55c690a9de9"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6CanonicalIdentity/nbsp",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "reread_ok": false
+      },
+      "duration_ms": 4062,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 81,
+      "synthetic_identity_id": "e480c6b9-1194-4dce-810e-ff718f2adab8"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6CanonicalIdentity/unicode_complete",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "reread_ok": false
+      },
+      "duration_ms": 4065,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 85,
+      "synthetic_identity_id": "f47d4901-8e4b-4043-bee0-e75ac4f83079"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6CanonicalIdentity/default_client",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "reread_ok": false
+      },
+      "duration_ms": 4063,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 89,
+      "synthetic_identity_id": "2ff1cea5-863c-44ad-8330-bfdd661f7b89"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6CanonicalIdentity/unsupported_types",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 50,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 93,
+      "synthetic_identity_id": "0dc40bdd-90a8-40cf-903e-dc54a3e1a91e"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6ProxyExpiryBoundary/expiry_crosses_hydration",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 62,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 94,
+      "synthetic_identity_id": "414f02e6-4b25-4d61-b907-e48dde66b85a"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6ProxyExpiryBoundary/future_control",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 34,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 95,
+      "synthetic_identity_id": "5bcfa3cd-b9db-4089-9b35-fa17dfcb1d1d"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW6UpgradeRefusal",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 28,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 96,
+      "synthetic_identity_id": "5308450a-2acf-42aa-bbba-cdd4426451df"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 120,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 97,
+      "synthetic_identity_id": "cbdc3d4e-cb2d-48df-989c-39e3b3537f9a"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 67,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 100,
+      "synthetic_identity_id": "b2a00ca4-3c01-40e9-86cd-8eb0d7fed7ba"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 64,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 103,
+      "synthetic_identity_id": "97ed6904-88b7-4079-9def-36e0a59ec13c"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 68,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 106,
+      "synthetic_identity_id": "cef3aa9a-dff6-4c98-97ea-009ceae451f0"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 83,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 109,
+      "synthetic_identity_id": "19aa1af0-580b-4621-a5e6-d99e194ed12f"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 76,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 112,
+      "synthetic_identity_id": "8adbc6ed-93c4-484e-a9a6-822379b8e4b2"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 77,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 115,
+      "synthetic_identity_id": "5600df10-4fea-48b9-872e-16194ef6c650"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 74,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 118,
+      "synthetic_identity_id": "a5ed29c9-4f14-417d-9e58-6f73b31853f1"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 26,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 121,
+      "synthetic_identity_id": "b1ec1880-56ae-4fdb-89a0-23ac5046fa23"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 18,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 122,
+      "synthetic_identity_id": "f69b9a4b-5804-4d31-a556-6afb126b2c55"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 15,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 123,
+      "synthetic_identity_id": "2482f73f-173d-4359-b831-d4603e1ab686"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 124,
+      "synthetic_identity_id": "c914d433-4f3d-4f42-b0d0-1deed7d615b7"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 15,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 125,
+      "synthetic_identity_id": "fbada28f-7511-460f-a48f-613c3001bc11"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 10,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 126,
+      "synthetic_identity_id": "c4b3be06-5782-4280-b04b-ff8980a0bed7"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 127,
+      "synthetic_identity_id": "8ab265bf-cc2b-4f88-8c5d-1b0aa3e52dc6"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 11,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 128,
+      "synthetic_identity_id": "cbdaf2b2-48fc-41d6-8ab0-0acfc3f77cf4"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/missing",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 49,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 129,
+      "synthetic_identity_id": "ce562e51-3392-4d50-864e-618123ed434c"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/null",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 22,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 130,
+      "synthetic_identity_id": "45452afb-732a-456c-802d-b3056966410e"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/empty",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 23,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 131,
+      "synthetic_identity_id": "6e4ab3bd-8733-4207-a24f-008048c8dd35"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/unicode_default",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 18,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 132,
+      "synthetic_identity_id": "f32e9fdb-6575-44a8-98b0-5c8e465522c2"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/string",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 23,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 133,
+      "synthetic_identity_id": "3619a8a8-8b9e-4bcc-87ca-3442c79596a2"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW7SupportedIdentityWriteControls/other_provider",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 16,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 134,
+      "synthetic_identity_id": "13e57a56-65b6-49d8-b2a6-bc1ce94b053e"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 117,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 136,
+      "synthetic_identity_id": "983a0712-5944-408d-bf5c-1a3c9ee11162"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 98,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 138,
+      "synthetic_identity_id": "9198581c-e46c-41db-a511-190354021858"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 86,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 140,
+      "synthetic_identity_id": "60a74933-af2b-4cd8-9646-0b068a81ccb4"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 74,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 142,
+      "synthetic_identity_id": "ea0644ac-693d-4d48-bf56-e8deb5bfc84b"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 133,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 144,
+      "synthetic_identity_id": "cadc84db-85a6-4af6-9146-d2950dcd81bf"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 100,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 146,
+      "synthetic_identity_id": "bbcc2856-068f-4975-85c7-e77b5b9ae7b8"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 80,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 148,
+      "synthetic_identity_id": "20cdda39-58f0-4de9-abd8-b4e1138f19c5"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 77,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 150,
+      "synthetic_identity_id": "995f1d23-c3e4-491f-9a19-ed73055ffcb2"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 78,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 152,
+      "synthetic_identity_id": "413adf26-e598-432a-8ca8-e2af02e7240e"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 84,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 154,
+      "synthetic_identity_id": "3d31e442-9cd8-446c-b57d-3422723aa3bf"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 100,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 156,
+      "synthetic_identity_id": "ff249970-287f-48c0-bda2-7e385b293a26"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 80,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 158,
+      "synthetic_identity_id": "593534e9-4c71-4e0f-82fa-d90a04bee1a5"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 75,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 160,
+      "synthetic_identity_id": "7aa849f1-2c39-4a16-b38b-8356a0d906b6"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 81,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 162,
+      "synthetic_identity_id": "e1545f21-f863-4d9d-94e8-fb6224f074f5"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 85,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 164,
+      "synthetic_identity_id": "059bf221-9c57-4265-9e42-eceb1624960f"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 84,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 166,
+      "synthetic_identity_id": "8954def9-be8d-4654-9f8d-928cbed807b7"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 30,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 168,
+      "synthetic_identity_id": "02fc1862-a622-49d7-ad5b-2f5ea3c8df43"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 12,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 169,
+      "synthetic_identity_id": "9792a1ad-ba04-4c25-b960-06efc007105e"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 18,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 170,
+      "synthetic_identity_id": "0c6e943c-42f5-4200-a382-fdb7062a5b04"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 15,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 171,
+      "synthetic_identity_id": "3679a0be-7375-4ed3-bdd6-5410e75e180c"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 15,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 172,
+      "synthetic_identity_id": "aff21ee4-a118-4eba-9935-dedadf135812"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 16,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 173,
+      "synthetic_identity_id": "36bfa1d5-07f2-494d-81bc-37acfb34052c"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 17,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 174,
+      "synthetic_identity_id": "93133b12-7394-49e2-b869-c262df8646ec"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 15,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 175,
+      "synthetic_identity_id": "0c2dbf02-e33e-42fb-9953-17b389ad889d"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 18,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 176,
+      "synthetic_identity_id": "99286e1e-c971-47da-8fa5-eb3b8a6ad706"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 13,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 177,
+      "synthetic_identity_id": "542b1783-cc47-486c-a23d-9052e6ccd3b8"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 17,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 178,
+      "synthetic_identity_id": "deed0136-7dbc-46f9-986b-45d8e4382671"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 16,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 179,
+      "synthetic_identity_id": "4bb5621f-4c66-4664-a87f-373a1ab78d2e"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 180,
+      "synthetic_identity_id": "30e0b860-6080-48f9-b304-bd4cf47d3747"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 12,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 181,
+      "synthetic_identity_id": "94ae5e02-9c15-42df-9c63-4032c24a4642"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 13,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 182,
+      "synthetic_identity_id": "83dcaf76-cbd2-4d19-8d53-f86840e0507f"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 183,
+      "synthetic_identity_id": "419682b3-33e8-415d-b7f9-bd62c781da2c"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 22,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 184,
+      "synthetic_identity_id": "5faa5cd8-bc89-47bb-9128-762ffbe64dd1"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 15,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 185,
+      "synthetic_identity_id": "dc28fbbe-eb58-41f4-81b4-703d3bcfd5cf"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 12,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 186,
+      "synthetic_identity_id": "5e5d676f-843f-4c2d-9796-fe17a7bda86b"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 13,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 187,
+      "synthetic_identity_id": "d81225af-8823-4857-a1c3-6e6fb155366d"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 13,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 188,
+      "synthetic_identity_id": "e8fae052-e7c8-420b-8db6-2d8e666f49b2"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 189,
+      "synthetic_identity_id": "af2e3389-d4a1-4a6e-9063-e1e3308887c8"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 11,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 190,
+      "synthetic_identity_id": "4e773618-dcdf-4d58-80a7-c556565e5bc3"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 13,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 191,
+      "synthetic_identity_id": "f5ef6774-c1a1-4b36-98d0-10f1058e6cba"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/missing",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 12,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 192,
+      "synthetic_identity_id": "e704012c-7401-4d26-a376-fbbc618ab760"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/null",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 10,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 193,
+      "synthetic_identity_id": "e6d379c8-76b8-4fbd-80e8-0b029a7026c4"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/empty",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 11,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 194,
+      "synthetic_identity_id": "5fd75d37-487f-4b5b-a16c-83ca28c0dabd"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/unicode",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 12,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 195,
+      "synthetic_identity_id": "5ab8cbdb-06cf-4a72-b6f2-f7fb4d3b7235"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/string",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 12,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 196,
+      "synthetic_identity_id": "b4320e81-1763-41e4-a7bf-9de89e7c9240"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 17,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 197,
+      "synthetic_identity_id": "31b8573a-0f2b-4d18-ba9d-6c4d2e29626b"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 17,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 198,
+      "synthetic_identity_id": "b4ff3a1e-ce62-4f40-818b-4358339dd1cf"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 17,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 199,
+      "synthetic_identity_id": "d4e0659f-fed7-4b85-bed6-21adaa04a4ab"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 200,
+      "synthetic_identity_id": "5d6a80da-5e25-4953-93b4-a5e890ed5da0"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 16,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 201,
+      "synthetic_identity_id": "f476ad17-445b-458b-870b-8b2d40d00c44"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 17,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 202,
+      "synthetic_identity_id": "35719593-4564-4d73-9914-d6510a8c3f01"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 203,
+      "synthetic_identity_id": "2c0c06d1-fff6-4ea2-9972-d8512177c603"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 13,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 204,
+      "synthetic_identity_id": "c2722f10-278c-4f5b-bd7a-c81e3a78e66a"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 26,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 205,
+      "synthetic_identity_id": "4f35f9f4-d251-4996-a007-2650e3237959"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 206,
+      "synthetic_identity_id": "3acf1d95-c40a-4094-a670-85cac3dc106b"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 22,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 207,
+      "synthetic_identity_id": "7e8b3b44-d2c8-4c03-92cd-40bc64016625"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 17,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 208,
+      "synthetic_identity_id": "2cffc0a8-904d-45a8-8848-5cb0058613d7"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 26,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 209,
+      "synthetic_identity_id": "9f19f8f1-9b00-478d-b88b-8b0e51e24e7e"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 26,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 210,
+      "synthetic_identity_id": "fa339a0e-ca3f-467f-a75f-43f5a125622d"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 20,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 211,
+      "synthetic_identity_id": "4c9974b7-cf03-454c-b189-91612a925201"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 15,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 212,
+      "synthetic_identity_id": "958cd1b4-0351-4274-9b9d-d9b36c889e24"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 213,
+      "synthetic_identity_id": "39307a65-59e1-441a-8191-aade30177a45"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 15,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 214,
+      "synthetic_identity_id": "51f51ede-c5b6-49fb-8ca7-8167c1922cb3"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 15,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 215,
+      "synthetic_identity_id": "1231e0ea-347d-4de9-9f7d-dff015b3720c"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 17,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 216,
+      "synthetic_identity_id": "4bb630e0-89b2-40c9-970b-a49f5f91987e"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 217,
+      "synthetic_identity_id": "3f56ec47-ba51-4712-ae7b-f830238a1633"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 218,
+      "synthetic_identity_id": "068a55ce-ac60-4c9a-b480-16966b84a55a"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 12,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 219,
+      "synthetic_identity_id": "b519c945-6869-40a7-92e3-2ef374b58db3"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 14,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 220,
+      "synthetic_identity_id": "082d28f5-4802-497e-ab3a-0cb71a83f6a8"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/missing",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 9,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 221,
+      "synthetic_identity_id": "53da1515-0384-4236-90a8-8f37f8348f66"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/null",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 9,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 222,
+      "synthetic_identity_id": "cf826590-e424-40a0-8143-93c6760b9c3d"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/empty",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 12,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 223,
+      "synthetic_identity_id": "2126c7f4-0337-4202-afd0-fb665ebc3245"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/unicode",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 12,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 224,
+      "synthetic_identity_id": "d38764d0-b821-47ce-8f6a-ef3db9682606"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/string",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 11,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 225,
+      "synthetic_identity_id": "13f83fb7-0c4e-41b6-81b8-fd00e281282f"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 34,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 226,
+      "synthetic_identity_id": "ea15a5d8-268d-4efe-a175-b2d33a31c40e"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 12,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 227,
+      "synthetic_identity_id": "813cbd3d-94a0-4f83-9550-b70fc6335b40"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 11,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 228,
+      "synthetic_identity_id": "703c0643-73c2-46fb-a026-4a10ed5f5fed"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 12,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 229,
+      "synthetic_identity_id": "b1d57e17-88c4-46a4-aa53-85c87f50139c"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "unknown",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 10,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 230,
+      "synthetic_identity_id": "32c7e0de-7c65-4660-b120-277c8ad8c62a"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 8,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 231,
+      "synthetic_identity_id": "62e6f3cc-77dd-45da-a3f1-5ac7616589c3"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 10,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 232,
+      "synthetic_identity_id": "ae269065-faf4-431f-83fa-6eac99009833"
+    },
+    {
+      "barriers": null,
+      "case_id": "TestOAuthForkW9EffectiveMergedDocument/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "empty",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 10,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "PASS",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 233,
+      "synthetic_identity_id": "1115bf94-c090-4f36-a712-eafe9590b538"
+    }
+  ],
+  "observations": [
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_1_a",
+      "application_b": "bulk_1_b",
+      "backend_a": 9084,
+      "backend_b": 9085,
+      "barrier_backend": 9077,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_4_a",
+      "application_b": "bulk_4_b",
+      "backend_a": 9091,
+      "backend_b": 9092,
+      "barrier_backend": 9077,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_7_a",
+      "application_b": "bulk_7_b",
+      "backend_a": 9094,
+      "backend_b": 9096,
+      "barrier_backend": 9077,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_10_a",
+      "application_b": "bulk_10_b",
+      "backend_a": 9099,
+      "backend_b": 9100,
+      "barrier_backend": 9077,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_13_a",
+      "application_b": "bulk_13_b",
+      "backend_a": 9103,
+      "backend_b": 9105,
+      "barrier_backend": 9077,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_16_a",
+      "application_b": "bulk_16_b",
+      "backend_a": 9108,
+      "backend_b": 9109,
+      "barrier_backend": 9077,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_19_a",
+      "application_b": "bulk_19_b",
+      "backend_a": 9112,
+      "backend_b": 9113,
+      "barrier_backend": 9077,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_22_a",
+      "application_b": "bulk_22_b",
+      "backend_a": 9114,
+      "backend_b": 9115,
+      "barrier_backend": 9077,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    }
+  ],
+  "effects": [
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          3
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        3
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          6
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        6
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          9
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        9
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          12
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        12
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          15
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        15
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          18
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        18
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          21
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        21
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          24
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        24
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object"
+    },
+    {
+      "b_own_account_changed_events": 0,
+      "bulk_event_ids": null,
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": null,
+      "case_id": "TestOAuthBulkAffectedIDsControls/zero"
+    },
+    {
+      "b_own_account_changed_events": 0,
+      "bulk_event_ids": [
+        [
+          28,
+          27
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        27,
+        28
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsControls/all"
+    },
+    {
+      "b_own_account_changed_events": 0,
+      "bulk_event_ids": [
+        [
+          29
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        29
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsControls/mixed_missing"
+    }
+  ]
+}

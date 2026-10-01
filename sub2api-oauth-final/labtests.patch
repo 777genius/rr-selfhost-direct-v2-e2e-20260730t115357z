@@ -1,0 +1,997 @@
+diff --git a/backend/internal/repository/oauth_lab_fixture_test.go b/backend/internal/repository/oauth_lab_fixture_test.go
+new file mode 100644
+--- /dev/null
++++ b/backend/internal/repository/oauth_lab_fixture_test.go
+@@ -0,0 +1,382 @@
++//go:build oauthlab
++
++package repository
++
++import (
++	"bufio"
++	"context"
++	"database/sql"
++	"encoding/base64"
++	"encoding/json"
++	"fmt"
++	"io"
++	"net"
++	"net/http"
++	"net/http/httptest"
++	"os"
++	"os/exec"
++	"runtime"
++	"strconv"
++	"strings"
++	"sync"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"entgo.io/ent/dialect"
++	entsql "entgo.io/ent/dialect/sql"
++	dbent "github.com/Wei-Shaw/sub2api/ent"
++	_ "github.com/Wei-Shaw/sub2api/ent/runtime"
++	"github.com/Wei-Shaw/sub2api/internal/service"
++	"github.com/google/uuid"
++	_ "github.com/lib/pq"
++	"github.com/redis/go-redis/v9"
++)
++
++const oauthLabEnable = "disposable-synthetic-only"
++const oauthLabEventPrefix = "OAUTH_LAB_EVENT "
++
++// All receipt fields are allowlisted. No token, DSN, raw error, or HTTP body is logged.
++type oauthLabEvent struct {
++	Kind string `json:"kind"`
++	Op string `json:"op,omitempty"`
++	PID int `json:"pid,omitempty"`
++	Phase string `json:"phase,omitempty"`
++	Error bool `json:"error,omitempty"`
++	Denied bool `json:"denied,omitempty"`
++	HTTPStatus int `json:"http_status,omitempty"`
++	Count int `json:"count,omitempty"`
++}
++
++type oauthLabCommand struct {
++	Kind string `json:"kind"`
++	Op string `json:"op"`
++	Count int `json:"count,omitempty"`
++	Scheduled bool `json:"scheduled,omitempty"`
++}
++
++type oauthLabSuite struct {
++	db *sql.DB
++	client *dbent.Client
++	repo service.AccountRepository
++	rdb *redis.Client
++	dsn string
++	redisURL string
++	issuerRequests atomic.Int64
++	pgVersion string
++	redisVersion string
++}
++
++func oauthLabNeed(t *testing.T, ok bool, message string) {
++	t.Helper()
++	if !ok { t.Fatal(message) }
++}
++
++func oauthLabOpenDB(dsn string) (*sql.DB, *dbent.Client, error) {
++	db, err := sql.Open("postgres", dsn)
++	if err != nil { return nil, nil, err }
++	db.SetMaxOpenConns(12)
++	db.SetMaxIdleConns(4)
++	return db, dbent.NewClient(dbent.Driver(entsql.OpenDB(dialect.Postgres, db))), nil
++}
++
++func oauthLabRedis(raw string) (*redis.Client, error) {
++	opts, err := redis.ParseURL(raw)
++	if err != nil { return nil, err }
++	if opts.DB < 1 { return nil, fmt.Errorf("dedicated nonzero Redis database required") }
++	opts.MaxRetries = -1
++	opts.DialTimeout = 300 * time.Millisecond
++	opts.ReadTimeout = 300 * time.Millisecond
++	opts.WriteTimeout = 300 * time.Millisecond
++	return redis.NewClient(opts), nil
++}
++
++func oauthLabSetup(t *testing.T) *oauthLabSuite {
++	t.Helper()
++	dsn, rawRedis := os.Getenv("OAUTH_LAB_PG_DSN"), os.Getenv("OAUTH_LAB_REDIS_URL")
++	if os.Getenv("OAUTH_LAB_ENABLE") != oauthLabEnable || dsn == "" || rawRedis == "" {
++		t.Skip("NOT RUN: requires explicit disposable synthetic PostgreSQL and Redis configuration")
++	}
++	ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second)
++	defer cancel()
++	db, client, err := oauthLabOpenDB(dsn)
++	oauthLabNeed(t, err == nil, "NOT RUN: PostgreSQL initialization failed (details withheld)")
++	t.Cleanup(func() { _ = client.Close() })
++	oauthLabNeed(t, db.PingContext(ctx) == nil, "NOT RUN: supplied disposable PostgreSQL unreachable")
++	var dbName, schema string
++	err = db.QueryRowContext(ctx, "SELECT current_database(), current_schema()").Scan(&dbName, &schema)
++	oauthLabNeed(t, err == nil && strings.HasPrefix(dbName, "oauth_lab_") && schema == "public", "requires dedicated oauth_lab_* database with public schema")
++	// Never migrate a populated account database. Operator creates a fresh dedicated DB.
++	var exists bool
++	err = db.QueryRowContext(ctx, "SELECT to_regclass('public.accounts') IS NOT NULL").Scan(&exists)
++	oauthLabNeed(t, err == nil, "database isolation inspection failed")
++	if exists {
++		var n int
++		err = db.QueryRowContext(ctx, "SELECT count(*) FROM accounts").Scan(&n)
++		oauthLabNeed(t, err == nil && n == 0, "refusing account-populated database")
++	}
++	rdb, err := oauthLabRedis(rawRedis)
++	oauthLabNeed(t, err == nil, "invalid disposable Redis configuration")
++	t.Cleanup(func() { _ = rdb.Close() })
++	oauthLabNeed(t, rdb.Ping(ctx).Err() == nil, "NOT RUN: supplied disposable Redis unreachable")
++	size, err := rdb.DBSize(ctx).Result()
++	oauthLabNeed(t, err == nil && size == 0, "refusing populated Redis database")
++	oauthLabNeed(t, ApplyMigrations(ctx, db) == nil, "NOT RUN: pinned migrations failed (details withheld)")
++	s := &oauthLabSuite{db: db, client: client, repo: NewAccountRepository(client, db, nil), rdb: rdb, dsn: dsn, redisURL: rawRedis}
++	_ = db.QueryRowContext(ctx, "SHOW server_version").Scan(&s.pgVersion)
++	if info, err := rdb.Info(ctx, "server").Result(); err == nil {
++		for _, line := range strings.Split(info, "\n") {
++			if strings.HasPrefix(line, "redis_version:") { s.redisVersion = strings.TrimSpace(strings.TrimPrefix(line, "redis_version:")) }
++		}
++	}
++	return s
++}
++
++type oauthLabAttempt struct {
++	Index int
++	Accepted bool
++	gate chan struct{}
++	once sync.Once
++}
++func (a *oauthLabAttempt) release() { a.once.Do(func() { close(a.gate) }) }
++
++type oauthLabIssuer struct {
++	suite *oauthLabSuite
++	id string
++	server *httptest.Server
++	mu sync.Mutex
++	consumed bool
++	revoked bool
++	autoRelease bool
++	attempts []*oauthLabAttempt
++	entered chan *oauthLabAttempt
++	resourceRequests int
++	rotations int
++	malformed int
++}
++
++func (i *oauthLabIssuer) token(phase string) string { return "fabricated-oauth-lab-" + i.id + "-" + phase }
++func (i *oauthLabIssuer) phase(token string) string {
++	for _, p := range []string{"A0", "A1", "REAUTH", "R0", "R1", "REAUTH_REFRESH"} {
++		if token == i.token(p) { return p }
++	}
++	if token == "" { return "empty" }
++	return "unknown"
++}
++func (i *oauthLabIssuer) credentials(reauth bool) map[string]any {
++	access, refresh := "A0", "R0"
++	expires := time.Now().Add(-time.Minute)
++	version := int64(0)
++	if reauth { access, refresh, expires, version = "REAUTH", "REAUTH_REFRESH", time.Now().Add(time.Hour), time.Now().Add(time.Hour).UnixMilli() }
++	return map[string]any{"access_token": i.token(access), "refresh_token": i.token(refresh), "expires_at": expires.Format(time.RFC3339), "client_id": "oauth-lab-fabricated-client", "_token_version": version}
++}
++func (i *oauthLabIssuer) idToken() string {
++	payload, _ := json.Marshal(map[string]any{"email": i.id + "@oauth-lab.invalid", "exp": time.Now().Add(time.Hour).Unix(), "https://api.openai.com/auth": map[string]any{"chatgpt_account_id": i.id, "chatgpt_user_id": "synthetic-user", "chatgpt_plan_type": "synthetic-plan"}})
++	return base64.RawURLEncoding.EncodeToString([]byte(`{"alg":"none"}`)) + "." + base64.RawURLEncoding.EncodeToString(payload) + ".fabricated"
++}
++func (i *oauthLabIssuer) serve(w http.ResponseWriter, r *http.Request) {
++	w.Header().Set("Content-Type", "application/json")
++	if r.URL.Path == "/resource" {
++		i.mu.Lock()
++		i.resourceRequests++
++		phase := i.phase(strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer "))
++		allowed := !i.revoked && (phase == "A1" || phase == "REAUTH")
++		i.mu.Unlock()
++		if !allowed { w.WriteHeader(http.StatusUnauthorized) }
++		_ = json.NewEncoder(w).Encode(map[string]any{"phase": phase, "accepted": allowed})
++		return
++	}
++	if r.URL.Path != "/token" || r.Method != http.MethodPost { w.WriteHeader(http.StatusNotFound); return }
++	if i.suite.issuerRequests.Add(1) > 128 { w.WriteHeader(http.StatusTooManyRequests); _, _ = io.WriteString(w, `{"error":"synthetic_budget_exhausted"}`); return }
++	_ = r.ParseForm()
++	i.mu.Lock()
++	validForm := r.Form.Get("grant_type") == "refresh_token" && r.Form.Get("client_id") == "oauth-lab-fabricated-client" && r.Form.Get("scope") != ""
++	if !validForm { i.malformed++ }
++	accepted := validForm && !i.revoked && !i.consumed && r.Form.Get("refresh_token") == i.token("R0")
++	if accepted { i.consumed = true; i.rotations++ }
++	a := &oauthLabAttempt{Index: len(i.attempts)+1, Accepted: accepted, gate: make(chan struct{})}
++	i.attempts = append(i.attempts, a)
++	auto := i.autoRelease
++	i.mu.Unlock()
++	if auto { a.release() }
++	select { case i.entered <- a: case <-r.Context().Done(): return }
++	// Barrier is AFTER single-use issuer consumption and BEFORE its HTTP reply.
++	select { case <-a.gate: case <-r.Context().Done(): return }
++	if !accepted {
++		w.WriteHeader(http.StatusBadRequest)
++		_, _ = io.WriteString(w, `{"error":"invalid_grant","error_description":"synthetic refresh credential revoked or already consumed"}`)
++		return
++	}
++	_ = json.NewEncoder(w).Encode(map[string]any{"access_token": i.token("A1"), "refresh_token": i.token("R1"), "id_token": i.idToken(), "token_type": "Bearer", "expires_in": 3600})
++}
++
++func (i *oauthLabIssuer) next(t *testing.T, ctx context.Context) *oauthLabAttempt {
++	t.Helper()
++	select { case a := <-i.entered: return a; case <-ctx.Done(): t.Fatal("issuer barrier not reached before bound"); return nil }
++}
++func (i *oauthLabIssuer) releaseAll() {
++	i.mu.Lock(); defer i.mu.Unlock()
++	i.autoRelease = true
++	for _, a := range i.attempts { a.release() }
++}
++
++type oauthLabFixture struct {
++	t *testing.T
++	suite *oauthLabSuite
++	ctx context.Context
++	cancel context.CancelFunc
++	issuer *oauthLabIssuer
++	account *service.Account
++	workers []*oauthLabProcess
++	start time.Time
++	barriers []string
++}
++func (s *oauthLabSuite) fixture(t *testing.T) *oauthLabFixture {
++	ctx, cancel := context.WithTimeout(context.Background(), 25*time.Second)
++	i := &oauthLabIssuer{suite: s, id: uuid.NewString(), entered: make(chan *oauthLabAttempt, 128)}
++	i.server = httptest.NewServer(http.HandlerFunc(i.serve))
++	f := &oauthLabFixture{t: t, suite: s, ctx: ctx, cancel: cancel, issuer: i, start: time.Now()}
++	// Receipt is emitted after worker termination and before deletion. Assertions never rewrite state.
++	t.Cleanup(f.close)
++	a := &service.Account{Name: "oauth-lab-" + i.id, Platform: service.PlatformOpenAI, Type: service.AccountTypeOAuth, Credentials: i.credentials(false), Extra: map[string]any{}, Concurrency: 8, Priority: 1, Status: service.StatusActive, Schedulable: true}
++	oauthLabNeed(t, s.repo.Create(ctx, a) == nil, "real PostgreSQL account creation failed")
++	f.account = a
++	return f
++}
++func (f *oauthLabFixture) row() *service.Account {
++	f.t.Helper()
++	a, err := f.suite.repo.GetByID(f.ctx, f.account.ID)
++	oauthLabNeed(f.t, err == nil && a != nil, "durable account reread failed")
++	return a
++}
++func (f *oauthLabFixture) scheduled() bool {
++	f.t.Helper()
++	rows, err := f.suite.repo.ListSchedulableByPlatform(f.ctx, service.PlatformOpenAI)
++	oauthLabNeed(f.t, err == nil, "actual scheduling repository query failed")
++	for _, row := range rows { if row.ID == f.account.ID { return true } }
++	return false
++}
++func (f *oauthLabFixture) check(ok bool, name string) {
++	f.t.Helper()
++	if !ok { f.t.Error(name) }
++}
++func (f *oauthLabFixture) close() {
++	if f.account == nil { f.issuer.releaseAll(); f.issuer.server.Close(); f.cancel(); return }
++	f.issuer.releaseAll()
++	for _, p := range f.workers { p.stop(f.t) }
++	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
++	defer cancel()
++	f.issuer.mu.Lock()
++	counts := map[string]int{"issuer_requests": len(f.issuer.attempts), "effective_rotations": f.issuer.rotations, "gateway_bearer_requests": f.issuer.resourceRequests, "malformed_token_requests": f.issuer.malformed}
++	f.issuer.mu.Unlock()
++	pids := []int{}
++	events := []oauthLabEvent{}
++	for _, p := range f.workers { pids = append(pids, p.cmd.Process.Pid); events = append(events, p.transcript...) }
++	row, err := f.suite.repo.GetByID(ctx, f.account.ID)
++	state := map[string]any{"reread_ok": err == nil && row != nil}
++	if row != nil { state["access_phase"] = f.issuer.phase(row.GetCredential("access_token")); state["refresh_phase"] = f.issuer.phase(row.GetCredential("refresh_token")); state["status"] = row.Status; state["schedulable"] = row.Schedulable }
++	if f.suite.issuerRequests.Load() > 128 { f.t.Error("suite issuer request budget exceeded") }
++	f.issuer.server.Close()
++	cleanupOK := true
++	if e := NewGeminiTokenCache(f.suite.rdb).DeleteAccessToken(ctx, service.OpenAITokenCacheKey(f.account)); e != nil { cleanupOK = false }
++	if e := NewGeminiTokenCache(f.suite.rdb).ReleaseRefreshLock(ctx, service.OpenAITokenCacheKey(f.account)); e != nil { cleanupOK = false }
++	if e := NewSchedulerCache(f.suite.rdb).DeleteAccount(ctx, f.account.ID); e != nil { cleanupOK = false }
++	_, e1 := f.suite.db.ExecContext(ctx, "DELETE FROM scheduler_outbox WHERE account_id = $1", f.account.ID)
++	e2 := f.suite.client.Account.DeleteOneID(f.account.ID).Exec(ctx)
++	cleanupOK = cleanupOK && e1 == nil && e2 == nil
++	if !cleanupOK { f.t.Error("owned PostgreSQL/Redis fixture cleanup failed") }
++	exitsOK := true
++	for _, p := range f.workers { exitsOK = exitsOK && p.exitOK }
++	status := "PASS"
++	if f.t.Failed() { status = "FAIL" }
++	receipt, _ := json.Marshal(map[string]any{"case_id": f.t.Name(), "synthetic_account_id": f.account.ID, "synthetic_identity_id": f.issuer.id, "status": status, "evidence_kind": "synthetic-http-real-postgresql-redis-two-process", "duration_ms": time.Since(f.start).Milliseconds(), "child_pids": pids, "child_exits_ok": exitsOK, "owned_cleanup_ok": cleanupOK, "counts": counts, "barriers": f.barriers, "durable_state": state, "events": events, "postgres_version": f.suite.pgVersion, "redis_version": f.suite.redisVersion, "go_version": runtime.Version(), "suite_issuer_requests": f.suite.issuerRequests.Load()})
++	f.t.Log("OAUTH_LAB_RECEIPT " + string(receipt))
++	f.cancel()
++}
++
++type oauthLabProcess struct {
++	cmd *exec.Cmd
++	stdin io.WriteCloser
++	encoder *json.Encoder
++	events chan oauthLabEvent
++	pending []oauthLabEvent
++	transcript []oauthLabEvent
++	exit chan error
++	cancel context.CancelFunc
++	exitOK bool
++}
++func (f *oauthLabFixture) process(redisURL string, ttl time.Duration, ackFault bool) *oauthLabProcess {
++	f.t.Helper()
++	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
++	cmd := exec.CommandContext(ctx, os.Args[0], "-test.run=^TestOAuthLabProcess$", "-test.count=1", "-test.timeout=29s")
++	// Explicit allowlist: no auth homes, parent provider environment, or proxy inheritance.
++	cmd.Env = []string{"PATH=" + os.Getenv("PATH"), "TZ=UTC", "GOMAXPROCS=2", "OAUTH_LAB_ENABLE=" + oauthLabEnable, "OAUTH_LAB_CHILD=1", "OAUTH_LAB_PG_DSN=" + f.suite.dsn, "OAUTH_LAB_REDIS_URL=" + redisURL, "OAUTH_LAB_ISSUER_URL=" + f.issuer.server.URL, "OAUTH_LAB_ACCOUNT_ID=" + strconv.FormatInt(f.account.ID, 10), "OAUTH_LAB_ID=" + f.issuer.id, "OAUTH_LAB_TTL=" + ttl.String(), "OAUTH_LAB_ACK_FAULT=" + strconv.FormatBool(ackFault)}
++	stdin, err := cmd.StdinPipe()
++	oauthLabNeed(f.t, err == nil, "child input pipe unavailable")
++	stdout, err := cmd.StdoutPipe()
++	oauthLabNeed(f.t, err == nil, "child output pipe unavailable")
++	cmd.Stderr = io.Discard
++	p := &oauthLabProcess{cmd: cmd, stdin: stdin, encoder: json.NewEncoder(stdin), events: make(chan oauthLabEvent, 256), exit: make(chan error, 1), cancel: cancel}
++	oauthLabNeed(f.t, cmd.Start() == nil, "child process launch failed")
++	f.workers = append(f.workers, p)
++	go func() {
++		scanner := bufio.NewScanner(stdout)
++		for scanner.Scan() {
++			line := scanner.Text()
++			if !strings.HasPrefix(line, oauthLabEventPrefix) { continue }
++			var e oauthLabEvent
++			if json.Unmarshal([]byte(strings.TrimPrefix(line, oauthLabEventPrefix)), &e) == nil { p.events <- e }
++		}
++		p.exit <- cmd.Wait()
++		close(p.events)
++	}()
++	p.await(f.t, f.ctx, "ready", "")
++	return p
++}
++func (p *oauthLabProcess) send(t *testing.T, c oauthLabCommand) {
++	t.Helper()
++	oauthLabNeed(t, p.encoder.Encode(c) == nil, "child command delivery failed")
++}
++func (p *oauthLabProcess) await(t *testing.T, ctx context.Context, kind, op string) oauthLabEvent {
++	t.Helper()
++	matches := func(e oauthLabEvent) bool { return e.Kind == kind && (op == "" || e.Op == op) }
++	for idx, e := range p.pending {
++		if matches(e) { p.pending = append(p.pending[:idx], p.pending[idx+1:]...); return e }
++	}
++	for {
++		select {
++		case e, ok := <-p.events:
++			if !ok { t.Fatal("child ended before observable " + kind + " barrier"); return oauthLabEvent{} }
++			p.transcript = append(p.transcript, e)
++			if matches(e) { return e }
++			p.pending = append(p.pending, e)
++		case <-ctx.Done(): t.Fatal("bounded child observation expired before " + kind); return oauthLabEvent{}
++		}
++	}
++}
++func (p *oauthLabProcess) stop(t *testing.T) {
++	t.Helper()
++	_ = p.encoder.Encode(oauthLabCommand{Kind: "stop"})
++	_ = p.stdin.Close()
++	select {
++	case err := <-p.exit:
++		p.exitOK = err == nil
++		if err != nil { t.Error("child did not terminate successfully") }
++	case <-time.After(3*time.Second):
++		p.cancel()
++		<-p.exit
++		t.Error("child required forced termination")
++	}
++	p.cancel()
++	for e := range p.events { p.transcript = append(p.transcript, e) }
++}
++
++// Real TCP connection failure, confined to this fixture. No fake cache implementation.
++func oauthLabRedisOutage(t *testing.T) string {
++	t.Helper()
++	listener, err := net.Listen("tcp", "127.0.0.1:0")
++	oauthLabNeed(t, err == nil, "synthetic Redis fault listener unavailable")
++	t.Cleanup(func() { _ = listener.Close() })
++	go func() { for { conn, err := listener.Accept(); if err != nil { return }; _ = conn.Close() } }()
++	return "redis://" + listener.Addr().String() + "/1"
++}
+diff --git a/backend/internal/repository/oauth_lab_lifecycle_test.go b/backend/internal/repository/oauth_lab_lifecycle_test.go
+new file mode 100644
+--- /dev/null
++++ b/backend/internal/repository/oauth_lab_lifecycle_test.go
+@@ -0,0 +1,319 @@
++//go:build oauthlab
++
++package repository
++
++import (
++	"context"
++	"fmt"
++	"strings"
++	"testing"
++	"time"
++
++	"github.com/Wei-Shaw/sub2api/internal/service"
++)
++
++func (f *oauthLabFixture) prepare(p *oauthLabProcess, op string, n int) {
++	p.send(f.t, oauthLabCommand{Kind: "prepare", Op: op, Count: n})
++	e := p.await(f.t, f.ctx, "prepared", op)
++	f.check(e.Count == n, "all request snapshots must be read from actual PostgreSQL before release")
++	f.barriers = append(f.barriers, "postgres_snapshots_prepared:" + op)
++}
++func (f *oauthLabFixture) release(p *oauthLabProcess, op string) {
++	p.send(f.t, oauthLabCommand{Kind: "release", Op: op})
++	p.await(f.t, f.ctx, "released", op)
++}
++func (f *oauthLabFixture) results(p *oauthLabProcess, op string, n int) []oauthLabEvent {
++	out := []oauthLabEvent{}
++	for k := 0; k < n; k++ { out = append(out, p.await(f.t, f.ctx, "result", fmt.Sprintf("%s-%d", op, k))) }
++	p.await(f.t, f.ctx, "batch_done", op)
++	return out
++}
++func (f *oauthLabFixture) request(p *oauthLabProcess, op string, scheduled bool) oauthLabEvent {
++	p.send(f.t, oauthLabCommand{Kind: "request", Op: op, Scheduled: scheduled})
++	return p.await(f.t, f.ctx, "result", op)
++}
++func (f *oauthLabFixture) rotated() {
++	row := f.row()
++	f.check(f.issuer.phase(row.GetCredential("access_token")) == "A1", "durable access credential must be the rotated issuer result")
++	f.check(f.issuer.phase(row.GetCredential("refresh_token")) == "R1", "durable refresh credential must be the single-use successor")
++	f.check(row.GetCredential("email") == f.issuer.id + "@oauth-lab.invalid" && row.GetCredential("chatgpt_account_id") == f.issuer.id && row.GetCredential("plan_type") == "synthetic-plan", "real ID-token parser must preserve fabricated issuer identity fields")
++	expires := row.GetCredentialAsTime("expires_at")
++	f.check(expires != nil && time.Until(*expires) > 50*time.Minute, "actual OAuth response expires_in must become a usable persisted expiration")
++	f.check(row.GetCredentialAsInt64("_token_version") > 0, "rotated credentials need a persisted version")
++}
++func (f *oauthLabFixture) accepted(e oauthLabEvent, phase string) {
++	f.check(!e.Error && !e.Denied && e.Phase == phase && e.HTTPStatus == 200, "actual gateway auth selector and synthetic HTTP resource must agree on " + phase)
++}
++func (f *oauthLabFixture) counts(requests, rotations int) {
++	f.issuer.mu.Lock(); defer f.issuer.mu.Unlock()
++	f.check(len(f.issuer.attempts) == requests, "issuer request count violates single-use refresh contract")
++	f.check(f.issuer.rotations == rotations, "effective issuer rotation count violates single-use refresh contract")
++	f.check(f.issuer.malformed == 0, "actual OAuth client sent malformed synthetic issuer form")
++}
++func (f *oauthLabFixture) background(p *oauthLabProcess, op string) {
++	p.send(f.t, oauthLabCommand{Kind: "background", Op: op})
++}
++func (f *oauthLabFixture) backgroundDone(p *oauthLabProcess, op string) {
++	e := p.await(f.t, f.ctx, "background_done", op)
++	f.check(!e.Error, "actual background service did not complete its bounded cycle")
++	f.barriers = append(f.barriers, "actual_background_cycle_completed:" + op)
++}
++func (f *oauthLabFixture) redisBarrier(ctx context.Context, predicate func() bool, label string) {
++	f.t.Helper()
++	ticker := time.NewTicker(10*time.Millisecond)
++	defer ticker.Stop()
++	for {
++		if predicate() { f.barriers = append(f.barriers, label); return }
++		select { case <-ticker.C: case <-ctx.Done(): f.t.Fatal("actual Redis state barrier not reached: " + label) }
++	}
++}
++
++func TestOAuthLabLifecycle(t *testing.T) {
++	s := oauthLabSetup(t)
++
++	// Red: split coordinators both consume R0, lose R1, or select expired A0.
++	t.Run("normal_8_concurrent", func(t *testing.T) {
++		f := s.fixture(t)
++		p1, p2 := f.process(s.redisURL, 60*time.Second, false), f.process(s.redisURL, 60*time.Second, false)
++		f.prepare(p1, "left", 4); f.prepare(p2, "right", 4)
++		f.release(p1, "left")
++		a := f.issuer.next(t, f.ctx)
++		f.check(a.Accepted, "first synthetic rotation must consume R0 exactly once")
++		f.release(p2, "right")
++		p2.await(t, f.ctx, "lock_contended", "")
++		f.barriers = append(f.barriers, "issuer_consumed_R0", "other_process_actual_redis_contention")
++		a.release()
++		for _, e := range append(f.results(p1, "left", 4), f.results(p2, "right", 4)...) { f.accepted(e, "A1") }
++		f.rotated()
++		f.accepted(f.request(p2, "subsequent", true), "A1")
++		f.counts(1, 1)
++	})
++
++	// Red: the real startup background cycle and request path use separate locks,
++	// or an old request snapshot republishes A0 after the background rotated it.
++	for _, backgroundFirst := range []bool{true, false} {
++		name := "background_then_request"
++		if !backgroundFirst { name = "request_then_background" }
++		t.Run(name, func(t *testing.T) {
++			f := s.fixture(t)
++			p1, p2 := f.process(s.redisURL, 60*time.Second, false), f.process(s.redisURL, 60*time.Second, false)
++			if backgroundFirst {
++				f.prepare(p2, "request", 1)
++				f.background(p1, "background")
++				a := f.issuer.next(t, f.ctx)
++				f.release(p2, "request")
++				p2.await(t, f.ctx, "lock_contended", "")
++				f.barriers = append(f.barriers, "background_issuer_inflight", "request_actual_redis_contention")
++				a.release()
++				f.backgroundDone(p1, "background")
++				f.accepted(f.results(p2, "request", 1)[0], "A1")
++			} else {
++				f.prepare(p1, "request", 1); f.release(p1, "request")
++				a := f.issuer.next(t, f.ctx)
++				f.background(p2, "background")
++				p2.await(t, f.ctx, "lock_contended", "")
++				f.backgroundDone(p2, "background")
++				f.barriers = append(f.barriers, "request_issuer_inflight", "background_actual_redis_contention")
++				a.release()
++				f.accepted(f.results(p1, "request", 1)[0], "A1")
++			}
++			f.rotated()
++			f.accepted(f.request(p2, "subsequent", true), "A1")
++			f.counts(1, 1)
++		})
++	}
++
++	// Red: unconditional OpenAI UpdateCredentials overwrites a reconnect completed
++	// after refresh started; background cache publication then restores that stale identity.
++	t.Run("reconnect_while_refresh", func(t *testing.T) {
++		f := s.fixture(t)
++		p1, p2 := f.process(s.redisURL, 60*time.Second, false), f.process(s.redisURL, 60*time.Second, false)
++		f.background(p1, "background")
++		a := f.issuer.next(t, f.ctx)
++		f.check(a.Accepted, "rotation must precede reconnect barrier")
++		updater, ok := s.repo.(interface { UpdateCredentials(context.Context, int64, map[string]any) error })
++		oauthLabNeed(t, ok, "real repository credential-update capability missing")
++		oauthLabNeed(t, updater.UpdateCredentials(f.ctx, f.account.ID, f.issuer.credentials(true)) == nil, "real reconnect persistence failed")
++		reconnected := f.row()
++		oauthLabNeed(t, f.issuer.phase(reconnected.GetCredential("refresh_token")) == "REAUTH_REFRESH", "reconnect durable barrier failed")
++		oauthLabNeed(t, service.NewCompositeTokenCacheInvalidator(NewGeminiTokenCache(s.rdb)).InvalidateToken(f.ctx, reconnected) == nil, "reconnect cache invalidation failed")
++		oauthLabNeed(t, NewSchedulerCache(s.rdb).SetAccount(f.ctx, reconnected) == nil, "reconnect scheduler publication failed")
++		f.barriers = append(f.barriers, "issuer_consumed_R0", "postgres_reconnect_committed", "redis_reconnect_published")
++		a.release()
++		f.backgroundDone(p1, "background")
++		row := f.row()
++		f.check(f.issuer.phase(row.GetCredential("refresh_token")) == "REAUTH_REFRESH", "FAIL: stale refresh overwrote durable reauthorization")
++		cached, err := NewSchedulerCache(s.rdb).GetAccount(f.ctx, f.account.ID)
++		f.check(err == nil && cached != nil && f.issuer.phase(cached.GetCredential("access_token")) == "REAUTH", "FAIL: stale refresh republished scheduler identity over reconnect")
++		f.accepted(f.request(p2, "subsequent", true), "REAUTH")
++		f.counts(1, 1)
++	})
++
++	// Red: post-refresh stale active snapshot re-enables a disabled account in Redis,
++	// even when credentials-only persistence leaves the durable disabled row intact.
++	t.Run("disable_while_refresh", func(t *testing.T) {
++		f := s.fixture(t)
++		p1, p2 := f.process(s.redisURL, 60*time.Second, false), f.process(s.redisURL, 60*time.Second, false)
++		f.background(p1, "background")
++		a := f.issuer.next(t, f.ctx)
++		row := f.row(); row.Status = service.StatusDisabled; row.Schedulable = false
++		oauthLabNeed(t, s.repo.Update(f.ctx, row) == nil, "real repository disable failed")
++		disabled := f.row()
++		oauthLabNeed(t, !disabled.IsActive() && !disabled.Schedulable && !f.scheduled(), "disable durable scheduling barrier failed")
++		oauthLabNeed(t, NewSchedulerCache(s.rdb).SetAccount(f.ctx, disabled) == nil, "real Redis disabled scheduler publication failed")
++		f.barriers = append(f.barriers, "issuer_rotation_inflight", "postgres_disable_committed", "redis_disable_published")
++		a.release()
++		f.backgroundDone(p1, "background")
++		row = f.row()
++		f.check(!row.IsActive() && !row.Schedulable && !f.scheduled(), "disabled account must remain excluded by actual repository scheduling")
++		cached, err := NewSchedulerCache(s.rdb).GetAccount(f.ctx, f.account.ID)
++		f.check(err == nil && (cached == nil || !cached.IsActive() || !cached.Schedulable), "FAIL: stale background refresh republished an active schedulable Redis account")
++		e := f.request(p2, "new_work", true)
++		f.check(e.Denied && e.HTTPStatus == 0, "disabled account must deny new synthetic gateway bearer work")
++		f.counts(1, 1)
++	})
++
++	// Red: expired lease permits another R0 attempt; the previous owner DEL then
++	// destroys a still-live successor lease. Lease expiry is observed from Redis.
++	t.Run("lock_ttl_expiry", func(t *testing.T) {
++		f := s.fixture(t)
++		p1, p2 := f.process(s.redisURL, 700*time.Millisecond, false), f.process(s.redisURL, 20*time.Second, false)
++		f.prepare(p1, "first", 1); f.prepare(p2, "successor", 1)
++		f.release(p1, "first")
++		a := f.issuer.next(t, f.ctx)
++		key := oauthRefreshLockKeyPrefix + service.OpenAITokenCacheKey(f.account)
++		remaining, err := s.rdb.PTTL(f.ctx, key).Result()
++		oauthLabNeed(t, err == nil && remaining > 0, "first real Redis lease must be observed live")
++		f.redisBarrier(f.ctx, func() bool { ttl, err := s.rdb.PTTL(f.ctx, key).Result(); return err == nil && ttl == -2*time.Nanosecond }, "actual_first_redis_lease_expired")
++		f.release(p2, "successor")
++		b := f.issuer.next(t, f.ctx)
++		p2.await(t, f.ctx, "lock_acquired", "")
++		remaining, err = s.rdb.PTTL(f.ctx, key).Result()
++		oauthLabNeed(t, err == nil && remaining > 10*time.Second, "successor lease live barrier failed")
++		f.barriers = append(f.barriers, "successor_issuer_attempt_held", "successor_redis_lease_observed_live")
++		f.check(!b.Accepted, "single-use issuer must refuse second R0 consumption")
++		a.release()
++		f.accepted(f.results(p1, "first", 1)[0], "A1")
++		remaining, err = s.rdb.PTTL(f.ctx, key).Result()
++		f.check(err == nil && remaining > 0, "FAIL: old refresh owner erased a successor Redis lease")
++		b.release()
++		f.accepted(f.results(p2, "successor", 1)[0], "A1")
++		f.rotated()
++		f.accepted(f.request(p2, "subsequent", true), "A1")
++		f.counts(1, 1) // A second request with consumed R0 is itself a regression.
++	})
++
++	// Red: removing the local coordinator mutex allows 8 attempts despite real
++	// Redis connection errors; local serialization must still publish R1 once.
++	t.Run("redis_outage_process_local_8", func(t *testing.T) {
++		f := s.fixture(t)
++		outage := oauthLabRedisOutage(t)
++		p1, p2 := f.process(outage, 60*time.Second, false), f.process(outage, 60*time.Second, false)
++		f.prepare(p1, "batch", 8); f.release(p1, "batch")
++		a := f.issuer.next(t, f.ctx)
++		p1.await(t, f.ctx, "lock_error", "")
++		f.barriers = append(f.barriers, "actual_redis_tcp_failure", "issuer_rotation_inflight")
++		a.release()
++		for _, e := range f.results(p1, "batch", 8) { f.accepted(e, "A1") }
++		f.rotated()
++		f.accepted(f.request(p2, "subsequent", true), "A1")
++		f.counts(1, 1)
++	})
++
++	// Red: per-instance local mutexes cannot serialize across separate processes
++	// when Redis is unreachable. Record this actual race as FAIL, never mock green.
++	t.Run("redis_outage_two_process_race", func(t *testing.T) {
++		f := s.fixture(t)
++		outage := oauthLabRedisOutage(t)
++		p1, p2 := f.process(outage, 60*time.Second, false), f.process(outage, 60*time.Second, false)
++		f.prepare(p1, "first", 1); f.prepare(p2, "other", 1)
++		f.release(p1, "first")
++		a := f.issuer.next(t, f.ctx)
++		p1.await(t, f.ctx, "lock_error", "")
++		f.release(p2, "other")
++		b := f.issuer.next(t, f.ctx)
++		p2.await(t, f.ctx, "lock_error", "")
++		f.barriers = append(f.barriers, "both_processes_actual_redis_failure", "both_processes_issuer_attempt_inflight")
++		b.release()
++		e := f.results(p2, "other", 1)[0]
++		f.check(e.Error && e.HTTPStatus == 0, "FAIL: cross-process refresh race fell back to stale synthetic bearer")
++		a.release()
++		f.accepted(f.results(p1, "first", 1)[0], "A1")
++		f.rotated()
++		f.accepted(f.request(p2, "subsequent", true), "A1")
++		f.counts(1, 1)
++	})
++
++	// Red: request-path invalid_grant is swallowed by OpenAI's fallback policy,
++	// leaving the revoked account schedulable and selecting A0 for new work.
++	for _, background := range []bool{false, true} {
++		name := "revocation_request_path"
++		if background { name = "revocation_background_path" }
++		t.Run(name, func(t *testing.T) {
++			f := s.fixture(t)
++			f.issuer.mu.Lock(); f.issuer.revoked = true; f.issuer.mu.Unlock()
++			p1, p2 := f.process(s.redisURL, 60*time.Second, false), f.process(s.redisURL, 60*time.Second, false)
++			if background { f.background(p1, "background") } else { f.prepare(p1, "request", 1); f.release(p1, "request") }
++			a := f.issuer.next(t, f.ctx)
++			f.check(!a.Accepted, "revoked single-use issuer must return invalid_grant")
++			f.barriers = append(f.barriers, "issuer_confirmed_invalid_grant")
++			a.release()
++			if background { f.backgroundDone(p1, "background") } else {
++				e := f.results(p1, "request", 1)[0]
++				f.check(e.Error && e.HTTPStatus == 0, "FAIL: confirmed revocation selected a stale gateway bearer")
++			}
++			f.check(!f.scheduled(), "FAIL: confirmed revoked account remains in actual scheduling repository")
++			f.issuer.releaseAll() // Any erroneous automatic/new-work attempt is answered, never hidden by a hang.
++			e := f.request(p2, "new_work", true)
++			f.check(e.Denied && e.HTTPStatus == 0, "confirmed revocation must deny new gateway bearer work before issuer/resource effects")
++			f.counts(1, 0)
++			f.issuer.mu.Lock(); resources := f.issuer.resourceRequests; f.issuer.mu.Unlock()
++			f.check(resources == 0, "revoked identity must not be sent to the synthetic gateway resource")
++		})
++	}
++
++	// Red: swallowing a real commit acknowledgement loss causes replay of consumed
++	// R0 or false non-durable success. Independent PostgreSQL reread must show R1.
++	t.Run("issuer_rotation_lost_db_commit_ack", func(t *testing.T) {
++		f := s.fixture(t)
++		p1, p2 := f.process(s.redisURL, 60*time.Second, true), f.process(s.redisURL, 60*time.Second, false)
++		f.background(p1, "background")
++		a := f.issuer.next(t, f.ctx)
++		f.issuer.releaseAll()
++		a.release()
++		p1.await(t, f.ctx, "db_commit_ack_lost", "")
++		f.backgroundDone(p1, "background")
++		f.barriers = append(f.barriers, "issuer_consumed_R0", "actual_postgresql_commit_ack_hidden", "independent_postgresql_reread")
++		f.rotated()
++		f.check(f.scheduled(), "durably rotated identity must not be falsely revoked by a lost acknowledgement")
++		f.accepted(f.request(p2, "subsequent", true), "A1")
++		f.counts(1, 1)
++	})
++
++	// Red: actual PostgreSQL credential-write rejection AFTER R0 was consumed
++	// triggers a background retry with that same R0. A trigger causes a real DB
++	// failure; no stub, imaginary commit, or fabricated durable state is involved.
++	t.Run("issuer_rotation_db_write_rejected", func(t *testing.T) {
++		f := s.fixture(t)
++		name := "oauth_lab_reject_" + strings.ReplaceAll(f.issuer.id, "-", "")
++		functionDDL := fmt.Sprintf("CREATE FUNCTION %s() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.id = %d AND NEW.credentials IS DISTINCT FROM OLD.credentials THEN RAISE EXCEPTION 'synthetic credential write rejected'; END IF; RETURN NEW; END $$", name, f.account.ID)
++		_, err := s.db.ExecContext(f.ctx, functionDDL)
++		oauthLabNeed(t, err == nil, "owned PostgreSQL fault function creation failed")
++		t.Cleanup(func() { ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second); defer cancel(); _, e := s.db.ExecContext(ctx, "DROP FUNCTION IF EXISTS " + name + "() CASCADE"); if e != nil { t.Error("owned PostgreSQL fault cleanup failed") } })
++		_, err = s.db.ExecContext(f.ctx, "CREATE TRIGGER " + name + " BEFORE UPDATE OF credentials ON accounts FOR EACH ROW EXECUTE FUNCTION " + name + "()")
++		oauthLabNeed(t, err == nil, "owned PostgreSQL rejection trigger creation failed")
++		p1, p2 := f.process(s.redisURL, 60*time.Second, false), f.process(s.redisURL, 60*time.Second, false)
++		f.background(p1, "background")
++		a := f.issuer.next(t, f.ctx)
++		f.check(a.Accepted, "issuer must consume R0 before the real PostgreSQL write fault")
++		f.barriers = append(f.barriers, "issuer_consumed_R0", "real_postgresql_rejection_trigger_installed")
++		f.issuer.releaseAll()
++		f.backgroundDone(p1, "background")
++		row := f.row()
++		f.check(f.issuer.phase(row.GetCredential("refresh_token")) == "R0", "rejected DB write must not fabricate persistence of R1")
++		f.check(!f.scheduled(), "uncertain consumed refresh credential must be contained before new gateway work")
++		e := f.request(p2, "new_work", true)
++		f.check(e.Denied && e.HTTPStatus == 0, "consumed uncertain refresh must deny subsequent gateway work")
++		f.counts(1, 1) // Any automatic issuer retry with consumed R0 makes this red.
++	})
++}
+diff --git a/backend/internal/repository/oauth_lab_worker_test.go b/backend/internal/repository/oauth_lab_worker_test.go
+new file mode 100644
+--- /dev/null
++++ b/backend/internal/repository/oauth_lab_worker_test.go
+@@ -0,0 +1,281 @@
++//go:build oauthlab
++
++package repository
++
++import (
++	"bufio"
++	"context"
++	"database/sql"
++	"database/sql/driver"
++	"encoding/json"
++	"errors"
++	"fmt"
++	"io"
++	"log"
++	"log/slog"
++	"net"
++	"net/http"
++	"net/url"
++	"os"
++	"strconv"
++	"strings"
++	"sync"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"entgo.io/ent/dialect"
++	entsql "entgo.io/ent/dialect/sql"
++	dbent "github.com/Wei-Shaw/sub2api/ent"
++	"github.com/Wei-Shaw/sub2api/internal/config"
++	"github.com/Wei-Shaw/sub2api/internal/service"
++	"github.com/lib/pq"
++	"github.com/redis/go-redis/v9"
++)
++
++// Observe actual Redis command results, without replacing locking or storage.
++type oauthLabRedisObserver struct { emit func(oauthLabEvent) }
++func (h oauthLabRedisObserver) DialHook(next redis.DialHook) redis.DialHook { return next }
++func (h oauthLabRedisObserver) ProcessPipelineHook(next redis.ProcessPipelineHook) redis.ProcessPipelineHook { return next }
++func (h oauthLabRedisObserver) ProcessHook(next redis.ProcessHook) redis.ProcessHook {
++	return func(ctx context.Context, cmd redis.Cmder) error {
++		err := next(ctx, cmd)
++		args := cmd.Args()
++		if cmd.Name() == "set" && len(args) > 1 && strings.HasPrefix(fmt.Sprint(args[1]), oauthRefreshLockKeyPrefix) {
++			if err != nil && err != redis.Nil { h.emit(oauthLabEvent{Kind: "lock_error"}) } else if b, ok := cmd.(*redis.BoolCmd); ok {
++				if b.Val() { h.emit(oauthLabEvent{Kind: "lock_acquired"}) } else { h.emit(oauthLabEvent{Kind: "lock_contended"}) }
++			}
++		}
++		return err
++	}
++}
++
++// The real background service exposes cycle completion through its structured log.
++// All other log records and all attributes are discarded in this synthetic child.
++type oauthLabCycleObserver struct { done chan struct{} }
++func (h *oauthLabCycleObserver) Enabled(context.Context, slog.Level) bool { return true }
++func (h *oauthLabCycleObserver) Handle(_ context.Context, r slog.Record) error {
++	if r.Message == "token_refresh.cycle_completed" { select { case h.done <- struct{}{}: default: } }
++	return nil
++}
++func (h *oauthLabCycleObserver) WithAttrs([]slog.Attr) slog.Handler { return h }
++func (h *oauthLabCycleObserver) WithGroup(string) slog.Handler { return h }
++
++// This is an explicitly injected test transport fault, not a repository stub:
++// the actual PostgreSQL transaction commits durably, but the driver acknowledgement
++// is hidden from the coordinator. The independent parent rereads the real row.
++type oauthLabAckFault struct { used atomic.Bool; emit func(oauthLabEvent) }
++type oauthLabConnector struct { driver.Connector; fault *oauthLabAckFault }
++func (c oauthLabConnector) Connect(ctx context.Context) (driver.Conn, error) {
++	conn, err := c.Connector.Connect(ctx)
++	if err != nil { return nil, err }
++	return &oauthLabConn{Conn: conn, fault: c.fault}, nil
++}
++type oauthLabConn struct { driver.Conn; fault *oauthLabAckFault }
++func (c *oauthLabConn) Begin() (driver.Tx, error) {
++	tx, err := c.Conn.Begin()
++	if err != nil { return nil, err }
++	return &oauthLabTx{Tx: tx, fault: c.fault}, nil
++}
++func (c *oauthLabConn) BeginTx(ctx context.Context, opts driver.TxOptions) (driver.Tx, error) {
++	if next, ok := c.Conn.(driver.ConnBeginTx); ok {
++		tx, err := next.BeginTx(ctx, opts)
++		if err != nil { return nil, err }
++		return &oauthLabTx{Tx: tx, fault: c.fault}, nil
++	}
++	if err := ctx.Err(); err != nil { return nil, err }
++	if opts.Isolation != 0 || opts.ReadOnly { return nil, errors.New("unsupported synthetic transaction options") }
++	return c.Begin()
++}
++func (c *oauthLabConn) ExecContext(ctx context.Context, q string, args []driver.NamedValue) (driver.Result, error) {
++	if next, ok := c.Conn.(driver.ExecerContext); ok { return next.ExecContext(ctx, q, args) }
++	return nil, driver.ErrSkip
++}
++func (c *oauthLabConn) QueryContext(ctx context.Context, q string, args []driver.NamedValue) (driver.Rows, error) {
++	if next, ok := c.Conn.(driver.QueryerContext); ok { return next.QueryContext(ctx, q, args) }
++	return nil, driver.ErrSkip
++}
++func (c *oauthLabConn) Ping(ctx context.Context) error {
++	if next, ok := c.Conn.(driver.Pinger); ok { return next.Ping(ctx) }
++	return ctx.Err()
++}
++type oauthLabTx struct { driver.Tx; fault *oauthLabAckFault }
++func (tx *oauthLabTx) Commit() error {
++	if err := tx.Tx.Commit(); err != nil { return err }
++	if tx.fault.used.CompareAndSwap(false, true) {
++		tx.fault.emit(oauthLabEvent{Kind: "db_commit_ack_lost"})
++		return errors.New("synthetic committed PostgreSQL acknowledgement lost")
++	}
++	return nil
++}
++
++func TestOAuthLabProcess(t *testing.T) {
++	if os.Getenv("OAUTH_LAB_CHILD") != "1" || os.Getenv("OAUTH_LAB_ENABLE") != oauthLabEnable {
++		t.Skip("NOT RUN: helper process requires explicit synthetic configuration")
++	}
++	var outputMu sync.Mutex
++	emit := func(e oauthLabEvent) {
++		e.PID = os.Getpid()
++		b, _ := json.Marshal(e)
++		outputMu.Lock(); defer outputMu.Unlock()
++		fmt.Println(oauthLabEventPrefix + string(b))
++	}
++	log.SetOutput(io.Discard)
++	cycle := &oauthLabCycleObserver{done: make(chan struct{}, 4)}
++	slog.SetDefault(slog.New(cycle))
++	ctx, cancel := context.WithTimeout(context.Background(), 27*time.Second)
++	defer cancel()
++	issuerURL, err := url.Parse(os.Getenv("OAUTH_LAB_ISSUER_URL"))
++	oauthLabNeed(t, err == nil && issuerURL.Scheme == "http" && net.ParseIP(issuerURL.Hostname()) != nil && net.ParseIP(issuerURL.Hostname()).IsLoopback() && issuerURL.User == nil, "child requires exact loopback synthetic issuer")
++	id, err := strconv.ParseInt(os.Getenv("OAUTH_LAB_ACCOUNT_ID"), 10, 64)
++	oauthLabNeed(t, err == nil && id > 0, "missing independent fixture account ID")
++	ttl, err := time.ParseDuration(os.Getenv("OAUTH_LAB_TTL"))
++	oauthLabNeed(t, err == nil && ttl > 0, "missing explicit synthetic lock TTL")
++	var db *sql.DB
++	var client *dbent.Client
++	if os.Getenv("OAUTH_LAB_ACK_FAULT") == "true" {
++		connector, e := pq.NewConnector(os.Getenv("OAUTH_LAB_PG_DSN"))
++		oauthLabNeed(t, e == nil, "synthetic PostgreSQL connector initialization failed")
++		db = sql.OpenDB(oauthLabConnector{Connector: connector, fault: &oauthLabAckFault{emit: emit}})
++		client = dbent.NewClient(dbent.Driver(entsql.OpenDB(dialect.Postgres, db)))
++	} else { db, client, err = oauthLabOpenDB(os.Getenv("OAUTH_LAB_PG_DSN")); oauthLabNeed(t, err == nil, "child PostgreSQL initialization failed") }
++	defer func() { _ = client.Close() }()
++	var dbName string
++	err = db.QueryRowContext(ctx, "SELECT current_database()").Scan(&dbName)
++	oauthLabNeed(t, err == nil && strings.HasPrefix(dbName, "oauth_lab_"), "child PostgreSQL isolation verification failed")
++	rdb, err := oauthLabRedis(os.Getenv("OAUTH_LAB_REDIS_URL"))
++	oauthLabNeed(t, err == nil, "child Redis configuration rejected")
++	defer func() { _ = rdb.Close() }()
++	rdb.AddHook(oauthLabRedisObserver{emit: emit})
++	cache := NewGeminiTokenCache(rdb)
++	schedulerCache := NewSchedulerCache(rdb)
++	repo := NewAccountRepository(client, db, nil)
++	// Existing same-package seam: the actual upstream HTTP issuer/parser is used.
++	oauth := service.NewOpenAIOAuthService(nil, &openaiOAuthService{tokenURL: issuerURL.String() + "/token"})
++	defer oauth.Stop()
++	executor := service.NewOpenAITokenRefresher(oauth, repo)
++	api := service.NewOAuthRefreshAPI(repo, cache, ttl)
++	provider := service.NewOpenAITokenProvider(repo, cache, oauth)
++	provider.SetRefreshAPI(api, executor)
++	// Leave the actual upstream OpenAI refresh policy unchanged, including failures.
++	gateway := service.NewOpenAIGatewayService(
++		repo, // accountRepo
++		nil, // usageLogRepo
++		nil, // usageBillingRepo
++		nil, // userRepo
++		nil, // userSubRepo
++		nil, // userGroupRateRepo
++		nil, // cache
++		&config.Config{}, // cfg
++		nil, // schedulerSnapshot
++		nil, // concurrencyService
++		nil, // billingService
++		nil, // rateLimitService
++		nil, // billingCacheService
++		nil, // httpUpstream: Forward is deliberately outside this auth-selection boundary
++		nil, // deferredService
++		provider,
++		nil, // grokTokenProvider
++		nil, // resolver
++		nil, // channelService
++		nil, // balanceNotifyService
++		nil, // settingService
++		nil, // userPlatformQuotaRepo
++	)
++	phase := func(token string) string {
++		for _, p := range []string{"A0", "A1", "REAUTH"} { if token == "fabricated-oauth-lab-" + os.Getenv("OAUTH_LAB_ID") + "-" + p { return p } }
++		if token == "" { return "empty" }; return "unknown"
++	}
++	httpClient := &http.Client{Timeout: 4*time.Second, Transport: &http.Transport{Proxy: nil}}
++	defer httpClient.CloseIdleConnections()
++	request := func(op string, account *service.Account, scheduled bool) {
++		e := oauthLabEvent{Kind: "result", Op: op}
++		if scheduled {
++			rows, e1 := repo.ListSchedulableByPlatform(ctx, service.PlatformOpenAI)
++			if e1 != nil { e.Error = true; emit(e); return }
++			found := false
++			for _, row := range rows { if row.ID == id { found = true; break } }
++			if !found { e.Denied = true; emit(e); return }
++		}
++		token, mode, e1 := gateway.GetAccessToken(ctx, account)
++		e.Phase = phase(token)
++		if e1 != nil || mode != "oauth" { e.Error = true; emit(e); return }
++		req, e1 := http.NewRequestWithContext(ctx, http.MethodGet, issuerURL.String() + "/resource", nil)
++		if e1 != nil { e.Error = true; emit(e); return }
++		req.Header.Set("Authorization", "Bearer " + token)
++		resp, e1 := httpClient.Do(req)
++		if e1 != nil { e.Error = true; emit(e); return }
++		_, _ = io.Copy(io.Discard, io.LimitReader(resp.Body, 2048)); _ = resp.Body.Close()
++		e.HTTPStatus = resp.StatusCode
++		emit(e)
++	}
++	load := func() *service.Account {
++		account, e := repo.GetByID(ctx, id)
++		oauthLabNeed(t, e == nil && account != nil, "child durable account read failed")
++		return account
++	}
++	prepared := map[string][]*service.Account{}
++	var work sync.WaitGroup
++	var background *service.TokenRefreshService
++	emit(oauthLabEvent{Kind: "ready"})
++	scanner := bufio.NewScanner(os.Stdin)
++	for scanner.Scan() {
++		var cmd oauthLabCommand
++		oauthLabNeed(t, json.Unmarshal(scanner.Bytes(), &cmd) == nil, "invalid synthetic child command")
++		switch cmd.Kind {
++		case "prepare":
++			oauthLabNeed(t, cmd.Count > 0 && cmd.Count <= 8, "request batch outside bound")
++			for n := 0; n < cmd.Count; n++ { prepared[cmd.Op] = append(prepared[cmd.Op], load()) }
++			emit(oauthLabEvent{Kind: "prepared", Op: cmd.Op, Count: cmd.Count})
++		case "release":
++			accounts := prepared[cmd.Op]
++			oauthLabNeed(t, len(accounts) > 0, "missing actual DB snapshot preparation")
++			delete(prepared, cmd.Op)
++			work.Add(1)
++			go func(c oauthLabCommand, batch []*service.Account) {
++				defer work.Done()
++				var batchWG sync.WaitGroup
++				start := make(chan struct{})
++				for n, account := range batch {
++					batchWG.Add(1)
++					go func(n int, account *service.Account) { defer batchWG.Done(); <-start; request(c.Op + "-" + strconv.Itoa(n), account, c.Scheduled) }(n, account)
++				}
++				close(start)
++				emit(oauthLabEvent{Kind: "released", Op: c.Op, Count: len(batch)})
++				batchWG.Wait()
++				emit(oauthLabEvent{Kind: "batch_done", Op: c.Op})
++			}(cmd, accounts)
++		case "request":
++			account := load()
++			work.Add(1)
++			go func(c oauthLabCommand, a *service.Account) { defer work.Done(); request(c.Op, a, c.Scheduled) }(cmd, account)
++		case "background":
++			oauthLabNeed(t, background == nil, "background cycle may start only once per child")
++			cfg := &config.Config{}
++			cfg.TokenRefresh = config.TokenRefreshConfig{Enabled: true, CheckIntervalMinutes: 5, RefreshBeforeExpiryHours: 0.1, MaxRetries: 3, RetryBackoffSeconds: 1, CandidatePageSize: 8, ProviderConcurrency: 1, ProviderQPS: 16, ProviderFailureThreshold: 3, AttemptTimeoutSeconds: 5, CycleTimeoutSeconds: 12}
++			background = service.NewTokenRefreshService(repo, nil, oauth, nil, nil, service.NewCompositeTokenCacheInvalidator(cache), schedulerCache, cfg, nil)
++			background.SetRefreshAPI(api)
++			background.Start()
++			work.Add(1)
++			go func(op string, bg *service.TokenRefreshService) {
++				defer work.Done()
++				select {
++				case <-cycle.done:
++					bg.Stop()
++					emit(oauthLabEvent{Kind: "background_done", Op: op})
++				case <-ctx.Done():
++					bg.Stop()
++					emit(oauthLabEvent{Kind: "background_done", Op: op, Error: true})
++				}
++			}(cmd.Op, background)
++		case "stop":
++			if background != nil { background.Stop() }
++			work.Wait()
++			emit(oauthLabEvent{Kind: "stopped"})
++			return
++		default: t.Fatal("unknown synthetic child command")
++		}
++	}
++	if background != nil { background.Stop() }
++	work.Wait()
++}

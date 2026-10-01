@@ -1,0 +1,2902 @@
+--- a/backend/internal/handler/admin/account_codex_import.go
++++ b/backend/internal/handler/admin/account_codex_import.go
+@@ -158,6 +158,10 @@
+ }
+ 
+ func (h *AccountHandler) importCodexSessions(ctx context.Context, req CodexSessionImportRequest, entries []codexImportEntry) (CodexSessionImportResult, error) {
++	if err := service.ValidateOpenAIOAuthIdentityCredentials(&service.Account{Platform: service.PlatformOpenAI, Type: service.AccountTypeOAuth, Credentials: req.CredentialExtras}); err != nil {
++		return CodexSessionImportResult{}, err
++	}
++
+ 	result := CodexSessionImportResult{
+ 		Total: len(entries),
+ 		Items: make([]CodexSessionImportItem, 0, len(entries)),
+@@ -502,6 +506,20 @@
+ 	case string:
+ 		item.AccessToken = strings.TrimSpace(raw)
+ 	case map[string]any:
++		// Reject unsupported identity fields before string extraction can coerce/drop them.
++		for _, key := range []string{"client_id", "refresh_token"} {
++			alias := "clientId"
++			if key == "refresh_token" {
++				alias = "refreshToken"
++			}
++			for _, path := range [][]string{{key}, {alias}, {"tokens", key}, {"tokens", alias}} {
++				if value, exists := codexPathValue(raw, path); exists {
++					if err := service.ValidateOpenAIOAuthIdentityCredentials(&service.Account{Platform: service.PlatformOpenAI, Type: service.AccountTypeOAuth, Credentials: map[string]any{key: value}}); err != nil {
++						return nil, err
++					}
++				}
++			}
++		}
+ 		if agentIdentity, ok := firstCodexMap(raw, []string{"agent_identity"}, []string{"agentIdentity"}); ok || strings.EqualFold(firstCodexString(raw, []string{"auth_mode"}, []string{"authMode"}), service.OpenAIAuthModeAgentIdentity) {
+ 			if !ok {
+ 				agentIdentity = raw
+@@ -544,7 +562,7 @@
+ 			[]string{"accessToken"},
+ 			[]string{"token"},
+ 		)
+-		item.RefreshToken = firstCodexString(raw,
++		item.RefreshToken = firstCodexIdentityString(raw,
+ 			[]string{"tokens", "refresh_token"},
+ 			[]string{"tokens", "refreshToken"},
+ 			[]string{"refresh_token"},
+@@ -1136,6 +1154,18 @@
+ 	}
+ }
+ 
++// Refresh-token identity must retain the exact submitted wire bytes.
++func firstCodexIdentityString(obj map[string]any, paths ...[]string) string {
++	for _, path := range paths {
++		if value, exists := codexPathValue(obj, path); exists {
++			if token, ok := value.(string); ok && strings.TrimSpace(token) != "" {
++				return token
++			}
++		}
++	}
++	return ""
++}
++
+ func firstCodexString(obj map[string]any, paths ...[]string) string {
+ 	for _, path := range paths {
+ 		if value, ok := codexPathValue(obj, path); ok {
+--- a/backend/internal/handler/admin/account_handler.go
++++ b/backend/internal/handler/admin/account_handler.go
+@@ -1415,20 +1415,17 @@
+ 	var newCredentials map[string]any
+ 
+ 	if account.IsOpenAI() {
+-		tokenInfo, err := h.openaiOAuthService.RefreshAccountToken(ctx, account)
++		refresher, ok := h.adminService.(interface {
++			RefreshOpenAIAccount(context.Context, *service.Account, *service.OpenAIOAuthService) (*service.Account, error)
++		})
++		if !ok {
++			return nil, "", errors.New("durable OpenAI OAuth refresh is not configured")
++		}
++		updated, err := refresher.RefreshOpenAIAccount(ctx, account, h.openaiOAuthService)
+ 		if err != nil {
+-			// 刷新失败但 access_token 可能仍有效，尝试设置隐私
+-			h.adminService.EnsureOpenAIPrivacy(ctx, account)
+ 			return nil, "", err
+ 		}
+-
+-		newCredentials = h.openaiOAuthService.BuildAccountCredentials(tokenInfo)
+-		for k, v := range account.Credentials {
+-			if _, exists := newCredentials[k]; !exists {
+-				newCredentials[k] = v
+-			}
+-		}
+-		newCredentials = service.NormalizeOpenAIPersonalAccessTokenCredentials(account, tokenInfo, newCredentials)
++		return updated, "", nil
+ 	} else if account.Platform == service.PlatformGemini {
+ 		tokenInfo, err := h.geminiOAuthService.RefreshAccountToken(ctx, account)
+ 		if err != nil {
+--- a/backend/internal/handler/admin/openai_oauth_handler.go
++++ b/backend/internal/handler/admin/openai_oauth_handler.go
+@@ -9,7 +9,6 @@
+ 	"time"
+ 
+ 	"github.com/Wei-Shaw/sub2api/internal/handler/dto"
+-	"github.com/Wei-Shaw/sub2api/internal/pkg/openai"
+ 	"github.com/Wei-Shaw/sub2api/internal/pkg/response"
+ 	"github.com/Wei-Shaw/sub2api/internal/service"
+ 
+@@ -208,22 +207,15 @@
+ 		return
+ 	}
+ 
+-	var proxyURL string
+-	if req.ProxyID != nil {
+-		proxy, err := h.adminService.GetProxy(c.Request.Context(), *req.ProxyID)
+-		if err == nil && proxy != nil {
+-			proxyURL = proxy.URL()
+-		}
+-	}
+-
+-	// 未指定 client_id 时，根据请求路径平台自动设置默认值，避免 repository 层盲猜
+-	clientID := strings.TrimSpace(req.ClientID)
+-	if clientID == "" {
+-		platform := oauthPlatformFromPath(c)
+-		clientID, _ = openai.OAuthClientConfigByPlatform(platform)
+-	}
+-
+-	tokenInfo, err := h.openaiOAuthService.RefreshTokenWithClientID(c.Request.Context(), refreshToken, proxyURL, clientID)
++	refresher, ok := h.adminService.(interface {
++		RefreshOpenAIToken(context.Context, string, *int64, string, *service.OpenAIOAuthService) (*service.OpenAITokenInfo, error)
++	})
++	if !ok {
++		response.InternalError(c, "durable OpenAI OAuth refresh is not configured")
++		return
++	}
++	tokenInfo, err := refresher.RefreshOpenAIToken(c.Request.Context(), refreshToken, req.ProxyID, strings.TrimSpace(req.ClientID), h.openaiOAuthService)
++
+ 	if err != nil {
+ 		response.ErrorFrom(c, err)
+ 		return
+@@ -267,27 +259,14 @@
+ 		return
+ 	}
+ 
+-	// Use OpenAI OAuth service to refresh token
+-	tokenInfo, err := h.openaiOAuthService.RefreshAccountToken(c.Request.Context(), account)
+-	if err != nil {
+-		response.ErrorFrom(c, err)
+-		return
+-	}
+-
+-	// Build new credentials from token info
+-	newCredentials := h.openaiOAuthService.BuildAccountCredentials(tokenInfo)
+-
+-	// Preserve non-token settings from existing credentials
+-	for k, v := range account.Credentials {
+-		if _, exists := newCredentials[k]; !exists {
+-			newCredentials[k] = v
+-		}
+-	}
+-	newCredentials = service.NormalizeOpenAIPersonalAccessTokenCredentials(account, tokenInfo, newCredentials)
+-
+-	updatedAccount, err := h.adminService.UpdateAccount(c.Request.Context(), accountID, &service.UpdateAccountInput{
+-		Credentials: newCredentials,
+-	})
++	refresher, ok := h.adminService.(interface {
++		RefreshOpenAIAccount(context.Context, *service.Account, *service.OpenAIOAuthService) (*service.Account, error)
++	})
++	if !ok {
++		response.InternalError(c, "durable OpenAI OAuth refresh is not configured")
++		return
++	}
++	updatedAccount, err := refresher.RefreshOpenAIAccount(c.Request.Context(), account, h.openaiOAuthService)
+ 	if err != nil {
+ 		response.ErrorFrom(c, err)
+ 		return
+--- a/backend/internal/handler/openai_gateway_handler.go
++++ b/backend/internal/handler/openai_gateway_handler.go
+@@ -2806,7 +2806,13 @@
+ 			reqLog.Warn("openai.websocket_bind_sticky_session_after_profit_admission_failed", zap.Int64("account_id", account.ID), zap.Error(err))
+ 		}
+ 
+-		token, _, err := h.gatewayService.GetRequestCredential(ctx, c, account)
++		// Bind before prefetch and hooks without mutating the shared selection.
++		boundCtx, execution, err := h.gatewayService.BindOAuthRequest(ctx, account)
++		var token string
++		if err == nil {
++			ctx, account = boundCtx, execution
++			token, _, err = h.gatewayService.GetRequestCredential(ctx, c, account)
++		}
+ 		if err != nil {
+ 			reqLog.Warn("openai.websocket_get_access_token_failed", zap.Int64("account_id", account.ID), zap.Error(err))
+ 			if ctx.Err() != nil {
+--- a/backend/internal/repository/account_repo.go
++++ b/backend/internal/repository/account_repo.go
+@@ -135,6 +135,9 @@
+ }
+ 
+ func createAccountRecord(ctx context.Context, client *dbent.Client, account *service.Account) error {
++	if err := service.ValidateOpenAIOAuthIdentityCredentials(account); err != nil {
++		return err
++	}
+ 	if account == nil {
+ 		return service.ErrAccountNilInput
+ 	}
+@@ -201,12 +204,17 @@
+ 	account.ID = created.ID
+ 	account.CreatedAt = created.CreatedAt
+ 	account.UpdatedAt = created.UpdatedAt
++	account.Credentials = copyJSONMap(created.Credentials)
++	rememberOAuthEditBase(account)
+ 	return nil
+ }
+ 
+ // CreateWithAccountGroups atomically persists an account, its exact per-group priorities,
+ // and the scheduler outbox event used to publish the new routing snapshot.
+ func (r *accountRepository) CreateWithAccountGroups(ctx context.Context, account *service.Account, groups []service.AccountGroup) error {
++	if err := service.ValidateOpenAIOAuthIdentityCredentials(account); err != nil {
++		return err
++	}
+ 	if account == nil {
+ 		return service.ErrAccountNilInput
+ 	}
+@@ -466,6 +474,9 @@
+ 		return nil
+ 	}
+ 
++	if err := service.ValidateOpenAIOAuthIdentityCredentials(account); err != nil {
++		return err
++	}
+ 	baseCtx := ctx
+ 	contextTx := dbent.TxFromContext(ctx)
+ 	client := r.client
+@@ -506,6 +517,8 @@
+ 	}
+ 
+ 	account.UpdatedAt = updated.UpdatedAt
++	account.Credentials = copyJSONMap(updated.Credentials)
++	rememberOAuthEditBase(account)
+ 	// 普通账号编辑（如 model_mapping / credentials）也需要立即刷新单账号快照，
+ 	// 否则网关在 outbox worker 延迟或异常时仍可能读到旧配置。
+ 	if contextTx == nil {
+@@ -522,6 +535,13 @@
+ 	explicitRateSyncEnabled *bool,
+ 	explicitRateMultiplier *float64,
+ ) (*dbent.Account, error) {
++	if err := rebaseOAuthAccountEdit(ctx, client, account); err != nil {
++		return nil, err
++	}
++	// Recheck the locked/rebased effective document before any durable mutation.
++	if err := service.ValidateOpenAIOAuthIdentityCredentials(account); err != nil {
++		return nil, err
++	}
+ 	extra, err := lockAndMergeAccountProbeExtra(ctx, client, account, explicitProbeEnabled, explicitRateSyncEnabled)
+ 	if err != nil {
+ 		return nil, err
+@@ -840,7 +860,29 @@
+ 	return value, true, nil
+ }
+ 
++// oauthIdentityWritePredicate validates the effective document against the current
++// target row in the UPDATE itself. PostgreSQL rechecks this condition after a
++// concurrent row update, including native-to-OAuth conversions. Preflight reads
++// can provide better errors but cannot authorize an identity write.
++func oauthIdentityWritePredicate(document string) string {
++	return "(platform <> 'openai' OR type <> 'oauth' OR (" +
++		"jsonb_typeof(" + document + ") = 'object' AND " +
++		"COALESCE(jsonb_typeof((" + document + ")->'client_id'), 'null') IN ('string','null') AND " +
++		"COALESCE(jsonb_typeof((" + document + ")->'refresh_token'), 'null') IN ('string','null')))"
++}
++
+ func (r *accountRepository) UpdateCredentials(ctx context.Context, id int64, credentials map[string]any) error {
++	// Supported documents need no platform lookup and retain the normal write flow.
++	if service.ValidateOpenAIOAuthIdentityCredentials(&service.Account{Platform: service.PlatformOpenAI, Type: service.AccountTypeOAuth, Credentials: credentials}) != nil {
++		current, err := r.GetByID(ctx, id)
++		if err != nil {
++			return err
++		}
++		current.Credentials = credentials
++		if err := service.ValidateOpenAIOAuthIdentityCredentials(current); err != nil {
++			return err
++		}
++	}
+ 	payload, err := json.Marshal(normalizeJSONMap(credentials))
+ 	if err != nil {
+ 		return err
+@@ -932,6 +974,9 @@
+ 			END,
+ 			updated_at = NOW()
+ 		WHERE id = $2 AND deleted_at IS NULL
++		AND `+oauthIdentityWritePredicate("$1::jsonb")+`
++		AND (platform <> 'openai' OR type <> 'oauth' OR NOT ($1::jsonb ? '_oauth_revision')
++		OR oauth_revision::text=$1::jsonb->>'_oauth_revision')
+ 	`, string(payload), id)
+ 	if err != nil {
+ 		return err
+@@ -1018,6 +1063,7 @@
+ 			q = q.Where(
+ 				dbaccount.StatusEQ(status),
+ 				dbaccount.SchedulableEQ(true),
++				oauthNoPendingPredicate(),
+ 				dbaccount.Or(
+ 					dbaccount.RateLimitResetAtIsNil(),
+ 					dbaccount.RateLimitResetAtLTE(time.Now()),
+@@ -1803,6 +1849,16 @@
+ 	if r == nil || r.schedulerCache == nil || accountID <= 0 {
+ 		return
+ 	}
++	if cache, ok := r.schedulerCache.(service.OAuthRevisionSchedulerCache); ok {
++		revision, err := r.OAuthAccountRevision(ctx, accountID)
++		if err != nil {
++			return
++		}
++		if revision != "" {
++			_ = cache.DeleteOAuthAccount(ctx, accountID, revision)
++			return
++		}
++	}
+ 	if err := r.schedulerCache.DeleteAccount(ctx, accountID); err != nil {
+ 		logger.LegacyPrintf("repository.account", "[Scheduler] delete account snapshot failed: id=%d err=%v", accountID, err)
+ 	}
+@@ -2027,6 +2083,7 @@
+ 		Where(
+ 			dbaccount.StatusEQ(service.StatusActive),
+ 			dbaccount.SchedulableEQ(true),
++			oauthNoPendingPredicate(),
+ 			tempUnschedulablePredicate(),
+ 			notExpiredPredicate(now),
+ 			dbaccount.Or(dbaccount.OverloadUntilIsNil(), dbaccount.OverloadUntilLTE(now)),
+@@ -2133,6 +2190,7 @@
+ 			dbaccount.PlatformEQ(platform),
+ 			dbaccount.StatusEQ(service.StatusActive),
+ 			dbaccount.SchedulableEQ(true),
++			oauthNoPendingPredicate(),
+ 			tempUnschedulablePredicate(),
+ 			notExpiredPredicate(now),
+ 			dbaccount.Or(dbaccount.OverloadUntilIsNil(), dbaccount.OverloadUntilLTE(now)),
+@@ -2167,6 +2225,7 @@
+ 			dbaccount.PlatformIn(platforms...),
+ 			dbaccount.StatusEQ(service.StatusActive),
+ 			dbaccount.SchedulableEQ(true),
++			oauthNoPendingPredicate(),
+ 			tempUnschedulablePredicate(),
+ 			notExpiredPredicate(now),
+ 			dbaccount.Or(dbaccount.OverloadUntilIsNil(), dbaccount.OverloadUntilLTE(now)),
+@@ -2187,6 +2246,7 @@
+ 			dbaccount.PlatformEQ(platform),
+ 			dbaccount.StatusEQ(service.StatusActive),
+ 			dbaccount.SchedulableEQ(true),
++			oauthNoPendingPredicate(),
+ 			dbaccount.Not(dbaccount.HasAccountGroups()),
+ 			tempUnschedulablePredicate(),
+ 			notExpiredPredicate(now),
+@@ -2211,6 +2271,7 @@
+ 			dbaccount.PlatformIn(platforms...),
+ 			dbaccount.StatusEQ(service.StatusActive),
+ 			dbaccount.SchedulableEQ(true),
++			oauthNoPendingPredicate(),
+ 			dbaccount.Not(dbaccount.HasAccountGroups()),
+ 			tempUnschedulablePredicate(),
+ 			notExpiredPredicate(now),
+@@ -2262,6 +2323,7 @@
+ 	preds := []dbpredicate.Account{
+ 		dbaccount.StatusEQ(service.StatusActive),
+ 		dbaccount.SchedulableEQ(true),
++		oauthNoPendingPredicate(),
+ 		dbaccount.PlatformIn(platforms...),
+ 	}
+ 	if !includeGrouped {
+@@ -3008,6 +3070,26 @@
+ 	if len(ids) == 0 {
+ 		return 0, nil
+ 	}
++	// Only unsupported submitted identity fields require target-platform validation.
++	if service.ValidateOpenAIOAuthIdentityCredentials(&service.Account{Platform: service.PlatformOpenAI, Type: service.AccountTypeOAuth, Credentials: updates.Credentials}) != nil {
++		accounts, err := r.GetByIDs(ctx, ids)
++		if err != nil {
++			return 0, err
++		}
++		for _, account := range accounts {
++			merged := copyJSONMap(account.Credentials)
++			if merged == nil {
++				merged = make(map[string]any)
++			}
++			for key, value := range updates.Credentials {
++				merged[key] = value
++			}
++			account.Credentials = merged
++			if err := service.ValidateOpenAIOAuthIdentityCredentials(account); err != nil {
++				return 0, err
++			}
++		}
++	}
+ 	updates.Extra = stripCodexFingerprintSeedFromExtraUpdate(updates.Extra)
+ 
+ 	setClauses := make([]string, 0, 8)
+@@ -3227,7 +3309,11 @@
+ 		whereClause += " AND type = $" + itoa(idx)
+ 		args = append(args, service.AccountTypeAPIKey)
+ 	}
+-	query := "UPDATE accounts SET " + joinClauses(setClauses, ", ") + whereClause
++	if credentialPlaceholder != "" {
++		// Validate the whole merged document, not only submitted keys.
++		whereClause += " AND " + oauthIdentityWritePredicate("(COALESCE(credentials, '{}'::jsonb) || "+credentialPlaceholder+"::jsonb)")
++	}
++	query := "UPDATE accounts SET " + joinClauses(setClauses, ", ") + whereClause + " RETURNING id"
+ 
+ 	baseCtx := ctx
+ 	contextTx := dbent.TxFromContext(ctx)
+@@ -3248,13 +3334,36 @@
+ 		}
+ 	}
+ 
+-	result, err := exec.ExecContext(ctx, query, args...)
++	// RETURNING is the authoritative row boundary after PostgreSQL rechecks
++	// the current-row predicate. Preflight targets cannot authorize publication.
++	updatedRows, err := exec.QueryContext(ctx, query, args...)
+ 	if err != nil {
+ 		return 0, err
+ 	}
+-	rows, err := result.RowsAffected()
+-	if err != nil {
++	defer updatedRows.Close()
++	updatedSet := make(map[int64]struct{})
++	for updatedRows.Next() {
++		var id int64
++		if err := updatedRows.Scan(&id); err != nil {
++			return 0, err
++		}
++		updatedSet[id] = struct{}{}
++	}
++	if err := updatedRows.Err(); err != nil {
+ 		return 0, err
++	}
++	if err := updatedRows.Close(); err != nil {
++		return 0, err
++	}
++	rows := int64(len(updatedSet))
++	// Preserve requested order, once per actual updated ID, independently of
++	// PostgreSQL's unspecified RETURNING order and duplicate input targets.
++	updatedIDs := make([]int64, 0, len(updatedSet))
++	for _, id := range ids {
++		if _, updated := updatedSet[id]; updated {
++			updatedIDs = append(updatedIDs, id)
++			delete(updatedSet, id)
++		}
+ 	}
+ 	if updates.ProbeEnabled != nil {
+ 		expectedRows := int64(0)
+@@ -3271,7 +3380,7 @@
+ 		}
+ 	}
+ 	if rows > 0 {
+-		payload := map[string]any{"account_ids": ids}
++		payload := map[string]any{"account_ids": updatedIDs}
+ 		if err := enqueueSchedulerOutbox(ctx, exec, service.SchedulerOutboxEventAccountBulkChanged, nil, nil, payload); err != nil {
+ 			return 0, err
+ 		}
+@@ -3290,7 +3399,7 @@
+ 			shouldSync = true
+ 		}
+ 		if shouldSync {
+-			r.syncSchedulerAccountSnapshots(baseCtx, ids)
++			r.syncSchedulerAccountSnapshots(baseCtx, updatedIDs)
+ 		}
+ 	}
+ 	return rows, nil
+@@ -3317,7 +3426,7 @@
+ 		preds = append(preds, dbaccount.PlatformIn(opts.platforms...))
+ 	}
+ 	if opts.schedulable {
+-		preds = append(preds, dbaccount.SchedulableEQ(true))
++		preds = append(preds, dbaccount.SchedulableEQ(true), oauthNoPendingPredicate())
+ 		if !opts.ignoreTransientState {
+ 			now := time.Now()
+ 			preds = append(preds,
+@@ -3420,6 +3529,7 @@
+ 		if ags, ok := accountGroupsByAccount[acc.ID]; ok {
+ 			out.AccountGroups = ags
+ 		}
++		rememberOAuthEditBase(out)
+ 		outAccounts = append(outAccounts, *out)
+ 	}
+ 
+@@ -3619,7 +3729,7 @@
+ 
+ 	rateMultiplier := m.RateMultiplier
+ 
+-	return &service.Account{
++	out := &service.Account{
+ 		ID:                      m.ID,
+ 		Name:                    m.Name,
+ 		Notes:                   m.Notes,
+@@ -3652,6 +3762,8 @@
+ 		ParentAccountID:         m.ParentAccountID,
+ 		QuotaDimension:          string(m.QuotaDimension),
+ 	}
++	rememberOAuthEditBase(out)
++	return out
+ }
+ 
+ func normalizeJSONMap(in map[string]any) map[string]any {
+--- a/backend/internal/repository/gemini_token_cache.go
++++ b/backend/internal/repository/gemini_token_cache.go
+@@ -2,6 +2,8 @@
+ 
+ import (
+ 	"context"
++	"crypto/rand"
++	"encoding/hex"
+ 	"fmt"
+ 	"time"
+ 
+@@ -47,3 +49,21 @@
+ 	key := fmt.Sprintf("%s%s", oauthRefreshLockKeyPrefix, cacheKey)
+ 	return c.rdb.Del(ctx, key).Err()
+ }
++
++// OpenAI leases return an acquisition handle; never key ownership by account
++// in a process-local map. A predecessor cannot delete a successor's lease.
++func (c *geminiTokenCache) AcquireOAuthRefreshLease(ctx context.Context, key string, ttl time.Duration) (string, error) {
++	var random [24]byte
++	if _, err := rand.Read(random[:]); err != nil {
++		return "", err
++	}
++	owner := hex.EncodeToString(random[:])
++	acquired, err := c.rdb.SetNX(ctx, oauthRefreshLockKeyPrefix+key, owner, ttl).Result()
++	if err != nil || !acquired {
++		return "", err
++	}
++	return owner, nil
++}
++func (c *geminiTokenCache) ReleaseOAuthRefreshLease(ctx context.Context, key, owner string) error {
++	return c.rdb.Eval(ctx, `if redis.call('GET',KEYS[1])==ARGV[1] then return redis.call('DEL',KEYS[1]) end return 0`, []string{oauthRefreshLockKeyPrefix + key}, owner).Err()
++}
+--- /dev/null
++++ b/backend/internal/repository/oauth_cache_fence.go
+@@ -0,0 +1,90 @@
++package repository
++
++import (
++	"context"
++	"strconv"
++	"strings"
++	"time"
++
++	"github.com/Wei-Shaw/sub2api/internal/service"
++)
++
++// Decimal string comparison is exact beyond 2^53; no Lua number conversion.
++// Fence keys have no TTL and survive access/full/meta payload deletion.
++const oauthRevisionFenceLua = `
++local function canonical(v)
++  return v and string.match(v, '^[1-9][0-9]*$') ~= nil
++end
++local function less(a, b)
++  if string.len(a) ~= string.len(b) then return string.len(a) < string.len(b) end
++  return a < b
++end
++local function fence(rev, deletion)
++  if not canonical(rev) then return false end
++  local old = redis.call('HGET', KEYS[1], 'revision')
++  if old and (less(rev,old) or (rev==old and redis.call('HGET',KEYS[1],'deleted')=='1' and not deletion)) then return false end
++  redis.call('HSET',KEYS[1],'revision',rev)
++  if deletion then redis.call('HSET',KEYS[1],'deleted','1')
++  elseif not old or less(old,rev) then redis.call('HSET',KEYS[1],'deleted','0') end
++  return true
++end
++`
++
++const oauthSchedulerWriteLua = oauthRevisionFenceLua + `
++local old=redis.call('HGET',KEYS[1],'revision')
++if not fence(ARGV[1],false) then return 0 end
++if old~=ARGV[1] then redis.call('DEL',KEYS[4]) end
++redis.call('SET',KEYS[2],ARGV[2])
++redis.call('SET',KEYS[3],ARGV[3])
++return 1
++`
++const oauthTokenWriteLua = oauthRevisionFenceLua + `
++local old=redis.call('HGET',KEYS[1],'revision')
++if not fence(ARGV[1],false) then return 0 end
++if old~=ARGV[1] then redis.call('DEL',KEYS[3],KEYS[4]) end
++redis.call('SET',KEYS[2],ARGV[1]..'\n'..ARGV[2],'PX',ARGV[3])
++return 1
++`
++const oauthDeleteLua = oauthRevisionFenceLua + `
++local rev = ARGV[1]
++if rev == '' then rev=redis.call('HGET',KEYS[1],'revision') or '1' end
++local old=redis.call('HGET',KEYS[1],'revision')
++if not fence(rev,ARGV[2]=='account') then return 0 end
++for i=2,#KEYS do
++  if ARGV[2]=='account' or i==2 or old~=rev then redis.call('DEL',KEYS[i]) end
++end
++return 1
++`
++const oauthTokenReadLua = `
++if redis.call('HGET',KEYS[1],'revision')~=ARGV[1] or redis.call('HGET',KEYS[1],'deleted')=='1' then return '' end
++local v=redis.call('GET',KEYS[2])
++local prefix=ARGV[1]..'\n'
++if not v or string.sub(v,1,string.len(prefix))~=prefix then return '' end
++return string.sub(v,string.len(prefix)+1)
++`
++
++func oauthFenceKey(id string) string { return "oauth:revision:account:" + id }
++func oauthTokenFenceKey(key string) string {
++	return oauthFenceKey(strings.TrimPrefix(key, "openai:account:"))
++}
++
++func (c *geminiTokenCache) GetOAuthAccessToken(ctx context.Context, key, revision string) (string, error) {
++	return c.rdb.Eval(ctx, oauthTokenReadLua, []string{oauthTokenFenceKey(key), oauthTokenKeyPrefix + key}, revision).Text()
++}
++func (c *geminiTokenCache) SetOAuthAccessToken(ctx context.Context, key, revision, token string, ttl time.Duration) error {
++	if ttl <= 0 {
++		return nil
++	}
++	return c.rdb.Eval(ctx, oauthTokenWriteLua, []string{oauthTokenFenceKey(key), oauthTokenKeyPrefix + key, schedulerAccountKey(strings.TrimPrefix(key, "openai:account:")), schedulerAccountMetaKey(strings.TrimPrefix(key, "openai:account:"))}, revision, token, ttl.Milliseconds()).Err()
++}
++func (c *geminiTokenCache) DeleteOAuthAccessToken(ctx context.Context, key, revision string) error {
++	return c.rdb.Eval(ctx, oauthDeleteLua, []string{oauthTokenFenceKey(key), oauthTokenKeyPrefix + key, schedulerAccountKey(strings.TrimPrefix(key, "openai:account:")), schedulerAccountMetaKey(strings.TrimPrefix(key, "openai:account:"))}, revision, "token").Err()
++}
++func (c *schedulerCache) DeleteOAuthAccount(ctx context.Context, id int64, revision string) error {
++	s := strconv.FormatInt(id, 10)
++	return c.rdb.Eval(ctx, oauthDeleteLua, []string{oauthFenceKey(s), schedulerAccountKey(s), schedulerAccountMetaKey(s), schedulerLastUsedKey(s), oauthTokenKeyPrefix + "openai:account:" + s}, revision, "account").Err()
++}
++
++var _ service.OAuthRevisionTokenCache = (*geminiTokenCache)(nil)
++var _ service.OAuthRevisionSchedulerCache = (*schedulerCache)(nil)
++var _ service.OAuthOwnedLeaseCache = (*geminiTokenCache)(nil)
+--- /dev/null
++++ b/backend/internal/repository/openai_oauth_durable.go
+@@ -0,0 +1,412 @@
++package repository
++
++import (
++	"context"
++	"encoding/json"
++	"errors"
++	"reflect"
++	"strconv"
++
++	entsql "entgo.io/ent/dialect/sql"
++	dbent "github.com/Wei-Shaw/sub2api/ent"
++	dbaccount "github.com/Wei-Shaw/sub2api/ent/account"
++	dbpredicate "github.com/Wei-Shaw/sub2api/ent/predicate"
++	"github.com/Wei-Shaw/sub2api/internal/service"
++)
++
++var errOAuthProtected = errors.New("OpenAI OAuth durable state unavailable or pending")
++
++// Read the Ent account then validate that entire snapshot against one SQL
++// statement. A concurrent mutation yields a protected rejection, never stale
++// eligibility. Pending is independent of Redis and survives process restarts.
++func (r *accountRepository) LoadOAuthState(ctx context.Context, id int64) (*service.Account, bool, error) {
++	// Retry only snapshot reads when a concurrent committed rotation changes
++	// the row between Ent hydration and SQL validation. Never retry issuer work.
++	for read := 0; read < 3; read++ {
++		a, err := r.GetByID(ctx, id)
++		if err != nil {
++			return nil, false, errOAuthProtected
++		}
++		payload, err := json.Marshal(a.Credentials)
++		if err != nil {
++			return nil, false, errOAuthProtected
++		}
++		rows, err := r.sql.QueryContext(ctx, `SELECT EXISTS (SELECT 1 FROM openai_oauth_consumption p
++            WHERE p.identity=openai_oauth_refresh_identity(a.credentials) AND p.state<>'reusable') FROM accounts a WHERE a.id=$1 AND a.deleted_at IS NULL
++		AND a.platform='openai' AND a.type='oauth' AND a.status='active'
++		AND (NOT a.auto_pause_on_expired OR a.expires_at IS NULL OR a.expires_at>now())
++		AND a.oauth_revision::text=$2 AND a.credentials=$3::jsonb`, id, service.OAuthRevision(a), string(payload))
++		if err != nil {
++			return nil, false, errOAuthProtected
++		}
++		if !rows.Next() {
++			err = rows.Err()
++			rows.Close()
++			if err != nil {
++				return nil, false, errOAuthProtected
++			}
++			continue
++		}
++		var pending bool
++		err = rows.Scan(&pending)
++		rows.Close()
++		if err != nil {
++			return nil, false, errOAuthProtected
++		}
++		return a, pending, nil
++	}
++	return nil, false, errOAuthProtected
++}
++
++func (r *accountRepository) ClaimOAuthRefresh(ctx context.Context, a *service.Account, owner string) (bool, error) {
++	expected, err := json.Marshal(a.Credentials)
++	if err != nil {
++		return false, errOAuthProtected
++	}
++	tx, err := r.client.Tx(ctx)
++	if err != nil {
++		return false, errOAuthProtected
++	}
++	defer tx.Rollback()
++	client := tx.Client()
++	// The row lock lasts only until claim commit, never across issuer HTTP.
++	rows, err := client.QueryContext(ctx, `SELECT id FROM accounts WHERE id=$1
++	AND oauth_revision::text=$2 AND credentials=$3::jsonb
++	AND platform='openai' AND type='oauth' AND status='active'
++	AND deleted_at IS NULL AND (NOT auto_pause_on_expired OR expires_at IS NULL OR expires_at>now())
++	AND proxy_id IS NOT DISTINCT FROM $4 FOR UPDATE`,
++		a.ID, service.OAuthRevision(a), string(expected), a.ProxyID)
++	if err != nil {
++		return false, errOAuthProtected
++	}
++	matched := rows.Next()
++	err = rows.Err()
++	rows.Close()
++	if err != nil {
++		return false, errOAuthProtected
++	}
++	if !matched {
++		return false, nil
++	}
++	// The unique keyed identity serializes different account IDs. A reusable
++	// domain is reopened only after exact durable nonrotating completion.
++	result, err := client.ExecContext(ctx, `INSERT INTO openai_oauth_consumption
++    (identity,state,owner,account_id,revision)
++    VALUES (openai_oauth_refresh_identity($4::jsonb),'pending',$3,$1,$2::bigint)
++    ON CONFLICT (identity) DO UPDATE SET state='pending',owner=EXCLUDED.owner,
++    account_id=EXCLUDED.account_id,revision=EXCLUDED.revision
++    WHERE openai_oauth_consumption.state='reusable'`, a.ID, service.OAuthRevision(a), owner, string(expected))
++	if err != nil {
++		return false, errOAuthProtected
++	}
++	n, err := result.RowsAffected()
++	if err != nil {
++		return false, errOAuthProtected
++	}
++	if n == 0 {
++		return false, nil
++	}
++	_, err = client.ExecContext(ctx, `INSERT INTO account_oauth_refresh_attempts
++    (account_id,revision,owner,state,expected_credentials,input_identity)
++    VALUES ($1,$2::bigint,$3,'pending',$4::jsonb,openai_oauth_refresh_identity($4::jsonb))`,
++		a.ID, service.OAuthRevision(a), owner, string(expected))
++	if err != nil {
++		return false, errOAuthProtected
++	}
++	if err := tx.Commit(); err == nil {
++		return true, nil
++	}
++	_ = tx.Rollback()
++	// A lost claim acknowledgement is safe only if this exact owner is durable.
++	rows, err = r.sql.QueryContext(ctx, `SELECT owner FROM account_oauth_refresh_attempts
++	WHERE account_id=$1 AND revision=$2::bigint AND owner=$3 AND state='pending'`, a.ID, service.OAuthRevision(a), owner)
++	if err != nil {
++		return false, errOAuthProtected
++	}
++	defer rows.Close()
++	var durableOwner string
++	if rows.Next() && rows.Scan(&durableOwner) == nil && durableOwner == owner {
++		return true, nil
++	}
++	return false, errOAuthProtected
++}
++
++func (r *accountRepository) CompleteOAuthRefresh(ctx context.Context, a *service.Account, owner string, credentials map[string]any, terminal bool) (*service.Account, bool, error) {
++	expected, err := json.Marshal(a.Credentials)
++	if err != nil {
++		return nil, false, errOAuthProtected
++	}
++	if !terminal {
++		version, err := strconv.ParseInt(service.OAuthRevision(a), 10, 64)
++		if err != nil || version <= 0 || version == 1<<63-1 {
++			return nil, false, errOAuthProtected
++		}
++		credentials["_token_version"] = strconv.FormatInt(version+1, 10)
++	} else {
++		credentials = a.Credentials
++	}
++	payload, err := json.Marshal(credentials)
++	if err != nil {
++		return nil, false, errOAuthProtected
++	}
++	tx, err := r.client.Tx(ctx)
++	if err == nil {
++		client := tx.Client()
++		// Owner, complete credential document, revision, routing and lifecycle
++		// all fence completion. The revision trigger covers lower/raw mutations.
++		rows, updateErr := client.QueryContext(ctx, `UPDATE accounts a SET
++		credentials=CASE WHEN $6 THEN a.credentials ELSE $5::jsonb END,
++		status=CASE WHEN $6 THEN 'error' ELSE a.status END,
++		schedulable=CASE WHEN $6 THEN false ELSE a.schedulable END,
++		error_message=CASE WHEN $6 THEN 'OpenAI OAuth invalid_grant' ELSE a.error_message END,
++		updated_at=now()
++		WHERE a.id=$1 AND a.oauth_revision::text=$2 AND a.credentials=$3::jsonb
++		AND a.proxy_id IS NOT DISTINCT FROM $4 AND a.deleted_at IS NULL
++		AND a.platform='openai' AND a.type='oauth' AND a.status='active'
++		AND EXISTS (SELECT 1 FROM account_oauth_refresh_attempts p WHERE p.account_id=a.id
++		AND p.revision=a.oauth_revision AND p.owner=$7 AND p.state='pending')
++		RETURNING a.oauth_revision,a.credentials`, a.ID, service.OAuthRevision(a), string(expected), a.ProxyID, string(payload), terminal, owner)
++		var revision int64
++		var resultJSON []byte
++		matched := false
++		if updateErr == nil {
++			matched = rows.Next()
++			if matched {
++				updateErr = rows.Scan(&revision, &resultJSON)
++			}
++			if updateErr == nil {
++				updateErr = rows.Err()
++			}
++			rows.Close()
++		}
++		if updateErr == nil && matched {
++			state := "completed"
++			if terminal {
++				state = "terminal"
++			}
++			_, updateErr = client.ExecContext(ctx, `UPDATE account_oauth_refresh_attempts SET
++			state=$1,expected_credentials='{}'::jsonb,result_credentials=$2::jsonb,completion_revision=$3,result_identity=openai_oauth_refresh_identity($2::jsonb)
++			WHERE account_id=$4 AND revision=$5::bigint AND owner=$6 AND state='pending'`,
++				state, string(resultJSON), revision, a.ID, service.OAuthRevision(a), owner)
++		}
++		if updateErr == nil && !matched && !terminal {
++			// A returned successor fenced by reconnect/routing is still useful
++			// for explicit reconciliation. It grants no admission or retry.
++			_, updateErr = client.ExecContext(ctx, `UPDATE account_oauth_refresh_attempts SET
++            result_credentials=$1::jsonb,result_identity=openai_oauth_refresh_identity($1::jsonb)
++            WHERE account_id=$2 AND revision=$3::bigint AND owner=$4 AND state='pending'`,
++				string(payload), a.ID, service.OAuthRevision(a), owner)
++		}
++		if updateErr == nil && matched {
++			// Only a successful persisted same identity is safe to consume
++			// again. Terminal/rotated identities are permanently consumed.
++			_, updateErr = client.ExecContext(ctx, `UPDATE openai_oauth_consumption d SET
++            state=CASE WHEN NOT $2 AND d.identity=openai_oauth_refresh_identity($3::jsonb)
++                       THEN 'reusable' ELSE 'consumed' END
++            WHERE d.owner=$1 AND d.state='pending'`, owner, terminal, string(resultJSON))
++		}
++		if updateErr == nil {
++			updateErr = tx.Commit()
++		}
++		_ = tx.Rollback() // Release any failed transaction before independent reread.
++		// Do not retry the issuer or treat an acknowledgement as a durable result.
++	}
++	current, readErr := r.GetByID(ctx, a.ID)
++	if readErr != nil || current == nil {
++		return nil, false, errOAuthProtected
++	}
++	rows, readErr := r.sql.QueryContext(ctx, `SELECT p.state FROM account_oauth_refresh_attempts p
++	JOIN accounts a ON a.id=p.account_id WHERE p.account_id=$1 AND p.revision=$2::bigint AND p.owner=$3
++	AND p.completion_revision=a.oauth_revision AND p.result_credentials=a.credentials
++	AND (p.state='terminal' AND $4 OR p.state='completed' AND NOT $4
++	AND (p.result_credentials-'_oauth_revision')=($5::jsonb-'_oauth_revision'))
++	AND a.credentials=$6::jsonb`, a.ID, service.OAuthRevision(a), owner, terminal, string(payload), mustJSON(current.Credentials))
++	if readErr != nil {
++		return nil, false, errOAuthProtected
++	}
++	exact := rows.Next()
++	readErr = rows.Err()
++	rows.Close()
++	if readErr != nil {
++		return nil, false, errOAuthProtected
++	}
++	if exact {
++		r.syncSchedulerAccountSnapshotDetached(ctx, a.ID)
++		return current, true, nil
++	}
++	// Reconnect/disable wins a completion CAS. Unchanged attempted state is
++	// persistence uncertainty, retaining the original durable pending claim.
++	if service.OAuthRevision(current) != service.OAuthRevision(a) {
++		return current, false, nil
++	}
++	return nil, false, errOAuthProtected
++}
++
++func mustJSON(v map[string]any) string { b, _ := json.Marshal(v); return string(b) }
++
++func (r *accountRepository) BlockOAuthMissingRefresh(ctx context.Context, a *service.Account) error {
++	_, err := r.sql.ExecContext(ctx, `UPDATE accounts SET status='error',schedulable=false,
++	error_message='OpenAI OAuth refresh token missing',updated_at=now()
++	WHERE id=$1 AND oauth_revision::text=$2 AND credentials=$3::jsonb AND deleted_at IS NULL`,
++		a.ID, service.OAuthRevision(a), mustJSON(a.Credentials))
++	return err
++}
++
++// Admin PUTs express field intent against a remembered DB snapshot. Under the
++// existing short edit transaction lock, apply only that intent to the current
++// row so a stale disable cannot write back pre-rotation credentials/status.
++func rebaseOAuthAccountEdit(ctx context.Context, client *dbent.Client, a *service.Account) error {
++	rows, err := client.QueryContext(ctx, `SELECT id FROM accounts WHERE id=$1 AND deleted_at IS NULL FOR UPDATE`, a.ID)
++	if err != nil {
++		return err
++	}
++	found := rows.Next()
++	rows.Close()
++	if !found {
++		return service.ErrAccountNotFound
++	}
++	m, err := client.Account.Query().Where(dbaccount.IDEQ(a.ID)).Only(ctx)
++	if err != nil {
++		return err
++	}
++	current := accountEntityToService(m)
++	if current.Platform != service.PlatformOpenAI || current.Type != service.AccountTypeOAuth {
++		if a.OAuthEditBase != nil {
++			return errOAuthProtected
++		}
++		return nil
++	}
++	base := a.OAuthEditBase
++	if base == nil {
++		return errOAuthProtected
++	}
++	// Explicit credential keys alone may replace tokens. Omitted/unchanged
++	// sensitive keys preserve concurrently rotated credentials.
++	merged := copyJSONMap(current.Credentials)
++	for key, value := range a.Credentials {
++		if key == "_oauth_revision" || key == "_oauth_group_change" {
++			continue
++		}
++		if old, exists := base.Credentials[key]; !exists || !reflect.DeepEqual(old, value) || a.OAuthCredentialFields[key] {
++			merged[key] = value
++		}
++	}
++	for key := range base.Credentials {
++		if _, exists := a.Credentials[key]; !exists && key != "_oauth_revision" && key != "_oauth_group_change" {
++			delete(merged, key)
++		}
++	}
++	a.Credentials = merged
++	mergedExtra := copyJSONMap(current.Extra)
++	if mergedExtra == nil {
++		mergedExtra = make(map[string]any)
++	}
++	for key, value := range a.Extra {
++		if old, exists := base.Extra[key]; !exists || !reflect.DeepEqual(old, value) {
++			mergedExtra[key] = value
++		}
++	}
++	for key := range base.Extra {
++		if _, exists := a.Extra[key]; !exists {
++			delete(mergedExtra, key)
++		}
++	}
++	a.Extra = mergedExtra
++	// Only fields actually persisted by updateLockedAccount are rebased. Relations
++	// are bound by their own intent operation and fenced by the SQL trigger.
++	fields := []string{"Name", "Notes", "Platform", "Type", "Status", "ErrorMessage", "Schedulable", "ProxyID", "Concurrency", "Priority", "LoadFactor", "ExpiresAt", "AutoPauseOnExpired", "RateLimitedAt", "RateLimitResetAt", "OverloadUntil", "SessionWindowStart", "SessionWindowEnd", "SessionWindowStatus", "ParentAccountID", "QuotaDimension"}
++	av, bv, cv := reflect.ValueOf(a).Elem(), reflect.ValueOf(base).Elem(), reflect.ValueOf(current).Elem()
++	for _, field := range fields {
++		if !a.OAuthEditFields[field] && reflect.DeepEqual(av.FieldByName(field).Interface(), bv.FieldByName(field).Interface()) {
++			av.FieldByName(field).Set(cv.FieldByName(field))
++		}
++	}
++	return nil
++}
++
++func rememberOAuthEditBase(a *service.Account) {
++	if a.Platform != service.PlatformOpenAI || a.Type != service.AccountTypeOAuth {
++		return
++	}
++	b, err := json.Marshal(a)
++	if err != nil {
++		return
++	}
++	var base service.Account
++	if json.Unmarshal(b, &base) == nil {
++		a.OAuthEditBase = &base
++	}
++}
++
++// CASE protects the strict identity function in every multi-account query.
++// PostgreSQL may reorder AND/OR operands; malformed rows must never reach it.
++// Credential shadows have no own refresh token; their parent is admitted separately.
++func oauthNoPendingPredicate() dbpredicate.Account {
++	return func(s *entsql.Selector) {
++		credentials := s.C("credentials")
++		s.Where(entsql.ExprP("CASE WHEN " + s.C("platform") + " <> 'openai' OR " + s.C("type") + " <> 'oauth' THEN TRUE " +
++			"WHEN jsonb_typeof(" + credentials + ")='object' " +
++			"AND COALESCE(jsonb_typeof(" + credentials + "->'client_id'),'null') IN ('string','null') " +
++			"AND COALESCE(jsonb_typeof(" + credentials + "->'refresh_token'),'null') IN ('string','null') " +
++			"AND (" + s.C("parent_account_id") + " IS NOT NULL OR COALESCE(" + credentials + "->>'refresh_token','')<>'') " +
++			"THEN NOT EXISTS (SELECT 1 FROM openai_oauth_consumption p WHERE p.identity=openai_oauth_refresh_identity(" + credentials + ") AND p.state<>'reusable') ELSE FALSE END"))
++	}
++}
++
++func (r *accountRepository) OAuthAccountRevision(ctx context.Context, id int64) (string, error) {
++	rows, err := r.sql.QueryContext(ctx, `SELECT max(revision)::text FROM (SELECT oauth_revision AS revision FROM accounts WHERE id=$1 UNION ALL SELECT revision FROM account_oauth_tombstones WHERE account_id=$1) x`, id)
++	if err != nil {
++		return "", err
++	}
++	defer rows.Close()
++	var revision *string
++	if !rows.Next() {
++		return "", rows.Err()
++	}
++	if err := rows.Scan(&revision); err != nil {
++		return "", err
++	}
++	if revision == nil {
++		return "", nil
++	}
++	return *revision, nil
++}
++
++func (r *accountRepository) FindOpenAIOAuthRefreshAccount(ctx context.Context, token string) (int64, error) {
++	rows, err := r.sql.QueryContext(ctx, `SELECT id FROM accounts WHERE platform='openai' AND type='oauth' AND deleted_at IS NULL AND credentials->>'refresh_token'=$1 LIMIT 2`, token)
++	if err != nil {
++		return 0, errOAuthProtected
++	}
++	defer rows.Close()
++	var id int64
++	if !rows.Next() || rows.Scan(&id) != nil || rows.Next() || rows.Err() != nil {
++		return 0, errOAuthProtected
++	}
++	return id, nil
++}
++
++var _ service.OpenAIOAuthDurableRepository = (*accountRepository)(nil)
++
++// Manual validation/enrichment consumes no refresh token. Full document and
++// revision CAS prevent metadata validation from overwriting reconnect/routing.
++func (r *accountRepository) SaveOAuthValidation(ctx context.Context, a *service.Account, credentials map[string]any) (*service.Account, error) {
++	rows, err := r.sql.QueryContext(ctx, `UPDATE accounts SET credentials=$4::jsonb,updated_at=now()
++    WHERE id=$1 AND oauth_revision::text=$2 AND credentials=$3::jsonb
++    AND status='active' AND platform='openai' AND type='oauth' AND deleted_at IS NULL
++    AND proxy_id IS NOT DISTINCT FROM $5 RETURNING id`, a.ID, service.OAuthRevision(a), mustJSON(a.Credentials), mustJSON(credentials), a.ProxyID)
++	if err != nil {
++		return nil, errOAuthProtected
++	}
++	matched := rows.Next()
++	err = rows.Err()
++	rows.Close()
++	if err != nil || !matched {
++		return nil, errOAuthProtected
++	}
++	current, err := r.GetByID(ctx, a.ID)
++	if err != nil {
++		return nil, errOAuthProtected
++	}
++	r.syncSchedulerAccountSnapshotDetached(ctx, a.ID)
++	return current, nil
++}
+--- a/backend/internal/repository/openai_oauth_service.go
++++ b/backend/internal/repository/openai_oauth_service.go
+@@ -83,6 +83,10 @@
+ }
+ 
+ func (s *openaiOAuthService) refreshTokenWithClientID(ctx context.Context, refreshToken, proxyURL, clientID string) (*openai.TokenResponse, error) {
++	if strings.TrimSpace(refreshToken) == "" {
++		return nil, infraerrors.New(http.StatusBadRequest, "OPENAI_OAUTH_NO_REFRESH_TOKEN", "no refresh token available")
++	}
++
+ 	client, err := createOpenAIReqClient(proxyURL)
+ 	if err != nil {
+ 		return nil, infraerrors.Newf(http.StatusBadGateway, "OPENAI_OAUTH_CLIENT_INIT_FAILED", "create HTTP client: %v", err)
+--- a/backend/internal/repository/scheduler_cache.go
++++ b/backend/internal/repository/scheduler_cache.go
+@@ -603,8 +603,7 @@
+ 	if accountID <= 0 {
+ 		return nil
+ 	}
+-	id := strconv.FormatInt(accountID, 10)
+-	return c.rdb.Del(ctx, schedulerAccountKey(id), schedulerAccountMetaKey(id), schedulerLastUsedKey(id)).Err()
++	return c.DeleteOAuthAccount(ctx, accountID, "")
+ }
+ 
+ func (c *schedulerCache) UpdateLastUsed(ctx context.Context, updates map[int64]time.Time) error {
+@@ -807,8 +806,15 @@
+ 		}
+ 
+ 		id := strconv.FormatInt(account.ID, 10)
+-		pipe.Set(ctx, schedulerAccountKey(id), fullPayload, 0)
+-		pipe.Set(ctx, schedulerAccountMetaKey(id), metaPayload, 0)
++		if service.OAuthRevision(&account) != "" || account.Platform == service.PlatformOpenAI && account.Type == service.AccountTypeOAuth {
++			if service.OAuthRevision(&account) == "" {
++				continue
++			} // pre-migration/unversioned snapshots cannot publish
++			pipe.Eval(ctx, oauthSchedulerWriteLua, []string{oauthFenceKey(id), schedulerAccountKey(id), schedulerAccountMetaKey(id), oauthTokenKeyPrefix + "openai:account:" + id}, service.OAuthRevision(&account), fullPayload, metaPayload)
++		} else {
++			pipe.Set(ctx, schedulerAccountKey(id), fullPayload, 0)
++			pipe.Set(ctx, schedulerAccountMetaKey(id), metaPayload, 0)
++		}
+ 		// Keep the hot LastUsedAt side key untouched: a lagging snapshot rebuild
+ 		// must not overwrite a newer scheduler update.
+ 		accountIDs = append(accountIDs, account.ID)
+@@ -956,7 +962,9 @@
+ 	}
+ 	// Candidate-list admission evaluates the account override before hydrating
+ 	// the full account. Dropping it silently falls back to the platform threshold.
+-	keys := []string{"model_mapping", "compact_model_mapping", "api_key", "project_id", "oauth_type", "plan_type", "account_scheduling_threshold"}
++	// Preserve the DB decimal string verbatim beside the existing allowlist.
++	// Metadata must never publish access/refresh tokens or raw credentials.
++	keys := []string{"model_mapping", "compact_model_mapping", "api_key", "project_id", "oauth_type", "plan_type", "account_scheduling_threshold", "_oauth_revision"}
+ 	filtered := make(map[string]any)
+ 	for _, key := range keys {
+ 		if value, ok := credentials[key]; ok && value != nil {
+--- a/backend/internal/service/account.go
++++ b/backend/internal/service/account.go
+@@ -21,6 +21,11 @@
+ )
+ 
+ type Account struct {
++	oauthForwardRevision string // request-local credential owner revision; never serialized
++
++	OAuthEditBase           *Account        `json:"-"` // Detached DB snapshot for field-intent edits.
++	OAuthEditFields         map[string]bool `json:"-"`
++	OAuthCredentialFields   map[string]bool `json:"-"`
+ 	ID                      int64
+ 	Name                    string
+ 	Notes                   *string
+--- a/backend/internal/service/account_service.go
++++ b/backend/internal/service/account_service.go
+@@ -320,6 +320,14 @@
+ 		return nil, fmt.Errorf("get account: %w", err)
+ 	}
+ 
++	account.OAuthEditFields = map[string]bool{
++		"Name": req.Name != nil, "Notes": req.Notes != nil, "Status": req.Status != nil,
++		"ProxyID": req.ProxyID != nil, "Concurrency": req.Concurrency != nil, "Priority": req.Priority != nil,
++		"ExpiresAt": req.ExpiresAt != nil, "AutoPauseOnExpired": req.AutoPauseOnExpired != nil,
++	}
++	if req.Credentials != nil {
++		account.OAuthCredentialFields = oauthCredentialIntent(*req.Credentials)
++	}
+ 	// 更新字段
+ 	if req.Name != nil {
+ 		account.Name = *req.Name
+--- a/backend/internal/service/admin_account.go
++++ b/backend/internal/service/admin_account.go
+@@ -476,6 +476,9 @@
+ }
+ 
+ func (s *adminServiceImpl) CreateAccount(ctx context.Context, input *CreateAccountInput) (*Account, error) {
++	if err := ValidateOpenAIOAuthIdentityCredentials(&Account{Platform: input.Platform, Type: input.Type, Credentials: input.Credentials}); err != nil {
++		return nil, err
++	}
+ 	accountExtra, err := normalizeOpenAILongContextBillingExtra(input.Platform, input.Extra)
+ 	if err != nil {
+ 		return nil, err
+@@ -576,6 +579,14 @@
+ 	if err != nil {
+ 		return nil, err
+ 	}
++	account.OAuthEditFields = map[string]bool{
++		"Name": input.Name != "", "Notes": input.Notes != nil, "Type": input.Type != "",
++		"Status": input.Status != "", "ProxyID": input.ProxyID != nil,
++		"Concurrency": input.Concurrency != nil, "Priority": input.Priority != nil,
++		"LoadFactor": input.LoadFactor != nil, "ExpiresAt": input.ExpiresAt != nil,
++		"AutoPauseOnExpired": input.AutoPauseOnExpired != nil,
++	}
++	account.OAuthCredentialFields = oauthCredentialIntent(input.Credentials)
+ 	var normalizedExtra map[string]any
+ 	if input.Extra != nil {
+ 		normalizedExtra, err = normalizeOpenAILongContextBillingUpdateExtra(account, input)
+@@ -654,6 +665,9 @@
+ 		}
+ 		// Strip SSO/password residue that must never sit next to OAuth tokens.
+ 		account.Credentials = SanitizeStoredCredentials(account.Platform, account.Credentials)
++	}
++	if err := ValidateOpenAIOAuthIdentityCredentials(account); err != nil {
++		return nil, err
+ 	}
+ 	// Extra 使用 map：需要区分“未提供(nil)”与“显式清空({})”。
+ 	// 关闭配额限制时前端会删除 quota_* 键并提交 extra:{}，此时也必须落库。
+@@ -1803,3 +1817,48 @@
+ 	applyAntigravityPrivacyMode(account, mode)
+ 	return mode
+ }
++
++func (s *adminServiceImpl) RefreshOpenAIAccount(ctx context.Context, account *Account, oauth *OpenAIOAuthService) (*Account, error) {
++	return RefreshOpenAIAccount(ctx, s.accountRepo, oauth, account)
++}
++
++// The token-only admin endpoint must not bypass account ownership. Unregistered
++// or ambiguously duplicated credentials are protected rather than consumed.
++func (s *adminServiceImpl) RefreshOpenAIToken(ctx context.Context, token string, proxyID *int64, clientID string, oauth *OpenAIOAuthService) (*OpenAITokenInfo, error) {
++	repo, ok := s.accountRepo.(interface {
++		FindOpenAIOAuthRefreshAccount(context.Context, string) (int64, error)
++	})
++	if !ok {
++		return nil, oauthProtected()
++	}
++	id, err := repo.FindOpenAIOAuthRefreshAccount(ctx, token)
++	if err != nil {
++		return nil, oauthProtected()
++	}
++	account, err := s.accountRepo.GetByID(ctx, id)
++	if err != nil {
++		return nil, oauthProtected()
++	}
++	if proxyID != nil && (account.ProxyID == nil || *proxyID != *account.ProxyID) {
++		return nil, oauthProtected()
++	}
++	if clientID != "" && account.GetCredential("client_id") != "" && clientID != account.GetCredential("client_id") {
++		return nil, oauthProtected()
++	}
++	current, err := RefreshOpenAIAccount(ctx, s.accountRepo, oauth, account)
++	if err != nil {
++		return nil, err
++	}
++	info := &OpenAITokenInfo{
++		AccessToken: current.GetOpenAIAccessToken(), RefreshToken: current.GetOpenAIRefreshToken(),
++		IDToken: current.GetCredential("id_token"), ClientID: current.GetCredential("client_id"),
++		Email: current.GetCredential("email"), ChatGPTAccountID: current.GetCredential("chatgpt_account_id"),
++		ChatGPTUserID: current.GetCredential("chatgpt_user_id"), OrganizationID: current.GetCredential("organization_id"),
++		PlanType: current.GetCredential("plan_type"), SubscriptionExpiresAt: current.GetCredential("subscription_expires_at"),
++	}
++	if expires := current.GetCredentialAsTime("expires_at"); expires != nil {
++		info.ExpiresAt = expires.Unix()
++		info.ExpiresIn = int64(time.Until(*expires).Seconds())
++	}
++	return info, nil
++}
+--- a/backend/internal/service/credential_shadow.go
++++ b/backend/internal/service/credential_shadow.go
+@@ -11,6 +11,10 @@
+ // 设计为包级函数（非任何 service 的方法），以便 OpenAIGatewayService / OpenAIQuotaService /
+ // AccountUsageService 等不同接收者共享同一实现。
+ func resolveCredentialAccount(ctx context.Context, repo AccountRepository, account *Account) (*Account, error) {
++	if bound, ok := ctx.Value(oauthForwardBindingKey{}).(*oauthForwardBinding); ok && account != nil && bound.selectionID == account.ID {
++		return bound.credential, nil
++	}
++
+ 	if account == nil || !account.IsShadow() {
+ 		return account, nil
+ 	}
+--- a/backend/internal/service/crs_sync_service.go
++++ b/backend/internal/service/crs_sync_service.go
+@@ -1448,19 +1448,11 @@
+ 		if s.openaiOAuthService == nil {
+ 			return nil
+ 		}
+-		tokenInfo, refreshErr := s.openaiOAuthService.RefreshAccountToken(ctx, account)
+-		if refreshErr != nil {
+-			err = refreshErr
+-		} else {
+-			newCredentials = s.openaiOAuthService.BuildAccountCredentials(tokenInfo)
+-			// Preserve non-token settings from existing credentials
+-			for k, v := range account.Credentials {
+-				if _, exists := newCredentials[k]; !exists {
+-					newCredentials[k] = v
+-				}
+-			}
+-			newCredentials = NormalizeOpenAIPersonalAccessTokenCredentials(account, tokenInfo, newCredentials)
+-		}
++		updated, refreshErr := RefreshOpenAIAccount(ctx, s.accountRepo, s.openaiOAuthService, account)
++		if refreshErr == nil && updated != nil {
++			*account = *updated
++		}
++		return nil // credentials are already committed under the attempt CAS
+ 	case PlatformGemini:
+ 		if s.geminiOAuthService == nil {
+ 			return nil
+--- a/backend/internal/service/oauth_refresh_api.go
++++ b/backend/internal/service/oauth_refresh_api.go
+@@ -179,6 +179,9 @@
+ 	}
+ 	if executor == nil {
+ 		return nil, errors.New("oauth refresh executor is nil")
++	}
++	if account.Platform == PlatformOpenAI && account.Type == AccountTypeOAuth {
++		return api.refreshOpenAIDurable(ctx, account, executor, refreshWindow)
+ 	}
+ 	requestPath := isOAuthRefreshRequestPath(ctx)
+ 	cacheKey := executor.CacheKey(account)
+--- a/backend/internal/service/openai_account_scheduler.go
++++ b/backend/internal/service/openai_account_scheduler.go
+@@ -1748,19 +1748,18 @@
+ }
+ 
+ func (s *defaultOpenAIAccountScheduler) lookupShadowParentAccount(ctx context.Context, id int64) *Account {
+-	if s == nil || s.service == nil {
++	if s == nil || s.service == nil || s.service.accountRepo == nil {
+ 		return nil
+ 	}
+-	if s.service.schedulerSnapshot != nil {
+-		if account, err := s.service.schedulerSnapshot.GetAccount(ctx, id); err == nil && account != nil {
+-			return account
+-		}
+-	}
+-	if s.service.accountRepo == nil {
++	durable, ok := s.service.accountRepo.(OpenAIOAuthDurableRepository)
++	if !ok {
+ 		return nil
+ 	}
+-	account, _ := s.service.accountRepo.GetByID(ctx, id)
+-	return account
++	current, pending, err := durable.LoadOAuthState(ctx, id)
++	if err != nil || pending || !openAIAccountAdmitted(withOAuthCredentialParent(ctx, id), current) {
++		return nil
++	}
++	return current
+ }
+ 
+ func (s *defaultOpenAIAccountScheduler) isAccountRequestCompatible(ctx context.Context, account *Account, req OpenAIAccountScheduleRequest) bool {
+--- a/backend/internal/service/openai_alpha_search.go
++++ b/backend/internal/service/openai_alpha_search.go
+@@ -27,6 +27,12 @@
+ // *OpenAIForwardResult（WebSearchCalls=1，供按次计费）；上游错误被原样透传
+ // 给客户端时返回 (nil, nil)，不产生计费。
+ func (s *OpenAIGatewayService) ForwardAlphaSearch(ctx context.Context, c *gin.Context, account *Account, body []byte) (*OpenAIForwardResult, error) {
++	oauthTupleCtx, oauthExecution, oauthBindErr := s.bindOAuthForward(ctx, account, "")
++	if oauthBindErr != nil {
++		return nil, oauthBindErr
++	}
++	ctx, account = oauthTupleCtx, oauthExecution
++
+ 	if s == nil || c == nil || account == nil {
+ 		return nil, fmt.Errorf("service, context, and account are required")
+ 	}
+--- a/backend/internal/service/openai_gateway_chat_completions.go
++++ b/backend/internal/service/openai_gateway_chat_completions.go
+@@ -71,6 +71,12 @@
+ 	defaultMappedModel string,
+ 	compatPromptCacheTenantIsolated bool,
+ ) (*OpenAIForwardResult, error) {
++	oauthTupleCtx, oauthExecution, oauthBindErr := s.bindOAuthForward(ctx, account, "")
++	if oauthBindErr != nil {
++		return nil, oauthBindErr
++	}
++	ctx, account = oauthTupleCtx, oauthExecution
++
+ 	rememberOpenCodeInboundBody(c, body)
+ 	beginUpstreamResponseModelObservation(c)
+ 	ClearActualOpenAIUpstreamEndpoint(c)
+--- a/backend/internal/service/openai_gateway_count_tokens.go
++++ b/backend/internal/service/openai_gateway_count_tokens.go
+@@ -50,6 +50,12 @@
+ 	account *Account,
+ 	body []byte,
+ ) error {
++	oauthTupleCtx, oauthExecution, oauthBindErr := s.bindOAuthForward(ctx, account, "")
++	if oauthBindErr != nil {
++		return oauthBindErr
++	}
++	ctx, account = oauthTupleCtx, oauthExecution
++
+ 	if account == nil {
+ 		writeOpenAIResponsesInputTokensError(c, http.StatusServiceUnavailable, "api_error", "No available OpenAI accounts")
+ 		return fmt.Errorf("responses input_tokens: missing account")
+@@ -259,6 +265,12 @@
+ 	body []byte,
+ 	defaultMappedModel string,
+ ) error {
++	oauthTupleCtx, oauthExecution, oauthBindErr := s.bindOAuthForward(ctx, account, "")
++	if oauthBindErr != nil {
++		return oauthBindErr
++	}
++	ctx, account = oauthTupleCtx, oauthExecution
++
+ 	if account == nil {
+ 		writeAnthropicCountTokensError(c, http.StatusServiceUnavailable, "api_error", "No available OpenAI accounts")
+ 		return fmt.Errorf("count_tokens: missing account")
+--- a/backend/internal/service/openai_gateway_forward.go
++++ b/backend/internal/service/openai_gateway_forward.go
+@@ -19,6 +19,12 @@
+ 
+ // Forward forwards request to OpenAI API
+ func (s *OpenAIGatewayService) Forward(ctx context.Context, c *gin.Context, account *Account, body []byte) (*OpenAIForwardResult, error) {
++	boundCtx, execution, bindErr := s.bindOAuthForward(ctx, account, "")
++	if bindErr != nil {
++		return nil, bindErr
++	}
++	ctx, account = boundCtx, execution
++
+ 	beginUpstreamResponseModelObservation(c)
+ 	ClearActualOpenAIUpstreamEndpoint(c)
+ 	if shouldForwardOpenAIResponsesViaRawChatCompletions(account) {
+--- a/backend/internal/service/openai_gateway_passthrough.go
++++ b/backend/internal/service/openai_gateway_passthrough.go
+@@ -135,6 +135,12 @@
+ 	reqStream bool,
+ 	startTime time.Time,
+ ) (*OpenAIForwardResult, error) {
++	oauthTupleCtx, oauthExecution, oauthBindErr := s.bindOAuthForward(ctx, account, "")
++	if oauthBindErr != nil {
++		return nil, oauthBindErr
++	}
++	ctx, account = oauthTupleCtx, oauthExecution
++
+ 	requestedModel := reqModel
+ 	upstreamPassthroughModel := ""
+ 	if isOpenAIResponsesCompactPath(c) {
+--- a/backend/internal/service/openai_gateway_scheduling.go
++++ b/backend/internal/service/openai_gateway_scheduling.go
+@@ -1267,7 +1267,7 @@
+ 		if s.accountRepo == nil {
+ 			return nil
+ 		}
+-		a, _ := s.accountRepo.GetByID(ctx, id)
++		a := s.parentAccountLookup(ctx)(id)
+ 		parentCacheL2[id] = a
+ 		return a
+ 	}
+@@ -1587,11 +1587,15 @@
+ // L2 候选循环改用带 per-pass 缓存的 parentLookupL2,不走此方法。
+ func (s *OpenAIGatewayService) parentAccountLookup(ctx context.Context) func(int64) *Account {
+ 	return func(id int64) *Account {
+-		if s.accountRepo == nil {
++		durable, ok := s.accountRepo.(OpenAIOAuthDurableRepository)
++		if !ok {
+ 			return nil
+ 		}
+-		a, _ := s.accountRepo.GetByID(ctx, id)
+-		return a
++		current, pending, err := durable.LoadOAuthState(ctx, id)
++		if err != nil || pending || !openAIAccountAdmitted(withOAuthCredentialParent(ctx, id), current) {
++			return nil
++		}
++		return current
+ 	}
+ }
+ 
+@@ -1610,6 +1614,11 @@
+ 	if account == nil {
+ 		return nil
+ 	}
++	admitted, admissionErr := admitOpenAISelection(ctx, s.accountRepo, account)
++	if admissionErr != nil {
++		return nil
++	}
++	account = admitted
+ 	platform = NormalizeOpenAICompatiblePlatform(platform)
+ 	if s.schedulerSnapshot == nil || s.accountRepo == nil {
+ 		if s.openAIGroupRequiresPrivacySet(ctx, groupID) && !account.IsPrivacySet() {
+@@ -1678,6 +1687,10 @@
+ 	if err != nil || account == nil {
+ 		return account, err
+ 	}
++	account, err = admitOpenAISelection(ctx, s.accountRepo, account)
++	if err != nil {
++		return nil, err
++	}
+ 	if s.isOpenAIAccountBlockedBySchedulingThreshold(ctx, account) {
+ 		return nil, nil
+ 	}
+@@ -1722,6 +1735,13 @@
+ }
+ 
+ func (s *OpenAIGatewayService) hydrateSelectedAccount(ctx context.Context, account *Account) (*Account, error) {
++	if account != nil {
++		current, err := admitOpenAISelection(ctx, s.accountRepo, account)
++		if err != nil {
++			return nil, err
++		}
++		account = current
++	}
+ 	if account == nil || s.schedulerSnapshot == nil {
+ 		return account, nil
+ 	}
+--- a/backend/internal/service/openai_gateway_service.go
++++ b/backend/internal/service/openai_gateway_service.go
+@@ -1201,12 +1201,35 @@
+ 
+ // GetAccessToken gets the access token for an OpenAI account
+ func (s *OpenAIGatewayService) GetAccessToken(ctx context.Context, account *Account) (string, string, error) {
++	if account == nil {
++		return "", "", oauthProtected()
++	}
++	if bound, ok := ctx.Value(oauthForwardBindingKey{}).(*oauthForwardBinding); ok && bound.selectionID == account.ID {
++		return bound.token, bound.mode, nil
++	}
+ 	if account.IsShadow() {
++		durable, ok := s.accountRepo.(OpenAIOAuthDurableRepository)
++		if !ok {
++			return "", "", oauthProtected()
++		}
++		shadow, pending, err := durable.LoadOAuthState(ctx, account.ID)
++		if err != nil || pending || !shadow.IsSchedulable() {
++			return "", "", oauthProtected()
++		}
++		account = shadow
+ 		credAccount, err := resolveCredentialAccount(ctx, s.accountRepo, account)
+ 		if err != nil {
+ 			return "", "", err
+ 		}
++		ctx = withOAuthCredentialParent(ctx, credAccount.ID)
+ 		account = credAccount
++	}
++	if account.Platform == PlatformOpenAI && account.Type == AccountTypeOAuth {
++		current, err := loadOpenAIUsableAccount(ctx, s.accountRepo, account.ID)
++		if err != nil || !openAIAccountAdmitted(ctx, current) {
++			return "", "", oauthProtected()
++		}
++		account = current
+ 	}
+ 	switch account.Type {
+ 	case AccountTypeOAuth:
+@@ -1235,6 +1258,12 @@
+ 			}
+ 			return accessToken, "oauth", nil
+ 		}
++		if account.Platform == PlatformOpenAI && !account.IsOpenAIPersonalAccessToken() {
++			expires := account.GetCredentialAsTime("expires_at")
++			if expires == nil || time.Until(*expires) <= openAITokenRefreshSkew {
++				return "", "", oauthProtected()
++			}
++		}
+ 		// 降级：TokenProvider 未配置时直接从账号读取
+ 		accessToken := account.GetOpenAIAccessToken()
+ 		if accessToken == "" {
+--- a/backend/internal/service/openai_images_responses.go
++++ b/backend/internal/service/openai_images_responses.go
+@@ -1788,6 +1788,12 @@
+ 	parsed *OpenAIImagesRequest,
+ 	channelMappedModel string,
+ ) (*OpenAIForwardResult, error) {
++	oauthTupleCtx, oauthExecution, oauthBindErr := s.bindOAuthForward(ctx, account, "")
++	if oauthBindErr != nil {
++		return nil, oauthBindErr
++	}
++	ctx, account = oauthTupleCtx, oauthExecution
++
+ 	startTime := time.Now()
+ 	requestModel := strings.TrimSpace(parsed.Model)
+ 	if mapped := strings.TrimSpace(channelMappedModel); mapped != "" {
+--- a/backend/internal/service/openai_live.go
++++ b/backend/internal/service/openai_live.go
+@@ -264,6 +264,12 @@
+ 	request *LiveCallRequest,
+ 	attestation string,
+ ) (*LiveCallCreated, error) {
++	oauthTupleCtx, oauthExecution, oauthBindErr := s.bindOAuthForward(ctx, account, "")
++	if oauthBindErr != nil {
++		return nil, oauthBindErr
++	}
++	ctx, account = oauthTupleCtx, oauthExecution
++
+ 	token, _, err := s.GetAccessToken(ctx, account)
+ 	if err != nil {
+ 		logLiveCreateStageFailure(ctx, account.ID, "access_token", err)
+@@ -418,6 +424,12 @@
+ 	account *Account,
+ 	record *LiveCallRecord,
+ ) (http.Header, error) {
++	oauthTupleCtx, oauthExecution, oauthBindErr := s.bindOAuthForward(ctx, account, "")
++	if oauthBindErr != nil {
++		return nil, oauthBindErr
++	}
++	ctx, account = oauthTupleCtx, oauthExecution
++
+ 	token, _, err := s.GetAccessToken(ctx, account)
+ 	if err != nil {
+ 		return nil, err
+--- /dev/null
++++ b/backend/internal/service/openai_oauth_durable.go
+@@ -0,0 +1,346 @@
++package service
++
++import (
++	"context"
++	"crypto/rand"
++	"encoding/hex"
++	"encoding/json"
++	"errors"
++	"log/slog"
++	"strings"
++	"time"
++
++	infraerrors "github.com/Wei-Shaw/sub2api/internal/pkg/errors"
++)
++
++// This capability is mandatory for every account-scoped OpenAI refresh path.
++// Claims and completion are short transactions; provider HTTP is outside them.
++type OpenAIOAuthDurableRepository interface {
++	LoadOAuthState(context.Context, int64) (*Account, bool, error)
++	ClaimOAuthRefresh(context.Context, *Account, string) (bool, error)
++	CompleteOAuthRefresh(context.Context, *Account, string, map[string]any, bool) (*Account, bool, error)
++	BlockOAuthMissingRefresh(context.Context, *Account) error
++}
++
++type OAuthOwnedLeaseCache interface {
++	AcquireOAuthRefreshLease(context.Context, string, time.Duration) (string, error)
++	ReleaseOAuthRefreshLease(context.Context, string, string) error
++}
++
++type OAuthRevisionTokenCache interface {
++	GetOAuthAccessToken(context.Context, string, string) (string, error)
++	SetOAuthAccessToken(context.Context, string, string, string, time.Duration) error
++	DeleteOAuthAccessToken(context.Context, string, string) error
++}
++
++type OAuthRevisionSchedulerCache interface {
++	DeleteOAuthAccount(context.Context, int64, string) error
++}
++
++type oauthClaimContextKey struct{}
++type oauthClaimContext struct {
++	id    int64
++	owner string
++}
++
++func oauthProtected() error {
++	return &providerCycleContainmentRefreshError{err: errors.New("OpenAI OAuth state is protected; reconnect or reconcile the durable attempt")}
++}
++
++func OAuthRevision(a *Account) string {
++	if a == nil {
++		return ""
++	}
++	return a.GetCredential("_oauth_revision")
++}
++
++// ValidateOpenAIOAuthIdentityCredentials checks only the two wire identity fields.
++// Unknown business fields and credentials for other platforms/types remain valid.
++// It never normalizes client strings or refresh-token bytes.
++func ValidateOpenAIOAuthIdentityCredentials(a *Account) error {
++	if a == nil || a.Platform != PlatformOpenAI || a.Type != AccountTypeOAuth {
++		return nil
++	}
++	for _, key := range []string{"client_id", "refresh_token"} {
++		if value := a.Credentials[key]; value != nil {
++			if _, ok := value.(string); !ok {
++				return infraerrors.BadRequest("INVALID_OPENAI_OAUTH_IDENTITY", "OpenAI OAuth "+key+" must be a string or null")
++			}
++		}
++	}
++	return nil
++}
++
++func openAIOAuthEligible(a *Account) bool {
++	return a != nil && a.Platform == PlatformOpenAI && a.Type == AccountTypeOAuth &&
++		ValidateOpenAIOAuthIdentityCredentials(a) == nil && a.IsActive() &&
++		(!a.AutoPauseOnExpired || a.ExpiresAt == nil || time.Now().Before(*a.ExpiresAt))
++}
++
++// Parent intent is scoped to one durable ID and introduced only by a validated
++// shadow path. It never changes the parent's direct scheduling configuration.
++type oauthCredentialParentKey struct{}
++
++func withOAuthCredentialParent(ctx context.Context, id int64) context.Context {
++	return context.WithValue(ctx, oauthCredentialParentKey{}, id)
++}
++func openAIAccountAdmitted(ctx context.Context, a *Account) bool {
++	if !openAIOAuthEligible(a) {
++		return false
++	}
++	if a.ProxyID != nil && (a.Proxy == nil || !a.Proxy.IsActive() || a.Proxy.IsExpired(time.Now())) {
++		return false
++	}
++
++	if id, ok := ctx.Value(oauthCredentialParentKey{}).(int64); ok && id == a.ID {
++		return a.IsCredentialUsableForShadow() && !a.IsShadow()
++	}
++	return a.IsSchedulable()
++}
++
++// Read and wait on durable state, including token-cache hits. Redis errors never
++// alter admission. A crashed owner remains pending indefinitely; waiting is bounded.
++func loadOpenAIUsableAccount(ctx context.Context, repo AccountRepository, id int64) (*Account, error) {
++	durable, ok := repo.(OpenAIOAuthDurableRepository)
++	if !ok {
++		return nil, oauthProtected()
++	}
++	waitCtx, cancel := context.WithTimeout(ctx, 2*time.Second)
++	defer cancel()
++	observedPending := false
++	for {
++		a, pending, err := durable.LoadOAuthState(waitCtx, id)
++		if err != nil || !openAIAccountAdmitted(ctx, a) {
++			return nil, oauthProtected()
++		}
++		if !pending {
++			return a, nil
++		}
++		if !observedPending {
++			slog.Info("oauth_refresh.pg_claim_contended", "account_id", id)
++			observedPending = true
++		}
++		timer := time.NewTimer(20 * time.Millisecond)
++		select {
++		case <-waitCtx.Done():
++			timer.Stop()
++			return nil, oauthProtected()
++		case <-timer.C:
++		}
++	}
++}
++
++func (api *OAuthRefreshAPI) refreshOpenAIDurable(ctx context.Context, account *Account, executor OAuthRefreshExecutor, window time.Duration) (*OAuthRefreshResult, error) {
++	repo, ok := api.accountRepo.(OpenAIOAuthDurableRepository)
++	if !ok {
++		return nil, oauthProtected()
++	}
++	key := executor.CacheKey(account)
++	mu := api.getLocalLock(key)
++	if err := mu.Lock(ctx); err != nil {
++		return nil, oauthProtected()
++	}
++	defer mu.Unlock()
++	// This lease reduces cache churn only. Neither its success, contention, nor
++	// failure grants permission to consume a refresh token.
++	if cache, ok := api.tokenCache.(OAuthOwnedLeaseCache); ok {
++		owner, err := cache.AcquireOAuthRefreshLease(ctx, key, api.lockTTL)
++		if err == nil && owner != "" {
++			defer func() {
++				cleanup, cancel := context.WithTimeout(context.WithoutCancel(ctx), 2*time.Second)
++				defer cancel()
++				_ = cache.ReleaseOAuthRefreshLease(cleanup, key, owner)
++			}()
++		}
++	}
++	fresh, pending, err := repo.LoadOAuthState(ctx, account.ID)
++	if err != nil || !openAIAccountAdmitted(ctx, fresh) {
++		return nil, oauthProtected()
++	}
++	if pending {
++		return api.openAIClaimContended(ctx, fresh)
++	}
++	if !executor.CanRefresh(fresh) {
++		return nil, oauthProtected()
++	}
++	if !executor.NeedsRefresh(fresh, window) {
++		return &OAuthRefreshResult{Account: fresh}, nil
++	}
++	var random [24]byte
++	if _, err := rand.Read(random[:]); err != nil {
++		return nil, oauthProtected()
++	}
++	owner := hex.EncodeToString(random[:])
++	claimed, err := repo.ClaimOAuthRefresh(ctx, fresh, owner)
++	if err != nil {
++		return nil, oauthProtected()
++	}
++	if !claimed {
++		current, pending, readErr := repo.LoadOAuthState(ctx, fresh.ID)
++		if readErr != nil || !openAIAccountAdmitted(ctx, current) {
++			return nil, oauthProtected()
++		}
++		if pending {
++			return api.openAIClaimContended(ctx, current)
++		}
++		// A reconnect/another completion won before claim. Return its row;
++		// this invocation never retries the issuer with its old snapshot.
++		return &OAuthRefreshResult{Account: current}, nil
++	}
++	attempt := snapshotOAuthRefreshAccount(fresh)
++	issuerCtx := context.WithValue(ctx, oauthClaimContextKey{}, oauthClaimContext{id: fresh.ID, owner: owner})
++	credentials, issuerErr := executor.Refresh(issuerCtx, fresh)
++	terminal := isInvalidGrantError(issuerErr)
++	if issuerErr != nil && !terminal || credentials == nil && !terminal {
++		// Includes timeout/transport failure: consumption is unknown. Never
++		// release or expire the durable claim, and never enter issuer retries.
++		return &OAuthRefreshResult{Account: attempt}, oauthProtected()
++	}
++	// Persist an already returned result even after request cancellation. A
++	// bounded independent reread reconciles a lost completion acknowledgement.
++	cleanup, cancel := context.WithTimeout(context.WithoutCancel(ctx), 2*time.Second)
++	defer cancel()
++	current, applied, err := repo.CompleteOAuthRefresh(cleanup, attempt, owner, credentials, terminal)
++	if err != nil || current == nil {
++		return nil, oauthProtected()
++	}
++	if cache, ok := api.tokenCache.(OAuthRevisionTokenCache); ok {
++		_ = cache.DeleteOAuthAccessToken(cleanup, key, OAuthRevision(current))
++	}
++	if !applied {
++		if !openAIAccountAdmitted(ctx, current) {
++			return nil, oauthProtected()
++		}
++		return &OAuthRefreshResult{Account: current}, nil
++	}
++	if terminal {
++		return &OAuthRefreshResult{Account: current}, &accountPermanentRefreshError{
++			err: errors.New("OpenAI OAuth invalid_grant"), persistentlyBlocked: true,
++		}
++	}
++	if !openAIAccountAdmitted(ctx, current) {
++		return nil, oauthProtected()
++	}
++	return &OAuthRefreshResult{Refreshed: true, NewCredentials: current.Credentials, Account: current}, nil
++}
++
++func (api *OAuthRefreshAPI) openAIClaimContended(ctx context.Context, account *Account) (*OAuthRefreshResult, error) {
++	// The observer is an actual durable repository outcome, not a lease hint.
++	slog.Info("oauth_refresh.pg_claim_contended", "account_id", account.ID)
++	if !isOAuthRefreshRequestPath(ctx) {
++		return &OAuthRefreshResult{LockHeld: true, Account: account}, nil
++	}
++	current, err := loadOpenAIUsableAccount(ctx, api.accountRepo, account.ID)
++	if err != nil {
++		return nil, err
++	}
++	return &OAuthRefreshResult{Account: current}, nil
++}
++
++// Manual refresh uses the same account claim/completion, and returns its durable
++// row directly. It must never pass rotated credentials into a later admin PUT.
++func RefreshOpenAIAccount(ctx context.Context, repo AccountRepository, oauth *OpenAIOAuthService, account *Account) (*Account, error) {
++	if repo == nil || oauth == nil || account == nil {
++		return nil, oauthProtected()
++	}
++	// Explicit manual intent differs from rotating refresh eligibility.
++	durable, ok := repo.(OpenAIOAuthDurableRepository)
++	if !ok {
++		return nil, oauthProtected()
++	}
++	fresh, pending, err := durable.LoadOAuthState(ctx, account.ID)
++	if err != nil || pending || !openAIOAuthEligible(fresh) {
++		return nil, oauthProtected()
++	}
++	if fresh.IsOpenAIPersonalAccessToken() || strings.TrimSpace(fresh.GetOpenAIRefreshToken()) == "" {
++		saver, ok := repo.(OAuthValidationRepository)
++		if !ok {
++			return nil, oauthProtected()
++		}
++		credentials, err := NewOpenAITokenRefresher(oauth, repo).Refresh(ctx, fresh)
++		if err != nil {
++			return nil, err
++		}
++		return saver.SaveOAuthValidation(ctx, fresh, credentials)
++	}
++	api := NewOAuthRefreshAPI(repo, nil)
++	result, err := api.RefreshIfNeeded(withOAuthRefreshRequestPath(ctx), account, NewOpenAITokenRefresher(oauth, repo), time.Duration(1<<63-1))
++	if err != nil {
++		return nil, err
++	}
++	return result.Account, nil
++}
++
++type OAuthAccountRevisionRepository interface {
++	OAuthAccountRevision(context.Context, int64) (string, error)
++}
++
++func deleteOAuthSchedulerAccount(ctx context.Context, cache SchedulerCache, repo AccountRepository, id int64) error {
++	if revisions, ok := repo.(OAuthAccountRevisionRepository); ok {
++		revision, err := revisions.OAuthAccountRevision(ctx, id)
++		if err != nil {
++			return err
++		}
++		if versioned, ok := cache.(OAuthRevisionSchedulerCache); ok && revision != "" {
++			return versioned.DeleteOAuthAccount(ctx, id, revision)
++		}
++	}
++	return cache.DeleteAccount(ctx, id)
++}
++
++func oauthCredentialIntent(credentials map[string]any) map[string]bool {
++	fields := make(map[string]bool, len(credentials))
++	for key, value := range credentials {
++		if text, ok := value.(string); ok && strings.TrimSpace(text) == "" {
++			continue
++		}
++		if value != nil {
++			fields[key] = true
++		}
++	}
++	return fields
++}
++
++// Scheduling admission never waits on a pending owner or trusts a cached
++// lifecycle. Final bearer selection independently validates again.
++func admitOpenAISelection(ctx context.Context, repo AccountRepository, account *Account) (*Account, error) {
++	if account == nil {
++		return nil, oauthProtected()
++	}
++	if account.Platform != PlatformOpenAI || account.Type != AccountTypeOAuth {
++		return account, nil
++	}
++	durable, ok := repo.(OpenAIOAuthDurableRepository)
++	if !ok {
++		return nil, oauthProtected()
++	}
++	current, pending, err := durable.LoadOAuthState(ctx, account.ID)
++	if err != nil || pending || !current.IsSchedulable() {
++		return nil, oauthProtected()
++	}
++	if current.IsCredentialShadow() && current.ParentAccountID != nil {
++		parent, pending, err := durable.LoadOAuthState(ctx, *current.ParentAccountID)
++		if err != nil || pending || !parent.IsCredentialUsableForShadow() {
++			return nil, oauthProtected()
++		}
++	}
++	return current, nil
++}
++
++type OAuthValidationRepository interface {
++	SaveOAuthValidation(context.Context, *Account, map[string]any) (*Account, error)
++}
++
++// Deep-copy only the serialized account document. Never change a cached/shared
++// account pointer while binding request credentials, routing or parent intent.
++func cloneOAuthExecutionAccount(a *Account) (*Account, error) {
++	payload, err := json.Marshal(a)
++	if err != nil {
++		return nil, oauthProtected()
++	}
++	var result Account
++	if json.Unmarshal(payload, &result) != nil {
++		return nil, oauthProtected()
++	}
++	return &result, nil
++}
+--- /dev/null
++++ b/backend/internal/service/openai_oauth_forward_binding.go
+@@ -0,0 +1,118 @@
++package service
++
++import (
++	"context"
++	"reflect"
++)
++
++type oauthForwardBindingKey struct{}
++type oauthForwardBinding struct {
++	selectionID       int64
++	selectionRevision string
++	credential        *Account
++	execution         *Account
++	token             string
++	mode              string
++}
++
++// BindOAuthRequest exposes tuple binding before handler prefetch and hooks.
++// Other platforms retain their request credential and failover path.
++func (s *OpenAIGatewayService) BindOAuthRequest(ctx context.Context, selected *Account) (context.Context, *Account, error) {
++	return s.bindOAuthForward(ctx, selected, "")
++}
++
++// Bind before request transforms/transport choice. A selected stale row is
++// denied; rotating a still-current selection returns one fresh execution
++// snapshot. Shadow quota/model/scheduling fields remain on a distinct copy.
++func (s *OpenAIGatewayService) bindOAuthForward(ctx context.Context, selected *Account, suppliedToken string) (context.Context, *Account, error) {
++	if selected == nil {
++		return ctx, nil, oauthProtected()
++	}
++	if selected.Platform != PlatformOpenAI || selected.Type != AccountTypeOAuth {
++		return ctx, selected, nil
++	}
++	durable, ok := s.accountRepo.(OpenAIOAuthDurableRepository)
++	if !ok {
++		return ctx, nil, oauthProtected()
++	}
++	if bound, ok := ctx.Value(oauthForwardBindingKey{}).(*oauthForwardBinding); ok && bound.selectionID == selected.ID {
++		// Reconnect/disable between prefetch and ingress still deny. Only
++		// this private execution snapshot may use the completed own tuple.
++		if selected != bound.execution || suppliedToken != "" && suppliedToken != bound.token {
++			return ctx, nil, oauthProtected()
++		}
++		current, pending, err := durable.LoadOAuthState(ctx, bound.credential.ID)
++		if err != nil || pending || !openAIAccountAdmitted(ctx, current) ||
++			OAuthRevision(current) != OAuthRevision(bound.credential) || !reflect.DeepEqual(current.Credentials, bound.credential.Credentials) {
++			return ctx, nil, oauthProtected()
++		}
++		if selected.IsShadow() {
++			child, blocked, err := durable.LoadOAuthState(ctx, selected.ID)
++			if err != nil || blocked || !child.IsSchedulable() || OAuthRevision(child) != bound.selectionRevision {
++				return ctx, nil, oauthProtected()
++			}
++		}
++		return ctx, bound.execution, nil
++	}
++	current, pending, err := durable.LoadOAuthState(ctx, selected.ID)
++	if err != nil || pending || !current.IsSchedulable() || OAuthRevision(selected) == "" ||
++		OAuthRevision(selected) != OAuthRevision(current) || !reflect.DeepEqual(selected.Credentials, current.Credentials) {
++		return ctx, nil, oauthProtected()
++	}
++	credential := current
++	if current.IsShadow() {
++		credential, pending, err = durable.LoadOAuthState(ctx, *current.ParentAccountID)
++		ctx = withOAuthCredentialParent(ctx, *current.ParentAccountID)
++		if err != nil || pending || !openAIAccountAdmitted(ctx, credential) {
++			return ctx, nil, oauthProtected()
++		}
++	}
++	token, mode := suppliedToken, "oauth"
++	if suppliedToken == "" {
++		token, mode, err = s.GetAccessToken(ctx, current)
++		if err != nil {
++			return ctx, nil, err
++		}
++	}
++	// Provider cache/issuer I/O may overlap reconnect, disable or rotation.
++	// Admit its exact bearer together with the matching full identity/route.
++	credential, pending, err = durable.LoadOAuthState(ctx, credential.ID)
++	if err != nil || pending || !openAIAccountAdmitted(ctx, credential) ||
++		(mode == "oauth" && (token == "" || token != credential.GetOpenAIAccessToken())) {
++		return ctx, nil, oauthProtected()
++	}
++	credential, err = cloneOAuthExecutionAccount(credential)
++	if err != nil {
++		return ctx, nil, err
++	}
++	execution := credential
++	if current.IsShadow() {
++		// Recheck the scheduling child after token I/O as well. Never replace
++		// its ID, quota dimension, model mappings or groups with the parent's.
++		shadow, blocked, e := durable.LoadOAuthState(ctx, current.ID)
++		if e != nil || blocked || !shadow.IsSchedulable() || OAuthRevision(shadow) != OAuthRevision(current) {
++			return ctx, nil, oauthProtected()
++		}
++		execution, e = cloneOAuthExecutionAccount(shadow)
++		if e != nil {
++			return ctx, nil, e
++		}
++		// Project authentication from the admitted parent into this private
++		// execution copy; retain child model/scheduling overrides separately.
++		childCredentials := execution.Credentials
++		execution.Credentials = make(map[string]any, len(credential.Credentials))
++		for key, value := range credential.Credentials {
++			execution.Credentials[key] = value
++		}
++		for _, key := range []string{"model_mapping", "compact_model_mapping", "account_scheduling_threshold"} {
++			if value, ok := childCredentials[key]; ok {
++				execution.Credentials[key] = value
++			}
++		}
++		execution.ProxyID = credential.ProxyID
++		execution.Proxy = credential.Proxy
++	}
++	execution.oauthForwardRevision = OAuthRevision(credential)
++	bound := &oauthForwardBinding{selectionID: execution.ID, selectionRevision: OAuthRevision(current), credential: credential, execution: execution, token: token, mode: mode}
++	return context.WithValue(ctx, oauthForwardBindingKey{}, bound), execution, nil
++}
+--- a/backend/internal/service/openai_oauth_service.go
++++ b/backend/internal/service/openai_oauth_service.go
+@@ -214,6 +214,10 @@
+ 
+ // RefreshTokenWithClientID refreshes an OpenAI OAuth token with optional client_id.
+ func (s *OpenAIOAuthService) RefreshTokenWithClientID(ctx context.Context, refreshToken string, proxyURL string, clientID string) (*OpenAITokenInfo, error) {
++	claim, ok := ctx.Value(oauthClaimContextKey{}).(oauthClaimContext)
++	if !ok || claim.owner == "" || claim.id <= 0 {
++		return nil, oauthProtected()
++	}
+ 	tokenResp, err := s.oauthClient.RefreshTokenWithClientID(ctx, refreshToken, proxyURL, clientID)
+ 	if err != nil {
+ 		return nil, err
+@@ -385,6 +389,10 @@
+ 		return nil, infraerrors.New(http.StatusBadRequest, "OPENAI_OAUTH_NO_REFRESH_TOKEN", "no refresh token available")
+ 	}
+ 
++	claim, ok := ctx.Value(oauthClaimContextKey{}).(oauthClaimContext)
++	if !ok || claim.id != account.ID || claim.owner == "" {
++		return nil, oauthProtected()
++	}
+ 	clientID := account.GetCredential("client_id")
+ 	return s.RefreshTokenWithClientID(ctx, refreshToken, proxyURL, clientID)
+ }
+--- a/backend/internal/service/openai_plugin_account_directory.go
++++ b/backend/internal/service/openai_plugin_account_directory.go
+@@ -143,6 +143,11 @@
+ 	if account.Type != AccountTypeOAuth || !account.IsOpenAIOAuthLike() {
+ 		return nil, nil
+ 	}
++	boundCtx, execution, bindErr := s.bindOAuthForward(ctx, account, "")
++	if bindErr != nil {
++		return nil, bindErr
++	}
++	ctx, account = boundCtx, execution
+ 	token, _, err := s.GetAccessToken(ctx, account)
+ 	if err != nil {
+ 		return nil, err
+--- a/backend/internal/service/openai_quota_service.go
++++ b/backend/internal/service/openai_quota_service.go
+@@ -468,6 +468,7 @@
+ 		if rerr != nil {
+ 			return "", "", "", false, infraerrors.Newf(http.StatusBadGateway, "OPENAI_QUOTA_SHADOW_RESOLVE_FAILED", "failed to resolve shadow account: %v", rerr)
+ 		}
++		ctx = withOAuthCredentialParent(ctx, resolved.ID)
+ 		account = resolved
+ 	}
+ 
+@@ -490,6 +491,24 @@
+ 		}
+ 		if strings.TrimSpace(accessToken) == "" {
+ 			return "", "", "", false, infraerrors.New(http.StatusBadGateway, "OPENAI_QUOTA_TOKEN_UNAVAILABLE", "access token is empty")
++		}
++	}
++	if account.Platform == PlatformOpenAI && account.Type == AccountTypeOAuth && !account.IsOpenAIAgentIdentity() {
++		durable, ok := s.accountRepo.(OpenAIOAuthDurableRepository)
++		if !ok {
++			return "", "", "", false, oauthProtected()
++		}
++		current, pending, e := durable.LoadOAuthState(ctx, account.ID)
++		if e != nil || pending || !openAIAccountAdmitted(ctx, current) || current.GetOpenAIAccessToken() != accessToken {
++			return "", "", "", false, oauthProtected()
++		}
++		account = current
++		chatGPTAccountID = strings.TrimSpace(account.GetChatGPTAccountID())
++		if chatGPTAccountID == "" {
++			chatGPTAccountID = strings.TrimSpace(account.GetCredential("organization_id"))
++		}
++		if chatGPTAccountID == "" {
++			return "", "", "", false, oauthProtected()
+ 		}
+ 	}
+ 	fedRAMP = account.IsChatGPTAccountFedRAMP()
+--- a/backend/internal/service/openai_token_provider.go
++++ b/backend/internal/service/openai_token_provider.go
+@@ -2,8 +2,6 @@
+ 
+ import (
+ 	"context"
+-	"errors"
+-	"log/slog"
+ 	"math/rand/v2"
+ 	"strings"
+ 	"sync/atomic"
+@@ -133,228 +131,81 @@
+ // GetAccessToken returns a valid access_token.
+ func (p *OpenAITokenProvider) GetAccessToken(ctx context.Context, account *Account) (string, error) {
+ 	p.ensureMetrics()
+-	if account == nil {
+-		return "", errors.New("account is nil")
+-	}
+-	if account.Platform != PlatformOpenAI || account.Type != AccountTypeOAuth {
+-		return "", errors.New("not an openai oauth account")
+-	}
+-
+-	cacheKey := OpenAITokenCacheKey(account)
+-
+-	// 1) Try cache first.
+-	if p.tokenCache != nil {
+-		if token, err := p.tokenCache.GetAccessToken(ctx, cacheKey); err == nil && strings.TrimSpace(token) != "" {
+-			slog.Debug("openai_token_cache_hit", "account_id", account.ID)
+-			return token, nil
+-		} else if err != nil {
+-			slog.Warn("openai_token_cache_get_failed", "account_id", account.ID, "error", err)
+-		}
+-	}
+-
+-	slog.Debug("openai_token_cache_miss", "account_id", account.ID)
+-
+-	// 2) Refresh if needed (pre-expiry skew).
+-	expiresAt := account.GetCredentialAsTime("expires_at")
+-	needsRefresh := !account.IsOpenAIPersonalAccessToken() && (expiresAt == nil || time.Until(*expiresAt) <= openAITokenRefreshSkew)
+-	if needsRefresh && strings.TrimSpace(account.GetOpenAIRefreshToken()) == "" {
+-		if expiresAt != nil && !time.Now().Before(*expiresAt) {
+-			const reason = "openai access_token expired and refresh_token is missing"
+-			// 永久故障：缺失 refresh_token 时账号无法自愈，必须立即从调度池剔除，
+-			// 否则会被反复选中、每次都在 token 阶段直接返回错误，对用户呈现持续 502。
+-			p.disableAccountMissingRefreshToken(account, reason)
+-			return "", errors.New(reason)
+-		}
+-		needsRefresh = false
+-	}
+-	refreshFailed := false
+-
+-	if needsRefresh && p.refreshAPI != nil && p.executor != nil {
+-		p.metrics.refreshRequests.Add(1)
+-		p.metrics.touchNow()
+-
+-		result, err := p.refreshAPI.RefreshIfNeeded(ctx, account, p.executor, openAITokenRefreshSkew)
+-		if err != nil {
+-			if p.refreshPolicy.OnRefreshError == ProviderRefreshErrorReturn {
+-				return "", err
+-			}
+-			slog.Warn("openai_token_refresh_failed", "account_id", account.ID, "error", err)
+-			p.metrics.refreshFailure.Add(1)
+-			refreshFailed = true
+-		} else if result.LockHeld {
+-			if p.refreshPolicy.OnLockHeld == ProviderLockHeldWaitForCache {
+-				p.metrics.lockContention.Add(1)
+-				p.metrics.touchNow()
+-				token, waitErr := p.waitForTokenAfterLockRace(ctx, cacheKey)
+-				if waitErr != nil {
+-					return "", waitErr
++	if account == nil || account.Platform != PlatformOpenAI || account.Type != AccountTypeOAuth {
++		return "", oauthProtected()
++	}
++	fresh, err := loadOpenAIUsableAccount(ctx, p.accountRepo, account.ID)
++	if err != nil {
++		return "", err
++	}
++	account = fresh
++	key := OpenAITokenCacheKey(account)
++	cache, _ := p.tokenCache.(OAuthRevisionTokenCache)
++	if cache != nil {
++		if token, err := cache.GetOAuthAccessToken(ctx, key, OAuthRevision(account)); err == nil && token != "" && token == account.GetOpenAIAccessToken() && openAIAccountAdmitted(ctx, account) {
++			expires := account.GetCredentialAsTime("expires_at")
++			if account.IsOpenAIPersonalAccessToken() || expires != nil && time.Until(*expires) > openAITokenRefreshSkew {
++				// Cache I/O may overlap disable/reconnect. Revalidate after it,
++				// just as the uncached path does before returning a bearer.
++				current, err := loadOpenAIUsableAccount(ctx, p.accountRepo, account.ID)
++				if err != nil || !openAIAccountAdmitted(ctx, current) {
++					return "", oauthProtected()
+ 				}
+-				if strings.TrimSpace(token) != "" {
+-					slog.Debug("openai_token_cache_hit_after_wait", "account_id", account.ID)
++				currentExpires := current.GetCredentialAsTime("expires_at")
++				if OAuthRevision(current) == OAuthRevision(account) && token == current.GetOpenAIAccessToken() && (current.IsOpenAIPersonalAccessToken() || currentExpires != nil && time.Until(*currentExpires) > openAITokenRefreshSkew) {
+ 					return token, nil
+ 				}
++				account = current
+ 			}
+-		} else if result.Refreshed {
++		}
++	}
++	expires := account.GetCredentialAsTime("expires_at")
++	needsRefresh := !account.IsOpenAIPersonalAccessToken() && (expires == nil || time.Until(*expires) <= openAITokenRefreshSkew)
++	if needsRefresh && strings.TrimSpace(account.GetOpenAIRefreshToken()) == "" {
++		if expires == nil || !time.Now().Before(*expires) {
++			repo, _ := p.accountRepo.(OpenAIOAuthDurableRepository)
++			if repo != nil {
++				_ = repo.BlockOAuthMissingRefresh(ctx, account)
++			}
++			return "", oauthProtected()
++		}
++		needsRefresh = false
++	}
++	if needsRefresh {
++		if p.refreshAPI == nil || p.executor == nil {
++			return "", oauthProtected()
++		}
++		p.metrics.refreshRequests.Add(1)
++		result, err := p.refreshAPI.RefreshIfNeeded(withOAuthRefreshRequestPath(ctx), account, p.executor, openAITokenRefreshSkew)
++		if err != nil || result == nil || result.LockHeld {
++			p.metrics.refreshFailure.Add(1)
++			return "", oauthProtected()
++		}
++		if result.Refreshed {
+ 			p.metrics.refreshSuccess.Add(1)
+-			account = result.Account
+-			expiresAt = account.GetCredentialAsTime("expires_at")
+-		} else {
+-			account = result.Account
+-			expiresAt = account.GetCredentialAsTime("expires_at")
+-		}
+-	} else if needsRefresh && p.tokenCache != nil {
+-		// Backward-compatible test path when refreshAPI is not injected.
+-		p.metrics.refreshRequests.Add(1)
+-		p.metrics.touchNow()
+-		locked, lockErr := p.tokenCache.AcquireRefreshLock(ctx, cacheKey, 30*time.Second)
+-		if lockErr == nil && locked {
+-			defer func() { _ = p.tokenCache.ReleaseRefreshLock(ctx, cacheKey) }()
+-		} else if lockErr != nil {
+-			p.metrics.lockAcquireFailure.Add(1)
+-			p.metrics.touchNow()
+-			slog.Warn("openai_token_lock_failed", "account_id", account.ID, "error", lockErr)
+-		} else {
+-			p.metrics.lockContention.Add(1)
+-			p.metrics.touchNow()
+-			token, waitErr := p.waitForTokenAfterLockRace(ctx, cacheKey)
+-			if waitErr != nil {
+-				return "", waitErr
++		}
++	}
++	// The final DB admission also closes delayed scheduler/token-cache reads.
++	account, err = loadOpenAIUsableAccount(ctx, p.accountRepo, account.ID)
++	if err != nil || !openAIAccountAdmitted(ctx, account) {
++		return "", oauthProtected()
++	}
++	token := account.GetOpenAIAccessToken()
++	expires = account.GetCredentialAsTime("expires_at")
++	if strings.TrimSpace(token) == "" || !account.IsOpenAIPersonalAccessToken() && expires == nil || expires != nil && !time.Now().Before(*expires) {
++		return "", oauthProtected()
++	}
++	if cache != nil {
++		ttl := 30 * time.Minute
++		if expires != nil {
++			ttl = time.Until(*expires) - openAITokenCacheSkew
++			if ttl <= 0 {
++				ttl = time.Until(*expires)
+ 			}
+-			if strings.TrimSpace(token) != "" {
+-				slog.Debug("openai_token_cache_hit_after_wait", "account_id", account.ID)
+-				return token, nil
+-			}
+-		}
+-	}
+-
+-	accessToken := account.GetCredential("access_token")
+-	if strings.TrimSpace(accessToken) == "" {
+-		return "", errors.New("access_token not found in credentials")
+-	}
+-
+-	// 3) Populate cache with TTL.
+-	if p.tokenCache != nil {
+-		latestAccount, isStale := CheckTokenVersion(ctx, account, p.accountRepo)
+-		if isStale && latestAccount != nil {
+-			slog.Debug("openai_token_version_stale_use_latest", "account_id", account.ID)
+-			accessToken = latestAccount.GetOpenAIAccessToken()
+-			if strings.TrimSpace(accessToken) == "" {
+-				return "", errors.New("access_token not found after version check")
+-			}
+-		} else {
+-			ttl := 30 * time.Minute
+-			if refreshFailed {
+-				if p.refreshPolicy.FailureTTL > 0 {
+-					ttl = p.refreshPolicy.FailureTTL
+-				} else {
+-					ttl = time.Minute
+-				}
+-				slog.Debug("openai_token_cache_short_ttl", "account_id", account.ID, "reason", "refresh_failed")
+-			} else if expiresAt != nil {
+-				until := time.Until(*expiresAt)
+-				switch {
+-				case until > openAITokenCacheSkew:
+-					ttl = until - openAITokenCacheSkew
+-				case until > 0:
+-					ttl = until
+-				default:
+-					ttl = time.Minute
+-				}
+-			}
+-			if err := p.tokenCache.SetAccessToken(ctx, cacheKey, accessToken, ttl); err != nil {
+-				slog.Warn("openai_token_cache_set_failed", "account_id", account.ID, "error", err)
+-			}
+-		}
+-	}
+-
+-	return accessToken, nil
+-}
+-
+-// disableAccountMissingRefreshToken 在请求路径上发现 OpenAI OAuth 账号
+-// 凭证已过期且 refresh_token 缺失时，将账号标记为 error 状态。
+-// 这是一种永久性故障：仅靠后续请求或 TokenRefreshService 不会自愈
+-// （NeedsRefresh 也会因 refresh_token 为空直接跳过），
+-// 必须主动剔除以避免账号被持续选中导致用户端反复 502。
+-// 使用 background context 是因为请求 context 可能很快结束。
+-func (p *OpenAITokenProvider) disableAccountMissingRefreshToken(account *Account, reason string) {
+-	if p == nil || p.accountRepo == nil || account == nil {
+-		return
+-	}
+-	if p.runtimeBlocker != nil {
+-		p.runtimeBlocker.BlockAccountScheduling(account, time.Time{}, "missing_refresh_token")
+-	}
+-	bgCtx := context.Background()
+-	if err := p.accountRepo.SetError(bgCtx, account.ID, reason); err != nil {
+-		slog.Warn("openai_token_provider.set_error_failed",
+-			"account_id", account.ID,
+-			"error", err,
+-		)
+-		return
+-	}
+-	if p.tokenCache != nil {
+-		cacheKey := OpenAITokenCacheKey(account)
+-		if err := p.tokenCache.DeleteAccessToken(bgCtx, cacheKey); err != nil {
+-			slog.Warn("openai_token_provider.cache_delete_failed",
+-				"account_id", account.ID,
+-				"error", err,
+-			)
+-		}
+-	}
+-	slog.Warn("openai_token_provider.account_disabled_missing_refresh_token",
+-		"account_id", account.ID,
+-		"reason", reason,
+-	)
+-}
+-
+-func (p *OpenAITokenProvider) waitForTokenAfterLockRace(ctx context.Context, cacheKey string) (string, error) {
+-	wait := openAILockInitialWait
+-	totalWaitMs := int64(0)
+-	for i := 0; i < openAILockMaxAttempts; i++ {
+-		actualWait := jitterLockWait(wait)
+-		timer := time.NewTimer(actualWait)
+-		select {
+-		case <-ctx.Done():
+-			if !timer.Stop() {
+-				select {
+-				case <-timer.C:
+-				default:
+-				}
+-			}
+-			return "", ctx.Err()
+-		case <-timer.C:
+-		}
+-
+-		waitMs := actualWait.Milliseconds()
+-		if waitMs < 0 {
+-			waitMs = 0
+-		}
+-		totalWaitMs += waitMs
+-		p.metrics.lockWaitSamples.Add(1)
+-		p.metrics.lockWaitTotalMs.Add(waitMs)
+-		p.metrics.touchNow()
+-
+-		token, err := p.tokenCache.GetAccessToken(ctx, cacheKey)
+-		if err == nil && strings.TrimSpace(token) != "" {
+-			p.metrics.lockWaitHit.Add(1)
+-			if totalWaitMs >= openAILockWarnThresholdMs {
+-				slog.Warn("openai_token_lock_wait_high", "wait_ms", totalWaitMs, "attempts", i+1)
+-			}
+-			return token, nil
+-		}
+-
+-		if wait < openAILockMaxWait {
+-			wait *= 2
+-			if wait > openAILockMaxWait {
+-				wait = openAILockMaxWait
+-			}
+-		}
+-	}
+-
+-	p.metrics.lockWaitMiss.Add(1)
+-	if totalWaitMs >= openAILockWarnThresholdMs {
+-		slog.Warn("openai_token_lock_wait_high", "wait_ms", totalWaitMs, "attempts", openAILockMaxAttempts)
+-	}
+-	return "", nil
++		}
++		_ = cache.SetOAuthAccessToken(ctx, key, OAuthRevision(account), token, ttl)
++	}
++	return token, nil
+ }
+ 
+ func jitterLockWait(base time.Duration) time.Duration {
+--- a/backend/internal/service/openai_ws_forwarder_ingress.go
++++ b/backend/internal/service/openai_ws_forwarder_ingress.go
+@@ -83,6 +83,12 @@
+ 	if account == nil {
+ 		return errors.New("account is nil")
+ 	}
++
++	boundCtx, execution, bindErr := s.bindOAuthForward(ctx, account, token)
++	if bindErr != nil {
++		return bindErr
++	}
++	ctx, account = boundCtx, execution
+ 	// A handler may reuse the same gin context across account failover attempts.
+ 	// Never let an OAuth attempt's response aliases leak into the next account.
+ 	setCodexToolNameReverse(c, nil)
+--- a/backend/internal/service/openai_ws_pool.go
++++ b/backend/internal/service/openai_ws_pool.go
+@@ -2,6 +2,8 @@
+ 
+ import (
+ 	"context"
++	"crypto/sha256"
++	"encoding/json"
+ 	"errors"
+ 	"fmt"
+ 	"math"
+@@ -84,6 +86,8 @@
+ }
+ 
+ type openAIWSHandshakeCompatibilityKey struct {
++	oauthTuple [32]byte
++
+ 	betaFeatures        string
+ 	codexInstallationID string
+ 	sessionIDHyphen     string
+@@ -2365,6 +2369,19 @@
+ 	key := openAIWSHandshakeCompatibilityKey{
+ 		betaFeatures: normalizeOpenAIWSBetaFeatures(headers),
+ 	}
++	if account != nil && account.Platform == PlatformOpenAI && account.Type == AccountTypeOAuth {
++		proxy := ""
++		if account.Proxy != nil {
++			proxy = account.Proxy.URL()
++		}
++		revision := account.oauthForwardRevision
++		if revision == "" {
++			revision = OAuthRevision(account)
++		}
++		payload, _ := json.Marshal([]string{headers.Get("Authorization"), headers.Get("chatgpt-account-id"),
++			headers.Get("x-openai-fedramp"), proxy, revision, account.GetCredential("auth_mode"), account.GetCredential("task_id")})
++		key.oauthTuple = sha256.Sum256(payload)
++	}
+ 	mode := activeCodexFingerprintMode(account)
+ 	if mode == codexFingerprintOff {
+ 		return key
+--- a/backend/internal/service/scheduler_snapshot_service.go
++++ b/backend/internal/service/scheduler_snapshot_service.go
+@@ -225,7 +225,7 @@
+ 		if err != nil {
+ 			logger.LegacyPrintf("service.scheduler_snapshot", "[Scheduler] cache read failed: bucket=%s err=%v", bucket.String(), err)
+ 		} else if hit {
+-			return derefAccounts(cached), useMixed, nil
++			return s.validateOAuthCandidates(ctx, derefAccounts(cached), bucket), useMixed, nil
+ 		}
+ 		token, err := s.cache.CaptureBucketWriteToken(ctx, bucket)
+ 		if ctxErr := ctx.Err(); ctxErr != nil {
+@@ -268,7 +268,7 @@
+ 		}
+ 	}
+ 
+-	return accounts, useMixed, nil
++	return s.validateOAuthCandidates(ctx, accounts, bucket), useMixed, nil
+ }
+ 
+ func (s *SchedulerSnapshotService) GetAccount(ctx context.Context, accountID int64) (*Account, error) {
+@@ -286,6 +286,17 @@
+ 		if err != nil {
+ 			logger.LegacyPrintf("service.scheduler_snapshot", "[Scheduler] account cache read failed: id=%d err=%v", accountID, err)
+ 		} else if account != nil {
++			if account.Platform == PlatformOpenAI && account.Type == AccountTypeOAuth {
++				durable, ok := s.accountRepo.(OpenAIOAuthDurableRepository)
++				if !ok {
++					return nil, oauthProtected()
++				}
++				current, pending, err := durable.LoadOAuthState(ctx, account.ID)
++				if err != nil || pending || !current.IsSchedulable() {
++					return nil, oauthProtected()
++				}
++				return current, nil
++			}
+ 			return account, nil
+ 		}
+ 	}
+@@ -295,7 +306,22 @@
+ 	}
+ 	fallbackCtx, cancel := s.withFallbackTimeout(ctx)
+ 	defer cancel()
+-	return s.accountRepo.GetByID(fallbackCtx, accountID)
++	account, err := s.accountRepo.GetByID(fallbackCtx, accountID)
++	if err != nil || account == nil {
++		return account, err
++	}
++	if account.Platform == PlatformOpenAI && account.Type == AccountTypeOAuth {
++		durable, ok := s.accountRepo.(OpenAIOAuthDurableRepository)
++		if !ok {
++			return nil, oauthProtected()
++		}
++		current, pending, err := durable.LoadOAuthState(fallbackCtx, accountID)
++		if err != nil || pending || !current.IsSchedulable() {
++			return nil, oauthProtected()
++		}
++		return current, nil
++	}
++	return account, nil
+ }
+ 
+ // GetGroupByID 获取分组信息（供调度器使用）
+@@ -576,7 +602,7 @@
+ 		}
+ 		allAccountsFound = false
+ 		if s.cache != nil {
+-			if err := s.cache.DeleteAccount(ctx, id); err != nil {
++			if err := deleteOAuthSchedulerAccount(ctx, s.cache, s.accountRepo, id); err != nil {
+ 				return err
+ 			}
+ 		}
+@@ -666,7 +692,7 @@
+ 	if err != nil {
+ 		if errors.Is(err, ErrAccountNotFound) {
+ 			if s.cache != nil {
+-				if err := s.cache.DeleteAccount(ctx, *accountID); err != nil {
++				if err := deleteOAuthSchedulerAccount(ctx, s.cache, s.accountRepo, *accountID); err != nil {
+ 					return err
+ 				}
+ 			}
+@@ -1731,3 +1757,35 @@
+ 	l.count++
+ 	return true
+ }
++
++func (s *SchedulerSnapshotService) validateOAuthCandidates(ctx context.Context, accounts []Account, bucket SchedulerBucket) []Account {
++	out := make([]Account, 0, len(accounts))
++	for _, account := range accounts {
++		if account.Platform != PlatformOpenAI || account.Type != AccountTypeOAuth {
++			out = append(out, account)
++			continue
++		}
++		durable, ok := s.accountRepo.(OpenAIOAuthDurableRepository)
++		if !ok {
++			continue
++		}
++		current, pending, err := durable.LoadOAuthState(ctx, account.ID)
++		if err != nil || pending || !current.IsSchedulable() {
++			continue
++		}
++		if bucket.GroupID > 0 {
++			member := false
++			for _, id := range current.GroupIDs {
++				if id == bucket.GroupID {
++					member = true
++					break
++				}
++			}
++			if !member {
++				continue
++			}
++		}
++		out = append(out, *current)
++	}
++	return out
++}
+--- a/backend/internal/service/token_cache_invalidator.go
++++ b/backend/internal/service/token_cache_invalidator.go
+@@ -64,6 +64,14 @@
+ 			continue
+ 		}
+ 		seen[key] = true
++		if account.Platform == PlatformOpenAI {
++			if cache, ok := c.cache.(OAuthRevisionTokenCache); ok {
++				if err := cache.DeleteOAuthAccessToken(ctx, key, OAuthRevision(account)); err != nil {
++					return err
++				}
++				continue
++			}
++		}
+ 		if err := c.cache.DeleteAccessToken(ctx, key); err != nil {
+ 			slog.Warn("token_cache_delete_failed", "key", key, "account_id", account.ID, "error", err)
+ 		}
+@@ -84,6 +92,17 @@
+ 		return nil, false
+ 	}
+ 
++	if account.Platform == PlatformOpenAI && account.Type == AccountTypeOAuth {
++		durable, ok := repo.(OpenAIOAuthDurableRepository)
++		if !ok {
++			return nil, true
++		}
++		current, pending, err := durable.LoadOAuthState(ctx, account.ID)
++		if err != nil || pending {
++			return nil, true
++		}
++		return current, OAuthRevision(current) != OAuthRevision(account)
++	}
+ 	currentVersion := account.GetCredentialAsInt64("_token_version")
+ 
+ 	latestAccount, err := repo.GetByID(ctx, account.ID)
+--- a/backend/internal/service/token_refresh_service.go
++++ b/backend/internal/service/token_refresh_service.go
+@@ -918,7 +918,7 @@
+ 		cancelAttempt()
+ 		releaseAttempt()
+ 		persistedAfterAttemptDeadline := attemptTimedOut && credentialsPersisted && err == nil
+-		if attemptTimedOut && !persistedAfterAttemptDeadline && !isProviderScopedTerminalRefreshError(err) {
++		if attemptTimedOut && !persistedAfterAttemptDeadline && !isProviderScopedTerminalRefreshError(err) && account.Platform != PlatformOpenAI {
+ 			cause := err
+ 			if cause == nil {
+ 				cause = context.DeadlineExceeded
+@@ -961,6 +961,10 @@
+ 			return errRefreshSkipped
+ 		}
+ 		if isProviderScopedTerminalRefreshError(err) {
++			return err
++		}
++		var oauthPermanent *accountPermanentRefreshError
++		if account.Platform == PlatformOpenAI && errors.As(err, &oauthPermanent) {
+ 			return err
+ 		}
+ 		var stateUnavailableErr *oauthRefreshStateUnavailableError
+@@ -1217,6 +1221,13 @@
+ }
+ 
+ func (s *TokenRefreshService) postRefreshStateSync(ctx context.Context, account *Account) {
++	if account != nil && account.Platform == PlatformOpenAI && account.Type == AccountTypeOAuth {
++		current, err := s.accountRepo.GetByID(ctx, account.ID)
++		if err != nil || current == nil {
++			return
++		}
++		account = current
++	}
+ 	// 对所有 OAuth 账号调用缓存失效（InvalidateToken 内部根据平台判断是否需要处理）
+ 	if s.cacheInvalidator != nil && account.Type == AccountTypeOAuth {
+ 		if err := s.cacheInvalidator.InvalidateToken(ctx, account); err != nil {
+--- a/backend/internal/service/token_refresher.go
++++ b/backend/internal/service/token_refresher.go
+@@ -109,7 +109,7 @@
+ 	}
+ 	expiresAt := account.GetCredentialAsTime("expires_at")
+ 	if expiresAt == nil {
+-		return account.IsRateLimited()
++		return true
+ 	}
+ 
+ 	return time.Until(*expiresAt) < refreshWindow
+--- /dev/null
++++ b/backend/migrations/241_openai_oauth_refresh_ownership.sql
+@@ -0,0 +1,98 @@
++-- PostgreSQL is the only refresh ownership domain. No lease/expiry can replay
++-- a claimed token. Keep attempt history through disable/re-enable and deletion.
++ALTER TABLE accounts ADD COLUMN oauth_revision bigint NOT NULL DEFAULT 1 CHECK (oauth_revision > 0);
++CREATE TABLE account_oauth_refresh_attempts (
++    account_id bigint NOT NULL,
++    revision bigint NOT NULL,
++    owner text NOT NULL,
++    state text NOT NULL CHECK (state IN ('pending', 'completed', 'terminal')),
++    expected_credentials jsonb NOT NULL,
++    result_credentials jsonb,
++    completion_revision bigint,
++    created_at timestamptz NOT NULL DEFAULT now(),
++    PRIMARY KEY (account_id, revision),
++    UNIQUE (owner)
++);
++CREATE TABLE account_oauth_tombstones (account_id bigint PRIMARY KEY, revision bigint NOT NULL);
++CREATE INDEX account_oauth_pending ON account_oauth_refresh_attempts(account_id)
++    WHERE state IN ('pending', 'terminal');
++
++-- The string projection lets the existing Ent credentials mapping carry an
++-- exact DB-assigned revision without generated-ORM changes or client clocks.
++UPDATE accounts SET credentials = jsonb_set(credentials, '{_oauth_revision}', '"1"')
++    WHERE platform = 'openai' AND type = 'oauth';
++CREATE FUNCTION fence_openai_oauth_account() RETURNS trigger LANGUAGE plpgsql AS $$
++BEGIN
++    IF TG_OP = 'INSERT' THEN
++        NEW.oauth_revision := 1;
++    ELSE
++        NEW.oauth_revision := OLD.oauth_revision;
++        IF (OLD.platform = 'openai' AND OLD.type = 'oauth') OR
++           (NEW.platform = 'openai' AND NEW.type = 'oauth') THEN
++            IF (to_jsonb(NEW) - ARRAY['oauth_revision','credentials','updated_at','last_used_at','created_at'])
++                IS DISTINCT FROM
++               (to_jsonb(OLD) - ARRAY['oauth_revision','credentials','updated_at','last_used_at','created_at'])
++               OR (NEW.credentials - '_oauth_revision') IS DISTINCT FROM (OLD.credentials - '_oauth_revision') THEN
++                NEW.oauth_revision := OLD.oauth_revision + 1;
++            END IF;
++        END IF;
++    END IF;
++    IF NEW.platform = 'openai' AND NEW.type = 'oauth' OR
++       TG_OP = 'UPDATE' AND OLD.platform = 'openai' AND OLD.type = 'oauth' THEN
++        NEW.credentials := jsonb_set(NEW.credentials, '{_oauth_revision}', to_jsonb(NEW.oauth_revision::text));
++    END IF;
++    RETURN NEW;
++END $$;
++CREATE TRIGGER fence_openai_oauth_account BEFORE INSERT OR UPDATE ON accounts
++    FOR EACH ROW EXECUTE FUNCTION fence_openai_oauth_account();
++
++-- Includes raw/bulk lifecycle writes. Invalidation is committed with the row.
++CREATE FUNCTION publish_openai_oauth_account() RETURNS trigger LANGUAGE plpgsql AS $$
++BEGIN
++    IF TG_OP = 'DELETE' THEN
++        IF OLD.platform = 'openai' AND OLD.type = 'oauth' OR OLD.credentials ? '_oauth_revision' THEN
++            INSERT INTO account_oauth_tombstones VALUES (OLD.id, OLD.oauth_revision + 1)
++                ON CONFLICT (account_id) DO UPDATE SET revision=GREATEST(account_oauth_tombstones.revision, EXCLUDED.revision);
++            INSERT INTO scheduler_outbox(event_type, account_id) VALUES ('account_changed', OLD.id);
++        END IF;
++        RETURN OLD;
++    END IF;
++    IF (NEW.platform = 'openai' AND NEW.type = 'oauth') OR
++       (OLD.platform = 'openai' AND OLD.type = 'oauth') THEN
++        IF NEW.oauth_revision IS DISTINCT FROM OLD.oauth_revision THEN
++            INSERT INTO scheduler_outbox(event_type, account_id) VALUES ('account_changed', NEW.id);
++        END IF;
++    END IF;
++    RETURN NEW;
++END $$;
++CREATE TRIGGER publish_openai_oauth_account AFTER UPDATE OR DELETE ON accounts
++    FOR EACH ROW EXECUTE FUNCTION publish_openai_oauth_account();
++
++-- Group binding is routing identity too. Use the same account row domain.
++CREATE FUNCTION fence_openai_oauth_group_binding() RETURNS trigger LANGUAGE plpgsql AS $$
++BEGIN
++    IF TG_OP <> 'INSERT' THEN
++        UPDATE accounts SET credentials = jsonb_set(credentials, '{_oauth_group_change}', to_jsonb(gen_random_uuid()::text))
++            WHERE id = OLD.account_id AND platform = 'openai' AND type = 'oauth';
++    END IF;
++    IF TG_OP <> 'DELETE' THEN
++        UPDATE accounts SET credentials = jsonb_set(credentials, '{_oauth_group_change}', to_jsonb(gen_random_uuid()::text))
++            WHERE id = NEW.account_id AND platform = 'openai' AND type = 'oauth';
++    END IF;
++    RETURN NULL;
++END $$;
++CREATE TRIGGER fence_openai_oauth_group_binding AFTER INSERT OR UPDATE OR DELETE ON account_groups
++    FOR EACH ROW EXECUTE FUNCTION fence_openai_oauth_group_binding();
++
++-- Editing a proxy changes the routing identity of every referencing OAuth row.
++CREATE FUNCTION fence_openai_oauth_proxy() RETURNS trigger LANGUAGE plpgsql AS $$
++BEGIN
++    IF ROW(NEW.protocol, NEW.host, NEW.port, NEW.username, NEW.password, NEW.status, NEW.deleted_at)
++       IS DISTINCT FROM ROW(OLD.protocol, OLD.host, OLD.port, OLD.username, OLD.password, OLD.status, OLD.deleted_at) THEN
++        UPDATE accounts SET credentials=jsonb_set(credentials, '{_oauth_proxy_change}', to_jsonb(gen_random_uuid()::text))
++            WHERE proxy_id=NEW.id AND platform='openai' AND type='oauth';
++    END IF;
++    RETURN NEW;
++END $$;
++CREATE TRIGGER fence_openai_oauth_proxy AFTER UPDATE ON proxies
++    FOR EACH ROW EXECUTE FUNCTION fence_openai_oauth_proxy();
+--- /dev/null
++++ b/backend/migrations/242_openai_oauth_identity_and_usage.sql
+@@ -0,0 +1,104 @@
++-- W2 migration 241 stays byte-identical for checksum-aware upgrades.
++-- One stable, private DB-custodied HMAC key. No API configuration or token index.
++CREATE TABLE openai_oauth_identity_key (
++    singleton boolean PRIMARY KEY DEFAULT true CHECK (singleton),
++    secret bytea NOT NULL CHECK (octet_length(secret)=32)
++);
++INSERT INTO openai_oauth_identity_key(secret)
++VALUES (sha256(convert_to(gen_random_uuid()::text || gen_random_uuid()::text, 'UTF8')));
++CREATE FUNCTION protect_openai_oauth_identity_key() RETURNS trigger LANGUAGE plpgsql AS $$
++BEGIN RAISE EXCEPTION 'OAuth identity key is immutable; preserve it during custody rotation'; END $$;
++CREATE TRIGGER protect_openai_oauth_identity_key BEFORE UPDATE OR DELETE ON openai_oauth_identity_key
++    FOR EACH ROW EXECUTE FUNCTION protect_openai_oauth_identity_key();
++
++-- RFC2104 HMAC-SHA256 using PostgreSQL built-in bytea SHA256 (no extension).
++-- Framed JSON array, fixed issuer and the effective official client fallback.
++CREATE FUNCTION openai_oauth_refresh_identity(credentials jsonb) RETURNS text
++LANGUAGE plpgsql STABLE STRICT AS $$
++DECLARE
++    secret bytea; ipad bytea := decode(repeat('36',64),'hex');
++    opad bytea := decode(repeat('5c',64),'hex'); message bytea; idx integer;
++BEGIN
++    IF COALESCE(credentials->>'refresh_token','')='' THEN RETURN NULL; END IF;
++    SELECT k.secret INTO STRICT secret FROM openai_oauth_identity_key k WHERE k.singleton;
++    FOR idx IN 0..31 LOOP
++        ipad := set_byte(ipad,idx,get_byte(ipad,idx) # get_byte(secret,idx));
++        opad := set_byte(opad,idx,get_byte(opad,idx) # get_byte(secret,idx));
++    END LOOP;
++    message := convert_to(jsonb_build_array('openai-refresh-v1','https://auth.openai.com/oauth/token',
++        COALESCE(NULLIF(btrim(credentials->>'client_id'),''),'app_EMoamEEZ73f0CkXaXp7hrann'),
++        credentials->>'refresh_token')::text,'UTF8');
++    RETURN encode(sha256(opad || sha256(ipad || message)),'hex');
++END $$;
++
++CREATE TABLE openai_oauth_consumption (
++    identity text PRIMARY KEY CHECK (length(identity)=64),
++    state text NOT NULL CHECK (state IN ('pending','consumed','reusable')),
++    owner text NOT NULL,
++    account_id bigint NOT NULL,
++    revision bigint NOT NULL
++); -- No account FK: deletion/reimport must preserve non-replay evidence.
++ALTER TABLE account_oauth_refresh_attempts ADD COLUMN input_identity text;
++ALTER TABLE account_oauth_refresh_attempts ADD COLUMN result_identity text;
++UPDATE account_oauth_refresh_attempts SET
++    input_identity=openai_oauth_refresh_identity(expected_credentials),
++    result_identity=openai_oauth_refresh_identity(result_credentials);
++-- Historical ambiguity is quarantined. Only an unambiguous successfully
++-- completed same-identity attempt is reusable; uncertainty never expires.
++INSERT INTO openai_oauth_consumption(identity,state,owner,account_id,revision)
++SELECT input_identity,
++    CASE WHEN count(*)=1 AND bool_and(state='completed' AND result_identity=input_identity)
++         THEN 'reusable' ELSE 'consumed' END,
++    min(owner),min(account_id),min(revision)
++FROM account_oauth_refresh_attempts WHERE input_identity IS NOT NULL GROUP BY input_identity;
++CREATE INDEX account_oauth_refresh_identity ON account_oauth_refresh_attempts(input_identity);
++
++-- Only observed usage snapshots are neutral. Routing/configuration Extra
++-- keys (including probe switches, fingerprints, model settings) stay fenced.
++CREATE FUNCTION openai_oauth_fenced_extra(extra jsonb) RETURNS jsonb LANGUAGE sql IMMUTABLE AS $$
++    SELECT COALESCE(jsonb_object_agg(key,value),'{}'::jsonb)
++    FROM jsonb_each(COALESCE(extra,'{}'::jsonb))
++    WHERE key NOT IN ('codex_usage_updated_at','codex_credits_snapshot','codex_referral_snapshot',
++                     'grok_billing_snapshot','session_window_utilization')
++      AND key !~ '^(codex_primary_|codex_secondary_|codex_5h_|codex_7d_|codex_reset_credit_|passive_usage_)'
++$$;
++CREATE OR REPLACE FUNCTION fence_openai_oauth_account() RETURNS trigger LANGUAGE plpgsql AS $$
++BEGIN
++    IF TG_OP='INSERT' THEN NEW.oauth_revision:=1;
++    ELSE
++        NEW.oauth_revision:=OLD.oauth_revision;
++        IF (OLD.platform='openai' AND OLD.type='oauth') OR (NEW.platform='openai' AND NEW.type='oauth') THEN
++            IF (to_jsonb(NEW)-ARRAY['oauth_revision','credentials','extra','updated_at','last_used_at','created_at'])
++                IS DISTINCT FROM (to_jsonb(OLD)-ARRAY['oauth_revision','credentials','extra','updated_at','last_used_at','created_at'])
++                OR (NEW.credentials-'_oauth_revision') IS DISTINCT FROM (OLD.credentials-'_oauth_revision')
++                OR openai_oauth_fenced_extra(NEW.extra) IS DISTINCT FROM openai_oauth_fenced_extra(OLD.extra) THEN
++                NEW.oauth_revision:=OLD.oauth_revision+1;
++            END IF;
++        END IF;
++    END IF;
++    IF NEW.platform='openai' AND NEW.type='oauth' OR TG_OP='UPDATE' AND OLD.platform='openai' AND OLD.type='oauth' THEN
++        NEW.credentials:=jsonb_set(NEW.credentials,'{_oauth_revision}',to_jsonb(NEW.oauth_revision::text));
++    END IF;
++    RETURN NEW;
++END $$;
++
++-- Keep exact current completion for lost-ACK reconciliation. Once superseded
++-- (or deleted), completed/terminal full documents are obsolete. Pending is
++-- deliberately retained, including reconciliation material; there is no TTL.
++CREATE FUNCTION redact_openai_oauth_history() RETURNS trigger LANGUAGE plpgsql AS $$
++DECLARE history_account_id bigint; current_revision bigint;
++BEGIN
++    IF TG_OP='DELETE' THEN history_account_id:=OLD.id; current_revision:=NULL;
++    ELSE history_account_id:=NEW.id; current_revision:=NEW.oauth_revision; END IF;
++    UPDATE account_oauth_refresh_attempts p SET expected_credentials='{}'::jsonb,result_credentials=NULL
++    WHERE p.account_id=history_account_id AND p.state IN ('completed','terminal')
++      AND (current_revision IS NULL OR p.completion_revision IS DISTINCT FROM current_revision);
++    RETURN NULL;
++END $$;
++CREATE TRIGGER redact_openai_oauth_history AFTER UPDATE OR DELETE ON accounts
++    FOR EACH ROW EXECUTE FUNCTION redact_openai_oauth_history();
++UPDATE account_oauth_refresh_attempts p SET expected_credentials='{}'::jsonb,
++    result_credentials=CASE WHEN EXISTS (SELECT 1 FROM accounts a WHERE a.id=p.account_id
++        AND a.deleted_at IS NULL AND a.oauth_revision=p.completion_revision)
++        THEN p.result_credentials ELSE NULL END
++WHERE p.state IN ('completed','terminal');
+--- /dev/null
++++ b/backend/migrations/243_openai_oauth_canonical_identity_and_proxy_expiry.sql
+@@ -0,0 +1,46 @@
++-- Never infer canonical aliases from opaque historical HMACs. Refuse this
++-- not-yet-deployed fork upgrade if ANY refresh history exists. An operator
++-- must reconcile from protected retained material, preserving all uncertainty
++-- and proving alias coverage. No deletion, reset or bypass is permitted.
++LOCK TABLE accounts, account_oauth_refresh_attempts, openai_oauth_consumption IN ACCESS EXCLUSIVE MODE;
++DO $$ BEGIN
++    IF EXISTS (SELECT 1 FROM openai_oauth_consumption)
++       OR EXISTS (SELECT 1 FROM account_oauth_refresh_attempts) THEN
++        RAISE EXCEPTION 'OpenAI OAuth identity upgrade requires protected history reconciliation; no automatic alias mapping' USING ERRCODE='55000';
++    END IF;
++END $$;
++
++-- Exact Go unicode.IsSpace set. Refresh bytes remain unchanged on the wire.
++CREATE OR REPLACE FUNCTION openai_oauth_refresh_identity(credentials jsonb) RETURNS text
++LANGUAGE plpgsql STABLE STRICT AS $$
++DECLARE
++    secret bytea; ipad bytea := decode(repeat('36',64),'hex');
++    opad bytea := decode(repeat('5c',64),'hex'); message bytea; idx integer;
++BEGIN
++    IF jsonb_typeof(credentials) <> 'object'
++       OR COALESCE(jsonb_typeof(credentials->'client_id'),'null') NOT IN ('string','null')
++       OR COALESCE(jsonb_typeof(credentials->'refresh_token'),'null') NOT IN ('string','null') THEN
++        RAISE EXCEPTION 'Unsupported OpenAI OAuth identity credential type' USING ERRCODE='22023';
++    END IF;
++    IF COALESCE(credentials->>'refresh_token','')='' THEN RETURN NULL; END IF;
++    SELECT k.secret INTO STRICT secret FROM openai_oauth_identity_key k WHERE k.singleton;
++    FOR idx IN 0..31 LOOP
++        ipad := set_byte(ipad,idx,get_byte(ipad,idx) # get_byte(secret,idx));
++        opad := set_byte(opad,idx,get_byte(opad,idx) # get_byte(secret,idx));
++    END LOOP;
++    message := convert_to(jsonb_build_array('openai-refresh-v1','https://auth.openai.com/oauth/token',
++        COALESCE(NULLIF(btrim(credentials->>'client_id', U&'\0009\000A\000B\000C\000D\0020\0085\00A0\1680\2000\2001\2002\2003\2004\2005\2006\2007\2008\2009\200A\2028\2029\202F\205F\3000'),''),'app_EMoamEEZ73f0CkXaXp7hrann'),
++        credentials->>'refresh_token')::text,'UTF8');
++    RETURN encode(sha256(opad || sha256(ipad || message)),'hex');
++END $$;
++
++
++CREATE OR REPLACE FUNCTION fence_openai_oauth_proxy() RETURNS trigger LANGUAGE plpgsql AS $$
++BEGIN
++    IF ROW(NEW.protocol, NEW.host, NEW.port, NEW.username, NEW.password, NEW.status, NEW.deleted_at, NEW.expires_at)
++       IS DISTINCT FROM ROW(OLD.protocol, OLD.host, OLD.port, OLD.username, OLD.password, OLD.status, OLD.deleted_at, OLD.expires_at) THEN
++        UPDATE accounts SET credentials=jsonb_set(credentials, '{_oauth_proxy_change}', to_jsonb(gen_random_uuid()::text))
++            WHERE proxy_id=NEW.id AND platform='openai' AND type='oauth';
++    END IF;
++    RETURN NEW;
++END $$;

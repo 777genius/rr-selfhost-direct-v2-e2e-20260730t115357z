@@ -1,0 +1,21 @@
+{"Time":"2026-10-01T17:11:48.788501451Z","Action":"start","Package":"github.com/Wei-Shaw/sub2api/internal/service"}
+{"Time":"2026-10-01T17:11:48.809225163Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/service","Output":"2026/10/01 17:11:48 Timezone initialized: UTC (UTC offset: +00:00)\n"}
+{"Time":"2026-10-01T17:11:48.809752586Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/service","Output":"testing: warning: no tests to run\n"}
+{"Time":"2026-10-01T17:11:48.809768699Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/service","Output":"PASS\n","OutputType":"frame"}
+{"Time":"2026-10-01T17:11:48.811561968Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/service","Output":"ok  \tgithub.com/Wei-Shaw/sub2api/internal/service\t0.023s [no tests to run]\n"}
+{"Time":"2026-10-01T17:11:48.811594593Z","Action":"pass","Package":"github.com/Wei-Shaw/sub2api/internal/service","Elapsed":0.023}
+{"Time":"2026-10-01T17:12:12.112885292Z","Action":"start","Package":"github.com/Wei-Shaw/sub2api/internal/handler"}
+{"Time":"2026-10-01T17:12:12.133260182Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/handler","Output":"testing: warning: no tests to run\n"}
+{"Time":"2026-10-01T17:12:12.133320202Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/handler","Output":"PASS\n","OutputType":"frame"}
+{"Time":"2026-10-01T17:12:12.135800159Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/handler","Output":"ok  \tgithub.com/Wei-Shaw/sub2api/internal/handler\t0.023s [no tests to run]\n"}
+{"Time":"2026-10-01T17:12:12.135836631Z","Action":"pass","Package":"github.com/Wei-Shaw/sub2api/internal/handler","Elapsed":0.023}
+{"Time":"2026-10-01T17:12:19.431089612Z","Action":"start","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin"}
+{"Time":"2026-10-01T17:12:19.450773778Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin","Output":"testing: warning: no tests to run\n"}
+{"Time":"2026-10-01T17:12:19.450870831Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin","Output":"PASS\n","OutputType":"frame"}
+{"Time":"2026-10-01T17:12:19.455248091Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin","Output":"ok  \tgithub.com/Wei-Shaw/sub2api/internal/handler/admin\t0.024s [no tests to run]\n"}
+{"Time":"2026-10-01T17:12:19.455290921Z","Action":"pass","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin","Elapsed":0.024}
+{"Time":"2026-10-01T17:12:30.722543489Z","Action":"start","Package":"github.com/Wei-Shaw/sub2api/internal/repository"}
+{"Time":"2026-10-01T17:12:30.745073732Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/repository","Output":"testing: warning: no tests to run\n"}
+{"Time":"2026-10-01T17:12:30.745116595Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/repository","Output":"PASS\n","OutputType":"frame"}
+{"Time":"2026-10-01T17:12:30.74731043Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/repository","Output":"ok  \tgithub.com/Wei-Shaw/sub2api/internal/repository\t0.025s [no tests to run]\n"}
+{"Time":"2026-10-01T17:12:30.747370988Z","Action":"pass","Package":"github.com/Wei-Shaw/sub2api/internal/repository","Elapsed":0.025}
