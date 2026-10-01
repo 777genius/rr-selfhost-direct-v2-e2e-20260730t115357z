@@ -1,0 +1,26 @@
+{
+  "verdict": "REQUESTCHANGES",
+  "reviewed_candidate": ".spike-inputs/candidate/sub2api-transport-r2",
+  "requested_transport_r3": "MISSING",
+  "external_actual_engine_gates": "NOT RUN",
+  "physical_interval_rss_status": "NOTPROVEN",
+  "tests": {
+    "supplied_node": {
+      "pass": 14,
+      "fail": 1,
+      "reason": "historical execution JSON missing"
+    },
+    "python": {
+      "pass": 9,
+      "fail": 0
+    },
+    "independent": {
+      "pass": 4,
+      "fail": 4,
+      "reason": "exact volumes, upstream volume, near-limit frame, numeric array accepted by driver"
+    }
+  },
+  "source_changes": [],
+  "ownership": "sub2api-transport-review-r4/ only",
+  "stopped_after_report": true
+}

@@ -1,0 +1,18 @@
+{
+  "command": "node --test sub2api-transport-r2/client.test.mjs",
+  "initial_unix_socket_tests": {
+    "tests": 4,
+    "pass": 0,
+    "fail": 4,
+    "reason": "listen EPERM"
+  },
+  "initial_loopback_attempt": "execution sandbox rejected local/private IP access",
+  "final_unix_socket_tests": {
+    "tests": 4,
+    "pass": 0,
+    "fail": 0,
+    "skipped": 4,
+    "status": "NOT RUN"
+  },
+  "fallback": "real NodeHTTP parsers and adopted mock over in-memory Duplex; explicitly not kernelTCP"
+}

@@ -1,0 +1,49 @@
+# Coordinator-reviewed template. Each *_IMAGE must be an immutable digest.
+# No host ports, Docker sockets, production config, auth homes, or live egress.
+name: ${LAB_PROJECT:?unique owned disposable project required}
+x-node: &node
+  image: ${LAB_NODE_IMAGE:?Node24 immutable image required}
+  working_dir: /lab
+  read_only: true
+  user: "1000:1000"
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  tmpfs: [/tmp]
+  networks: [lab]
+  volumes:
+    - ./sub2api-regression-lab:/lab/sub2api-regression-lab:ro
+    - ./sub2api-transport-r4/adapter.mjs:/lab/sub2api-transport-r4/adapter.mjs:ro
+    - ./sub2api-spike/broker.mjs:/lab/sub2api-spike/broker.mjs:ro
+    - ./sub2api-spike/util.mjs:/lab/sub2api-spike/util.mjs:ro
+    - ./sub2api-spike/native-errors.mjs:/lab/sub2api-spike/native-errors.mjs:ro
+    - ${LAB_PRIVATE:?owned private directory required}:/private
+    - ${LAB_EVIDENCE:?owned evidence directory required}:/evidence
+    - ${LAB_TELEMETRY:?owned telemetry directory required}:/telemetry:ro
+services:
+  postgres:
+    image: ${LAB_PG_IMAGE:?Postgres immutable image required}
+    env_file: ${LAB_PRIVATE}/postgres.env
+    environment: {PGDATA: /var/lib/postgresql/data}
+    tmpfs: [/var/lib/postgresql/data]
+    networks: [lab]
+  redis:
+    image: ${LAB_REDIS_IMAGE:?Redis immutable image required}
+    command: [redis-server, --save, "", --appendonly, "no"]
+    networks: [lab]
+  sub2api:
+    image: ${LAB_ENGINE_IMAGE:?exact engine immutable image required}
+    env_file: ${LAB_PRIVATE}/engine.env
+    mem_limit: 768m
+    networks: [lab]
+    depends_on: [postgres, redis]
+  mock:
+    <<: *node
+    mem_limit: 512m
+    command: [node, sub2api-regression-lab/mock.mjs]
+  operator:
+    <<: *node
+    mem_limit: 512m
+    profiles: [operator]
+    command: [node, sub2api-regression-lab/run.mjs, --plan]
+networks:
+  lab: {internal: true}

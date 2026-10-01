@@ -1,0 +1,42 @@
+{
+  "integrity": "PASS",
+  "provided_files": 150,
+  "reviewed_candidate_files": 34,
+  "candidate_job_identity": "transport-r3 (user supplied)",
+  "candidate_artifact_directory": "sub2api-transport-r2 (inherited)",
+  "materialized_candidate": ".spike-inputs/candidate",
+  "review_identity": "transport-review-r4",
+  "historical_execution_sha256": "c1152dfe52e4d81a2dd3417679711a34aae38ac72744b1a37e45abfacdf6f761",
+  "historical": {
+    "FAIL": 11,
+    "NOT RUN": 9
+  },
+  "attempts": 686,
+  "effects": 686,
+  "original_verdict": "REQUESTCHANGES",
+  "job_identity_independently_queried": false,
+  "history_reexecuted": false,
+  "legacy_candidate_prior_manifest_differences": [
+    {
+      "path": ".spike-inputs/prior-code/sub2api-regression-lab/common.mjs",
+      "historical_candidate_manifest_sha256": "0c75c8c23776e1f924169de4c35d45caecb25d4ce7f2e2865dd43d56779368a3",
+      "provided_exact_input_sha256": "421578d5bce18031f0a09dd9510aecf24230d4617130d3caefaa23d069c9b118"
+    },
+    {
+      "path": ".spike-inputs/prior-code/sub2api-regression-lab/run.mjs",
+      "historical_candidate_manifest_sha256": "2f48b41c26e1ed20f5bd0253dda1fc7b10025b0fc709421915bcc77ec73e1c89",
+      "provided_exact_input_sha256": "8c6cddbe200d3f7b172f9433c9fb76060c914a174bafb59726d5d6d77a260024"
+    }
+  ],
+  "legacy_candidate_prior_manifest_absent_paths": [
+    ".spike-inputs/prior-code/sub2api-telemetry-analysis/REPORT.md",
+    ".spike-inputs/prior-code/sub2api-telemetry-analysis/validation.json",
+    ".spike-inputs/prior-code/sub2api-telemetry-analysis/batch-plan.json",
+    ".spike-inputs/prior-code/sub2api-telemetry-analysis/collector-proposal.py",
+    ".spike-inputs/prior-code/sub2api-telemetry-analysis/adapter.test.mjs",
+    ".spike-inputs/prior-code/sub2api-telemetry-analysis/run-integration-proposal.patch",
+    ".spike-inputs/prior-code/sub2api-telemetry-analysis/adapter-proposal.mjs",
+    ".spike-inputs/prior-code/sub2api-telemetry-analysis/collector_test.py"
+  ],
+  "repacked_frozen_baseline_authority": "exact provided INPUT-HASHES.json; legacy candidate prior baseline not reconstructed"
+}

@@ -1,0 +1,86 @@
+✔ actual load driver accepts exact-volume valid control (2.16498ms)
+✖ REGRESSION: actual load driver must reject one extra downstream byte (1.311218ms)
+✖ REGRESSION: actual load driver must reject upstream byte loss despite downstream padding (0.781156ms)
+✖ REGRESSION: actual load driver must reject missing near2MiB frame (0.922798ms)
+✖ REGRESSION: actual load driver must reject numeric array byte canary (0.782404ms)
+✔ actual load driver rejects numeric object byte canary (1.680471ms)
+✔ 40case matrix contains exact cross product and two 250-request soaks (0.779969ms)
+✔ adapter rejects JSON numeric objects and arrays without coercion (3.526202ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 4
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 93.756808
+
+✖ failing tests:
+
+test at sub2api-transport-review-r4/independent.test.mjs:21:1
+✖ REGRESSION: actual load driver must reject one extra downstream byte (1.311218ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'PASS' !== 'FAIL'
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-review-r4/sub2api-transport-review-r4/independent.test.mjs:21:93)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'PASS',
+    expected: 'FAIL',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-transport-review-r4/independent.test.mjs:22:1
+✖ REGRESSION: actual load driver must reject upstream byte loss despite downstream padding (0.781156ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'PASS' !== 'FAIL'
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-review-r4/sub2api-transport-review-r4/independent.test.mjs:22:113)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'PASS',
+    expected: 'FAIL',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-transport-review-r4/independent.test.mjs:23:1
+✖ REGRESSION: actual load driver must reject missing near2MiB frame (0.922798ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'PASS' !== 'FAIL'
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-review-r4/sub2api-transport-review-r4/independent.test.mjs:23:90)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'PASS',
+    expected: 'FAIL',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-transport-review-r4/independent.test.mjs:24:1
+✖ REGRESSION: actual load driver must reject numeric array byte canary (0.782404ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'PASS' !== 'FAIL'
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-review-r4/sub2api-transport-review-r4/independent.test.mjs:24:93)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'PASS',
+    expected: 'FAIL',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

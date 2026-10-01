@@ -1,0 +1,14 @@
+{
+  "REPORT.md": "5dfe59e429c82fef10982d92dc2b6cca118a6d8265b705587f3279a3692493dc",
+  "evidence/independent.tap": "353c16a968162856d00f5231bdbd6c15d63becc3629b9e82059b7d87ed5b05bf",
+  "evidence/input-verification.json": "786d973d4cbefa893d0e95aba513029f166093699f04c1fcfb30ffb23d0b57f5",
+  "evidence/integration-verification.json": "d20e82e515b02e1af41629e517eea4e9e3d38e877d93df2ba119aa35e64c4092",
+  "evidence/integration.txt": "4c26739c8c16990af1ba50e1d64d566df80853e312ba641a5e5318636326a420",
+  "evidence/node-tests.tap": "69ff03b65125e6de22da2719b1d3e3cb2552509a891911070cb0f7d7deaed36e",
+  "evidence/python-tests.txt": "c91abea92e7eaed38c2f43c392025f530236e11f2d090e4ee6148b581452c669",
+  "evidence/reconstructed-plan.json": "743c86e02d898565e38c3473703a452183c2246ecf1727c5d51d5c09da14e0ec",
+  "evidence/reviewed-source-hashes.json": "efa9191b75232be345263fbd958290f106578f52001f05c08af89597aff535d5",
+  "independent.test.mjs": "eb7b1bf42e16e5d53254cb2e72f01ec31d9e8831fb421efb78f5afe43ca38497",
+  "review.json": "e2ce798cc7f2e1a0cd44827277da7863e1632d9d8a0bde86bc362db374701d9b",
+  "verify-inputs.py": "eff5b5d7e17aee4eababa8646905ef4af6f6a0ea54c210a0abbc870388d5f4b1"
+}

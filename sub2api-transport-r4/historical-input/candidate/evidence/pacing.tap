@@ -1,0 +1,14 @@
+{"original_client_transport":"deadline","bytes_before_deadline":176883,"deadline_ms":1800,"kind":"in-memory-duplex-not-kernelTCP"}
+✔ historical per-chunk5ms delay fails1800ms deadline on small fragments over realHTTP parser (1807.897874ms)
+{"fallback_http_parser_pacing_ms":[1003.2005059719086,1001.9589909315109],"wire_bytes":2097152,"kind":"in-memory-duplex-not-kernelTCP"}
+✔ HTTP parser fallback:2MiB/s cumulative byte debt across512/64K fragments (2005.884328ms)
+✔ HTTP parser fallback:deadline/cancel promptly close stream once and stop pacing (81.032765ms)
+✔ bounded native near2MiB frames parse fragmented UTF8 and full terminals (102.486609ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4081.285237

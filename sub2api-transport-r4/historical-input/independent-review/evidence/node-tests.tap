@@ -1,0 +1,45 @@
+✖ before-test history remains11FAIL9NOTRUN/686 attempts and all cleanup (1.099311ms)
+✔ documented Linux6.8 raw decline remains raw with sampled maxima, never physical bound (1.95384ms)
+✔ raw HWM below RSS allowed; missing metrics and fabricated exact values fail closed (2.531426ms)
+✔ PID, cgroup, executable, freshness, baseline and source clock stay strict (3.264489ms)
+✔ limit, cgroup peak regression,250ms gaps, slow reads, fake resets/goroutines rejected (0.965333ms)
+✔ 512absolute/128+16perstream/768cgroup bounds unchanged (1.028818ms)
+✔ full5second tail, acknowledged DONE, and actual endpoint within5sec mandatory;32MiB retained (1.669093ms)
+✔ cgroup charge smaller than processRSS valid and never substituted for RSS (0.895478ms)
+{"synthetic_mock_http_duplex":[{"protocol":"responses","mib":8,"wire_bytes":8388608,"max_frame_bytes":1975925},{"protocol":"responses","mib":32,"wire_bytes":33554432,"max_frame_bytes":1975925},{"protocol":"responses","mib":64,"wire_bytes":67108864,"max_frame_bytes":1975925},{"protocol":"messages","mib":8,"wire_bytes":8388608,"max_frame_bytes":1966224},{"protocol":"messages","mib":32,"wire_bytes":33554432,"max_frame_bytes":1966224},{"protocol":"messages","mib":64,"wire_bytes":67108864,"max_frame_bytes":1966224}],"attempts":6,"effects":6,"active":0}
+✔ actual adopted mock over HTTP/Duplex: exact8/32/64MiB and native bounded terminal/effects (502.8998ms)
+✔ actual adopted mock over HTTP/Duplex: paced1/5/20 streams preserve one effect and cleanup (12207.060504ms)
+{"paced_messages_http_duplex":[{"mib":32,"bytes":33554432,"duration_ms":16021.464689970016,"transport":null},{"mib":64,"bytes":67108864,"duration_ms":32010.746642947197,"transport":null}],"attempts":34,"effects":34,"active":0}
+✔ Messages32/64MiB slow discard completes within original65sec deadline over HTTP/Duplex (48040.251126ms)
+{"original_client_transport":"deadline","bytes_before_deadline":175859,"deadline_ms":1800,"kind":"in-memory-duplex-not-kernelTCP"}
+✔ historical per-chunk5ms delay fails1800ms deadline on small fragments over realHTTP parser (1807.963264ms)
+{"fallback_http_parser_pacing_ms":[1003.8572731018066,1002.2133150100708],"wire_bytes":2097152,"kind":"in-memory-duplex-not-kernelTCP"}
+✔ HTTP parser fallback:2MiB/s cumulative byte debt across512/64K fragments (2006.745855ms)
+✔ HTTP parser fallback:deadline/cancel promptly close stream once and stop pacing (81.096568ms)
+✔ bounded native near2MiB frames parse fragmented UTF8 and full terminals (99.919312ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 14
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 60859.960024
+
+✖ failing tests:
+
+test at .spike-inputs/candidate/sub2api-transport-r2/adapter.test.mjs:30:1
+✖ before-test history remains11FAIL9NOTRUN/686 attempts and all cleanup (1.099311ms)
+  Error: ENOENT: no such file or directory, open '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-review-r4/.spike-inputs/candidate/.spike-inputs/execution.json'
+      at Object.openSync (node:fs:621:18)
+      at readFileSync (node:fs:487:35)
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-review-r4/.spike-inputs/candidate/sub2api-transport-r2/adapter.test.mjs:31:26)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-review-r4/.spike-inputs/candidate/.spike-inputs/execution.json'
+  }

@@ -1,0 +1,8 @@
+{
+  "input_hashes_verified": 191,
+  "canonical_patch_zero_fuzz": true,
+  "six_output_hashes_match": true,
+  "runnable_plan": true,
+  "frozen_root_patch": "NOT RUN: .spike-inputs/prior-code absent",
+  "requested_transport_r3": "MISSING: only transport-r2 supplied"
+}

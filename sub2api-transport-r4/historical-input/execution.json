@@ -1,0 +1,428 @@
+{
+  "kind": "actual-fresh-probe-fork-Go-engine-synthetic-load",
+  "live_provider": false,
+  "source": {
+    "source_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+    "image_id": "sha256:b18daf85976c92496e86fb1ffe3626898734f66b246e3868aafce7916b3f0b7c",
+    "component": {
+      "lane": "canonical",
+      "patch_sha256": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45"
+    },
+    "binary_sha256": "ee3da0ea4fbc839072a72686f438baf618a9d2937dc7ec33b5cb9d1f26a248e4",
+    "source_hashes_match": true
+  },
+  "total_upstream_attempts": 686,
+  "results": [
+    {
+      "id": "memory-responses-8-1",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "FAIL",
+      "memory": {
+        "status": "FAIL",
+        "reason": "ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+        "baseline_rss_bytes": 85196800,
+        "interval_max_rss_bytes": 121823232,
+        "lifetime_peak_rss_bytes": 121823232,
+        "batch_peak_rss_upper_bound_bytes": 121823232,
+        "batch_delta_upper_bound_bytes": 36626432,
+        "cgroup_lifetime_peak_bytes": 68083712,
+        "peak_scope": "fresh-lifetime-including-startup-and-preparation",
+        "samples": 58,
+        "max_sockets": 25,
+        "instantaneous_goroutines": null
+      },
+      "upstream_attempts": 3,
+      "effects": 3,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 7.56
+    },
+    {
+      "id": "memory-responses-8-5",
+      "operator_exit": 1,
+      "collector_exit": 1,
+      "status": "NOT RUN",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "upstream_attempts": 7,
+      "effects": 7,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 7.8
+    },
+    {
+      "id": "memory-responses-8-20",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "NOT RUN",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "upstream_attempts": 22,
+      "effects": 22,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 8.08
+    },
+    {
+      "id": "memory-responses-32-1",
+      "operator_exit": 1,
+      "collector_exit": 1,
+      "status": "NOT RUN",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "upstream_attempts": 3,
+      "effects": 3,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 26.02
+    },
+    {
+      "id": "memory-responses-32-5",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "FAIL",
+      "memory": {
+        "status": "FAIL",
+        "reason": "ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+        "baseline_rss_bytes": 82169856,
+        "interval_max_rss_bytes": 174686208,
+        "lifetime_peak_rss_bytes": 177438720,
+        "batch_peak_rss_upper_bound_bytes": 177438720,
+        "batch_delta_upper_bound_bytes": 95268864,
+        "cgroup_lifetime_peak_bytes": 136347648,
+        "peak_scope": "fresh-lifetime-including-startup-and-preparation",
+        "samples": 239,
+        "max_sockets": 34,
+        "instantaneous_goroutines": null
+      },
+      "upstream_attempts": 7,
+      "effects": 7,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 25.61
+    },
+    {
+      "id": "memory-responses-32-20",
+      "operator_exit": 1,
+      "collector_exit": 1,
+      "status": "NOT RUN",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "upstream_attempts": 22,
+      "effects": 22,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 27.29
+    },
+    {
+      "id": "memory-responses-64-1",
+      "operator_exit": 1,
+      "collector_exit": 1,
+      "status": "NOT RUN",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "upstream_attempts": 3,
+      "effects": 3,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 50.44
+    },
+    {
+      "id": "memory-responses-64-5",
+      "operator_exit": 1,
+      "collector_exit": 1,
+      "status": "NOT RUN",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "upstream_attempts": 7,
+      "effects": 7,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 49.88
+    },
+    {
+      "id": "memory-responses-64-20",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "FAIL",
+      "memory": {
+        "status": "FAIL",
+        "reason": "ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+        "baseline_rss_bytes": 80908288,
+        "interval_max_rss_bytes": 259133440,
+        "lifetime_peak_rss_bytes": 271060992,
+        "batch_peak_rss_upper_bound_bytes": 271060992,
+        "batch_delta_upper_bound_bytes": 190152704,
+        "cgroup_lifetime_peak_bytes": 303902720,
+        "peak_scope": "fresh-lifetime-including-startup-and-preparation",
+        "samples": 491,
+        "max_sockets": 77,
+        "instantaneous_goroutines": null
+      },
+      "upstream_attempts": 22,
+      "effects": 22,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 51.13
+    },
+    {
+      "id": "memory-messages-8-1",
+      "operator_exit": 1,
+      "collector_exit": 1,
+      "status": "NOT RUN",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "upstream_attempts": 2,
+      "effects": 2,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 26.54
+    },
+    {
+      "id": "memory-messages-8-5",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "NOT RUN",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "upstream_attempts": 6,
+      "effects": 6,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 26.5
+    },
+    {
+      "id": "memory-messages-8-20",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "NOT RUN",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "upstream_attempts": 21,
+      "effects": 21,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 28.02
+    },
+    {
+      "id": "memory-messages-32-1",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "FAIL",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "upstream_attempts": 2,
+      "effects": 2,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 63.92
+    },
+    {
+      "id": "memory-messages-32-5",
+      "operator_exit": 1,
+      "collector_exit": 1,
+      "status": "FAIL",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "upstream_attempts": 6,
+      "effects": 6,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 64.22
+    },
+    {
+      "id": "memory-messages-32-20",
+      "operator_exit": 1,
+      "collector_exit": 1,
+      "status": "FAIL",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "upstream_attempts": 21,
+      "effects": 21,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 64.18
+    },
+    {
+      "id": "memory-messages-64-1",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "FAIL",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "upstream_attempts": 2,
+      "effects": 2,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 64.22
+    },
+    {
+      "id": "memory-messages-64-5",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "FAIL",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "upstream_attempts": 6,
+      "effects": 6,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 64.0
+    },
+    {
+      "id": "memory-messages-64-20",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "FAIL",
+      "memory": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "upstream_attempts": 21,
+      "effects": 21,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 64.07
+    },
+    {
+      "id": "soak-responses",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "FAIL",
+      "memory": {
+        "status": "FAIL",
+        "reason": "ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+        "baseline_rss_bytes": 82886656,
+        "interval_max_rss_bytes": 128262144,
+        "lifetime_peak_rss_bytes": 128262144,
+        "batch_peak_rss_upper_bound_bytes": 128262144,
+        "batch_delta_upper_bound_bytes": 45375488,
+        "cgroup_lifetime_peak_bytes": 64815104,
+        "peak_scope": "fresh-lifetime-including-startup-and-preparation",
+        "samples": 86,
+        "max_sockets": 47,
+        "instantaneous_goroutines": null
+      },
+      "upstream_attempts": 252,
+      "effects": 252,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 10.47
+    },
+    {
+      "id": "soak-messages",
+      "operator_exit": 1,
+      "collector_exit": 0,
+      "status": "FAIL",
+      "memory": {
+        "status": "FAIL",
+        "reason": "ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+        "baseline_rss_bytes": 80363520,
+        "interval_max_rss_bytes": 115482624,
+        "lifetime_peak_rss_bytes": 115482624,
+        "batch_peak_rss_upper_bound_bytes": 115482624,
+        "batch_delta_upper_bound_bytes": 35119104,
+        "cgroup_lifetime_peak_bytes": 54468608,
+        "peak_scope": "fresh-lifetime-including-startup-and-preparation",
+        "samples": 103,
+        "max_sockets": 50,
+        "instantaneous_goroutines": null
+      },
+      "upstream_attempts": 251,
+      "effects": 251,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "elapsed_s": 12.2
+    }
+  ],
+  "instantaneous_goroutine_count": "NOT RUN: stock export interval>=60seconds; never fabricate current PID sample"
+}

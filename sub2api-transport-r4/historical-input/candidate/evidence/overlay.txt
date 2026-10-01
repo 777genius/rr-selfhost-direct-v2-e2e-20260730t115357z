@@ -1,0 +1,2 @@
+PASS: exact canonical patch, zero fuzz, matching output hashes, syntax, runnable original40case plan
+PASS: exact frozen fresh-probe root patch, zero fuzz, same final output hashes

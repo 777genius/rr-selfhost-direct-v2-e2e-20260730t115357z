@@ -1,0 +1,20 @@
+{
+  "requirement_evidence": {
+    "P1 exact upstream/downstream 8/32/64MiB": "evidence/load-tests.tap and evidence/overlay-verification.json",
+    "P1 frame1.9MiB inclusive/2MiB exclusive": "evidence/load-tests.tap and evidence/node-tests.tap",
+    "P2 finite scalar no coerced arrays/strings": "93 parsed JSONL canaries in evidence/load-tests.tap",
+    "Four independent RED then GREEN": "evidence/independent-before.tap and evidence/node-tests.tap; original assertions unchanged",
+    "Successful terminal/tool/text/effect preserved": "evidence/node-tests.tap and evidence/load-tests.tap",
+    "Original thresholds/pacing100ms/full5sec tail/no retry/matrix/cap": "candidate unchanged-code checks; evidence/python-tests.txt; both reconstructed original plans",
+    "HistoricalREQUESTCHANGES11FAIL9NOTRUN686effects/provenance": "historical-input exact copy; evidence/provenance.json",
+    "Both six-file overlays zero fuzz/exact hashes": "evidence/overlay-verification.json and changed-loc.json",
+    "Standalone owned adapter/collector/tests/root integrationpaths": "runtime/; evidence/standalone-plan.json; collector help; patched import and mount",
+    "No forged protocol conversion equality or normalization": "load \u00b11-byte mismatches FAIL; semantic_byte_normalization NONE",
+    "Actualengine/kernel/load coordinator NOT RUN": "validation.json and REPORT.md",
+    "ExactLOC/hash/limits bounded15min STOP": "loc-metrics.json; changed-loc.json; output-hashes.json; validation.json"
+  },
+  "candidate_scope_guard": "PASS: only load numeric/volume/frame acceptance, r4 path updates and near-frame fixture differ",
+  "independent_assertions_preserved": true,
+  "adapter_collector_exact_candidate": true,
+  "completion_scope": "authorized bounded handoff; real engine/kernel/load remain coordinator NOT RUN"
+}

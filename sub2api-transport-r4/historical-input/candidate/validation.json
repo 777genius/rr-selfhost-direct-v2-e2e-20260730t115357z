@@ -1,0 +1,104 @@
+{
+  "finished_utc": "2026-10-01T13:15:12.857386+00:00",
+  "ownership": "sub2api-transport-r2/ only",
+  "versions": {
+    "node": "v24.21.0",
+    "python": "3.12.3"
+  },
+  "historical": {
+    "memory_cells": 18,
+    "soak_cells": 2,
+    "FAIL": 11,
+    "NOT RUN": 9,
+    "synthetic_attempts": 686,
+    "cleanup_failures": 0,
+    "remaining_owned_resources": 0
+  },
+  "canonical_overlay_loc": {
+    "added": 45,
+    "deleted": 16,
+    "changed": 61
+  },
+  "adopted_review_delta_loc": {
+    "collector.py": {
+      "baseline": "sub2api-telemetry-review/collector-proposal.py",
+      "added": 19,
+      "deleted": 6,
+      "lines": 240
+    },
+    "adapter.mjs": {
+      "baseline": "sub2api-telemetry-review/adapter-proposal.mjs",
+      "added": 26,
+      "deleted": 14,
+      "lines": 82
+    }
+  },
+  "checks": {
+    "adapter_node": {
+      "pass": 8,
+      "command": "node --test sub2api-transport-r2/adapter.test.mjs"
+    },
+    "pacing_node": {
+      "pass": 4,
+      "command": "node --test sub2api-transport-r2/pacing.test.mjs"
+    },
+    "mock_node": {
+      "pass": 3,
+      "command": "node --test sub2api-transport-r2/mock-behavior.test.mjs"
+    },
+    "collector_python": {
+      "pass": 9,
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s sub2api-transport-r2 -p '*_test.py' -v"
+    },
+    "actual_local_socket": {
+      "pass": 0,
+      "skipped": 4,
+      "status": "NOT RUN",
+      "reason": "sandbox denies listen (EPERM)",
+      "command": "node --test sub2api-transport-r2/client.test.mjs"
+    },
+    "exact_overlays": {
+      "status": "PASS",
+      "zero_fuzz": true,
+      "matching_output_hashes": true,
+      "runnable_original_matrix": {
+        "cancel": 12,
+        "uncertainty": 8,
+        "memory": 18,
+        "soak": 2,
+        "soak_requests": 500,
+        "mock_attempt_cap": 2000
+      },
+      "command": "python3 sub2api-transport-r2/verify-overlay.py"
+    },
+    "collector_entrypoint": {
+      "status": "PASS",
+      "command": "python3 sub2api-transport-r2/collector.py --help"
+    }
+  },
+  "new_engine_gates": "NOT RUN",
+  "physical_absolute_intersample_bound": "NOTPROVEN",
+  "current_goroutines": "NOT RUN: unavailable instantaneous PID sample",
+  "full_real_kernel_tail": "NOT RUN",
+  "socket_policy_bypass": false,
+  "external_gates_waited": false,
+  "git_mutations": false,
+  "subagents": false,
+  "artifacts": [
+    "lab-overlay.patch",
+    "frozen-root-overlay.patch",
+    "collector.py",
+    "adapter.mjs",
+    "REPORT.md",
+    "RUNBOOK.md",
+    "input-hashes.json",
+    "changed-loc.json",
+    "output-hashes.json"
+  ],
+  "risks": [
+    "5sec residual may still exceed32MiB",
+    "sampled empirical PASS cannot prove absolute intersample physical RSS bound",
+    "coordinator must independently inspect fresh cgroup lifecycle and retain actual collector exit status",
+    "actual kernel TCP/container/Go engine gates unexecuted in this lane"
+  ]
+}

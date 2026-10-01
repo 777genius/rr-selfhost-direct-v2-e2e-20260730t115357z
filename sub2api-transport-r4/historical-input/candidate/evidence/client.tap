@@ -1,0 +1,12 @@
+﹣ old chunk delay reproduces timeout; repaired byte pacing independent of actual local socket fragmentation (2.546565ms) # NOT RUN: sandbox denies local socket listen
+﹣ deadline and cancel close owned socket and clear outstanding slow timer (0.658642ms) # NOT RUN: sandbox denies local socket listen
+﹣ actual synthetic mock wire8/32/64MiB native terminal/tool/effect checks; near2MiB bounded frames (0.647721ms) # NOT RUN: sandbox denies local socket listen
+﹣ paced concurrency1/5/20 uses actual synthetic sockets and one effect per request (0.34918ms) # NOT RUN: sandbox denies local socket listen
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 4
+ℹ todo 0
+ℹ duration_ms 70.447162

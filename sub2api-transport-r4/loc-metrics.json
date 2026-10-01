@@ -1,0 +1,179 @@
+{
+  "canonical": {
+    "files": {
+      "sub2api-regression-lab/client.mjs": {
+        "added": 18,
+        "deleted": 6,
+        "original_sha256": "b3b5937525ace30e24936545595b2cef17dddc1630d3b3d646412c1e8e902fda",
+        "result_sha256": "c3a772ed23202367f87f1fcf19099b8d9d060843096b7acd8c288d1cde5cdd47",
+        "result_lines": 43
+      },
+      "sub2api-regression-lab/common.mjs": {
+        "added": 2,
+        "deleted": 1,
+        "original_sha256": "421578d5bce18031f0a09dd9510aecf24230d4617130d3caefaa23d069c9b118",
+        "result_sha256": "c6b50fb270c95d5aff4b6fbf3b54d5b4c9fb95fb8d75b4e7d7122c237357de75",
+        "result_lines": 55
+      },
+      "sub2api-regression-lab/compose.example.yaml": {
+        "added": 1,
+        "deleted": 0,
+        "original_sha256": "d10ac9ebccca8d3c9670929625c774676f77a1cd271f5254d8ff0be86c4bcf1d",
+        "result_sha256": "7acafaa9a2c573db3ff3ab8552d513f0ef24ddda17f16db24533099dd8657f36",
+        "result_lines": 49
+      },
+      "sub2api-regression-lab/mock.mjs": {
+        "added": 1,
+        "deleted": 1,
+        "original_sha256": "9d22a8833acd02a6be7793d772f5739dbdd233d13ad1079aac72c3bbaec39de5",
+        "result_sha256": "a253781f03a7cfaba12e46fde023e3d4af3572cc9e14e305f4e438fdc22bca38",
+        "result_lines": 120
+      },
+      "sub2api-regression-lab/run.mjs": {
+        "added": 41,
+        "deleted": 12,
+        "original_sha256": "8c6cddbe200d3f7b172f9433c9fb76060c914a174bafb59726d5d6d77a260024",
+        "result_sha256": "1105d7cadfe10f5d5d4de25f4bd9f2cb41348ca92eb3463bf487584ec71a0f0e",
+        "result_lines": 297
+      },
+      "sub2api-regression-lab/wire.mjs": {
+        "added": 1,
+        "deleted": 1,
+        "original_sha256": "50cf28d2ac996bd2103c7a18829a7027ff7af001290b4651527d9b914e48795c",
+        "result_sha256": "1e91fdbd45e9c8c4d4dc1aa8595f03c71642222b036a0db979e186ab5a2f392c",
+        "result_lines": 107
+      }
+    },
+    "added": 64,
+    "deleted": 21,
+    "changed": 85
+  },
+  "frozen-root": {
+    "files": {
+      "sub2api-regression-lab/client.mjs": {
+        "added": 18,
+        "deleted": 6,
+        "original_sha256": "b3b5937525ace30e24936545595b2cef17dddc1630d3b3d646412c1e8e902fda",
+        "result_sha256": "c3a772ed23202367f87f1fcf19099b8d9d060843096b7acd8c288d1cde5cdd47",
+        "result_lines": 43
+      },
+      "sub2api-regression-lab/common.mjs": {
+        "added": 2,
+        "deleted": 1,
+        "original_sha256": "421578d5bce18031f0a09dd9510aecf24230d4617130d3caefaa23d069c9b118",
+        "result_sha256": "c6b50fb270c95d5aff4b6fbf3b54d5b4c9fb95fb8d75b4e7d7122c237357de75",
+        "result_lines": 55
+      },
+      "sub2api-regression-lab/compose.example.yaml": {
+        "added": 1,
+        "deleted": 0,
+        "original_sha256": "d10ac9ebccca8d3c9670929625c774676f77a1cd271f5254d8ff0be86c4bcf1d",
+        "result_sha256": "7acafaa9a2c573db3ff3ab8552d513f0ef24ddda17f16db24533099dd8657f36",
+        "result_lines": 49
+      },
+      "sub2api-regression-lab/mock.mjs": {
+        "added": 1,
+        "deleted": 1,
+        "original_sha256": "9d22a8833acd02a6be7793d772f5739dbdd233d13ad1079aac72c3bbaec39de5",
+        "result_sha256": "a253781f03a7cfaba12e46fde023e3d4af3572cc9e14e305f4e438fdc22bca38",
+        "result_lines": 120
+      },
+      "sub2api-regression-lab/run.mjs": {
+        "added": 41,
+        "deleted": 12,
+        "original_sha256": "8c6cddbe200d3f7b172f9433c9fb76060c914a174bafb59726d5d6d77a260024",
+        "result_sha256": "1105d7cadfe10f5d5d4de25f4bd9f2cb41348ca92eb3463bf487584ec71a0f0e",
+        "result_lines": 297
+      },
+      "sub2api-regression-lab/wire.mjs": {
+        "added": 1,
+        "deleted": 1,
+        "original_sha256": "50cf28d2ac996bd2103c7a18829a7027ff7af001290b4651527d9b914e48795c",
+        "result_sha256": "1e91fdbd45e9c8c4d4dc1aa8595f03c71642222b036a0db979e186ab5a2f392c",
+        "result_lines": 107
+      }
+    },
+    "added": 64,
+    "deleted": 21,
+    "changed": 85
+  },
+  "candidate-job-transport-r3": {
+    "files": {
+      "sub2api-regression-lab/client.mjs": {
+        "added": 0,
+        "deleted": 0,
+        "original_sha256": "c3a772ed23202367f87f1fcf19099b8d9d060843096b7acd8c288d1cde5cdd47",
+        "result_sha256": "c3a772ed23202367f87f1fcf19099b8d9d060843096b7acd8c288d1cde5cdd47",
+        "result_lines": 43
+      },
+      "sub2api-regression-lab/common.mjs": {
+        "added": 0,
+        "deleted": 0,
+        "original_sha256": "c6b50fb270c95d5aff4b6fbf3b54d5b4c9fb95fb8d75b4e7d7122c237357de75",
+        "result_sha256": "c6b50fb270c95d5aff4b6fbf3b54d5b4c9fb95fb8d75b4e7d7122c237357de75",
+        "result_lines": 55
+      },
+      "sub2api-regression-lab/compose.example.yaml": {
+        "added": 1,
+        "deleted": 1,
+        "original_sha256": "9847f4db58eb44b249f88b3ba5009cc24d2f72d259c1f2671d66cbeaa536351c",
+        "result_sha256": "7acafaa9a2c573db3ff3ab8552d513f0ef24ddda17f16db24533099dd8657f36",
+        "result_lines": 49
+      },
+      "sub2api-regression-lab/mock.mjs": {
+        "added": 0,
+        "deleted": 0,
+        "original_sha256": "a253781f03a7cfaba12e46fde023e3d4af3572cc9e14e305f4e438fdc22bca38",
+        "result_sha256": "a253781f03a7cfaba12e46fde023e3d4af3572cc9e14e305f4e438fdc22bca38",
+        "result_lines": 120
+      },
+      "sub2api-regression-lab/run.mjs": {
+        "added": 20,
+        "deleted": 6,
+        "original_sha256": "921180086029cd481ad8cd89590f410193e53c6c8adae38106d8e549d9cf2d4b",
+        "result_sha256": "1105d7cadfe10f5d5d4de25f4bd9f2cb41348ca92eb3463bf487584ec71a0f0e",
+        "result_lines": 297
+      },
+      "sub2api-regression-lab/wire.mjs": {
+        "added": 1,
+        "deleted": 1,
+        "original_sha256": "144ce7e7bb807dbeb291735ebff04b38b82e4f2e99a1bf6a8557319836bd566b",
+        "result_sha256": "1e91fdbd45e9c8c4d4dc1aa8595f03c71642222b036a0db979e186ab5a2f392c",
+        "result_lines": 107
+      }
+    },
+    "added": 22,
+    "deleted": 8,
+    "changed": 30
+  },
+  "unchanged_adopted": {
+    "adapter.mjs": {
+      "lines": 82,
+      "sha256": "a58d895ae26621e3fd1e13d891010736f21db902bfef127588f170e466288e86",
+      "identical_to_candidate": true
+    },
+    "collector.py": {
+      "lines": 240,
+      "sha256": "b9b90fe86861d8e58e75750b104c14627de45d5a212a5f8e971d3d4b47643c58",
+      "identical_to_candidate": true
+    }
+  },
+  "active_executable_lines": {
+    "adapter.mjs": 82,
+    "adapter.test.mjs": 94,
+    "audit.py": 21,
+    "before-reproduction.mjs": 41,
+    "build-overlay.py": 30,
+    "client.test.mjs": 118,
+    "collector.py": 240,
+    "collector_test.py": 168,
+    "independent.test.mjs": 41,
+    "load-harness.mjs": 26,
+    "load.test.mjs": 53,
+    "mock-behavior.test.mjs": 69,
+    "pacing.test.mjs": 69,
+    "prepare-standalone.py": 18,
+    "verify-overlay.py": 40,
+    "verify-provenance.py": 35
+  }
+}
