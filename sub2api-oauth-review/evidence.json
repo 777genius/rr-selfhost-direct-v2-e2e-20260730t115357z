@@ -1,0 +1,210 @@
+{
+  "schema": "oauth-independent-review-evidence/v1",
+  "input_hash_entries_verified": 6313,
+  "backend_fingerprint": {
+    "file_count": 3137,
+    "sha256": "1d3236198621e693d1c5d971ecd4e3bebf5ca8075b8801869e292792b390165b"
+  },
+  "source_pin": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "patches": {
+    "source.patch": "f26d8e06e4efeebfc4b705efb0f55c52a670ce1a64aee92753fc399b54cecd52",
+    "tests-overlay.patch": "5131c0f6e070cc89587786aee0a7ef9d6182094bb0069639b01ee437e1a938fe"
+  },
+  "canonical_tests_patch": {
+    "path": "sub2api-oauth-lab/tests.patch",
+    "sha256": "a2276bd1f8a90a7554a81749f669bb4ffddf874883374824ecafa91a3b6e46d4"
+  },
+  "changed_files_exact_patch_reconstruction": 28,
+  "coordinator": {
+    "execution_sha256": "9cebf5ed84b6e86bd7a67ca155116313f64d987778bd4a7266d92adef5727347",
+    "public_receipts_sha256": "fd52d497beeb1b137c91cb8686b6e1d39d4b374c63e0618a152085a27303e27f",
+    "gofmt_list_sha256": "d97a5703aed8da2cdb8b2fa9f1e155cef8db7484d86f3929bac02e81ccb65fa4",
+    "service_cases": 23,
+    "metadata_unit_pass": true,
+    "public_projection_limitation": "Only status and field names are supplied. Raw counters, PID values, timing, durable state, service versions and event values cannot be independently audited.",
+    "receipt_count_field": 3,
+    "receipt_count_interpretation": "Execution metadata says 3; public file explicitly parses 23 case items. No raw capture provided to reconcile aggregation."
+  },
+  "reproductions": [
+    {
+      "id": "F2",
+      "kind": "extracted SQL on in-memory SQLite",
+      "dialect_changes": "remove bigint/jsonb/text casts; no PG row locking simulated",
+      "same_account_second_claim_rows": 0,
+      "different_account_same_token_claim_rows": 1,
+      "conclusion": "Two durable pending owners can represent one refresh token across account IDs. Actual issuer replay not run."
+    },
+    {
+      "id": "F3",
+      "kind": "extracted SQL plus independent upstream predicate",
+      "parent_active": true,
+      "parent_schedulable": false,
+      "upstream_credential_usable": true,
+      "fork_durable_loader_returns_row": false,
+      "conclusion": "Supported independently schedulable shadow is rejected because parent scheduling configuration is applied to credential admission."
+    },
+    {
+      "id": "F1",
+      "kind": "source-bound interleaving model, not Go/HTTP execution",
+      "interleaving": [
+        "select revision 1",
+        "commit reconnect/proxy change to revision 2",
+        "GetAccessToken loads revision 2 locally",
+        "Forward builds identity headers and selects proxy from revision 1"
+      ],
+      "wire_phases": {
+        "bearer_phase": "new",
+        "identity_phase": "old",
+        "proxy_phase": "old"
+      },
+      "conclusion": "Fresh bearer is paired with stale identity/routing snapshot."
+    },
+    {
+      "id": "F4",
+      "kind": "source-bound branch proof, not Go/provider execution",
+      "manual_helper_window": "max duration",
+      "PAT_needs_refresh": false,
+      "PAT_validator_reachable_via_manual_helper": false,
+      "conclusion": "Manual PAT refresh returns the durable row without invoking the existing validation/enrichment operation."
+    },
+    {
+      "id": "F5",
+      "kind": "source-bound trigger effect model plus extracted completion/load SQL on SQLite",
+      "control_completion_matches": true,
+      "telemetry_only_revision_change_completion_matches": false,
+      "durable_pending_after_telemetry": true,
+      "conclusion": "An asynchronous usage Extra write fences successful rotation; unchanged consumed refresh material remains permanently pending."
+    }
+  ],
+  "offline_lua": {
+    "result": "PASS",
+    "engine": "local liblua 5.3",
+    "store": "in-memory command-semantic harness",
+    "assertions": [
+      "adjacent integers above 2^53",
+      "full/meta atomic source script",
+      "matching token revision",
+      "stale token read denied",
+      "tombstone retained",
+      "equal/older write denied after deletion",
+      "newer revision may republish"
+    ],
+    "limitations": "Not Redis service execution; TTL/eviction/restart/cluster not measured."
+  },
+  "reviewer_go_tests": "NOT RUN: prohibited root toolchain/services",
+  "live_provider": "NOT RUN: prohibited",
+  "bindings": {
+    "backend/internal/handler/admin/account_handler.go": {
+      "before_sha256": "88f14887c0c3d5bf6aaa953dadfc53d5043c81fe5036c33a30ebb8ea1c14edde",
+      "after_sha256": "f7c3825d992009f595630a9ab8cc26eeaaf95e0de92ce5cbe71214609f4ad26d"
+    },
+    "backend/internal/handler/admin/openai_oauth_handler.go": {
+      "before_sha256": "183918ffb739197db743a840eeabcb438eb7b01564d61cc9a3c2797225bc26db",
+      "after_sha256": "eae2f6b20e1181a4aa7c4f208ae98e8313175130b6224d8904e5bccb52a52bee"
+    },
+    "backend/internal/repository/account_repo.go": {
+      "before_sha256": "8548ce0689ce564e828e4e508e914892b302e649d5656e54b109e973c8730e2c",
+      "after_sha256": "a4077a198f231615b930a5557cabff568c8392c65c5cd67a28780dbee5fed415"
+    },
+    "backend/internal/repository/gemini_token_cache.go": {
+      "before_sha256": "f185143beedd7d0d63970d8e2adc129afddcc91272d52aab4607176849e56c19",
+      "after_sha256": "276b4b6d08d5e84db3043f7d7edb2d63ac01f35a12f0a61229ba69d346626f96"
+    },
+    "backend/internal/repository/oauth_cache_fence.go": {
+      "before_sha256": null,
+      "after_sha256": "df6ebba48fb429ea5637d6f1b97b7750ca41d07d9c73b3ab201654adf75af3a8"
+    },
+    "backend/internal/repository/openai_oauth_durable.go": {
+      "before_sha256": null,
+      "after_sha256": "05fcb83494e3de0277199c11c9025ef381aeddf09b30cfe23bb72d3752c01c1d"
+    },
+    "backend/internal/repository/scheduler_cache.go": {
+      "before_sha256": "31afbc2c7b46e4f464b7f49ecc8f5ddf7674ec9b582f3da10ab63089b62d5778",
+      "after_sha256": "60cadd19cb28987f0b01d07fcc20c5e83412e898d2978c3478fba3e04d8bb91b"
+    },
+    "backend/internal/service/account.go": {
+      "before_sha256": "d2c9c04d4acbb76d1c04ebb5628ea22efe620aae75ca97b319bb85fd5a17d083",
+      "after_sha256": "8a8c5a8c65fe880ed93a97e2fb20c7e05a94eac344e395cf9bac6b013e5d7cf2"
+    },
+    "backend/internal/service/account_service.go": {
+      "before_sha256": "810ea670a3b3246bc4faba54f31dee5791e550b47fb5197b10b2ca19edd0d653",
+      "after_sha256": "58b598307af38190533ef2fef767485462e2d73db9bf01eaf4e864889916da82"
+    },
+    "backend/internal/service/admin_account.go": {
+      "before_sha256": "dbe1b688310bb7a93213dba61a825aeaa400cd8457282819629659c526a12c48",
+      "after_sha256": "c3634c1438d12f57bf0ab8954645ec062dc2891b5fbf79a69884e646ec88f303"
+    },
+    "backend/internal/service/crs_sync_service.go": {
+      "before_sha256": "ec743ab649c06fae6746a87d57f9463587f19a025fda3572d3ad773b3d13f6ff",
+      "after_sha256": "5e84eabd09e218578de734ee3a4706935c02613f61dc80381c67540bd371d004"
+    },
+    "backend/internal/service/oauth_refresh_api.go": {
+      "before_sha256": "60e98afb0fecb99ad27adb197ac311d78d65a42a7e752f5aabf9be7cc1566270",
+      "after_sha256": "bb4d6391c006a7b6945f97560cf33a3098cf7cd5bd9a0bca916129face7a8549"
+    },
+    "backend/internal/service/openai_account_scheduler.go": {
+      "before_sha256": "29eb856475bb614fde42241b7a114ec10c021f535b3f47107e3e91f1dd3129ca",
+      "after_sha256": "cfca619b417709090a718987067aca07af7f9f60f3fca46da63a348c636f2399"
+    },
+    "backend/internal/service/openai_gateway_scheduling.go": {
+      "before_sha256": "e3d5026b2a23ed54293c470369f2d0e3a9c0cfb5903d30c4a3c71e12fba9f1d6",
+      "after_sha256": "4bd5728d88c1f359f342be0e6e04f0d61ac4ec9da8fe39d36df4009c82fd31dd"
+    },
+    "backend/internal/service/openai_gateway_service.go": {
+      "before_sha256": "4538b19f5fcce4026e170a2b3b9760100640a95c685c4c1bbe41a9403513234d",
+      "after_sha256": "1b484bc7d0445cf73c2b87fb38c40c8c5ecf49524a91e34e4e3e644362a5e045"
+    },
+    "backend/internal/service/openai_oauth_durable.go": {
+      "before_sha256": null,
+      "after_sha256": "9cd6ab8a6c6f310b9837447d0951060c34a6cbe4a217bc0faccd9466b8df716b"
+    },
+    "backend/internal/service/openai_oauth_service.go": {
+      "before_sha256": "f695d871a37e46b620265b6cb51e22ab8a210c9b5e9ba60e4bdccd59b37b8028",
+      "after_sha256": "91f732697ddd6a18b6c9cb71a52d87ec7af413fbf62f8301856d414afa555435"
+    },
+    "backend/internal/service/openai_token_provider.go": {
+      "before_sha256": "5a88259bc6f9fe2474cfae081bb5d6d1c4bd2173d631bbe31d1f0dd202a96fff",
+      "after_sha256": "defdbb9dd54967eea3120a55432a6230cd23d0fd61e37c813af8ad586c9ee6cf"
+    },
+    "backend/internal/service/scheduler_snapshot_service.go": {
+      "before_sha256": "9f386e413ccf8074a2f8a158b513d1f437198af719c1ed1699031510ddb76996",
+      "after_sha256": "8ffaf8cfbae006387345977a43077584bfdde53e41eb8b436baa23412796d670"
+    },
+    "backend/internal/service/token_cache_invalidator.go": {
+      "before_sha256": "18b78acfb4135678bc6230c1a5f90858a6799ffc55723abc415fd084b03523c8",
+      "after_sha256": "3df3d993bf31d745e9037799bb6fca2b362ac31941a78d157ef2e9d397c667d8"
+    },
+    "backend/internal/service/token_refresh_service.go": {
+      "before_sha256": "030445d6638fc209485282ea3715647f3302bf302cd632a9c4c2d0fdf38d6131",
+      "after_sha256": "cdafb8b31211476e88a3112bb0cf10a54e2e56d4848bf6ac2c296699e0879848"
+    },
+    "backend/internal/service/token_refresher.go": {
+      "before_sha256": "af2f01ff7d77cc14c5a7cf046c21e5ce129c0ab39aa3e14523dc2712437308a3",
+      "after_sha256": "fcd9f715a768840e5802e625c4b5c0e027a44653d0cf24ee438c75408000f9e6"
+    },
+    "backend/migrations/241_openai_oauth_refresh_ownership.sql": {
+      "before_sha256": null,
+      "after_sha256": "a939c78f50f5a71882b93e1267389ce446f1f9ccf6ed1f567188c86ded44a6f8"
+    },
+    "backend/internal/repository/oauth_fork_contract_metadata_test.go": {
+      "before_sha256": null,
+      "after_sha256": "19f7a3fd87276e09b15b4094f90cb136e3ffac900b09b7ad12f2e39ae6c25223"
+    },
+    "backend/internal/repository/oauth_fork_contract_test.go": {
+      "before_sha256": null,
+      "after_sha256": "0d897bfe81be5ca0679114ef039a1236033b360eadfd38550c87be5abe15dd12"
+    },
+    "backend/internal/repository/oauth_lab_fixture_test.go": {
+      "before_sha256": "5988618c0f63c4416617a42ac7697fd988cd9772dd7d568e6dd6c04cf60ba0f8",
+      "after_sha256": "93b125b8f8f0c139dc85402f8b7e3b2427fc92654e3c72c5fb015fd7bdd0ddd3"
+    },
+    "backend/internal/repository/oauth_lab_lifecycle_test.go": {
+      "before_sha256": "876c024545228d9d37ac2f6bfb7d900a949b5a35735a9fcb393aadb9692f36f1",
+      "after_sha256": "d664aeb754031f246ff2791c88988e9e874ed60a00fa6832594917a8bc19d411"
+    },
+    "backend/internal/repository/oauth_lab_worker_test.go": {
+      "before_sha256": "7d35b832b7cc71deefb576f57b2a609d9b96cb00ac18442afe94349f2265df47",
+      "after_sha256": "ccd8f6cec544c8e403bbd6f7170a032035359b8531bfc35f3e221960d35b2d02"
+    }
+  }
+}
