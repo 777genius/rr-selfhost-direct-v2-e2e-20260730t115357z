@@ -1,0 +1,1103 @@
+{
+  "schema": "oauth-independent-review-w7-evidence/v1",
+  "result": "PASS",
+  "input_hashes_verified": 3218,
+  "checks": 6578,
+  "actual_backend_files": 3158,
+  "actual_backend_sha256": "e65867224573204555df213b48521b45c8c93804b9fa76c6f2ebef9eb927946f",
+  "historical_w9_backend_sha256": "193fa7c81691585aabf9d9f7b9466c3772ef2fe426e9fe92b1b9715abb4cab3a",
+  "production_delta": [
+    {
+      "path": "backend/internal/repository/account_repo.go",
+      "added_lines": 29,
+      "removed_lines": 6
+    }
+  ],
+  "admin_delta": [
+    {
+      "path": "backend/internal/handler/admin/openai_oauth_handler.go",
+      "added_lines": 0,
+      "removed_lines": 1
+    }
+  ],
+  "source_refs": {
+    "backend/internal/repository/account_repo.go": {
+      "sha256": "835c6ffbbc2f8278f5c78f2fa0e1b73cf0a18365d532a1e9c84307b7471ef9e2",
+      "anchors": {
+        "func oauthIdentityWritePredicate": [
+          867
+        ],
+        "func (r *accountRepository) BulkUpdate": [
+          3069
+        ],
+        " RETURNING id": [
+          3316
+        ],
+        "updatedRows.Scan": [
+          3347
+        ],
+        "updatedRows.Err()": [
+          3352
+        ],
+        "updatedRows.Close();": [
+          3355
+        ],
+        "updatedIDs :=": [
+          3361
+        ],
+        "\"account_ids\": updatedIDs": [
+          3383
+        ],
+        "tx.Commit()": [
+          266,
+          514,
+          995,
+          1036,
+          1942,
+          2016,
+          2035,
+          2854,
+          2899,
+          3389
+        ],
+        "syncSchedulerAccountSnapshots(baseCtx, updatedIDs)": [
+          3402
+        ]
+      }
+    },
+    "backend/internal/repository/oauth_bulk_affected_ids_test.go": {
+      "sha256": "f26dd64d288c34edb86c40f583599d726d34cfdb546c3bc80aa14ed99bd7041c",
+      "anchors": {
+        "func (c *oauthBulkCacheObserver) SetAccount": [
+          31
+        ],
+        "func oauthBulkAssertEffects": [
+          113
+        ],
+        "oauthW9Blocked(t, f, pidB": [
+          255
+        ],
+        "oauthW9Blocked(t, f, pidA": [
+          269
+        ],
+        "after.Status == service.StatusActive": [
+          299
+        ],
+        "OAUTH_BULK_RACE_OBSERVATION": [
+          333
+        ]
+      }
+    },
+    "backend/internal/repository/oauth_bulk_sql_cursor_test.go": {
+      "sha256": "21eafb7d0646a7f9a3991522abca11298e0056fb5913bee254647908d97633d7",
+      "anchors": {
+        "func TestOAuthBulkReturningCursorFailures": [
+          36
+        ],
+        "mock.ExpectRollback()": [
+          56
+        ]
+      }
+    },
+    "backend/internal/repository/oauth_fork_contract_w9_test.go": {
+      "sha256": "6ebf17f959d51c1f2a7567897d70d5b07233e7e4955569c96fbc54f17e0b3144",
+      "anchors": {
+        "func oauthW9Blocked": [
+          50
+        ],
+        "pg_blocking_pids(pid)": [
+          58
+        ]
+      }
+    },
+    "backend/internal/handler/admin/account_codex_import.go": {
+      "sha256": "c2879faeb38a93a3d2c2de193ebc8d455e6b85947b483398d13e595e7b92bf21",
+      "anchors": {
+        "func normalizeCodexImportEntry": [
+          495
+        ]
+      }
+    },
+    "backend/internal/service/openai_oauth_forward_binding.go": {
+      "sha256": "f6f999f4975887c963fb52a312cbbf0fd0162ee64502b5397fe68895d9f9d72a",
+      "anchors": {
+        "func (s *OpenAIGatewayService) bindOAuthForward": [
+          27
+        ]
+      }
+    },
+    "backend/internal/repository/openai_oauth_durable.go": {
+      "sha256": "8ae8c53eaee4a30c9320465e52dbc4cfb8202f04295e1213353901e3c06d0e9a",
+      "anchors": {
+        "func oauthNoPendingPredicate": [
+          344
+        ]
+      }
+    }
+  },
+  "green": {
+    "test_terminals": 211,
+    "receipts": 144,
+    "mixed_observations": 8,
+    "effects": 11,
+    "retained_terminals": 193,
+    "retained_receipt_identities": 133,
+    "retained_inventory": 160,
+    "retained_singleton_races": 16
+  },
+  "red": {
+    "failed_leaves": 8,
+    "failed_parent": 1,
+    "receipts": 8,
+    "observations": 8,
+    "effects": 8,
+    "propagation_assertion_failures": 16
+  },
+  "compile_packages": [
+    "github.com/Wei-Shaw/sub2api/internal/handler",
+    "github.com/Wei-Shaw/sub2api/internal/handler/admin",
+    "github.com/Wei-Shaw/sub2api/internal/repository",
+    "github.com/Wei-Shaw/sub2api/internal/service"
+  ],
+  "raw_admin_import": "PASS1",
+  "unit_bulk": "PASS49; four cursor fault boundaries",
+  "race_evidence": [
+    {
+      "run": "GREEN",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_1_a",
+        "application_b": "bulk_1_b",
+        "backend_a": 9084,
+        "backend_b": 9085,
+        "barrier_backend": 9077,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            3
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          3
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric"
+      }
+    },
+    {
+      "run": "GREEN",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_4_a",
+        "application_b": "bulk_4_b",
+        "backend_a": 9091,
+        "backend_b": 9092,
+        "barrier_backend": 9077,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            6
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          6
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean"
+      }
+    },
+    {
+      "run": "GREEN",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_7_a",
+        "application_b": "bulk_7_b",
+        "backend_a": 9094,
+        "backend_b": 9096,
+        "barrier_backend": 9077,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            9
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          9
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array"
+      }
+    },
+    {
+      "run": "GREEN",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_10_a",
+        "application_b": "bulk_10_b",
+        "backend_a": 9099,
+        "backend_b": 9100,
+        "barrier_backend": 9077,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            12
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          12
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object"
+      }
+    },
+    {
+      "run": "GREEN",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_13_a",
+        "application_b": "bulk_13_b",
+        "backend_a": 9103,
+        "backend_b": 9105,
+        "barrier_backend": 9077,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            15
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          15
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric"
+      }
+    },
+    {
+      "run": "GREEN",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_16_a",
+        "application_b": "bulk_16_b",
+        "backend_a": 9108,
+        "backend_b": 9109,
+        "barrier_backend": 9077,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            18
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          18
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean"
+      }
+    },
+    {
+      "run": "GREEN",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_19_a",
+        "application_b": "bulk_19_b",
+        "backend_a": 9112,
+        "backend_b": 9113,
+        "barrier_backend": 9077,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            21
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          21
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array"
+      }
+    },
+    {
+      "run": "GREEN",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_22_a",
+        "application_b": "bulk_22_b",
+        "backend_a": 9114,
+        "backend_b": 9115,
+        "barrier_backend": 9077,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            24
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          24
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object"
+      }
+    },
+    {
+      "run": "RED",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_1_a",
+        "application_b": "bulk_1_b",
+        "backend_a": 9081,
+        "backend_b": 9082,
+        "barrier_backend": 9076,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            1,
+            3,
+            1,
+            3
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          1,
+          3
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric"
+      }
+    },
+    {
+      "run": "RED",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_4_a",
+        "application_b": "bulk_4_b",
+        "backend_a": 9086,
+        "backend_b": 9088,
+        "barrier_backend": 9076,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            4,
+            6,
+            4,
+            6
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          4,
+          6
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean"
+      }
+    },
+    {
+      "run": "RED",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_7_a",
+        "application_b": "bulk_7_b",
+        "backend_a": 9089,
+        "backend_b": 9090,
+        "barrier_backend": 9076,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            7,
+            9,
+            7,
+            9
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          7,
+          9
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array"
+      }
+    },
+    {
+      "run": "RED",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_10_a",
+        "application_b": "bulk_10_b",
+        "backend_a": 9093,
+        "backend_b": 9095,
+        "barrier_backend": 9076,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            10,
+            12,
+            10,
+            12
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          10,
+          12
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object"
+      }
+    },
+    {
+      "run": "RED",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_13_a",
+        "application_b": "bulk_13_b",
+        "backend_a": 9097,
+        "backend_b": 9098,
+        "barrier_backend": 9076,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            13,
+            15,
+            13,
+            15
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          13,
+          15
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric"
+      }
+    },
+    {
+      "run": "RED",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_16_a",
+        "application_b": "bulk_16_b",
+        "backend_a": 9102,
+        "backend_b": 9104,
+        "barrier_backend": 9076,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            16,
+            18,
+            16,
+            18
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          16,
+          18
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean"
+      }
+    },
+    {
+      "run": "RED",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_19_a",
+        "application_b": "bulk_19_b",
+        "backend_a": 9106,
+        "backend_b": 9107,
+        "barrier_backend": 9076,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            19,
+            21,
+            19,
+            21
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          19,
+          21
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array"
+      }
+    },
+    {
+      "run": "RED",
+      "observation": {
+        "a_exactly_one_actual_native_update": true,
+        "a_rows": 1,
+        "application_a": "bulk_22_a",
+        "application_b": "bulk_22_b",
+        "backend_a": 9110,
+        "backend_b": 9111,
+        "barrier_backend": 9076,
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object",
+        "converted_document_unchanged": true,
+        "converted_revision_unchanged": true,
+        "converted_schedulable": true,
+        "observed_a_update_blocked_by_b": true,
+        "observed_b_blocked_by_barrier": true,
+        "sibling_schedulable": true
+      },
+      "effects": {
+        "b_own_account_changed_events": 2,
+        "bulk_event_ids": [
+          [
+            22,
+            24,
+            22,
+            24
+          ]
+        ],
+        "cache_after_commit": true,
+        "cache_boundary": "repository SetAccount observer; no Redis writes",
+        "cache_effect_ids": [
+          22,
+          24
+        ],
+        "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object"
+      }
+    }
+  ],
+  "current_terminal_identities": [
+    "TestOAuthBulkAffectedIDsControls",
+    "TestOAuthBulkAffectedIDsControls/all",
+    "TestOAuthBulkAffectedIDsControls/mixed_missing",
+    "TestOAuthBulkAffectedIDsControls/zero",
+    "TestOAuthBulkAffectedIDsConversionConcurrency",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object",
+    "TestOAuthBulkReturningCursorFailures",
+    "TestOAuthBulkReturningCursorFailures/close",
+    "TestOAuthBulkReturningCursorFailures/iteration",
+    "TestOAuthBulkReturningCursorFailures/query",
+    "TestOAuthBulkReturningCursorFailures/scan",
+    "TestOAuthForkContracts",
+    "TestOAuthForkContracts/cache_exact_integer_revision",
+    "TestOAuthForkContracts/crash_after_consume_no_expiry_replay",
+    "TestOAuthForkContracts/invalid_grant_reconnect_wins",
+    "TestOAuthForkContracts/late_cache_publish_and_delete_tombstone",
+    "TestOAuthForkContracts/mixed_redis_bad_owner",
+    "TestOAuthForkContracts/mixed_redis_good_owner",
+    "TestOAuthForkContracts/primed_cache_direct_disable",
+    "TestOAuthForkContracts/reconnect_reversed_clock",
+    "TestOAuthForkContracts/reconnect_same_clock",
+    "TestOAuthForkContracts/redis_owner_compare_delete",
+    "TestOAuthForkContracts/stale_admin_disable_after_refresh",
+    "TestOAuthForkEmptyRefreshHTTPBoundary",
+    "TestOAuthForkManualValidationHTTP",
+    "TestOAuthForkManualValidationHTTP/access_only_enrichment",
+    "TestOAuthForkManualValidationHTTP/invalid_pat",
+    "TestOAuthForkManualValidationHTTP/reconnect_during_pat",
+    "TestOAuthForkManualValidationHTTP/valid_pat",
+    "TestOAuthForkRemediation",
+    "TestOAuthForkRemediation/completed_nonrotating_transition",
+    "TestOAuthForkRemediation/delete_reimport_uncertain",
+    "TestOAuthForkRemediation/forward_stale_selection_and_coherent_control",
+    "TestOAuthForkRemediation/keyed_identity_hmac_and_completed_redaction",
+    "TestOAuthForkRemediation/spark_parent_disabled",
+    "TestOAuthForkRemediation/spark_parent_overloaded",
+    "TestOAuthForkRemediation/spark_parent_paused",
+    "TestOAuthForkRemediation/spark_parent_pending",
+    "TestOAuthForkRemediation/spark_parent_rate_limited",
+    "TestOAuthForkRemediation/spark_parent_shared_cooldown",
+    "TestOAuthForkRemediation/two_id_unique_claim_contention",
+    "TestOAuthForkRemediation/two_ids_one_consumption",
+    "TestOAuthForkRemediation/usage_during_consumed_response",
+    "TestOAuthForkRemediation/usage_preserves_extra_routing_barrier",
+    "TestOAuthForkRemediation/usage_preserves_group_barrier",
+    "TestOAuthForkRemediation/usage_preserves_proxy_barrier",
+    "TestOAuthForkRemediation/validation_cas_reconnect",
+    "TestOAuthForkRemediation/websocket_ingress_stale_selection_denied",
+    "TestOAuthForkRemediation/websocket_ingress_stale_selection_denied/disabled_fresh_control",
+    "TestOAuthForkRemediation/websocket_ingress_stale_selection_denied/disabled_stale_guard_precedes_config",
+    "TestOAuthForkRemediation/websocket_ingress_stale_selection_denied/enabled_fresh_control",
+    "TestOAuthForkRemediation/websocket_ingress_stale_selection_denied/enabled_stale_selection",
+    "TestOAuthForkRemediation/websocket_ingress_stale_selection_denied/enabled_wrong_bearer",
+    "TestOAuthForkSchedulerMetadataProjection",
+    "TestOAuthForkSchedulerMetadataProjection/revision_",
+    "TestOAuthForkSchedulerMetadataProjection/revision_9007199254740992",
+    "TestOAuthForkSchedulerMetadataProjection/revision_9007199254740993",
+    "TestOAuthForkW6CanonicalIdentity",
+    "TestOAuthForkW6CanonicalIdentity/default_client",
+    "TestOAuthForkW6CanonicalIdentity/nbsp",
+    "TestOAuthForkW6CanonicalIdentity/tab_newline",
+    "TestOAuthForkW6CanonicalIdentity/unicode_complete",
+    "TestOAuthForkW6CanonicalIdentity/unsupported_types",
+    "TestOAuthForkW6ProxyExpiryBoundary",
+    "TestOAuthForkW6ProxyExpiryBoundary/expiry_crosses_hydration",
+    "TestOAuthForkW6ProxyExpiryBoundary/future_control",
+    "TestOAuthForkW6UpgradeRefusal",
+    "TestOAuthForkW6WSHandlerTuple",
+    "TestOAuthForkW6WSHandlerTuple/disable",
+    "TestOAuthForkW6WSHandlerTuple/expired",
+    "TestOAuthForkW6WSHandlerTuple/near_expiry",
+    "TestOAuthForkW6WSHandlerTuple/reconnect",
+    "TestOAuthForkW6WSHandlerTuple/shadow_parent_refresh",
+    "TestOAuthForkW6WSHandlerTuple/unexpired",
+    "TestOAuthForkW6WSHandlerTuple/wrong_bearer",
+    "TestOAuthForkW7MalformedIdentityScheduling",
+    "TestOAuthForkW7MalformedIdentityScheduling/client_id/array",
+    "TestOAuthForkW7MalformedIdentityScheduling/client_id/boolean",
+    "TestOAuthForkW7MalformedIdentityScheduling/client_id/numeric",
+    "TestOAuthForkW7MalformedIdentityScheduling/client_id/object",
+    "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/array",
+    "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/boolean",
+    "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/numeric",
+    "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/object",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/array",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/boolean",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/numeric",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/object",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/array",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/boolean",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/numeric",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/object",
+    "TestOAuthForkW7SupportedIdentityWriteControls",
+    "TestOAuthForkW7SupportedIdentityWriteControls/empty",
+    "TestOAuthForkW7SupportedIdentityWriteControls/missing",
+    "TestOAuthForkW7SupportedIdentityWriteControls/null",
+    "TestOAuthForkW7SupportedIdentityWriteControls/other_provider",
+    "TestOAuthForkW7SupportedIdentityWriteControls/string",
+    "TestOAuthForkW7SupportedIdentityWriteControls/unicode_default",
+    "TestOAuthForkW9EffectiveMergedDocument",
+    "TestOAuthForkW9EffectiveMergedDocument/client_id/array",
+    "TestOAuthForkW9EffectiveMergedDocument/client_id/boolean",
+    "TestOAuthForkW9EffectiveMergedDocument/client_id/numeric",
+    "TestOAuthForkW9EffectiveMergedDocument/client_id/object",
+    "TestOAuthForkW9EffectiveMergedDocument/refresh_token/array",
+    "TestOAuthForkW9EffectiveMergedDocument/refresh_token/boolean",
+    "TestOAuthForkW9EffectiveMergedDocument/refresh_token/numeric",
+    "TestOAuthForkW9EffectiveMergedDocument/refresh_token/object",
+    "TestOAuthForkW9ManagementConversionConcurrency",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/array",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/boolean",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/numeric",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/object",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/array",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/boolean",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/numeric",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/object",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/array",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/boolean",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/numeric",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/object",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/array",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/boolean",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/numeric",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/empty",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/missing",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/null",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/string",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/unicode",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/empty",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/missing",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/null",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/string",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/unicode",
+    "TestOAuthForkWSReuseCredentialTuple",
+    "TestOAuthForkWSReuseCredentialTuple/bearer",
+    "TestOAuthForkWSReuseCredentialTuple/fedramp",
+    "TestOAuthForkWSReuseCredentialTuple/identity",
+    "TestOAuthForkWSReuseCredentialTuple/proxy",
+    "TestOAuthForkWSReuseCredentialTuple/revision",
+    "TestOAuthLabLifecycle",
+    "TestOAuthLabLifecycle/background_then_request",
+    "TestOAuthLabLifecycle/disable_while_refresh",
+    "TestOAuthLabLifecycle/issuer_rotation_db_write_rejected",
+    "TestOAuthLabLifecycle/issuer_rotation_lost_db_commit_ack",
+    "TestOAuthLabLifecycle/lock_ttl_expiry",
+    "TestOAuthLabLifecycle/normal_8_concurrent",
+    "TestOAuthLabLifecycle/reconnect_while_refresh",
+    "TestOAuthLabLifecycle/redis_outage_process_local_8",
+    "TestOAuthLabLifecycle/redis_outage_two_process_race",
+    "TestOAuthLabLifecycle/request_then_background",
+    "TestOAuthLabLifecycle/revocation_background_path",
+    "TestOAuthLabLifecycle/revocation_request_path"
+  ],
+  "retained_receipt_identities": [
+    "TestOAuthForkContracts/cache_exact_integer_revision",
+    "TestOAuthForkContracts/late_cache_publish_and_delete_tombstone",
+    "TestOAuthForkContracts/redis_owner_compare_delete",
+    "TestOAuthForkRemediation/completed_nonrotating_transition",
+    "TestOAuthForkRemediation/forward_stale_selection_and_coherent_control",
+    "TestOAuthForkRemediation/spark_parent_disabled",
+    "TestOAuthForkRemediation/spark_parent_overloaded",
+    "TestOAuthForkRemediation/spark_parent_paused",
+    "TestOAuthForkRemediation/spark_parent_pending",
+    "TestOAuthForkRemediation/spark_parent_rate_limited",
+    "TestOAuthForkRemediation/spark_parent_shared_cooldown",
+    "TestOAuthForkRemediation/two_id_unique_claim_contention",
+    "TestOAuthForkRemediation/validation_cas_reconnect",
+    "TestOAuthForkRemediation/websocket_ingress_stale_selection_denied",
+    "TestOAuthForkW6CanonicalIdentity/default_client",
+    "TestOAuthForkW6CanonicalIdentity/nbsp",
+    "TestOAuthForkW6CanonicalIdentity/tab_newline",
+    "TestOAuthForkW6CanonicalIdentity/unicode_complete",
+    "TestOAuthForkW6CanonicalIdentity/unsupported_types",
+    "TestOAuthForkW6ProxyExpiryBoundary/expiry_crosses_hydration",
+    "TestOAuthForkW6ProxyExpiryBoundary/future_control",
+    "TestOAuthForkW6UpgradeRefusal",
+    "TestOAuthForkW6WSHandlerTuple/disable",
+    "TestOAuthForkW6WSHandlerTuple/expired",
+    "TestOAuthForkW6WSHandlerTuple/near_expiry",
+    "TestOAuthForkW6WSHandlerTuple/reconnect",
+    "TestOAuthForkW6WSHandlerTuple/shadow_parent_refresh",
+    "TestOAuthForkW6WSHandlerTuple/unexpired",
+    "TestOAuthForkW6WSHandlerTuple/wrong_bearer",
+    "TestOAuthForkW7MalformedIdentityScheduling/client_id/array",
+    "TestOAuthForkW7MalformedIdentityScheduling/client_id/boolean",
+    "TestOAuthForkW7MalformedIdentityScheduling/client_id/numeric",
+    "TestOAuthForkW7MalformedIdentityScheduling/client_id/object",
+    "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/array",
+    "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/boolean",
+    "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/numeric",
+    "TestOAuthForkW7MalformedIdentityScheduling/refresh_token/object",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/array",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/boolean",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/numeric",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/client_id/object",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/array",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/boolean",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/numeric",
+    "TestOAuthForkW7ManagementWritesRejectMalformedIdentity/refresh_token/object",
+    "TestOAuthForkW7SupportedIdentityWriteControls/empty",
+    "TestOAuthForkW7SupportedIdentityWriteControls/missing",
+    "TestOAuthForkW7SupportedIdentityWriteControls/null",
+    "TestOAuthForkW7SupportedIdentityWriteControls/other_provider",
+    "TestOAuthForkW7SupportedIdentityWriteControls/string",
+    "TestOAuthForkW7SupportedIdentityWriteControls/unicode_default",
+    "TestOAuthForkW9EffectiveMergedDocument/client_id/array",
+    "TestOAuthForkW9EffectiveMergedDocument/client_id/boolean",
+    "TestOAuthForkW9EffectiveMergedDocument/client_id/numeric",
+    "TestOAuthForkW9EffectiveMergedDocument/client_id/object",
+    "TestOAuthForkW9EffectiveMergedDocument/refresh_token/array",
+    "TestOAuthForkW9EffectiveMergedDocument/refresh_token/boolean",
+    "TestOAuthForkW9EffectiveMergedDocument/refresh_token/numeric",
+    "TestOAuthForkW9EffectiveMergedDocument/refresh_token/object",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/array",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/boolean",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/numeric",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/client_id/object",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/array",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/boolean",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/numeric",
+    "TestOAuthForkW9ManagementConversionConcurrency/BulkUpdate/refresh_token/object",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/array",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/boolean",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/numeric",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/client_id/object",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/array",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/boolean",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/numeric",
+    "TestOAuthForkW9ManagementConversionConcurrency/UpdateCredentials/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_grok/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/native_openai/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/stable_oauth/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/empty",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/missing",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/null",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/string",
+    "TestOAuthForkW9ManagementWriteControls/BulkUpdate/supported/unicode",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_grok/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/native_openai/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/client_id/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/array",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/boolean",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/numeric",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/stable_oauth/refresh_token/object",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/empty",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/missing",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/null",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/string",
+    "TestOAuthForkW9ManagementWriteControls/UpdateCredentials/supported/unicode"
+  ],
+  "new_terminal_identities": [
+    "TestOAuthBulkAffectedIDsControls",
+    "TestOAuthBulkAffectedIDsControls/all",
+    "TestOAuthBulkAffectedIDsControls/mixed_missing",
+    "TestOAuthBulkAffectedIDsControls/zero",
+    "TestOAuthBulkAffectedIDsConversionConcurrency",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric",
+    "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object",
+    "TestOAuthBulkReturningCursorFailures",
+    "TestOAuthBulkReturningCursorFailures/close",
+    "TestOAuthBulkReturningCursorFailures/iteration",
+    "TestOAuthBulkReturningCursorFailures/query",
+    "TestOAuthBulkReturningCursorFailures/scan"
+  ],
+  "raw_green_structured_receipts": 171,
+  "raw_extra_records_not_counted_as_acceptance": 27,
+  "runtime_execution_by_reviewer": false,
+  "cache_scope": "Immediate repository SetAccount observer after visible account/outbox commit; Redis implementation mutation not tested",
+  "limits": [
+    "Populated-history migration243 NO upgrade GO",
+    "Live OAuth NOT RUN deliberately; NO production GO",
+    "Source provenance supplied; no Git/network revalidation"
+  ]
+}

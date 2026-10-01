@@ -1,0 +1,22 @@
+{
+  "schema": "oauth-independent-review-w7-artifacts/v1",
+  "artifact_file_count_including_manifest": 5,
+  "files": {
+    "REPORT.md": {
+      "bytes": 10586,
+      "sha256": "afe969985e344def1722429fb8b2ec32d704764e72140536eba8ede32b0f6f1e"
+    },
+    "evidence.json": {
+      "bytes": 49077,
+      "sha256": "61e5f7d7ca939ed618ff91472879157c7526909ebd4de808fcaa7444caee5567"
+    },
+    "review.json": {
+      "bytes": 6062,
+      "sha256": "34d876bc2b5d2001cbe8ea0c8ac6441748970287df202d669d4d528e6105de20"
+    },
+    "reproductions/verify_review.py": {
+      "bytes": 16771,
+      "sha256": "aa3ce4c97db90c77d6a666e4d3e4d6f7b528b38f7e1f0a3af1f8786749748cef"
+    }
+  }
+}
