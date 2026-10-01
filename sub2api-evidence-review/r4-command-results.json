@@ -1,0 +1,81 @@
+[
+  {
+    "name": "candidate",
+    "executable": "/opt/nodejs/node-v24.21.0-linux-x64/bin/node",
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      ".spike-inputs/candidate/sub2api-spike/evidence.test.mjs",
+      ".spike-inputs/candidate/sub2api-spike/run-client.test.mjs",
+      ".spike-inputs/candidate/sub2api-evidence-r2/client-contract.test.mjs"
+    ],
+    "environment": {
+      "CONSUMER_WORKFLOW_SOURCE": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r2/.github/workflows/sub2api-gateway-spike.yml"
+    },
+    "status": 0,
+    "signal": null,
+    "totals": [
+      "# tests 29",
+      "# pass 29",
+      "# fail 0",
+      "# skipped 0"
+    ]
+  },
+  {
+    "name": "canonical-bound-red",
+    "executable": "/opt/nodejs/node-v24.21.0-linux-x64/bin/node",
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "--test-name-pattern=caller accepts",
+      ".spike-inputs/candidate/sub2api-evidence-r2/client-contract.test.mjs"
+    ],
+    "environment": {
+      "RUN_CLIENT_SOURCE": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r2/sub2api-evidence-review/r4-canonical-caller.mjs"
+    },
+    "status": 1,
+    "signal": null,
+    "totals": [
+      "# tests 4",
+      "# pass 3",
+      "# fail 1",
+      "# skipped 0"
+    ]
+  },
+  {
+    "name": "independent",
+    "executable": "/opt/nodejs/node-v24.21.0-linux-x64/bin/node",
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      "sub2api-evidence-review/r4-independent.test.mjs"
+    ],
+    "environment": {},
+    "status": 0,
+    "signal": null,
+    "totals": [
+      "# tests 6",
+      "# pass 6",
+      "# fail 0",
+      "# skipped 0"
+    ]
+  },
+  {
+    "name": "grant",
+    "executable": "/opt/nodejs/node-v24.21.0-linux-x64/bin/node",
+    "args": [
+      "--test",
+      "--test-reporter=tap",
+      ".spike-inputs/candidate/sub2api-spike/granted-run.test.mjs"
+    ],
+    "environment": {},
+    "status": 0,
+    "signal": null,
+    "totals": [
+      "# tests 2",
+      "# pass 2",
+      "# fail 0",
+      "# skipped 0"
+    ]
+  }
+]

@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: signed verified identity yields only a positive identity receipt
+ok 1 - signed verified identity yields only a positive identity receipt
+  ---
+  duration_ms: 3.777825
+  type: 'test'
+  ...
+# Subtest: spoofed runtime and malformed grant deny before an agent can execute
+ok 2 - spoofed runtime and malformed grant deny before an agent can execute
+  ---
+  duration_ms: 1.445435
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 129.437383

@@ -1,0 +1,50 @@
+TAP version 13
+# Subtest: caller accepts object with real independent reproduction
+ok 1 - caller accepts object with real independent reproduction
+  ---
+  duration_ms: 55.795368
+  type: 'test'
+  ...
+# Subtest: caller accepts canary-shaped array with real independent reproduction
+ok 2 - caller accepts canary-shaped array with real independent reproduction
+  ---
+  duration_ms: 52.359684
+  type: 'test'
+  ...
+# Subtest: caller accepts actual local Node wallet execution emitting both numeric examples
+ok 3 - caller accepts actual local Node wallet execution emitting both numeric examples
+  ---
+  duration_ms: 100.971813
+  type: 'test'
+  ...
+# Subtest: caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+not ok 4 - caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+  ---
+  duration_ms: 121.87769
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r2/.spike-inputs/candidate/sub2api-evidence-r2/client-contract.test.mjs:78:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    ["Spike failed at evidence; inspect effects privately before retry."]
+    
+    1 !== undefined
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r2/.spike-inputs/candidate/sub2api-evidence-r2/client-contract.test.mjs:82:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 3
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 412.122365

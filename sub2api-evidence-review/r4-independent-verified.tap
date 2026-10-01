@@ -1,0 +1,46 @@
+TAP version 13
+# Subtest: real wallet Node stdout object array JSONL and actual baseline rejection
+ok 1 - real wallet Node stdout object array JSONL and actual baseline rejection
+  ---
+  duration_ms: 63.829135
+  type: 'test'
+  ...
+# Subtest: every JSONL line validated even after or before exact matching row
+ok 2 - every JSONL line validated even after or before exact matching row
+  ---
+  duration_ms: 1.369221
+  type: 'test'
+  ...
+# Subtest: no cross-row assembly recursion prose or numeric coercion
+ok 3 - no cross-row assembly recursion prose or numeric coercion
+  ---
+  duration_ms: 0.612273
+  type: 'test'
+  ...
+# Subtest: successful completed real command event type and original command classifier retained
+ok 4 - successful completed real command event type and original command classifier retained
+  ---
+  duration_ms: 0.506382
+  type: 'test'
+  ...
+# Subtest: fixed fixture bytes and projection fixture exact custody
+ok 5 - fixed fixture bytes and projection fixture exact custody
+  ---
+  duration_ms: 10.44712
+  type: 'test'
+  ...
+# Subtest: separate reads genuine terminal and final finding remain mandatory
+ok 6 - separate reads genuine terminal and final finding remain mandatory
+  ---
+  duration_ms: 3.694686
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 6
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 163.63135
