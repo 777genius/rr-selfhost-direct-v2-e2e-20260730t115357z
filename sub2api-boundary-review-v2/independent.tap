@@ -1,0 +1,34 @@
+✔ BR01 independent full stock omitted slices pass connect and unknown-ack retirement (16.193354ms)
+✔ BR03 independent remap at each promotion acknowledgement compensates before publication (9.606981ms)
+✔ owned malformed acknowledgement retains ID and quarantines; reused foreign ID fences without writes (5.72031ms)
+✖ BR02 integration contract: preparation must preserve explicit trusted probe-disable (4.065392ms)
+✔ BR04 independently selected grant identity denies all supported cross-selection changes (2.485896ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 4
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 120.549145
+
+✖ failing tests:
+
+test at sub2api-boundary-review-v2/independent.test.mjs:62:1
+✖ BR02 integration contract: preparation must preserve explicit trusted probe-disable (4.065392ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/boundary-review-w2/sub2api-boundary-review-v2/independent.test.mjs:64:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
