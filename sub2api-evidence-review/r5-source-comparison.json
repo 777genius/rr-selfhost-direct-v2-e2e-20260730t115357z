@@ -1,0 +1,65 @@
+[
+  {
+    "path": "sub2api-spike/run-client.mjs",
+    "canonical_sha256": "0cafcb8b3adf01f607b62786f7d95021deefddaba7b71a0c62b86ba0419f2565",
+    "candidate_sha256": "3308b5cbaaf2b5be10d616ace4a1e47a24e013fa944514ae61054fd37d7fb490",
+    "added": 9,
+    "removed": 5
+  },
+  {
+    "path": "sub2api-spike/evidence.mjs",
+    "canonical_sha256": "44f17424b5057ab94693809d05bc33db6305f065ead928f95aa0b066137f2160",
+    "candidate_sha256": "44f17424b5057ab94693809d05bc33db6305f065ead928f95aa0b066137f2160",
+    "added": 0,
+    "removed": 0
+  },
+  {
+    "path": "sub2api-evidence-r2/client-contract.test.mjs",
+    "canonical_sha256": "4c9d4eed62708962b86f396f69d00b9f582b34a0a331ea3753f012d95cfda3d8",
+    "candidate_sha256": "49bf6f90369b551e598fd79535dee389bc789b69d7f624b7b0f29ec04b802efa",
+    "added": 97,
+    "removed": 9
+  },
+  {
+    "path": "sub2api-spike/runner-isolation.mjs",
+    "canonical_sha256": "3eb6a0844007d088609dccf959962d319cac93ea77c1cf9233a90993c4293d03",
+    "candidate_sha256": "3eb6a0844007d088609dccf959962d319cac93ea77c1cf9233a90993c4293d03",
+    "added": 0,
+    "removed": 0
+  },
+  {
+    "path": "sub2api-spike/granted-run.mjs",
+    "canonical_sha256": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+    "candidate_sha256": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+    "added": 0,
+    "removed": 0
+  },
+  {
+    "path": "gateway-spike/evidence.mjs",
+    "canonical_sha256": "f21567866c5c3433809d60af26223d8a6341becc2cf7500e1be4f4b9b56c9755",
+    "candidate_sha256": "f21567866c5c3433809d60af26223d8a6341becc2cf7500e1be4f4b9b56c9755",
+    "added": 0,
+    "removed": 0
+  },
+  {
+    "path": "sub2api-spike/operator/runner-launcher.sh",
+    "canonical_sha256": "07f9d0eaee9136e86082a9d324dc5b7670a1db18151bd83649764fd105c1a477",
+    "candidate_sha256": "07f9d0eaee9136e86082a9d324dc5b7670a1db18151bd83649764fd105c1a477",
+    "added": 0,
+    "removed": 0
+  },
+  {
+    "path": "sub2api-spike/fixture/wallet.mjs",
+    "canonical_sha256": "c47fcdfb32c95bf1ede68c01a3705084a658ecbd2882ab21ca4e8cc5fc658f71",
+    "candidate_sha256": "c47fcdfb32c95bf1ede68c01a3705084a658ecbd2882ab21ca4e8cc5fc658f71",
+    "added": 0,
+    "removed": 0
+  },
+  {
+    "path": "sub2api-spike/fixture/BUSINESS_RULES.md",
+    "canonical_sha256": "1a9837e5e95ee86f22eb171c7bc9ee1226c55ff859973ad573417feb6aae43a5",
+    "candidate_sha256": "1a9837e5e95ee86f22eb171c7bc9ee1226c55ff859973ad573417feb6aae43a5",
+    "added": 0,
+    "removed": 0
+  }
+]
