@@ -1,0 +1,1030 @@
+{
+  "frozen_inputs": [
+    {
+      "path": "oauth-lab/verification.json",
+      "expected_sha256": "958fb74ab98b5787f839a99e6dc41d008841b9b2bb22c9173ca82deb3d15b979",
+      "actual_sha256": "958fb74ab98b5787f839a99e6dc41d008841b9b2bb22c9173ca82deb3d15b979",
+      "match": true
+    },
+    {
+      "path": "oauth-lab/REPORT.md",
+      "expected_sha256": "0632445d756d7873a1f32fc876bcecb4cf0892c46f910bee4d364be7d6e326aa",
+      "actual_sha256": "0632445d756d7873a1f32fc876bcecb4cf0892c46f910bee4d364be7d6e326aa",
+      "match": true
+    },
+    {
+      "path": "oauth-lab/tests.patch",
+      "expected_sha256": "a2276bd1f8a90a7554a81749f669bb4ffddf874883374824ecafa91a3b6e46d4",
+      "actual_sha256": "a2276bd1f8a90a7554a81749f669bb4ffddf874883374824ecafa91a3b6e46d4",
+      "match": true
+    },
+    {
+      "path": "oauth-lab/RUNBOOK.md",
+      "expected_sha256": "897ecaaabea44d3feff018c8a58cb89de2d8c95abc8f9b78a4c00a9cf6090813",
+      "actual_sha256": "897ecaaabea44d3feff018c8a58cb89de2d8c95abc8f9b78a4c00a9cf6090813",
+      "match": true
+    },
+    {
+      "path": "oauth-lab/results.json",
+      "expected_sha256": "5b2319c576a322c1b632b8ebb179a9466d93811824c86346f288e1dc8da0572a",
+      "actual_sha256": "5b2319c576a322c1b632b8ebb179a9466d93811824c86346f288e1dc8da0572a",
+      "match": true
+    },
+    {
+      "path": "oauth-lab/source-manifest.json",
+      "expected_sha256": "8b7476b4aefb13c6f64023d62880ab5fb74e8bc7c6f420e97efdbd754104d78d",
+      "actual_sha256": "8b7476b4aefb13c6f64023d62880ab5fb74e8bc7c6f420e97efdbd754104d78d",
+      "match": true
+    },
+    {
+      "path": "oauth-lab/backend/internal/repository/oauth_lab_fixture_test.go",
+      "expected_sha256": "5988618c0f63c4416617a42ac7697fd988cd9772dd7d568e6dd6c04cf60ba0f8",
+      "actual_sha256": "5988618c0f63c4416617a42ac7697fd988cd9772dd7d568e6dd6c04cf60ba0f8",
+      "match": true
+    },
+    {
+      "path": "oauth-lab/backend/internal/repository/oauth_lab_worker_test.go",
+      "expected_sha256": "7d35b832b7cc71deefb576f57b2a609d9b96cb00ac18442afe94349f2265df47",
+      "actual_sha256": "7d35b832b7cc71deefb576f57b2a609d9b96cb00ac18442afe94349f2265df47",
+      "match": true
+    },
+    {
+      "path": "oauth-lab/backend/internal/repository/oauth_lab_lifecycle_test.go",
+      "expected_sha256": "876c024545228d9d37ac2f6bfb7d900a949b5a35735a9fcb393aadb9692f36f1",
+      "actual_sha256": "876c024545228d9d37ac2f6bfb7d900a949b5a35735a9fcb393aadb9692f36f1",
+      "match": true
+    },
+    {
+      "path": "coordinator/execution.json",
+      "expected_sha256": "f44286b02e98c846416a9e51831a08f892249b06871498de7a0e26c1afe79eba",
+      "actual_sha256": "f44286b02e98c846416a9e51831a08f892249b06871498de7a0e26c1afe79eba",
+      "match": true
+    },
+    {
+      "path": "coordinator/case-receipts.json",
+      "expected_sha256": "0f8314008b13875e940c8c2eeb9239af7fa6d5eb8844f870849daeae79d99abe",
+      "actual_sha256": "0f8314008b13875e940c8c2eeb9239af7fa6d5eb8844f870849daeae79d99abe",
+      "match": true
+    }
+  ],
+  "source_fingerprint": {
+    "file_count": 3137,
+    "sha256": "1d3236198621e693d1c5d971ecd4e3bebf5ca8075b8801869e292792b390165b",
+    "match": true
+  },
+  "selected_source_files": [
+    {
+      "path": ".spike-inputs/upstream/backend/go.mod",
+      "sha256": "105595eed2189a9e501d17a5a046fce5b84e0830b3792c7d13479553665cd12d",
+      "actual_sha256": "105595eed2189a9e501d17a5a046fce5b84e0830b3792c7d13479553665cd12d",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/go.sum",
+      "sha256": "0ed026ee0ecad45e8c31563a0da61b4f8f00f750b02e32ab159ebe947cadc105",
+      "actual_sha256": "0ed026ee0ecad45e8c31563a0da61b4f8f00f750b02e32ab159ebe947cadc105",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/repository/openai_oauth_service.go",
+      "sha256": "b59d39225286b25809e5eddf09fd6d034d2b6681bd19efadb4eb3abdeaacdad6",
+      "actual_sha256": "b59d39225286b25809e5eddf09fd6d034d2b6681bd19efadb4eb3abdeaacdad6",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/repository/req_client_pool.go",
+      "sha256": "4c3496bb87c2567e58733d95a19fcad3c863130f78be0ef6759c32c0b3e9474e",
+      "actual_sha256": "4c3496bb87c2567e58733d95a19fcad3c863130f78be0ef6759c32c0b3e9474e",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/repository/account_repo.go",
+      "sha256": "8548ce0689ce564e828e4e508e914892b302e649d5656e54b109e973c8730e2c",
+      "actual_sha256": "8548ce0689ce564e828e4e508e914892b302e649d5656e54b109e973c8730e2c",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/repository/gemini_token_cache.go",
+      "sha256": "f185143beedd7d0d63970d8e2adc129afddcc91272d52aab4607176849e56c19",
+      "actual_sha256": "f185143beedd7d0d63970d8e2adc129afddcc91272d52aab4607176849e56c19",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/repository/scheduler_cache.go",
+      "sha256": "31afbc2c7b46e4f464b7f49ecc8f5ddf7674ec9b582f3da10ab63089b62d5778",
+      "actual_sha256": "31afbc2c7b46e4f464b7f49ecc8f5ddf7674ec9b582f3da10ab63089b62d5778",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/repository/migrations_runner.go",
+      "sha256": "d18d93efe65bba309bc1184037cb2a24ddfcb3c954c2100de834a67ad6ed40d1",
+      "actual_sha256": "d18d93efe65bba309bc1184037cb2a24ddfcb3c954c2100de834a67ad6ed40d1",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/repository/integration_harness_test.go",
+      "sha256": "fd04a2bdf4282d1e3d7814a3d500d3a0402ce571dadb321d46204809430d240d",
+      "actual_sha256": "fd04a2bdf4282d1e3d7814a3d500d3a0402ce571dadb321d46204809430d240d",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/service/oauth_refresh_api.go",
+      "sha256": "60e98afb0fecb99ad27adb197ac311d78d65a42a7e752f5aabf9be7cc1566270",
+      "actual_sha256": "60e98afb0fecb99ad27adb197ac311d78d65a42a7e752f5aabf9be7cc1566270",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/service/openai_oauth_service.go",
+      "sha256": "f695d871a37e46b620265b6cb51e22ab8a210c9b5e9ba60e4bdccd59b37b8028",
+      "actual_sha256": "f695d871a37e46b620265b6cb51e22ab8a210c9b5e9ba60e4bdccd59b37b8028",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/service/openai_token_provider.go",
+      "sha256": "5a88259bc6f9fe2474cfae081bb5d6d1c4bd2173d631bbe31d1f0dd202a96fff",
+      "actual_sha256": "5a88259bc6f9fe2474cfae081bb5d6d1c4bd2173d631bbe31d1f0dd202a96fff",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/service/token_refresher.go",
+      "sha256": "af2f01ff7d77cc14c5a7cf046c21e5ce129c0ab39aa3e14523dc2712437308a3",
+      "actual_sha256": "af2f01ff7d77cc14c5a7cf046c21e5ce129c0ab39aa3e14523dc2712437308a3",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/service/token_refresh_service.go",
+      "sha256": "030445d6638fc209485282ea3715647f3302bf302cd632a9c4c2d0fdf38d6131",
+      "actual_sha256": "030445d6638fc209485282ea3715647f3302bf302cd632a9c4c2d0fdf38d6131",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/service/refresh_policy.go",
+      "sha256": "85872d7ff14a4a2165a5634649b52e7b5ac488cf450d8449cd16bd10233f17a0",
+      "actual_sha256": "85872d7ff14a4a2165a5634649b52e7b5ac488cf450d8449cd16bd10233f17a0",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/service/account_credentials_persistence.go",
+      "sha256": "1a0e8d462c9c046e2688a9b9239feddc28a3dc3d41d500c0a16840af741fdf86",
+      "actual_sha256": "1a0e8d462c9c046e2688a9b9239feddc28a3dc3d41d500c0a16840af741fdf86",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/service/token_cache_invalidator.go",
+      "sha256": "18b78acfb4135678bc6230c1a5f90858a6799ffc55723abc415fd084b03523c8",
+      "actual_sha256": "18b78acfb4135678bc6230c1a5f90858a6799ffc55723abc415fd084b03523c8",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/service/openai_gateway_service.go",
+      "sha256": "4538b19f5fcce4026e170a2b3b9760100640a95c685c4c1bbe41a9403513234d",
+      "actual_sha256": "4538b19f5fcce4026e170a2b3b9760100640a95c685c4c1bbe41a9403513234d",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/service/account_service.go",
+      "sha256": "810ea670a3b3246bc4faba54f31dee5791e550b47fb5197b10b2ca19edd0d653",
+      "actual_sha256": "810ea670a3b3246bc4faba54f31dee5791e550b47fb5197b10b2ca19edd0d653",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/pkg/openai/oauth.go",
+      "sha256": "d080a475211b3e8a37d8e34529182914f5a63933fe4807d4ea86ad4dd8b98053",
+      "actual_sha256": "d080a475211b3e8a37d8e34529182914f5a63933fe4807d4ea86ad4dd8b98053",
+      "match": true
+    },
+    {
+      "path": ".spike-inputs/upstream/backend/internal/config/config.go",
+      "sha256": "c46cafc4a9821d15a2d24934d9beab411c1963ba9dae0888aad53f523b672f41",
+      "actual_sha256": "c46cafc4a9821d15a2d24934d9beab411c1963ba9dae0888aad53f523b672f41",
+      "match": true
+    }
+  ],
+  "receipt_audit": {
+    "cases": 12,
+    "pass": 6,
+    "fail": 6,
+    "distinct_child_pids_per_case": true,
+    "successful_child_exits_and_owned_cleanup": true,
+    "execution_receipt_agreement": true
+  },
+  "input_manifest_sha256": "29613d6249476fb33eb6b99ff1bc3796e8020233d5ece1c1aacd96deb4cca39b",
+  "schema": "sub2api-oauth-analysis/v1",
+  "review_status": "COMPLETE",
+  "upstream_lifecycle_acceptance": "FAIL",
+  "source_pin": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "provenance": "User supplied official archived upstream; coordinator hash-verified staged source; local SHA256 verification, no independent archive/network/Git check",
+  "runtime_evidence": "Frozen coordinator execution audited; reviewer did not rerun services",
+  "report": "REPORT.md",
+  "original_failure_receipts": [
+    {
+      "barriers": [
+        "issuer_consumed_R0",
+        "postgres_reconnect_committed",
+        "redis_reconnect_published",
+        "actual_background_cycle_completed:background"
+      ],
+      "case_id": "TestOAuthLabLifecycle/reconnect_while_refresh",
+      "child_exits_ok": true,
+      "child_pids": [
+        86,
+        91
+      ],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 1,
+        "issuer_requests": 1,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 140,
+      "events": [
+        {
+          "kind": "ready",
+          "pid": 86
+        },
+        {
+          "kind": "lock_acquired",
+          "pid": 86
+        },
+        {
+          "kind": "background_done",
+          "op": "background",
+          "pid": 86
+        },
+        {
+          "kind": "stopped",
+          "pid": 86
+        },
+        {
+          "kind": "ready",
+          "pid": 91
+        },
+        {
+          "kind": "result",
+          "op": "subsequent",
+          "pid": 91,
+          "phase": "A1",
+          "http_status": 200
+        },
+        {
+          "kind": "stopped",
+          "pid": 91
+        }
+      ],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-two-process",
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 4,
+      "synthetic_account_id": 4,
+      "synthetic_identity_id": "583dbcfa-9e0e-4ff3-9671-de76b2f6ff4b"
+    },
+    {
+      "barriers": [
+        "issuer_rotation_inflight",
+        "postgres_disable_committed",
+        "redis_disable_published",
+        "actual_background_cycle_completed:background"
+      ],
+      "case_id": "TestOAuthLabLifecycle/disable_while_refresh",
+      "child_exits_ok": true,
+      "child_pids": [
+        97,
+        102
+      ],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 1,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": false,
+        "status": "disabled"
+      },
+      "duration_ms": 104,
+      "events": [
+        {
+          "kind": "ready",
+          "pid": 97
+        },
+        {
+          "kind": "lock_acquired",
+          "pid": 97
+        },
+        {
+          "kind": "background_done",
+          "op": "background",
+          "pid": 97
+        },
+        {
+          "kind": "stopped",
+          "pid": 97
+        },
+        {
+          "kind": "ready",
+          "pid": 102
+        },
+        {
+          "kind": "result",
+          "op": "new_work",
+          "pid": 102,
+          "denied": true
+        },
+        {
+          "kind": "stopped",
+          "pid": 102
+        }
+      ],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-two-process",
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 5,
+      "synthetic_account_id": 5,
+      "synthetic_identity_id": "1f3f644c-2bfc-4745-8d29-0e86c5393459"
+    },
+    {
+      "barriers": [
+        "postgres_snapshots_prepared:first",
+        "postgres_snapshots_prepared:successor",
+        "actual_first_redis_lease_expired",
+        "successor_issuer_attempt_held",
+        "successor_redis_lease_observed_live"
+      ],
+      "case_id": "TestOAuthLabLifecycle/lock_ttl_expiry",
+      "child_exits_ok": true,
+      "child_pids": [
+        107,
+        112
+      ],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 3,
+        "issuer_requests": 2,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 870,
+      "events": [
+        {
+          "kind": "ready",
+          "pid": 107
+        },
+        {
+          "kind": "prepared",
+          "op": "first",
+          "pid": 107,
+          "count": 1
+        },
+        {
+          "kind": "released",
+          "op": "first",
+          "pid": 107,
+          "count": 1
+        },
+        {
+          "kind": "lock_acquired",
+          "pid": 107
+        },
+        {
+          "kind": "result",
+          "op": "first-0",
+          "pid": 107,
+          "phase": "A1",
+          "http_status": 200
+        },
+        {
+          "kind": "batch_done",
+          "op": "first",
+          "pid": 107
+        },
+        {
+          "kind": "stopped",
+          "pid": 107
+        },
+        {
+          "kind": "ready",
+          "pid": 112
+        },
+        {
+          "kind": "prepared",
+          "op": "successor",
+          "pid": 112,
+          "count": 1
+        },
+        {
+          "kind": "released",
+          "op": "successor",
+          "pid": 112,
+          "count": 1
+        },
+        {
+          "kind": "lock_acquired",
+          "pid": 112
+        },
+        {
+          "kind": "result",
+          "op": "successor-0",
+          "pid": 112,
+          "phase": "A1",
+          "http_status": 200
+        },
+        {
+          "kind": "batch_done",
+          "op": "successor",
+          "pid": 112
+        },
+        {
+          "kind": "result",
+          "op": "subsequent",
+          "pid": 112,
+          "phase": "A1",
+          "http_status": 200
+        },
+        {
+          "kind": "stopped",
+          "pid": 112
+        }
+      ],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-two-process",
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 7,
+      "synthetic_account_id": 6,
+      "synthetic_identity_id": "b26977e9-6405-43c7-9a3b-af40c0e5dc32"
+    },
+    {
+      "barriers": [
+        "postgres_snapshots_prepared:first",
+        "postgres_snapshots_prepared:other",
+        "both_processes_actual_redis_failure",
+        "both_processes_issuer_attempt_inflight"
+      ],
+      "case_id": "TestOAuthLabLifecycle/redis_outage_two_process_race",
+      "child_exits_ok": true,
+      "child_pids": [
+        127,
+        132
+      ],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 3,
+        "issuer_requests": 2,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 164,
+      "events": [
+        {
+          "kind": "ready",
+          "pid": 127
+        },
+        {
+          "kind": "prepared",
+          "op": "first",
+          "pid": 127,
+          "count": 1
+        },
+        {
+          "kind": "released",
+          "op": "first",
+          "pid": 127,
+          "count": 1
+        },
+        {
+          "kind": "lock_error",
+          "pid": 127
+        },
+        {
+          "kind": "result",
+          "op": "first-0",
+          "pid": 127,
+          "phase": "A1",
+          "http_status": 200
+        },
+        {
+          "kind": "batch_done",
+          "op": "first",
+          "pid": 127
+        },
+        {
+          "kind": "stopped",
+          "pid": 127
+        },
+        {
+          "kind": "ready",
+          "pid": 132
+        },
+        {
+          "kind": "prepared",
+          "op": "other",
+          "pid": 132,
+          "count": 1
+        },
+        {
+          "kind": "released",
+          "op": "other",
+          "pid": 132,
+          "count": 1
+        },
+        {
+          "kind": "lock_error",
+          "pid": 132
+        },
+        {
+          "kind": "result",
+          "op": "other-0",
+          "pid": 132,
+          "phase": "A0",
+          "http_status": 401
+        },
+        {
+          "kind": "batch_done",
+          "op": "other",
+          "pid": 132
+        },
+        {
+          "kind": "result",
+          "op": "subsequent",
+          "pid": 132,
+          "phase": "A1",
+          "http_status": 200
+        },
+        {
+          "kind": "stopped",
+          "pid": 132
+        }
+      ],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-two-process",
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 10,
+      "synthetic_account_id": 8,
+      "synthetic_identity_id": "50921983-d52a-47d4-8cda-97481c2d5442"
+    },
+    {
+      "barriers": [
+        "postgres_snapshots_prepared:request",
+        "issuer_confirmed_invalid_grant"
+      ],
+      "case_id": "TestOAuthLabLifecycle/revocation_request_path",
+      "child_exits_ok": true,
+      "child_pids": [
+        137,
+        142
+      ],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 2,
+        "issuer_requests": 1,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 106,
+      "events": [
+        {
+          "kind": "ready",
+          "pid": 137
+        },
+        {
+          "kind": "prepared",
+          "op": "request",
+          "pid": 137,
+          "count": 1
+        },
+        {
+          "kind": "released",
+          "op": "request",
+          "pid": 137,
+          "count": 1
+        },
+        {
+          "kind": "lock_acquired",
+          "pid": 137
+        },
+        {
+          "kind": "result",
+          "op": "request-0",
+          "pid": 137,
+          "phase": "A0",
+          "http_status": 401
+        },
+        {
+          "kind": "batch_done",
+          "op": "request",
+          "pid": 137
+        },
+        {
+          "kind": "stopped",
+          "pid": 137
+        },
+        {
+          "kind": "ready",
+          "pid": 142
+        },
+        {
+          "kind": "result",
+          "op": "new_work",
+          "pid": 142,
+          "phase": "A0",
+          "http_status": 401
+        },
+        {
+          "kind": "stopped",
+          "pid": 142
+        }
+      ],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-two-process",
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 11,
+      "synthetic_account_id": 9,
+      "synthetic_identity_id": "535ea36b-252a-4eed-9f3b-ecb0385e88b5"
+    },
+    {
+      "barriers": [
+        "issuer_consumed_R0",
+        "real_postgresql_rejection_trigger_installed",
+        "actual_background_cycle_completed:background"
+      ],
+      "case_id": "TestOAuthLabLifecycle/issuer_rotation_db_write_rejected",
+      "child_exits_ok": true,
+      "child_pids": [
+        167,
+        172
+      ],
+      "counts": {
+        "effective_rotations": 1,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 2,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": false,
+        "status": "error"
+      },
+      "duration_ms": 1122,
+      "events": [
+        {
+          "kind": "ready",
+          "pid": 167
+        },
+        {
+          "kind": "lock_acquired",
+          "pid": 167
+        },
+        {
+          "kind": "lock_acquired",
+          "pid": 167
+        },
+        {
+          "kind": "background_done",
+          "op": "background",
+          "pid": 167
+        },
+        {
+          "kind": "stopped",
+          "pid": 167
+        },
+        {
+          "kind": "ready",
+          "pid": 172
+        },
+        {
+          "kind": "result",
+          "op": "new_work",
+          "pid": 172,
+          "denied": true
+        },
+        {
+          "kind": "stopped",
+          "pid": 172
+        }
+      ],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-two-process",
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 15,
+      "synthetic_account_id": 12,
+      "synthetic_identity_id": "29a009e3-b3d2-4fe6-80d9-625659bb5a94"
+    }
+  ],
+  "case_summary": [
+    {
+      "case_id": "TestOAuthLabLifecycle/normal_8_concurrent",
+      "status": "PASS",
+      "issuer_requests": 1,
+      "effective_rotations": 1,
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      }
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/background_then_request",
+      "status": "PASS",
+      "issuer_requests": 1,
+      "effective_rotations": 1,
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      }
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/request_then_background",
+      "status": "PASS",
+      "issuer_requests": 1,
+      "effective_rotations": 1,
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      }
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/reconnect_while_refresh",
+      "status": "FAIL",
+      "issuer_requests": 1,
+      "effective_rotations": 1,
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      }
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/disable_while_refresh",
+      "status": "FAIL",
+      "issuer_requests": 1,
+      "effective_rotations": 1,
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": false,
+        "status": "disabled"
+      }
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/lock_ttl_expiry",
+      "status": "FAIL",
+      "issuer_requests": 2,
+      "effective_rotations": 1,
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      }
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/redis_outage_process_local_8",
+      "status": "PASS",
+      "issuer_requests": 1,
+      "effective_rotations": 1,
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      }
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/redis_outage_two_process_race",
+      "status": "FAIL",
+      "issuer_requests": 2,
+      "effective_rotations": 1,
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      }
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/revocation_request_path",
+      "status": "FAIL",
+      "issuer_requests": 1,
+      "effective_rotations": 0,
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      }
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/revocation_background_path",
+      "status": "PASS",
+      "issuer_requests": 1,
+      "effective_rotations": 0,
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": false,
+        "status": "error"
+      }
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/issuer_rotation_lost_db_commit_ack",
+      "status": "PASS",
+      "issuer_requests": 1,
+      "effective_rotations": 1,
+      "durable_state": {
+        "access_phase": "A1",
+        "refresh_phase": "R1",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      }
+    },
+    {
+      "case_id": "TestOAuthLabLifecycle/issuer_rotation_db_write_rejected",
+      "status": "FAIL",
+      "issuer_requests": 2,
+      "effective_rotations": 1,
+      "durable_state": {
+        "access_phase": "A0",
+        "refresh_phase": "R0",
+        "reread_ok": true,
+        "schedulable": false,
+        "status": "error"
+      }
+    }
+  ],
+  "findings": [
+    {
+      "id": "O1",
+      "priority": "P1",
+      "case": "reconnect_while_refresh",
+      "path": "backend/internal/service/oauth_refresh_api.go",
+      "lines": [
+        293,
+        358
+      ],
+      "cause": "Unconditional completion overwrites reconnect",
+      "remedy": "Attempt/revision CAS plus transactional outbox"
+    },
+    {
+      "id": "O2",
+      "priority": "P1",
+      "case": "disable_while_refresh",
+      "path": "backend/internal/service/token_refresh_service.go",
+      "lines": [
+        1219,
+        1241
+      ],
+      "cause": "Stale account publication restores active scheduler snapshot",
+      "remedy": "Committed-state reread plus atomic revision-guarded full/meta publication"
+    },
+    {
+      "id": "O3",
+      "priority": "P1",
+      "case": "lock_ttl_expiry",
+      "path": "backend/internal/repository/gemini_token_cache.go",
+      "lines": [
+        41,
+        48
+      ],
+      "cause": "Lease expiry permits duplicate consumption; predecessor unconditional DEL erases successor",
+      "remedy": "Owner compare-delete and durable per-account attempt claim"
+    },
+    {
+      "id": "O4",
+      "priority": "P1",
+      "case": "redis_outage_two_process_race",
+      "path": "backend/internal/service/oauth_refresh_api.go",
+      "lines": [
+        186,
+        203
+      ],
+      "cause": "Redis error falls back to independent local locks",
+      "remedy": "Protected rejection or shared PostgreSQL ownership on all paths"
+    },
+    {
+      "id": "O5",
+      "priority": "P1",
+      "case": "revocation_request_path",
+      "path": "backend/internal/service/openai_token_provider.go",
+      "lines": [
+        145,
+        270
+      ],
+      "cause": "Terminal failure swallowed; stale bearer cached and selected",
+      "remedy": "Typed terminal handling, conditional durable exclusion, revision/eligibility validation at cache hits"
+    },
+    {
+      "id": "O6",
+      "priority": "P1",
+      "case": "issuer_rotation_db_write_rejected",
+      "path": "backend/internal/service/oauth_refresh_api.go",
+      "lines": [
+        353,
+        358
+      ],
+      "cause": "Post-consumption persistence failure enters background issuer retry",
+      "remedy": "Retain durable uncertain ownership, reconcile exact completion after error; persistence-only retry"
+    }
+  ],
+  "fix_implemented": false,
+  "new_tests_authored": false,
+  "oracle_artifacts": {
+    "second_issuer_barriers": [
+      "oauth_lab_lifecycle_test.go:189",
+      "oauth_lab_lifecycle_test.go:234"
+    ],
+    "revision": "Accept actual protected rejection or observed durable-owner waiting; release first reply before waiting for completion; unexpected second issuer always fails",
+    "invariants": [
+      "issuer requests <= 1",
+      "no stale bearer",
+      "independent durable/cache state"
+    ],
+    "scheduler_boundary": "Fixture conditional real repository query; real gateway auth selector; no production scheduler admission exercised",
+    "reconnect_version": "Fixture future timestamp; not actual admin version advancement"
+  },
+  "handoff": {
+    "owned_files": [
+      "sub2api-oauth-analysis/REPORT.md",
+      "sub2api-oauth-analysis/review.json"
+    ],
+    "blockers": [],
+    "limitations": [
+      "No reviewer runtime rerun or fixed-code execution",
+      "No full production scheduling/forwarding proof",
+      "Frozen receipts lack serialized scheduler snapshots; cache failures supported by fixture assertions/source"
+    ],
+    "next_gate": "Fork implementation plus separate corrected-oracle execution, preserving original failures"
+  },
+  "final_verification": {
+    "status": "PASS",
+    "frozen_inputs_unchanged": true,
+    "selected_source_and_complete_backend_unchanged": true,
+    "original_failure_receipts_byte_content_preserved_as_json_objects": true,
+    "findings_paths_exist": true,
+    "owned_artifacts_valid": true,
+    "new_runtime_tests": "NOT RUN; no service/network execution authorized in reviewer lane"
+  }
+}
