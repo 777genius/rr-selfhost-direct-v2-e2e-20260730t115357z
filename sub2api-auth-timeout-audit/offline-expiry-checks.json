@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "checks": [
+    "actual RS256 verifier converts signed exp seconds to absolute milliseconds",
+    "actual broker default 15-minute TTL is clipped to signed 5-minute exp",
+    "fresh same-run JWT while grant active returns prior capability and original expiry; does not renew",
+    "actual 300-second request budget clips to remaining 240-second access lease before upstream fetch; network trap prevents dispatch",
+    "actual verifier rejects token at exp equality",
+    "actual broker rejects capability at expiry equality",
+    "still-valid newer JWT cannot reopen expired same-run grant because durable run replay branch denies",
+    "actual identity binder does not validate expires, so client lifetime preflight is absent there"
+  ],
+  "execution": "Offline VM of actual source; generated synthetic RSA key; deterministic clock; injected JWKS; HTTP server, persistence and JSON plumbing replaced in memory; fetch throws before any network. No existing assertion changed. No integration/cancellation/persistence/provider claim.",
+  "source_sha256": {
+    "broker.mjs": "742b1d166670a18eae27475c5cd5ab5fb3e770bbbb92706e885ee11d33aa900a",
+    "oidc.mjs": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647",
+    "granted-run.mjs": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047"
+  }
+}
