@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "node_check_files": [
+    "sub2api-spike/customer.mjs",
+    "sub2api-spike/customer.test.mjs",
+    "sub2api-spike/run-client.mjs",
+    "sub2api-spike/runner-isolation.mjs",
+    "sub2api-spike/runner-isolation.test.mjs",
+    "sub2api-spike/operator/runner-containment.mjs",
+    "sub2api-boundary/regression-oracle.mjs"
+  ],
+  "shell_syntax": "sub2api-spike/operator/runner-launcher.sh"
+}

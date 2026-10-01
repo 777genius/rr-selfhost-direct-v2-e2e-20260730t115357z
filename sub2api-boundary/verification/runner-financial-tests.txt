@@ -1,0 +1,15 @@
+✔ A06 successful separate shell-wrapped rules read validates actual source and finding (1.110414ms)
+✔ A06 malformed and fabricated financial success fail inherited validator (0.181334ms)
+✔ A10 E04 streamed UTF8 and missing native terminal rejected (3.881181ms)
+✔ uid1001 Actions service and agent cannot serve as control parent (0.644603ms)
+✔ clean child environment rejects control tokens and arbitrary overrides (0.568524ms)
+✔ fixed control contract validates selectors and token destination (3.453808ms)
+✔ fixed control input has a hard byte limit (0.729271ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 62.908988

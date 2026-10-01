@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "PASS": false,
+  "observations": {
+    "stock_empty_template": {
+      "PASS": false,
+      "error": "quarantine_template_denied",
+      "duplicate_calls": 0
+    },
+    "inflight_routing_remap": {
+      "PASS": false,
+      "result": "active",
+      "error": null,
+      "schedulable": true,
+      "engine_group_ids": [
+        11
+      ],
+      "current_workspace_group": 22
+    }
+  },
+  "limits": "Offline adapter control flow only; no engine/DB/scheduler/kernel/inference claim."
+}

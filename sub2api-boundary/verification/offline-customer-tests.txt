@@ -1,0 +1,25 @@
+✔ stock admin create contract is denied before any remote write (1.232614ms)
+✔ legacy orphan intent fences workspace on startup without adoption or admin IO (42.192785ms)
+✔ offline boundary authentic omitted-group fixture completes stock roundtrip (140.103823ms)
+✔ offline boundary authentic omitted-group fixture reconciles full stock list and get (313.737649ms)
+✔ offline boundary actual in-flight group remap compensates at every promotion await (438.839974ms)
+✔ offline boundary replaced deleted credentials templates and membership authority stop promotion (1062.024244ms)
+✔ offline boundary authority changes during template and credential awaits prevent duplicate (216.063873ms)
+✔ offline boundary remapped existing reads exports and mutations compensate before publication (682.350803ms)
+✔ offline boundary contradictory null malformed or lite group authority never publishes (4070.153007ms)
+✔ offline boundary malformed lite recovery list and contradictory fetchOwned are refused (181.354368ms)
+✔ offline boundary uncertain compensation fences current replaced authority durably (148.863767ms)
+✔ offline boundary recovery rechecks remaps during list get and promotion (492.45838ms)
+✔ offline boundary replacement remap during old retirement compensates new account (283.984685ms)
+✔ offline boundary replaced authority during failed compensation revocation remains fenced (140.029422ms)
+✔ offline boundary matching group representations and null redacted credentials are valid full DTOs (128.176471ms)
+✔ offline boundary prepared template identity and scope mutation cannot duplicate (370.101957ms)
+✔ offline boundary acknowledged interrupted promotion retains explicit retire and complete recovery (344.992178ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9139.303856
