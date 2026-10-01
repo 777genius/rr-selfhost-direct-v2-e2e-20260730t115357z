@@ -1,0 +1,207 @@
+--- a/sub2api-spike/broker.mjs
++++ b/sub2api-spike/broker.mjs
+@@ -10,7 +10,7 @@
+ const paths = new Map([['/v1/responses', 'responses'], ['/openai/v1/responses', 'responses'], ['/v1/messages', 'messages'], ['/anthropic/v1/messages', 'messages']]);
+ const routing = new Set(['account_id', 'account', 'group', 'group_id', 'key', 'api_key', 'baseURL', 'base_url', 'provider', 'workspace', 'workspace_id', 'upstream_url']);
+ function denyRouting(x) { if (!x || typeof x !== 'object') return; for (const k of Object.keys(x)) if (routing.has(k)) throw fault(400, 'routing_denied'); }
+-export async function createBroker({ ledgerPath, verifyOIDC, scopes, resolveWorkspace, isWorkspaceActive = () => true, timeoutMs = 60000, ttlMs = 900000, maxRequests = 32, maxConcurrent = 2, globalConcurrent = 40, log = () => {} }) {
++export async function createBroker({ ledgerPath, verifyOIDC, scopes, resolveWorkspace, isWorkspaceActive = () => true, timeoutMs = 60000, ttlMs = 900000, maxRequests = 32, maxConcurrent = 2, globalConcurrent = 40, log = () => {}, observeCancellation = () => {} }) {
+   if (!(ttlMs > 0 && ttlMs <= 900000 && maxRequests > 0 && maxRequests <= 32 && maxConcurrent > 0 && maxConcurrent <= 2 && timeoutMs > 0)) throw Error('Invalid limits');
+   // Exclusive process lock. Crash leaves it present: fail closed until the
+   // coordinator proves the old broker terminal and removes only this lock.
+@@ -24,7 +24,16 @@
+   async function persist() { try { await atomicJSON(ledgerPath, disk); } catch { poisoned = true; throw fault(503, 'ledger_unavailable'); } }
+   try { await persist(); } catch (e) { await ledgerLock.close(); releaseLock(); throw e; } // Before admission.
+   await ledgerLock.close();
+-  function close(g) { g.closed = true; for (const c of g.controllers) c.abort(); clearTimeout(g.timer); }
++  const dispatches = new WeakMap(); let dispatch = 0;
++  function abort(c, cause) {
++    // Diagnostic observation precedes the abort; repeated abort calls emit no second event.
++    if (!c.signal.aborted) {
++      const event = { ...dispatches.get(c), cause, mono_ms: Number(process.hrtime.bigint()) / 1e6, clock: 'linux-CLOCK_MONOTONIC' };
++      try { observeCancellation(Object.freeze(event)); } catch {} // Observation cannot prevent cancellation.
++    }
++    c.abort();
++  }
++  function close(g, cause) { g.closed = true; for (const c of g.controllers) abort(c, cause); clearTimeout(g.timer); }
+   const server = http.createServer({ maxHeaderSize: 16384 }, async (req, res) => {
+     const started = Date.now(); let code = 'ok';
+     try {
+@@ -46,7 +55,7 @@
+           const expires = Math.min(Date.now() + ttlMs, claims.expires); if (expires <= Date.now()) throw fault(401, 'expired');
+           disk.runs[claims.runID] = { attempt: claims.attempt, workspace, state: 'issued' }; await persist();
+           const grant = { capability: randomBytes(32).toString('base64url'), session: randomUUID(), scope, binding, workspace, attempt: claims.attempt, expires, requests: 0, active: 0, closed: false, controllers: new Set() };
+-          grant.timer = setTimeout(() => close(grant), expires - Date.now()); grant.timer.unref();
++          grant.timer = setTimeout(() => close(grant, 'expiry'), expires - Date.now()); grant.timer.unref();
+           grants.set(grant.capability, grant); byRun.set(claims.runID, grant); return grant;
+         });
+         send(res, 200, { capability: g.capability, model: scope.model, expires: g.expires }); return;
+@@ -54,15 +63,17 @@
+       if (req.method !== 'POST' && req.method !== 'DELETE') throw fault(404, 'route_denied');
+       const g = grants.get(bearer(req));
+       if (!g || g.closed || g.expires <= Date.now()) throw fault(401, 'capability_denied');
+-      if (!await isWorkspaceActive(g.workspace)) { close(g); throw fault(403, 'membership_denied'); }
+-      if (url.pathname === '/grant' && req.method === 'DELETE') { close(g); send(res, 200, { revoked: true }); return; }
++      if (!await isWorkspaceActive(g.workspace)) { close(g, 'membership'); throw fault(403, 'membership_denied'); }
++      if (url.pathname === '/grant' && req.method === 'DELETE') { close(g, 'revoke'); send(res, 200, { revoked: true }); return; }
+       if (req.method !== 'POST' || paths.get(url.pathname) !== g.scope.protocol) throw fault(404, 'route_denied');
+       if (g.requests >= maxRequests || g.active >= maxConcurrent || active >= globalConcurrent) throw fault(429, 'request_limit');
+       // Reserve capacity BEFORE reading body so concurrent uploads cannot bypass it.
+       g.active++; active++;
+       const controller = new AbortController(); g.controllers.add(controller);
+-      const timer = setTimeout(() => { controller.abort(); req.destroy(); }, Math.min(timeoutMs, g.expires - Date.now())); timer.unref();
+-      const cancel = () => { if (!res.writableFinished) controller.abort(); }; res.once('close', cancel);
++      dispatches.set(controller, { dispatch: ++dispatch, protocol: g.scope.protocol });
++      const expiryRemaining = g.expires - Date.now();
++      const timer = setTimeout(() => { abort(controller, expiryRemaining <= timeoutMs ? 'request-expiry' : 'timeout'); req.destroy(); }, Math.min(timeoutMs, expiryRemaining)); timer.unref();
++      const cancel = () => { if (!res.writableFinished) abort(controller, 'downstream-close'); }; res.once('close', cancel);
+       try {
+         const body = await readJSON(req); denyRouting(body);
+         // This bounded capability authorizes native streaming Responses/Messages.
+@@ -92,14 +103,14 @@
+         const source = Readable.fromWeb(upstream.body);
+         if (type.includes('text/event-stream')) await pipeline(source, nativeErrorFilter(), res, { signal: controller.signal });
+         else await pipeline(source, res, { signal: controller.signal });
+-      } finally { clearTimeout(timer); res.off('close', cancel); controller.abort(); g.controllers.delete(controller); g.active--; active--; }
++      } finally { clearTimeout(timer); res.off('close', cancel); abort(controller, 'request-finally'); g.controllers.delete(controller); g.active--; active--; }
+     } catch (e) {
+       code = e.code && e.status ? e.code : 'transport_failure';
+       if (res.headersSent) res.destroy(); else send(res, e.status ?? 502, { error: { type: code } });
+     } finally { log({ event: 'request', code, duration_ms: Date.now() - started }); }
+   });
+   server.headersTimeout = 10000; server.requestTimeout = Math.min(timeoutMs, 60000);
+-  server.once('close', () => { for (const g of grants.values()) close(g); releaseLock(); });
+-  server.revokeWorkspace = workspace => { for (const g of grants.values()) if (g.workspace === workspace) close(g); };
++  server.once('close', () => { for (const g of grants.values()) close(g, 'server-close'); releaseLock(); });
++  server.revokeWorkspace = workspace => { for (const g of grants.values()) if (g.workspace === workspace) close(g, 'workspace-revoke'); };
+   return server;
+ }
+--- a/sub2api-regression-lab/run.mjs
++++ b/sub2api-regression-lab/run.mjs
+@@ -72,7 +72,8 @@
+ }
+ async function broker(c, spec, tenant, row) {
+   const oidc = randomBytes(24).toString('hex');
+-  const server = await createBroker({ ledgerPath: `/private/${c.run_id}.${spec.id}.broker.json`,
++  row.broker_abort_events = [];
++  const server = await createBroker({ observeCancellation: event => row.broker_abort_events.push({ id: spec.id, ...event }), ledgerPath: `/private/${c.run_id}.${spec.id}.broker.json`,
+     verifyOIDC: async token => { must(token === oidc, 'SYNTHETIC_OIDC_DENIED'); return { runID: spec.id, attempt: '1', workflowSHA: 'a'.repeat(40), expires: Date.now() + 60000 }; },
+     resolveWorkspace: async () => 'lab', ttlMs: spec.trigger === 'expiry' ? 3000 : 30000, timeoutMs: 30000,
+     scopes: { [`synthetic:${spec.protocol}`]: { model: models[spec.protocol], protocol: spec.protocol, baseURL: c.engine_url,
+@@ -91,6 +92,7 @@
+   } catch (e) { server.close(); server.closeAllConnections(); throw e; }
+ }
+ async function cancel(c, spec, tenant, row, clients) {
++  row.cancel_trigger = spec.trigger; row.cancel_clock = 'linux-CLOCK_MONOTONIC';
+   let b;
+   try {
+     if (spec.trigger !== 'client') b = await broker(c, spec, tenant, row);
+@@ -109,18 +111,18 @@
+     else if (spec.trigger === 'revoke') await b.revoke();
+     if (b) {
+       const end = mono() + 4500; while (row.broker_boundary_close_ms === undefined && mono() < end) await sleep(20);
+-      row.cancel_ms = row.broker_boundary_close_ms ?? null;
+-      must(row.cancel_ms !== null, 'BROKER_CANCEL_BOUNDARY_NOT_OBSERVED');
++      must(Number.isFinite(row.broker_boundary_close_ms), 'BROKER_CANCEL_BOUNDARY_NOT_OBSERVED');
++      must(row.broker_abort_events.length === 1, 'BROKER_PRE_ABORT_NOT_OBSERVED');
++      row.cancel_ms = spec.trigger === 'expiry' ? row.broker_abort_events[0].mono_ms : row.action_requested_ms;
+       const denied = await fetch(`${b.base}/v1/${spec.protocol}`, { method: 'POST', headers: { authorization: `Bearer ${b.key}`, 'content-type': 'application/json' }, body: '{}', signal: AbortSignal.timeout(2000) });
+       row.closed_capability_denied = denied.status === 401; await denied.body?.cancel();
+     }
+-    await sleep(Math.max(0, row.cancel_ms + 1250 - mono()));
++    while (mono() < row.cancel_ms + 1250) await sleep(Math.max(1, row.cancel_ms + 1250 - mono()));
+     row.immediate_observation_ms = mono();
+     rs = (await control(c, 'state')).records.filter(r => r.id === spec.id);
+     row.upstream_at_immediate_oracle = rs;
+-    // Hold for ten seconds; only this explicit release permits deliberate usage drain to finish.
++    // Keep the ten-second hold. No manual release may supply cancellation proof.
+     await sleep(Math.max(0, rs[0].hold_until_ms - mono()));
+-    await control(c, 'release', { id: spec.id });
+     row.downstream = await pending.promise;
+     row.upstream = await waitFor(c, spec.id, x => x.length > 0 && x.every(r => r.close_ms !== null), 5000);
+     Object.assign(row, cancellationVerdict(row, spec.placement));
+--- a/sub2api-regression-lab/receipts.mjs
++++ b/sub2api-regression-lab/receipts.mjs
+@@ -17,19 +17,70 @@
+   return { status: 'PASS', reason: 'OBSERVABLE_FAILURE_SINGLE_ATTEMPT_NO_RETRY' };
+ }
+ export function cancellationVerdict(row, placement) {
+-  const rs = row.upstream ?? [], cancel = row.cancel_ms;
++  const rs = row.upstream ?? [], cancel = row.cancel_ms, d = row.downstream;
++  const fail = reason => ({ status: 'FAIL', reason });
+   if (!row.healthy_control || rs.length === 0) return { status: 'NOT RUN', reason: 'UPSTREAM_CANCEL_NOT_EXERCISED' };
+-  if (rs.length !== 1 || rs[0].effects !== 1) return { status: 'FAIL', reason: 'UPSTREAM_ATTEMPT_OR_EFFECT_COUNT' };
+-  const r = rs[0], d = row.downstream;
+-  if (!Number.isFinite(cancel) || !Number.isFinite(r.effect_ms) || r.effect_ms > cancel) return { status: 'FAIL', reason: 'CANCEL_ORDER_NOT_PROVEN' };
+-  if (placement === 'after' && !([r.first_flush_ms, d.ack_ms, r.ack_received_ms].every(Number.isFinite) && d.ack_frame_bytes > 4096 && r.first_flush_ms <= d.ack_ms && d.ack_ms <= r.ack_received_ms && r.ack_received_ms < cancel))
+-    return { status: 'FAIL', reason: 'EARLY_FRAME_NOT_ACKNOWLEDGED' };
+-  if (placement === 'before' && (d.ack_ms !== null || r.first_flush_ms !== null && r.first_flush_ms < cancel))
+-    return { status: 'FAIL', reason: 'CANCEL_WAS_AFTER_OUTPUT' };
+-  if (!(r.close_ms !== null && r.close_ms >= cancel && r.close_ms - cancel <= 1200 && r.terminal_ms === null && r.release_ms === null))
+-    return { status: 'FAIL', reason: 'IMMEDIATE_ABORT_ORACLE_USAGE_DRAIN_PRESERVED' };
+-  if (success(d)) return { status: 'FAIL', reason: 'CANCEL_FALSE_SUCCESS' };
+-  return { status: 'PASS', reason: 'UPSTREAM_ABORT_OBSERVED_WITHIN_1200MS' };
++  if (rs.length !== 1 || !rs[0] || rs[0].effects !== 1) return fail('UPSTREAM_ATTEMPT_OR_EFFECT_COUNT');
++  const r = rs[0], healthy = row.preparation_control;
++  if (!healthy?.downstream || !success(healthy.downstream) || !(healthy.downstream.ack_frame_bytes > 4096) ||
++      ![healthy.downstream.ack_ms, healthy.downstream.terminal_ms, healthy.downstream.client_close_ms].every(Number.isFinite) ||
++      healthy.upstream?.length !== 1 || !healthy.upstream[0] || healthy.upstream[0].effects !== 1 || healthy.upstream[0].finished !== true ||
++      healthy.upstream[0].identity !== row.protocol || healthy.upstream[0].protocol !== row.protocol ||
++      healthy.upstream[0].id !== `${row.id}.healthy` ||
++      ![healthy.upstream[0].effect_ms, healthy.upstream[0].first_flush_ms, healthy.upstream[0].terminal_ms, healthy.upstream[0].close_ms].every(Number.isFinite) ||
++      !(healthy.upstream[0].effect_ms <= healthy.upstream[0].first_flush_ms &&
++        healthy.upstream[0].first_flush_ms <= healthy.downstream.ack_ms &&
++        healthy.downstream.ack_ms <= healthy.downstream.terminal_ms && healthy.downstream.terminal_ms <= healthy.downstream.client_close_ms &&
++        healthy.upstream[0].first_flush_ms <= healthy.upstream[0].terminal_ms &&
++        healthy.upstream[0].terminal_ms <= healthy.upstream[0].close_ms))
++    return fail('HEALTHY_CONTROL_NOT_PROVEN');
++  if (!['before', 'after'].includes(placement) || !['client', 'revoke', 'expiry'].includes(row.cancel_trigger) ||
++      row.cancel_clock !== 'linux-CLOCK_MONOTONIC' || row.deployment?.clock !== row.cancel_clock ||
++      r.id !== row.id || r.identity !== row.protocol || r.protocol !== row.protocol || r.mode !== `hold-${placement}` ||
++      !d || ![row.started_ms, d.started_ms, r.started_ms, r.effect_ms, row.action_requested_ms, cancel].every(Number.isFinite) ||
++      !(row.started_ms <= d.started_ms && d.started_ms <= r.started_ms && r.started_ms <= r.effect_ms &&
++        r.effect_ms <= row.action_requested_ms && row.action_requested_ms <= cancel))
++    return fail('CANCEL_ORDER_NOT_PROVEN');
++  let abort = cancel;
++  if (row.cancel_trigger === 'client') {
++    if (d.client_cancel_ms !== cancel || d.transport !== 'client_cancel' || (row.broker_abort_events?.length ?? 0) !== 0)
++      return fail('CLIENT_CANCEL_NOT_PROVEN');
++  } else {
++    const events = row.broker_abort_events;
++    if (!Array.isArray(events) || events.length !== 1) return fail('BROKER_PRE_ABORT_NOT_PROVEN');
++    const event = events[0];
++    if (!event) return fail('BROKER_PRE_ABORT_NOT_PROVEN');
++    abort = event.mono_ms;
++    if (event.id !== row.id || event.protocol !== row.protocol || event.dispatch !== 1 || event.clock !== row.cancel_clock ||
++        !Number.isFinite(abort) || !Number.isFinite(row.broker_boundary_close_ms) ||
++        !(cancel <= abort && abort <= row.broker_boundary_close_ms) || row.closed_capability_denied !== true ||
++        (row.cancel_trigger === 'revoke' ? event.cause !== 'revoke' || cancel !== row.action_requested_ms
++          : !['expiry', 'request-expiry'].includes(event.cause) || cancel !== abort))
++      return fail('BROKER_PRE_ABORT_NOT_PROVEN');
++  }
++  if (placement === 'after' && !([r.first_flush_ms, d.ack_ms, r.ack_received_ms].every(Number.isFinite) &&
++      d.ack_frame_bytes > 4096 && r.ack_frame_bytes === d.ack_frame_bytes && r.client_ack_ms === d.ack_ms &&
++      r.effect_ms <= r.first_flush_ms && r.first_flush_ms <= d.ack_ms && d.ack_ms <= r.ack_received_ms && r.ack_received_ms < cancel))
++    return fail('EARLY_FRAME_NOT_ACKNOWLEDGED');
++  if (placement === 'before' && (d.ack_ms !== null || r.first_write_ms !== null || r.first_flush_ms !== null || r.bytes !== 0))
++    return fail('CANCEL_WAS_AFTER_OUTPUT');
++  const physical = x => x && x.id === row.id && x.identity === row.protocol && x.protocol === row.protocol &&
++    Number.isSafeInteger(x.sequence) && x.sequence > 0 && x.sequence === r.sequence &&
++    x.mode === r.mode && x.effect_ms === r.effect_ms && x.hold_started_ms === r.hold_started_ms &&
++    x.effects === 1 && x.finished === false &&
++    Number.isFinite(x.close_ms) && x.close_ms >= abort && x.close_ms - cancel <= 1200 &&
++    x.terminal_ms === null && x.release_ms === null && x.reset_ms === null && x.safety_stop_ms === undefined &&
++    Number.isFinite(x.hold_started_ms) && x.hold_started_ms <= cancel &&
++    x.hold_until_ms === x.hold_started_ms + 10000 && x.close_ms < x.hold_until_ms;
++  const immediate = row.upstream_at_immediate_oracle;
++  if (!physical(r) || !Array.isArray(immediate) || immediate.length !== 1 || !physical(immediate[0]) ||
++      immediate[0].close_ms !== r.close_ms || !Number.isFinite(row.immediate_observation_ms) ||
++      row.immediate_observation_ms < cancel + 1250 || row.immediate_observation_ms >= r.hold_until_ms)
++    return fail('IMMEDIATE_ABORT_ORACLE_USAGE_DRAIN_PRESERVED');
++  // An HTTP error ending normally before SSE headers is permitted; an SSE terminal never is.
++  if (d.terminal_ms !== null || success(d) || !Number.isFinite(d.client_close_ms) || d.client_close_ms < cancel)
++    return fail('CANCEL_FALSE_SUCCESS');
++  return { status: 'PASS', reason: 'PHYSICAL_UPSTREAM_ABORT_OBSERVED_WITHIN_1200MS' };
+ }
+ export function telemetryVerdict(samples, meta, { final = true } = {}) {
+   const missing = reason => ({ status: 'NOT RUN', reason });

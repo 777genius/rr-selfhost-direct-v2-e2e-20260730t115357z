@@ -1,0 +1,1040 @@
+TAP version 13
+# (node:12) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: responses: revoke observation precedes first actual abort and physical close
+ok 1 - responses: revoke observation precedes first actual abort and physical close
+  ---
+  duration_ms: 3.39298
+  type: 'test'
+  ...
+# Subtest: responses: expiry observation precedes first actual abort and physical close
+ok 2 - responses: expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 1.909865
+  type: 'test'
+  ...
+# Subtest: responses: request-expiry observation precedes first actual abort and physical close
+ok 3 - responses: request-expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 2.358113
+  type: 'test'
+  ...
+# Subtest: messages: revoke observation precedes first actual abort and physical close
+ok 4 - messages: revoke observation precedes first actual abort and physical close
+  ---
+  duration_ms: 1.835723
+  type: 'test'
+  ...
+# Subtest: messages: expiry observation precedes first actual abort and physical close
+ok 5 - messages: expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 1.73146
+  type: 'test'
+  ...
+# Subtest: messages: request-expiry observation precedes first actual abort and physical close
+ok 6 - messages: request-expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 1.711662
+  type: 'test'
+  ...
+# Subtest: observer exception cannot prevent real cancellation
+ok 7 - observer exception cannot prevent real cancellation
+  ---
+  duration_ms: 1.912803
+  type: 'test'
+  ...
+# Subtest: request timeout remains distinct from expiry
+ok 8 - request timeout remains distinct from expiry
+  ---
+  duration_ms: 2.679231
+  type: 'test'
+  ...
+# Subtest: downstream close remains distinct from capability cancellation
+ok 9 - downstream close remains distinct from capability cancellation
+  ---
+  duration_ms: 1.811338
+  type: 'test'
+  ...
+# Subtest: responses before client: rapid physical close is valid
+ok 10 - responses before client: rapid physical close is valid
+  ---
+  duration_ms: 1.53765
+  type: 'test'
+  ...
+# Subtest: responses before revoke: rapid physical close is valid
+ok 11 - responses before revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.166446
+  type: 'test'
+  ...
+# Subtest: responses before expiry: rapid physical close is valid
+ok 12 - responses before expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.121036
+  type: 'test'
+  ...
+# Subtest: responses after client: rapid physical close is valid
+ok 13 - responses after client: rapid physical close is valid
+  ---
+  duration_ms: 0.097212
+  type: 'test'
+  ...
+# Subtest: responses after revoke: rapid physical close is valid
+ok 14 - responses after revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.102303
+  type: 'test'
+  ...
+# Subtest: responses after expiry: rapid physical close is valid
+ok 15 - responses after expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.094025
+  type: 'test'
+  ...
+# Subtest: responses: expiry callback anchors expiry, not setup
+ok 16 - responses: expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.143596
+  type: 'test'
+  ...
+# Subtest: responses: request-expiry callback anchors expiry, not setup
+ok 17 - responses: request-expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.194996
+  type: 'test'
+  ...
+# Subtest: messages before client: rapid physical close is valid
+ok 18 - messages before client: rapid physical close is valid
+  ---
+  duration_ms: 0.176318
+  type: 'test'
+  ...
+# Subtest: messages before revoke: rapid physical close is valid
+ok 19 - messages before revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.732482
+  type: 'test'
+  ...
+# Subtest: messages before expiry: rapid physical close is valid
+ok 20 - messages before expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.11211
+  type: 'test'
+  ...
+# Subtest: messages after client: rapid physical close is valid
+ok 21 - messages after client: rapid physical close is valid
+  ---
+  duration_ms: 0.071056
+  type: 'test'
+  ...
+# Subtest: messages after revoke: rapid physical close is valid
+ok 22 - messages after revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.040021
+  type: 'test'
+  ...
+# Subtest: messages after expiry: rapid physical close is valid
+ok 23 - messages after expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.031077
+  type: 'test'
+  ...
+# Subtest: messages: expiry callback anchors expiry, not setup
+ok 24 - messages: expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.033042
+  type: 'test'
+  ...
+# Subtest: messages: request-expiry callback anchors expiry, not setup
+ok 25 - messages: request-expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.033509
+  type: 'test'
+  ...
+# Subtest: physical close at 1201ms exceeds original 1200ms acceptance
+not ok 26 - physical close at 1201ms exceeds original 1200ms acceptance
+  ---
+  duration_ms: 0.755955
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:55:40'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:57:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: physical close at 1249.9ms exceeds original 1200ms acceptance
+not ok 27 - physical close at 1249.9ms exceeds original 1200ms acceptance
+  ---
+  duration_ms: 0.201047
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:55:40'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:57:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: physical close at 1250ms exceeds original 1200ms acceptance
+not ok 28 - physical close at 1250ms exceeds original 1200ms acceptance
+  ---
+  duration_ms: 0.118276
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:55:40'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:57:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject close before abort despite being after request
+ok 29 - reject close before abort despite being after request
+  ---
+  duration_ms: 0.087989
+  type: 'test'
+  ...
+# Subtest: reject close before action request
+ok 30 - reject close before action request
+  ---
+  duration_ms: 0.053673
+  type: 'test'
+  ...
+# Subtest: reject close before upstream request
+ok 31 - reject close before upstream request
+  ---
+  duration_ms: 0.056644
+  type: 'test'
+  ...
+# Subtest: reject close after 1250ms deadline
+ok 32 - reject close after 1250ms deadline
+  ---
+  duration_ms: 0.071594
+  type: 'test'
+  ...
+# Subtest: reject late broker response cannot extend deadline
+ok 33 - reject late broker response cannot extend deadline
+  ---
+  duration_ms: 0.072445
+  type: 'test'
+  ...
+# Subtest: reject upstream semantic terminal
+ok 34 - reject upstream semantic terminal
+  ---
+  duration_ms: 0.049755
+  type: 'test'
+  ...
+# Subtest: reject downstream terminal even with transport error
+ok 35 - reject downstream terminal even with transport error
+  ---
+  duration_ms: 0.052895
+  type: 'test'
+  ...
+# Subtest: reject normal complete upstream close
+ok 36 - reject normal complete upstream close
+  ---
+  duration_ms: 0.043847
+  type: 'test'
+  ...
+# Subtest: reject manual upstream release
+ok 37 - reject manual upstream release
+  ---
+  duration_ms: 0.051271
+  type: 'test'
+  ...
+# Subtest: reject manual upstream reset
+ok 38 - reject manual upstream reset
+  ---
+  duration_ms: 0.04336
+  type: 'test'
+  ...
+# Subtest: reject upstream safety reset
+ok 39 - reject upstream safety reset
+  ---
+  duration_ms: 0.059709
+  type: 'test'
+  ...
+# Subtest: reject missing physical close
+ok 40 - reject missing physical close
+  ---
+  duration_ms: 0.050553
+  type: 'test'
+  ...
+# Subtest: reject missing pre-abort event
+ok 41 - reject missing pre-abort event
+  ---
+  duration_ms: 0.045004
+  type: 'test'
+  ...
+# Subtest: reject foreign pre-abort protocol
+ok 42 - reject foreign pre-abort protocol
+  ---
+  duration_ms: 0.038038
+  type: 'test'
+  ...
+# Subtest: reject foreign pre-abort request
+ok 43 - reject foreign pre-abort request
+  ---
+  duration_ms: 0.036586
+  type: 'test'
+  ...
+# Subtest: reject foreign source clock
+ok 44 - reject foreign source clock
+  ---
+  duration_ms: 0.035742
+  type: 'test'
+  ...
+# Subtest: reject missing clock custody
+ok 45 - reject missing clock custody
+  ---
+  duration_ms: 0.057212
+  type: 'test'
+  ...
+# Subtest: reject foreign physical protocol
+ok 46 - reject foreign physical protocol
+  ---
+  duration_ms: 0.065117
+  type: 'test'
+  ...
+# Subtest: reject foreign physical identity
+ok 47 - reject foreign physical identity
+  ---
+  duration_ms: 0.050939
+  type: 'test'
+  ...
+# Subtest: reject foreign physical request
+ok 48 - reject foreign physical request
+  ---
+  duration_ms: 0.038911
+  type: 'test'
+  ...
+# Subtest: reject double upstream dispatch
+ok 49 - reject double upstream dispatch
+  ---
+  duration_ms: 0.05215
+  type: 'test'
+  ...
+# Subtest: reject double broker dispatch
+ok 50 - reject double broker dispatch
+  ---
+  duration_ms: 0.044722
+  type: 'test'
+  ...
+# Subtest: reject second broker dispatch substituted
+ok 51 - reject second broker dispatch substituted
+  ---
+  duration_ms: 0.033847
+  type: 'test'
+  ...
+# Subtest: reject multiple effects
+ok 52 - reject multiple effects
+  ---
+  duration_ms: 0.03305
+  type: 'test'
+  ...
+# Subtest: reject missing immediate snapshot
+ok 53 - reject missing immediate snapshot
+  ---
+  duration_ms: 0.074735
+  type: 'test'
+  ...
+# Subtest: reject late close only in final snapshot
+ok 54 - reject late close only in final snapshot
+  ---
+  duration_ms: 0.086568
+  type: 'test'
+  ...
+# Subtest: reject foreign immediate sequence
+ok 55 - reject foreign immediate sequence
+  ---
+  duration_ms: 0.083455
+  type: 'test'
+  ...
+# Subtest: reject immediate terminal later erased
+ok 56 - reject immediate terminal later erased
+  ---
+  duration_ms: 0.068017
+  type: 'test'
+  ...
+# Subtest: reject shortened hold
+ok 57 - reject shortened hold
+  ---
+  duration_ms: 0.072954
+  type: 'test'
+  ...
+# Subtest: reject oracle observation too early
+ok 58 - reject oracle observation too early
+  ---
+  duration_ms: 0.049056
+  type: 'test'
+  ...
+# Subtest: reject oracle observation after hold
+ok 59 - reject oracle observation after hold
+  ---
+  duration_ms: 0.036616
+  type: 'test'
+  ...
+# Subtest: reject healthy boolean without physical control
+ok 60 - reject healthy boolean without physical control
+  ---
+  duration_ms: 0.048745
+  type: 'test'
+  ...
+# Subtest: reject missing healthy downstream
+ok 61 - reject missing healthy downstream
+  ---
+  duration_ms: 0.036032
+  type: 'test'
+  ...
+# Subtest: reject missing healthy ack size
+ok 62 - reject missing healthy ack size
+  ---
+  duration_ms: 0.035631
+  type: 'test'
+  ...
+# Subtest: reject null upstream record
+ok 63 - reject null upstream record
+  ---
+  duration_ms: 0.032205
+  type: 'test'
+  ...
+# Subtest: reject null broker event
+ok 64 - reject null broker event
+  ---
+  duration_ms: 0.042887
+  type: 'test'
+  ...
+# Subtest: reject missing healthy acknowledgment
+ok 65 - reject missing healthy acknowledgment
+  ---
+  duration_ms: 0.0502
+  type: 'test'
+  ...
+# Subtest: reject foreign healthy request
+ok 66 - reject foreign healthy request
+  ---
+  duration_ms: 0.041853
+  type: 'test'
+  ...
+# Subtest: reject missing healthy physical close
+ok 67 - reject missing healthy physical close
+  ---
+  duration_ms: 0.041836
+  type: 'test'
+  ...
+# Subtest: reject tiny acknowledged healthy frame
+ok 68 - reject tiny acknowledged healthy frame
+  ---
+  duration_ms: 0.036946
+  type: 'test'
+  ...
+# Subtest: reject tiny acknowledged early frame
+ok 69 - reject tiny acknowledged early frame
+  ---
+  duration_ms: 0.037644
+  type: 'test'
+  ...
+# Subtest: reject ack before upstream flush
+ok 70 - reject ack before upstream flush
+  ---
+  duration_ms: 0.055831
+  type: 'test'
+  ...
+# Subtest: reject ack at cancellation
+ok 71 - reject ack at cancellation
+  ---
+  duration_ms: 0.048585
+  type: 'test'
+  ...
+# Subtest: reject before placement already wrote output
+ok 72 - reject before placement already wrote output
+  ---
+  duration_ms: 0.081605
+  type: 'test'
+  ...
+# Subtest: reject request timeout pretending expiry
+ok 73 - reject request timeout pretending expiry
+  ---
+  duration_ms: 0.069486
+  type: 'test'
+  ...
+# Subtest: reject finally abort pretending revoke
+ok 74 - reject finally abort pretending revoke
+  ---
+  duration_ms: 0.085879
+  type: 'test'
+  ...
+# Subtest: reject client completion pretending cancellation
+ok 75 - reject client completion pretending cancellation
+  ---
+  duration_ms: 0.061252
+  type: 'test'
+  ...
+# Subtest: historical cancel-messages-after-expiry: absent pre-abort evidence cannot become green
+ok 76 - historical cancel-messages-after-expiry: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.108125
+  type: 'test'
+  ...
+# Subtest: historical cancel-messages-after-revoke: absent pre-abort evidence cannot become green
+ok 77 - historical cancel-messages-after-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.026763
+  type: 'test'
+  ...
+# Subtest: historical cancel-messages-before-revoke: absent pre-abort evidence cannot become green
+ok 78 - historical cancel-messages-before-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.023774
+  type: 'test'
+  ...
+# Subtest: historical cancel-responses-after-expiry: absent pre-abort evidence cannot become green
+ok 79 - historical cancel-responses-after-expiry: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.030235
+  type: 'test'
+  ...
+# Subtest: historical cancel-responses-after-revoke: absent pre-abort evidence cannot become green
+ok 80 - historical cancel-responses-after-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.029824
+  type: 'test'
+  ...
+# Subtest: historical cancel-responses-before-revoke: absent pre-abort evidence cannot become green
+ok 81 - historical cancel-responses-before-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.022428
+  type: 'test'
+  ...
+# Subtest: missing upstream exercise stays NOT RUN
+ok 82 - missing upstream exercise stays NOT RUN
+  ---
+  duration_ms: 0.837448
+  type: 'test'
+  ...
+# Subtest: responses client: physical close +1200ms is PASS
+ok 83 - responses client: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.105492
+  type: 'test'
+  ...
+# Subtest: responses client: physical close +1200.001ms is FAIL
+not ok 84 - responses client: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.141358
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: responses client: physical close +1249ms is FAIL
+not ok 85 - responses client: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.143425
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: responses revoke: physical close +1200ms is PASS
+ok 86 - responses revoke: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.044121
+  type: 'test'
+  ...
+# Subtest: responses revoke: physical close +1200.001ms is FAIL
+not ok 87 - responses revoke: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.095341
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: responses revoke: physical close +1249ms is FAIL
+not ok 88 - responses revoke: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.088965
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: responses expiry: physical close +1200ms is PASS
+ok 89 - responses expiry: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.04066
+  type: 'test'
+  ...
+# Subtest: responses expiry: physical close +1200.001ms is FAIL
+not ok 90 - responses expiry: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.11554
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: responses expiry: physical close +1249ms is FAIL
+not ok 91 - responses expiry: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.121541
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: messages client: physical close +1200ms is PASS
+ok 92 - messages client: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.043582
+  type: 'test'
+  ...
+# Subtest: messages client: physical close +1200.001ms is FAIL
+not ok 93 - messages client: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.091546
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: messages client: physical close +1249ms is FAIL
+not ok 94 - messages client: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.081098
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: messages revoke: physical close +1200ms is PASS
+ok 95 - messages revoke: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.142527
+  type: 'test'
+  ...
+# Subtest: messages revoke: physical close +1200.001ms is FAIL
+not ok 96 - messages revoke: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.197478
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: messages revoke: physical close +1249ms is FAIL
+not ok 97 - messages revoke: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.165034
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: messages expiry: physical close +1200ms is PASS
+ok 98 - messages expiry: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.102155
+  type: 'test'
+  ...
+# Subtest: messages expiry: physical close +1200.001ms is FAIL
+not ok 99 - messages expiry: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.172389
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: messages expiry: physical close +1249ms is FAIL
+not ok 100 - messages expiry: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.181144
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:125:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:130:14)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: revoke transit consumes acceptance time; abort cannot grant grace
+not ok 101 - revoke transit consumes acceptance time; abort cannot grant grace
+  ---
+  duration_ms: 0.299156
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:134:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:138:34)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: expiry: acceptance starts at actual expiry callback
+not ok 102 - expiry: acceptance starts at actual expiry callback
+  ---
+  duration_ms: 0.234782
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:141:51'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:146:34)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: request-expiry: acceptance starts at actual expiry callback
+not ok 103 - request-expiry: acceptance starts at actual expiry callback
+  ---
+  duration_ms: 0.164637
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:141:51'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-repair-w2/sub2api-cancel-oracle-repair/oracle.test.mjs:146:34)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# (node:14) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: runner before client: binds real cancellation, physical proof, unchanged hold
+ok 104 - runner before client: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 3.214087
+  type: 'test'
+  ...
+# Subtest: runner before revoke: binds real cancellation, physical proof, unchanged hold
+ok 105 - runner before revoke: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 1.884529
+  type: 'test'
+  ...
+# Subtest: runner before expiry: binds real cancellation, physical proof, unchanged hold
+ok 106 - runner before expiry: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 2.866546
+  type: 'test'
+  ...
+# Subtest: runner after client: binds real cancellation, physical proof, unchanged hold
+ok 107 - runner after client: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 1.36475
+  type: 'test'
+  ...
+# Subtest: runner after revoke: binds real cancellation, physical proof, unchanged hold
+ok 108 - runner after revoke: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 1.520955
+  type: 'test'
+  ...
+# Subtest: runner after expiry: binds real cancellation, physical proof, unchanged hold
+ok 109 - runner after expiry: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 1.852541
+  type: 'test'
+  ...
+# Subtest: runner accepts the request expiry timer as the actual expiry trigger
+ok 110 - runner accepts the request expiry timer as the actual expiry trigger
+  ---
+  duration_ms: 2.026417
+  type: 'test'
+  ...
+# Subtest: runner waits until the source clock reaches 1250ms when a timer returns early
+ok 111 - runner waits until the source clock reaches 1250ms when a timer returns early
+  ---
+  duration_ms: 1.68625
+  type: 'test'
+  ...
+1..111
+# tests 111
+# suites 0
+# pass 93
+# fail 18
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 93.799029

@@ -1,0 +1,20 @@
+--- a/sub2api-regression-lab/receipts.mjs
++++ b/sub2api-regression-lab/receipts.mjs
+@@ -68,7 +68,7 @@
+     Number.isSafeInteger(x.sequence) && x.sequence > 0 && x.sequence === r.sequence &&
+     x.mode === r.mode && x.effect_ms === r.effect_ms && x.hold_started_ms === r.hold_started_ms &&
+     x.effects === 1 && x.finished === false &&
+-    Number.isFinite(x.close_ms) && x.close_ms >= abort && x.close_ms - cancel <= 1250 &&
++    Number.isFinite(x.close_ms) && x.close_ms >= abort && x.close_ms - cancel <= 1200 &&
+     x.terminal_ms === null && x.release_ms === null && x.reset_ms === null && x.safety_stop_ms === undefined &&
+     Number.isFinite(x.hold_started_ms) && x.hold_started_ms <= cancel &&
+     x.hold_until_ms === x.hold_started_ms + 10000 && x.close_ms < x.hold_until_ms;
+@@ -80,7 +80,7 @@
+   // An HTTP error ending normally before SSE headers is permitted; an SSE terminal never is.
+   if (d.terminal_ms !== null || success(d) || !Number.isFinite(d.client_close_ms) || d.client_close_ms < cancel)
+     return fail('CANCEL_FALSE_SUCCESS');
+-  return { status: 'PASS', reason: 'PHYSICAL_UPSTREAM_ABORT_OBSERVED_WITHIN_1250MS' };
++  return { status: 'PASS', reason: 'PHYSICAL_UPSTREAM_ABORT_OBSERVED_WITHIN_1200MS' };
+ }
+ export function telemetryVerdict(samples, meta, { final = true } = {}) {
+   const missing = reason => ({ status: 'NOT RUN', reason });

@@ -1,0 +1,54 @@
+{
+  "old": {
+    "exit_code": 1,
+    "tests": 90,
+    "pass": 35,
+    "fail": 55,
+    "cancelled": 0,
+    "skipped": 0,
+    "syntax_checked": [
+      "sub2api-spike/broker.mjs",
+      "sub2api-regression-lab/run.mjs",
+      "sub2api-regression-lab/receipts.mjs"
+    ],
+    "test_sha256": {
+      "oracle.test.mjs": "d4439d24a73429d2ba4433b6fa6a7da467be5380bc55e83085f80e2a34bad0ba",
+      "broker.test.mjs": "02bf8dc2987e8ae3bd6493d7ac715091fe6690e37b0a8b81a42cd957f6832efa",
+      "runner.test.mjs": "c20c65e73a9d9e5ec4d2cd450c368575cfe8a09af3608f9b0bdf61fce537cb90"
+    }
+  },
+  "new": {
+    "exit_code": 0,
+    "tests": 90,
+    "pass": 90,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "syntax_checked": [
+      "sub2api-spike/broker.mjs",
+      "sub2api-regression-lab/run.mjs",
+      "sub2api-regression-lab/receipts.mjs"
+    ],
+    "test_sha256": {
+      "oracle.test.mjs": "d4439d24a73429d2ba4433b6fa6a7da467be5380bc55e83085f80e2a34bad0ba",
+      "broker.test.mjs": "02bf8dc2987e8ae3bd6493d7ac715091fe6690e37b0a8b81a42cd957f6832efa",
+      "runner.test.mjs": "c20c65e73a9d9e5ec4d2cd450c368575cfe8a09af3608f9b0bdf61fce537cb90"
+    }
+  },
+  "preservation": {
+    "uncertainty_verdict": "byte-identical",
+    "telemetry_verdict": "byte-identical",
+    "uncertainty_load_and_main_runner": "byte-identical",
+    "mock_client_wire_plan_adapter_and_all_other_runtime_inputs": "unchanged pinned inputs",
+    "fixture_policy_sha256": "6a70040c047f3e72005f6c1cec6b8404457e4de23b9ca36a5231023ccec4dc8a",
+    "production_source": "untouched",
+    "delta_modules": [
+      "sub2api-spike/broker.mjs",
+      "sub2api-regression-lab/run.mjs",
+      "sub2api-regression-lab/receipts.mjs"
+    ],
+    "actual_e2e": "NOT RUN"
+  },
+  "delta_sha256": "3f19e308f6e1f3881a1534981893b420eadb3a06a694c44bf03ce380ae0eca59",
+  "node": "v24.21.0"
+}
