@@ -25,7 +25,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Verify key independent contracts
-        run: node --test sub2api-spike/*.test.mjs
+        run: node --test sub2api-spike/*.test.mjs sub2api-server/*.test.mjs
       - name: One sealed fixture native review
         working-directory: sub2api-spike
         env:
