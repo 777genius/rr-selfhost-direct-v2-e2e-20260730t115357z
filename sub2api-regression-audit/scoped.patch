@@ -1,0 +1,669 @@
+diff --git a/sub2api-regression-audit/REPORT.md b/sub2api-regression-audit/REPORT.md
+new file mode 100644
+--- /dev/null
++++ b/sub2api-regression-audit/REPORT.md
+@@ -0,0 +1,78 @@
++# Regression audit w1 — bounded handoff
++
++2026-10-01 UTC. Task `rr-gateway-spike-20260930-regression-audit-w1`. This contribution is complete as an audit and replay specification. Engine fixes, operator execution and final adoption acceptance are still pending. Only `sub2api-regression-audit/` is changed; no engine, adapter, fixture, workflow or producer branch was edited.
++
++The existing 77-row ledger remains **58 bounded PASS / 5 FAIL / 14 NOT RUN**. [remaining-matrix.json](remaining-matrix.json) maps all 19 unresolved rows to a concrete observable regression, experiment, acceptance oracle and remediation. It adds three integration gates without changing historical results. [OPERATOR-REPLAY.md](OPERATOR-REPLAY.md) defines a finite replay sequence. No new synthetic result is claimed, and no source-text tests were added.
++
++## Evidence and provenance
++
++Read the existing fork PLAN, spike PLAN/results/REPORT/MIMO-DIAGNOSIS, runtime-lab `run.mjs`, `mock.mjs`, `wire.mjs`, targeted adapter/client/error-fence source and normalized operator receipts. Existing receipts are observations from earlier executions, not fresh runs on producer patches. The source manifest names harness `f05e6a4f451a45681c0bbc7b4b0ced17199ff339`; A02/A03 genuine successes were on `222c6d89900e06e38586100ca2d1cfb978a915a7`. Neither proves the pending integrated build.
++
++Upstream claimed pin is v0.2.11 / `96f4c115c9749078f90cbf210a01d39baf3f53b6`, original image `weishaw/sub2api@sha256:2e3b7fab1e84d2e862cde664d09c1ae84fc897093357cf200cbeb0f64b2f2390`. The staged tree has no verified Git provenance: `sub2api-spike/source-snapshot.json` explicitly says `pin_verified:false`. All five hashes in that snapshot match the corresponding current staged files, but none authenticates every gateway/OAuth file read here. A narrow public raw-source verification was denied by the sandbox domain allowlist. Thus code references below describe the **hashed staged source**, not independently authenticated pinned release code. The ledger records hashes of the inspected source and receipts. Before applying any proposed engine patch or counting new runtime results, the coordinator must verify those exact files against the pin and record any difference. No blind source transplant is proposed.
++
++One supported read-only Git preflight (`git status --short`) failed because the linked Git directory is inaccessible/not a repository in this sandbox. It was not bypassed or retried. No add/commit/push was attempted. A self-contained [scoped.patch](scoped.patch) adds the three handoff files from an absent-directory baseline; the coordinator owns integration.
++
++## E06: deliberate accounting drain, with a flawed Responses cancellation observation
++
++The staged `backend/internal/service/gateway_usage_billing.go:573` and `:583` detach streaming/upstream contexts with `context.WithoutCancel`, returning a no-op release function. `openai_gateway_forward.go:1042` uses the detached context for native Responses. `openai_gateway_response_handling.go:246` explicitly marks client disconnect and continues upstream drain for billing; write/flush failures suppress further downstream writes rather than immediately cancelling the provider request. Native compatible Messages uses `detachStreamUpstreamContext` at `openai_gateway_messages_anthropic_native.go:96`, closes the response body on function exit, and keeps parsing usage after writer failure at `:470`. Its scanner queue is 16 lines; configured data-interval timeout can terminate incomplete usage. These are deliberate accounting choices. Disabling client retries or aborting the broker fetch does not undo them.
++
++There is an important timing weakness in the older evidence:
++
++- `first-20260930-faults-fixed.json`, E06-M: first Messages frame reached the client in 4 ms; after the lab's approximately 1.2 s observation, the synthetic upstream was still open. This supports failure of prompt upstream transport cancellation at that boundary. It does not quantify complete drain or resource release.
++- `first-20260930-remaining.json`, E06-A: upstream finished normally at 6003 ms, while the client first-data cancellation was reported at 6011 ms. `run.mjs:111` cancels on its first downstream data chunk. The tiny initial Responses frames can remain buffered in the engine. This receipt **does not prove six seconds of upstream work after client cancellation**. The earlier E06-A cases with zero upstream requests also do not exercise cancellation.
++- A mock `finish` event means its response was handed to its transport, not that a real provider completed billable inference. Socket close is a local transport observation; remote stop-spend remains provider policy.
++
++The corrected experiment needs independent timestamps for upstream first-frame flush, downstream socket destroy, engine upstream close, mock completion and capacity availability. Send a valid early native frame large enough to cross buffering, flush it, wait for client acknowledgement, then destroy the client while the provider fixture remains blocked. Exercise both protocols, plus broker revoke/expiry, and separately test cancellation before first output. The oracle requires `t_cancel < t_upstream_terminal`; otherwise mark the attempt inconclusive, never PASS. Observe for a fixed bound, then intentionally release the fixture and inspect final usage. Use a second synthetic request to measure slot reuse and simultaneous provider work; a released local slot alone cannot establish remote cancellation.
++
++## Is an opt-in native API-key abort safe?
++
++**Not as a forwarding-only toggle.** No supported abort-on-disconnect setting was found in the inspected gateway context helpers/config. Existing stream interval/keepalive settings control silence, not cancellation policy; a provider producing continuously can keep a drain alive. This conclusion is limited to the inspected tree and requires pin verification.
++
++An account-scoped option could be viable for explicitly configured native API-key providers, defaulting to existing drain behavior and excluding OAuth/other routes. Its minimal review scope would be account extra/config validation, the two native request-context creation paths and stream handlers, result metadata, Responses/Messages usage submission, slot cleanup and the existing usage/billing/reservation boundary. Do not globally change `WithoutCancel`, which also protects billing persistence and cleanup. The existing request builder calls the no-op release immediately after building a request; replacing it with a real cancel without changing lifetime would cancel a healthy request before forwarding.
++
++Current handler code (`openai_gateway_handler.go:859` onwards) submits partial usage for disconnect/error results as well as successful forwarding; detached billing (`gateway_usage_billing.go:565`) protects post-request writes. Inflight reservation release and final debit are separate. Aborting before terminal usage can lose output/reasoning/cache tokens and provider effects. Partial or absent usage must be explicitly marked incomplete/unknown, retained for reconciliation, and excluded from any assertion of exact final debit or zero spend. Never fabricate usage, refund as though no work occurred, or report successful review. Exact accounting is safe only with a provider-supported final usage/reconciliation contract; otherwise expose uncertainty or keep drain. Usage persistence must be idempotent and independent of the cancelled request context.
++
++Minimal *future* behavioral tests, after checking existing tests for overlap:
++
++1. Default policy: upstream remains readable after client cancel and terminal usage is persisted once; healthy SSE bytes/tool IDs are unchanged.
++2. Opt-in Responses and Messages: provider transport closes within the agreed local bound, no second request starts automatically, handler/scanner exits, slot is released once, partial usage remains incomplete and no invented successful terminal appears.
++3. Race cancel vs terminal: one usage row/final debit and one slot release, including terminal received just before downstream failure.
++4. Cancel before usage, late usage persistence, worker queue/persistence failure: no false zero charge, silent refund or retry after uncertain effect. Capture pending reconciliation state.
++5. OAuth/default accounts remain on current policy; disabling the option restores default behavior.
++
++Existing disconnect/drain tests such as `openai_gateway_chat_completions_raw_test.go` concern a different route. Reuse relevant native tests where available; do not duplicate raw-Chat tests and call that native Responses coverage. No engine policy was implemented here.
++
++## E07 / G05: engine memory remains unproved
++
++The 8.39 MB replay completed in 29151 ms with one upstream request and client/control RSS delta 27684864 bytes. The lab explicitly collects response chunks up to 12 MiB, so that RSS is partly observer retention. Engine post-load 60.07 MiB is not peak memory. The 485-request soak proves only the recorded workload, not a streaming memory envelope.
++
++A fixed scanner/channel bound is also insufficient. Inspect full data frames, multiline JSON document assembly, pending frames and output accumulators: staged Responses has a 4 KiB writer, scanner/document scanner, asynchronous queue and `BufferedResponseAccumulator` at `openai_gateway_response_handling.go:344`; native Messages queues 16 lines. Slow writes can retain these structures and connections. Broker `native-errors.mjs` limits individual frames to 2 MiB but temporarily concatenates chunks; a per-frame bound does not bound whole-system memory.
++
++Use actual engine process RSS plus cgroup peak, 100 ms samples, baseline/post-drain, worker/goroutine and socket counts. Run finite 8/32/64 MiB valid streams with a streaming client that discards consumed bytes, both protocols, concurrency 1/5/20. Include comment-only pressure, text deltas, large tool results and multiline/near-limit frames; the old comment fixture misses accumulator growth. Predeclare envelope and wall-time limits (replay plan), count all provider attempts, and verify capacity recovery. A payload-size-dependent rise or retained workers makes the test red. Missing engine telemetry means NOTRUN, not PASS.
++
++## F04 / F05: synthetic OAuth is feasible without an identity
++
++The prior ledger's lack of a live test identity is not a technical blocker to **synthetic** refresh tests. The staged repository has an existing seam: `openai_oauth_service.go:19` defaults to the official endpoint, while same-package tests instantiate `openaiOAuthService{tokenURL: srv.URL}` (`openai_oauth_service_test.go:40`). Service constructors accept the OAuth client interface; `OpenAITokenProvider.SetRefreshAPI` injects the real refresh coordinator/executor. This allows the real form parser, HTTP refresh client, coordinator, durable account repository and Redis locks to participate with fabricated credentials and a local synthetic issuer. No general endpoint override, production login, DNS override or account import is necessary. Do not override global HTTP transport. If a seam is inaccessible across packages, add only a test helper or injected client factory in the appropriate test package, subject to exact-source review.
++
++Existing tests already cover form fields/client IDs, local serialization, held lock, degraded lock, invalid_grant race recovery and cleanup after cancellation. Do not add another stub proving those same branches. The missing boundary is **two independent coordinators/processes with real disposable Redis/PostgreSQL plus actual synthetic HTTP refresh**, followed by gateway scheduling using persisted credentials.
++
++`oauth_refresh_api.go:200` degrades Redis lock errors to process-local locking. `:259` performs refresh after reread. The success CAS branch is Grok-specific; other accounts take `persistAccountCredentials` at `:350`. These are concrete race risks to exercise, not proof that OpenAI loses updates in every case. Force a barrier, rotate one-use R0 to R1, race background and request-path refresh, and race refresh against admin reconnect/disable. Observe issuer count, durable credential version and subsequent synthetic gateway authority. Also cover lock TTL expiry and Redis outage with explicit expected containment; two processes can outlive a lock or lose cross-process serialization.
++
++F05 must exercise genuine synthetic invalid_grant/revoked/401 and successful token rotation with a lost persistence acknowledgement. New work must fail closed or require reconnect after confirmed revocation; a stale failure must not disable a concurrently reauthorized account. A token consumed at issuer followed by uncertain persistence must not trigger automatic same-account refresh retry. Synthetic proof stays separate from F07/F08 live subscription login. No live OAuth proof is claimed.
++
++## Other unresolved boundaries
++
++- **C10:** `customer.mjs:67` creates directly in an authorized group. An upstream create may commit before response/persistence fails; `recovery_required` hides the local binding but leaves remote scheduling authority. Test through actual admin API with a lost acknowledgement, broker admission and upstream sentinel counters. Remediate with a durable operation ID, quarantine group with no keys, verified publication and idempotent reconciliation. Test lost acknowledgements at each promotion step; no automatic create retry and no publication after ambiguous promotion. A fake admin that never persists is insufficient.
++- **D03:** child env allowlisting in `run-client.mjs:14` does not prevent same-UID parent procfs reads. Reuse the synthetic-only procfs reproduction in `sub2api-review` as the negative control, then run it through the exact new UID/PID/mount boundary. Check sibling/control proc environments, inherited FDs, writable config/artifacts and mounts, using only synthetic sentinels. Trusted coordinator performs real-key scans separately. No real parent environment was read here.
++- **G04:** restored counts (accounts 10, groups 10, keys 9, users 10, links 8, migrations 289) prove data restoration only. Start a disposable restored engine behind a broker retaining tombstones, replay a stale capability and its grant, and prove zero provider effects. A new authorized synthetic run must work against restored accounts. Also test lost/corrupt/missing broker ledger failing closed; restoring DB keys cannot recreate broker authority. The old networkless restore script intentionally cannot prove admission.
++- **E08/F01/F03/F06:** measure actual cooldown deadline rather than assuming Retry-After=2 means selectable at 2.3 s; inspect slot cleanup after cancel/crash and actual account disable during an active stream. Document whether existing work finishes; deny new work using revoked authority.
++- **D02/E12:** public error fencing already has coverage. Private engine ops/logs can retain raw upstream diagnostics (`openai_gateway_forward.go:1174`). Scan synthetic sentinels across private logs/ops/crash captures; exported evidence contains only counts. Minimize/redact storage as well as public responses.
++- **A08/H05/F07/F08:** proprietary feature, accounting and live subscription gaps remain distinct. Unsupported feature rejection is acceptable only when honest and before effects. Budget admission/final debit/refund requires actual durable balance observations. Production pool remains untouched; absence of a test identity keeps live subscription lanes NOTRUN.
++
++## Final integration requirements and validation
++
++All three genuine clients must pass the strict financial fixture on the **same exact patched engine image digest and integrated harness SHA**, with native protocols and thinking enabled where supported: Codex 0.159.2 + MiMo `mimo-v2.6-pro`, Codex 0.159.2 + OpenRouter `openai/gpt-4.1`, Claude Code 2.1.285 + MiMo Messages. Record effective provider reasoning mode; do not silently select `none`, bridge protocols or switch models. Thinking history/tool-call association and genuine assistant final answer are required. HTTP200/response.completed/tool stdout alone cannot pass. Preserve all old failed Actions and diagnostic attempts as historical evidence.
++
++Zero automatic retries is a multi-layer invariant: client, broker, engine and refresh coordinator. Staged handler `openai_gateway_handler.go:915` supports same-account retries in pool mode, and forwarding has compatibility recovery retries. Before paid canaries, use a synthetic upstream that records an effect and drops before any downstream semantic bytes, after committed frames, and after a side-effecting tool result. Each uncertain attempt must cause exactly one upstream request, even when an engine might label it precommit/transient. Broker/client retry=0 alone is insufficient. This audit does not claim current engine configuration satisfies that invariant.
++
++Validation performed here: JSON parse; exact set equality against all 19 baseline unresolved IDs; totals 77/58/5/14; source/receipt hash inventory; required experiment fields; patch reconstruction against generated files. These are artifact integrity checks, not regression coverage. Engine/loopback/OAuth/container/live checks are **NOTRUN** here: Go is not installed, Docker/root/live operations are prohibited, public source verification is denied, and producers/operator execution belong to the coordinator. No external check was waited on. Final adoption gates remain open without blocking this bounded audit delivery.
+diff --git a/sub2api-regression-audit/remaining-matrix.json b/sub2api-regression-audit/remaining-matrix.json
+new file mode 100644
+--- /dev/null
++++ b/sub2api-regression-audit/remaining-matrix.json
+@@ -0,0 +1,537 @@
++{
++  "schema": "rr-sub2-regression-audit/v1",
++  "task_id": "rr-gateway-spike-20260930-regression-audit-w1",
++  "audit_date": "2026-10-01",
++  "delivery_scope": "audit/checklist only; no engine changes; no fresh runtime proof",
++  "baseline": {
++    "path": "sub2api-spike/results.json",
++    "basis_sha": "f05e6a4f451a45681c0bbc7b4b0ced17199ff339",
++    "total": 77,
++    "PASS": 58,
++    "FAIL": 5,
++    "NOTRUN": 14,
++    "unchanged": true
++  },
++  "provenance": {
++    "upstream_claimed_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
++    "upstream_claimed_tag": "v0.2.11",
++    "staged_pin_verified": false,
++    "five_existing_snapshot_hashes_match": true,
++    "public_source_verification": "NOTRUN: raw.githubusercontent.com denied by sandbox domain allowlist",
++    "source_hash_semantics": "SHA256 fingerprints of current inspected bytes; not authentication of claimed revision",
++    "git_preflight": "One git status --short failed on inaccessible linked Git directory; not bypassed or retried",
++    "runtime_execution": "NOTRUN: Go absent; Docker/root/live operations prohibited; external checks coordinator-owned"
++  },
++  "cancellation_evidence_correction": {
++    "responses_receipt": "sub2api-spike/evidence/operator/first-20260930-remaining.json",
++    "upstream_normal_finish_ms": 6003,
++    "client_first_data_cancel_ms": 6011,
++    "proves_post_cancel_drain": false,
++    "messages_receipt": "sub2api-spike/evidence/operator/first-20260930-faults-fixed.json",
++    "messages_first_data_cancel_ms": 4,
++    "messages_still_open_at_followup": true,
++    "remote_stop_spend_proven": false
++  },
++  "remaining": [
++    {
++      "id": "A01",
++      "status": "FAIL",
++      "baseline_kind": "Real Actions",
++      "baseline_detail": "Исходные Actions 36775047872 и 36778603368 остаются FAIL. Диагностика 2026-10-01: Sub2 удаляет unencrypted reasoning; одинаковый replay без него -> no message, с ним -> message. reasoning.effort=none прошёл strict financial contract в hosted container, не новом Actions. См. MIMO-DIAGNOSIS.md.",
++      "evidence": [
++        "sub2api-spike/evidence/mimo-diagnosis/paired-replay.json",
++        "sub2api-spike/evidence/mimo-diagnosis/client-validation.json"
++      ],
++      "source_mechanism": "Reasoning-only completed can end a genuine Codex turn without final assistant message; unencrypted history normalization is implicated by the paired replay.",
++      "source_locations": "sub2api-spike/MIMO-DIAGNOSIS.md; staged openai_gateway_request_body.go:731; openai_gateway_forward.go",
++      "experiment_step": "12",
++      "experiment": "Native tool-history replay plus one genuine thinking-enabled Codex/MiMo canary on the reviewed build.",
++      "observable_red_condition": "Missing/stale assistant final, broken tool association or disabled thinking.",
++      "acceptance_oracle": [
++        "Strict financial validator and independent numeric reproduction pass.",
++        "Unencrypted reasoning preserved only for configured account; OpenAI/OAuth defaults retained."
++      ],
++      "practical_remediation": "Provider-aware opt-in native reasoning preservation; retain final-answer failure gate.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + genuine native client"
++    },
++    {
++      "id": "A08",
++      "status": "NOTRUN",
++      "baseline_kind": "Частичный контракт",
++      "baseline_detail": "Неизвестные routes/scopes отвергаются; proprietary Codex custom/tool_search/delegation и encrypted history не проверены реальным клиентом.",
++      "evidence": [
++        "sub2api-spike/results.json"
++      ],
++      "source_mechanism": "Route denial does not exercise proprietary custom/tool_search/delegation or encrypted-history behavior.",
++      "source_locations": "sub2api-spike/broker.mjs; sub2api-spike/run-client.mjs",
++      "experiment_step": "12",
++      "experiment": "One explicitly supported proprietary-feature probe per required native client feature; reject unsupported before provider effects.",
++      "observable_red_condition": "Unsupported feature creates paid effects, false success or wrong tool association.",
++      "acceptance_oracle": [
++        "Explicit supported behavior or honest pre-effect rejection.",
++        "No fallback/provider impersonation or fabricated safeguard."
++      ],
++      "practical_remediation": "Document unsupported features; add only required native feature fixture.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "C10",
++      "status": "FAIL",
++      "baseline_kind": "Независимый source review",
++      "baseline_detail": "Local recovery_required скрывает binding, но remote ambiguous create уже active/schedulable в рабочей группе. Нужна quarantine group без access keys и reconcile; текущий контракт не закрывает orphan authority.",
++      "evidence": [
++        "sub2api-review/REPORT.md",
++        "sub2api-spike/results.json"
++      ],
++      "source_mechanism": "Remote create commits in authorized group before ambiguous response; local recovery_required cannot remove remote authority.",
++      "source_locations": "sub2api-spike/customer.mjs:60-70",
++      "experiment_step": "2",
++      "experiment": "Actual admin create with lost acknowledgement/local save, ambiguous promotion, crash and reconcile.",
++      "observable_red_condition": "Any pending/orphan account schedules an upstream request or ambiguous operation creates a duplicate.",
++      "acceptance_oracle": [
++        "Pending account has no routable authority; A/B denial verified.",
++        "Operation reconciled once; durable publication only after verified promotion."
++      ],
++      "practical_remediation": "Quarantine group with no keys, durable operation identity, fail-closed publication/reconcile.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "D02",
++      "status": "FAIL",
++      "baseline_kind": "Настоящий sentinel engine + source review",
++      "baseline_detail": "Публичные failed SSE диагностические поля теперь удалены. Private Sub2API logs/ops при upstream error могут хранить raw body; запрет всех diagnostic secrets не доказан.",
++      "evidence": [
++        "sub2api-spike/evidence/operator/native-custody-fixed.json",
++        "sub2api-review/REPORT.md"
++      ],
++      "source_mechanism": "Public SSE projection does not redact private engine raw upstream diagnostics/ops.",
++      "source_locations": "staged openai_gateway_forward.go:1174; sub2api-spike/native-errors.mjs",
++      "experiment_step": "10",
++      "experiment": "HTTP/SSE/reset/crash synthetic diagnostic sentinels; trusted private ops/log/artifact scan.",
++      "observable_red_condition": "Any sentinel in forbidden private or exported diagnostic surface.",
++      "acceptance_oracle": [
++        "Zero disallowed matches; meaningful failure still visible.",
++        "Only count/boolean projection exported."
++      ],
++      "practical_remediation": "Minimize/redact diagnostic persistence and sanitize logging at source.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "D03",
++      "status": "FAIL",
++      "baseline_kind": "Независимый synthetic process proof",
++      "baseline_detail": "Master keys/auth homes/socket не монтируются. Однако агент с тем же UID может прочитать parent OIDC request env через procfs; отдельная PID/control isolation не реализована.",
++      "evidence": [
++        "sub2api-review/REPORT.md"
++      ],
++      "source_mechanism": "Child env allowlist leaves same-UID parent procfs and potential control FDs readable.",
++      "source_locations": "sub2api-spike/run-client.mjs:14; sub2api-review/REPORT.md:R07",
++      "experiment_step": "3",
++      "experiment": "Synthetic parent/OIDC/control-FD sentinels through exact runner isolation with same-UID negative control.",
++      "observable_red_condition": "Agent can read control sentinel, parent environ, inherited secret FD or mutate control artifacts.",
++      "acceptance_oracle": [
++        "Negative control reproduces original exposure.",
++        "Separated UID/PID/mount/FD authority denies reads and writes; fixture sealed."
++      ],
++      "practical_remediation": "Separate trusted exchange/control identity from unprivileged agent; isolate procfs/FDs/mounts.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "E06",
++      "status": "FAIL",
++      "baseline_kind": "Настоящий engine + synthetic upstream",
++      "baseline_detail": "Messages upstream не отменён за 1.2 s; Responses продолжил inference/drain до 6 s. Не считать broker AbortSignal гарантией остановки provider spend.",
++      "evidence": [
++        "sub2api-spike/evidence/operator/first-20260930-faults-fixed.json",
++        "sub2api-spike/evidence/operator/first-20260930-remaining.json"
++      ],
++      "source_mechanism": "WithoutCancel and writer-disconnect usage drain are deliberate; old Responses receipt cancels after upstream completion, so post-cancel drain duration is unproved.",
++      "source_locations": "staged gateway_usage_billing.go:573/583; openai_gateway_forward.go:1042; openai_gateway_messages_anthropic_native.go:96/470; sub2api-runtime-lab/run.mjs:111",
++      "experiment_step": "4",
++      "experiment": "Acknowledged early native frame then cancel while upstream blocked; repeat before-output/revoke/expiry; measure usage and local capacity separately.",
++      "observable_red_condition": "Cancel precedes terminal yet upstream transport remains open beyond 2.5 s, slot stuck or usage/paid effect silently lost.",
++      "acceptance_oracle": [
++        "Record t_cancel < t_terminal or classify inconclusive.",
++        "Abort oracle requires transport close and capacity recovery; default drain remains FAIL for immediate-abort requirement.",
++        "Default drain accounting/opt-in partial uncertainty reported independently; no remote stop-spend claim."
++      ],
++      "practical_remediation": "Consider native API-key opt-in only with accounting uncertainty/reconciliation and lifecycle changes; no engine patch here.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "E07",
++      "status": "NOTRUN",
++      "baseline_kind": "Частичный real engine proof",
++      "baseline_detail": "8.39 MB slow-consumer поток PASS за29.15 s,1upstream. Client RSS +27.68MB. Engine peak RSS под этим прогоном не измерялся, поэтому полный bounded-memory gate NOT RUN.",
++      "evidence": [
++        "sub2api-spike/evidence/operator/first-20260930-remaining.json"
++      ],
++      "source_mechanism": "Client retains chunks; comment-only slow stream and post-load engine RSS cannot establish peak or accumulator bounds.",
++      "source_locations": "sub2api-runtime-lab/run.mjs:91/285; staged openai_gateway_response_handling.go:344; sub2api-spike/native-errors.mjs",
++      "experiment_step": "5",
++      "experiment": "8/32/64 MiB, both protocols, concurrency 1/5/20, discard observer, real engine RSS/cgroup peak and post-drain slots.",
++      "observable_red_condition": "Memory exceeds predeclared envelope or grows with payload, lost bytes/terminal, stuck workers or multiple attempts.",
++      "acceptance_oracle": [
++        "Engine RSS/peak measured through all batches; proposed envelope explicit.",
++        "Text/tool/multiline frames plus comments, integrity and worker/slot recovery proven."
++      ],
++      "practical_remediation": "Instrument engine; bound retained frame/document/output buffers and worker lifetime if experiment fails.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "E08",
++      "status": "NOTRUN",
++      "baseline_kind": "Частичный real engine proof",
++      "baseline_detail": "429 group isolation/cooldown rejection PASS. Recovery expectation2.3s не прошла, реальный cooldown deadline не измерен; это не объявляется доказанным engine bug.",
++      "evidence": [
++        "sub2api-spike/evidence/operator/first-20260930-faults-fixed.json"
++      ],
++      "source_mechanism": "Retry-After value is not necessarily scheduler cooldown deadline; 2.3 s recovery test did not prove deadline-relative recovery.",
++      "source_locations": "sub2api-runtime-lab/run.mjs:243; sub2api-spike/operator/scheduling.mjs",
++      "experiment_step": "6",
++      "experiment": "Read actual deadline, pre-deadline deny and post-deadline request in exclusive allowed group within 5 min.",
++      "observable_red_condition": "Early reuse, unauthorized identity selection, or continued denial after verified eligibility deadline.",
++      "acceptance_oracle": [
++        "Cooldown enforced and recovery timed to engine state.",
++        "Sentinel identity/model/group unchanged; attempts recorded."
++      ],
++      "practical_remediation": "Use measured deadline; fix scheduler only after validated reproduction.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "E12",
++      "status": "NOTRUN",
++      "baseline_kind": "Частичный контракт/source risk",
++      "baseline_detail": "Broker public error projection проверена; отсутствие prompts/master keys во всех private engine ops/logs не доказано.",
++      "evidence": [
++        "sub2api-review/REPORT.md",
++        "sub2api-spike/results.json"
++      ],
++      "source_mechanism": "Public broker error projection leaves private raw partial-stream/ops/log storage unverified.",
++      "source_locations": "sub2api-spike/broker.mjs; staged openai_gateway_forward.go:1174",
++      "experiment_step": "10",
++      "experiment": "Partial reset/timeout/crash carrying synthetic prompt, key and cross-tenant markers; inspect trusted private surfaces.",
++      "observable_red_condition": "Partial failure persists prohibited markers or exposes another tenant response.",
++      "acceptance_oracle": [
++        "Zero disallowed sentinel matches with surface inventory.",
++        "No false successful review or raw export."
++      ],
++      "practical_remediation": "Limit/redact private error and crash custody; keep public native failure fence.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "F01",
++      "status": "NOTRUN",
++      "baseline_kind": "Частичный engine proof",
++      "baseline_detail": "Two-account selection/unavailable/precommit failover наблюдались; полный timed cooldown recovery gate остаётся непроверенным.",
++      "evidence": [
++        "sub2api-spike/evidence/operator/first-20260930-lifecycle.json"
++      ],
++      "source_mechanism": "Two-account selection/disable/precommit failover does not prove timed cooldown recovery.",
++      "source_locations": "sub2api-spike/operator/scheduling.mjs:34-39; sub2api-runtime-lab/run.mjs:243",
++      "experiment_step": "6",
++      "experiment": "Two account availability plus actual cooldown deadline recovery and no-available-account control.",
++      "observable_red_condition": "Selection crosses allowed group, cooled/disabled account used or eligible pool never recovers.",
++      "acceptance_oracle": [
++        "Selection/no-available/cooldown recovery observed via distinct sentinels.",
++        "No model/provider switch or uncertain automatic retry."
++      ],
++      "practical_remediation": "Extend existing scheduler replay with deadline observation, not duplicate selection mock.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "F03",
++      "status": "NOTRUN",
++      "baseline_kind": "Частичный engine/contract",
++      "baseline_detail": "Per-account concurrency=1 и broker concurrency лимиты PASS. Engine crash/cancel capacity lifecycle не полностью доказан; cancel drain FAIL.",
++      "evidence": [
++        "sub2api-spike/evidence/operator/first-20260930-lifecycle.json",
++        "sub2api-spike/evidence/operator/engine-restart.json"
++      ],
++      "source_mechanism": "Per-account concurrency proof is incomplete for cancel/crash; local slot release may coexist with detached upstream work.",
++      "source_locations": "staged openai_gateway_handler.go:2216/2307; sub2api-runtime-lab/run.mjs:270",
++      "experiment_step": "4,8",
++      "experiment": "Held stream cancel/crash, count slot and provider active work, then one fresh synthetic control.",
++      "observable_red_condition": "Leaked/double-released slot or concurrent upstream work exceeding documented capacity.",
++      "acceptance_oracle": [
++        "Per-account/global bounds and post-fault recovery measured.",
++        "Transport lifetime distinguished from local capacity."
++      ],
++      "practical_remediation": "Idempotent lifecycle release; bound detached drains and ensure real work matches capacity policy.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "F04",
++      "status": "NOTRUN",
++      "baseline_kind": "Нет test OAuth identity",
++      "baseline_detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены.",
++      "evidence": [
++        "sub2api-spike/results.json"
++      ],
++      "source_mechanism": "Redis lock error degrades to process-local lock; cross-process TTL/reread/rotation and stale write race need durable boundary proof.",
++      "source_locations": "staged oauth_refresh_api.go:200/259/350; openai_oauth_service.go:19; openai_oauth_service_test.go:40",
++      "experiment_step": "7",
++      "experiment": "Two coordinators real Redis/PostgreSQL and synthetic one-use HTTP issuer; rotation/background/reconnect/TTL/Redis-loss races.",
++      "observable_red_condition": "Multiple effective refreshes, consumed-token reuse, stale overwrite or disabled account revival.",
++      "acceptance_oracle": [
++        "Normal race has one effective issuer refresh and durable R1 used by synthetic gateway.",
++        "Cross-process uncertainty contained; concurrent reauthorization/status wins stale refresh."
++      ],
++      "practical_remediation": "Use existing test endpoint injection; harden distributed containment/version updates only if reproduced.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "F05",
++      "status": "NOTRUN",
++      "baseline_kind": "Нет test OAuth identity",
++      "baseline_detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены.",
++      "evidence": [
++        "sub2api-spike/results.json"
++      ],
++      "source_mechanism": "Issuer rotation plus failed DB persistence or stale invalid_grant can leave credential state ambiguous; unit stubs do not prove scheduling lifecycle.",
++      "source_locations": "staged oauth_refresh_api.go:269/350; openai_token_provider.go:172; token_refresh_service.go",
++      "experiment_step": "7",
++      "experiment": "Synthetic revoke/invalid_grant/401 plus rotated token/lost persist acknowledgement and concurrent reauthorization.",
++      "observable_red_condition": "Revoked account still admitted, stale error disables new authority or consumed token automatically retried.",
++      "acceptance_oracle": [
++        "Confirmed revoke denies work/requires reconnect.",
++        "Reauthorized credential remains active; unknown persistence reconciles without same-account replay."
++      ],
++      "practical_remediation": "Version-conditional error handling, quarantine uncertain token state and reconnect projection.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "F06",
++      "status": "NOTRUN",
++      "baseline_kind": "Частичный контракт",
++      "baseline_detail": "Our workspace revoke закрывает authority в mock контракте; actual engine in-flight account removal/disable и reuse не проверены.",
++      "evidence": [
++        "sub2api-spike/evidence/operator/first-20260930-lifecycle.json"
++      ],
++      "source_mechanism": "Adapter mock revoke/new-request scheduling does not establish actual engine in-flight disable/removal semantics.",
++      "source_locations": "sub2api-spike/operator/scheduling.mjs:46; sub2api-spike/customer.mjs",
++      "experiment_step": "8",
++      "experiment": "Committed native stream; disable/remove account; deny new work; observe old stream and clean capacity.",
++      "observable_red_condition": "New request uses disabled/deleted account or old work falsely succeeds/duplicates.",
++      "acceptance_oracle": [
++        "Document actual in-flight policy per protocol.",
++        "New authority denied with zero upstream effects and no stuck slot."
++      ],
++      "practical_remediation": "Synchronize authority invalidation/selection; document bounded in-flight behavior.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "F07",
++      "status": "NOTRUN",
++      "baseline_kind": "Нет test OAuth identity",
++      "baseline_detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены.",
++      "evidence": [
++        "sub2api-spike/results.json"
++      ],
++      "source_mechanism": "No authorized disposable Codex subscription identity; API-key or synthetic token tests cannot prove subscription login/session/refresh.",
++      "source_locations": "sub2api-spike/PLAN.md:F07; staged openai_token_provider.go",
++      "experiment_step": "separate identity lane",
++      "experiment": "Only after separate authorization: test identity login, refresh, native tool turns/session affinity and revoke.",
++      "observable_red_condition": "Real test subscription fails refresh/tool association/session affinity or revocation admission.",
++      "acceptance_oracle": [
++        "Genuine test-only subscription receipts with identity/key custody.",
++        "Production pool untouched; no fabricated live proof."
++      ],
++      "practical_remediation": "Keep NOTRUN without disposable test identity; synthetic F04/F05 remain separate.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "live-test-subscription"
++    },
++    {
++      "id": "F08",
++      "status": "NOTRUN",
++      "baseline_kind": "Нет test OAuth identity",
++      "baseline_detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены.",
++      "evidence": [
++        "sub2api-spike/results.json"
++      ],
++      "source_mechanism": "No authorized disposable Claude subscription identity; synthetic lifecycle cannot establish live Claude subscription behavior.",
++      "source_locations": "sub2api-spike/PLAN.md:F08; staged claude_token_provider.go",
++      "experiment_step": "separate identity lane",
++      "experiment": "Only after separate authorization: test identity login, refresh, native Messages tool turns and revoke.",
++      "observable_red_condition": "Live test subscription fails rotation/tool blocks or remains usable after revoke.",
++      "acceptance_oracle": [
++        "Genuine isolated subscription receipts and custody.",
++        "No production account import."
++      ],
++      "practical_remediation": "Keep NOTRUN absent test identity; do not repurpose production credentials.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "live-test-subscription"
++    },
++    {
++      "id": "G04",
++      "status": "NOTRUN",
++      "baseline_kind": "Частичный actual restore",
++      "baseline_detail": "Networkless PG restore: accounts10,groups10,keys9,users10,links8,migrations289 совпали; dump удалён. Admission с восстановленным engine + stale cap в одной цепочке NOT RUN.",
++      "evidence": [
++        "sub2api-spike/evidence/operator/backup-restore.json"
++      ],
++      "source_mechanism": "Networkless table-count restore does not prove restored-engine admission and retained broker tombstones together.",
++      "source_locations": "sub2api-spike/operator/backup-restore.sh; sub2api-spike/broker.mjs",
++      "experiment_step": "9",
++      "experiment": "Separate restored engine plus retained broker ledger; stale cap/grant replay, new scoped grant, missing/corrupt ledger denial.",
++      "observable_red_condition": "Restored permanent keys revive stale run access or missing ledger admits replay.",
++      "acceptance_oracle": [
++        "Stale cap and grant denied with zero effects.",
++        "New authorized run uses intended restored account; ledger loss fails closed."
++      ],
++      "practical_remediation": "Preserve durable tombstones across restore/rollback; validate combined admission chain.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "G05",
++      "status": "NOTRUN",
++      "baseline_kind": "Частичный actual load proof",
++      "baseline_detail": "1/5/20 concurrency:0errors;20 p50=46ms,p95=231ms.30s soak485requests:0errors,0retries,0stuck,p50=10ms,p95=12ms. Peak engine RSS не измерялся; после load60.07MiB, не peak. Это synthetic local latency, не provider SLA.",
++      "evidence": [
++        "sub2api-spike/evidence/operator/first-20260930-faults-fixed.json"
++      ],
++      "source_mechanism": "1/5/20 and soak request/latency receipts lack engine peak memory; observer RSS/post-load snapshot is not peak.",
++      "source_locations": "sub2api-runtime-lab/run.mjs:332; sub2api-spike/REPORT.md",
++      "experiment_step": "5,11",
++      "experiment": "Same bounded soak ≤30 s/≤500 requests with actual peak RSS, cross-tenant sentinels, attempts and stuck sockets.",
++      "observable_red_condition": "Peak exceeds envelope, unexpected request/effect counts, crossover or retained worker/socket.",
++      "acceptance_oracle": [
++        "Measured p50/p95/error/attempt counts plus peak/steady/post-drain engine memory.",
++        "No synthetic local latency claim as provider SLA."
++      ],
++      "practical_remediation": "Add operator telemetry and discard observer; reuse existing load rather than new platform.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    },
++    {
++      "id": "H05",
++      "status": "NOTRUN",
++      "baseline_kind": "Source audit",
++      "baseline_detail": "Budget reservation/final debit/fail-open accounting изучены; полный synthetic debit/refund/double-billing gate не реализован. Fake sandbox balance не production billing.",
++      "evidence": [
++        "sub2api-spike/results.json"
++      ],
++      "source_mechanism": "Budget reservation can fail open; final usage debit/refund/double-billing is not proven by source review or fake balance.",
++      "source_locations": "staged billing_inflight_reservation.go:18/208/259/272; gateway_usage_billing.go:565",
++      "experiment_step": "10",
++      "experiment": "Real disposable durable balance/reservation/usage records for complete, incomplete, persist-failure and concurrent exhaustion cases.",
++      "observable_red_condition": "Overshoot under selected strict policy, double debit/refund or absent usage treated as zero charge.",
++      "acceptance_oracle": [
++        "Authoritative usage finalized once; incomplete pending state explicit.",
++        "Budget admission/final debit/release observed at durable boundary."
++      ],
++      "practical_remediation": "Choose fail-closed product budget policy, idempotent settlement and uncertain-usage reconciliation.",
++      "planned_execution_status": "NOTRUN",
++      "execution_owner": "coordinator",
++      "boundary": "exact engine/harness + synthetic boundary"
++    }
++  ],
++  "integration_gates": [
++    {
++      "id": "I01",
++      "status": "NOTRUN",
++      "requirement": "All 3 genuine native clients pass strict financial fixture with thinking enabled where supported on same exact patched image and harness.",
++      "observable_red_condition": "Any empty/stale/fabricated final, changed model/protocol, disabled thinking or mismatched build.",
++      "experiment_step": "12"
++    },
++    {
++      "id": "I02",
++      "status": "NOTRUN",
++      "requirement": "No automatic same-account retry after accepted/uncertain effects at client, broker, engine or token refresh layers.",
++      "observable_red_condition": "More than 1 upstream request/effect after uncertainty, including before semantic output.",
++      "experiment_step": "1,7"
++    },
++    {
++      "id": "I03",
++      "status": "NOTRUN",
++      "requirement": "Replay all 77 original scenario IDs with explicit boundary receipts/NOTRUN; independent review exact code, custody and owned teardown; keep every historical failure.",
++      "observable_red_condition": "Missing scenario, invalid provenance, promotion by source-only/mock proof, discarded old failure, residual owned secrets/resources.",
++      "experiment_step": "11,12"
++    }
++  ],
++  "file_sha256": {
++    ".spike-inputs/upstream/backend/internal/config/config.go": "c46cafc4a9821d15a2d24934d9beab411c1963ba9dae0888aad53f523b672f41",
++    ".spike-inputs/upstream/backend/internal/handler/openai_gateway_handler.go": "53f5831d51019249f0545c2b69a490ee94a5321fdd1f34ead7a7ca4b3f9682c1",
++    ".spike-inputs/upstream/backend/internal/repository/openai_oauth_service.go": "b59d39225286b25809e5eddf09fd6d034d2b6681bd19efadb4eb3abdeaacdad6",
++    ".spike-inputs/upstream/backend/internal/repository/openai_oauth_service_test.go": "d5de05b9b8f2ef70cd23dbfd261ddf97cae89bedfb98052952881b2e28162314",
++    ".spike-inputs/upstream/backend/internal/service/billing_inflight_reservation.go": "1388a30510c50e081a15bd45b48eb03f688b330ecd50e9c99cb70dac66386e19",
++    ".spike-inputs/upstream/backend/internal/service/gateway_usage_billing.go": "97cb8d9473119c6b21075cc761c544a975276c2c816fef597762ee0d00d9e1b5",
++    ".spike-inputs/upstream/backend/internal/service/oauth_refresh_api.go": "60e98afb0fecb99ad27adb197ac311d78d65a42a7e752f5aabf9be7cc1566270",
++    ".spike-inputs/upstream/backend/internal/service/oauth_refresh_api_test.go": "3be9fe6abad0467c3b8ccf6b33ed3bd4065dbe001656b838fb2c9edcdeea2177",
++    ".spike-inputs/upstream/backend/internal/service/openai_gateway_forward.go": "a3a20c891f67ae6268a2cd4af8363aeba1e2c1853305746aa1a40f27d3bd898e",
++    ".spike-inputs/upstream/backend/internal/service/openai_gateway_messages_anthropic_native.go": "88258388e24fa739150996c9bb39fb94448d0c421af5473af09b084126d28bf0",
++    ".spike-inputs/upstream/backend/internal/service/openai_gateway_request_body.go": "b7cf920f1013a2cd0dbfdf9c0d306da7deeff94e2fb25f764b242f23fe4f6bcb",
++    ".spike-inputs/upstream/backend/internal/service/openai_gateway_response_handling.go": "83d5155c10776ad6f7d00ea31c18b77681f4b8fef772cd321ab85072580d8827",
++    ".spike-inputs/upstream/backend/internal/service/openai_token_provider.go": "5a88259bc6f9fe2474cfae081bb5d6d1c4bd2173d631bbe31d1f0dd202a96fff",
++    ".spike-inputs/upstream/backend/internal/service/token_refresh_service.go": "030445d6638fc209485282ea3715647f3302bf302cd632a9c4c2d0fdf38d6131",
++    ".spike-inputs/upstream/backend/internal/service/token_refresh_service_test.go": "08ce82cba71c39e3ce7186829d0b04a3d95a5f10344966f376edbac7e3c682e8",
++    "sub2api-fork/PLAN.md": "7faa6dbb7775a6619d9f130dc1fba199670c31d9d12ca4e7e2b7d3ccd8b1eeb0",
++    "sub2api-review/REPORT.md": "1a23c1b1ec02548db6e46c978f510420807a30933ec7ab1febf81d5e5272d15a",
++    "sub2api-runtime-lab/mock.mjs": "8e24e0a4177234c8e203fb0582ec3c35f6b0c44ba0ca80719bb5ca1deb03366e",
++    "sub2api-runtime-lab/run.mjs": "cf21f6abd14733e209f8cf383645e2145dbd55dd4237716459e8cee4ef06d111",
++    "sub2api-runtime-lab/wire.mjs": "1f3247de20b7b559cb864f30f6be86a63d1287b08998ba3e10713700435ca5d0",
++    "sub2api-spike/MIMO-DIAGNOSIS.md": "4db72d6d8ca3db9003c866a684af768684e14df577e4cefc23c1ce963fca223b",
++    "sub2api-spike/PLAN.md": "17b9cd683d9f51a900cf7b1b4044911e25f3ddc72790ebfb52a4a0ec1e3c0439",
++    "sub2api-spike/REPORT.md": "f02ca763b409766b743f3bc322e83b1b66fbcf6d5e63a48289d1b65d69153361",
++    "sub2api-spike/broker.mjs": "9b8a7951d80dab2c90c13bdd3408631255b96b64e8ee3534c26b8b64d281ba24",
++    "sub2api-spike/customer.mjs": "a1468ef850ffb9185534cdd12186f1787f68b482ace108034d94b870efceb80d",
++    "sub2api-spike/evidence/mimo-diagnosis/client-validation.json": "68cd8851683d32a548c75d3b2758a3a52514783e00656184184162c0501ef091",
++    "sub2api-spike/evidence/mimo-diagnosis/paired-replay.json": "ad99d8f6cc55313882f1e9eb33822ba0cf30c36ea03ae5f8a14fd32565e7d1ed",
++    "sub2api-spike/evidence/operator/backup-restore.json": "0530cc026066d96af0f6fe664ce80e791ef275e2cd65891a3c2d6523467976a7",
++    "sub2api-spike/evidence/operator/engine-restart.json": "932fe0defbfe93c84cd6088340d89f0b943bec0be43f996a78514409ac1424b3",
++    "sub2api-spike/evidence/operator/first-20260930-baseline.json": "98496f3c56a09b3df5cda094d1a940ab9269cc42e901a8b68f923b6b26af8067",
++    "sub2api-spike/evidence/operator/first-20260930-faults-fixed.json": "8ced5a51e4b642db1b4be94cd63eb36014c8a423d2ca36aaab3892dfddaacafd",
++    "sub2api-spike/evidence/operator/first-20260930-faults.json": "ddc5bb430125c06efccc2135346406753959c7e273e6d979e962f244d9bb75fe",
++    "sub2api-spike/evidence/operator/first-20260930-lifecycle.json": "3e6e3546c7e77277a1970bf434a667c87f97616f499e7229a7d13e291a10776e",
++    "sub2api-spike/evidence/operator/first-20260930-remaining.json": "7bea1a2288ab9ccb639652439c48ff3658f674ff252e2a10f1516ad810dfa6cb",
++    "sub2api-spike/evidence/operator/lab-source-hashes.json": "fa2833fc2b11546723d1b4dcfe6ab422f79dfb363f606d4f076398a956d3ce6b",
++    "sub2api-spike/evidence/operator/native-custody-fixed.json": "094b185825e88ba149fee75b393f82de7da37438828af70bff742c42abc1021c",
++    "sub2api-spike/evidence/source-manifest.json": "12316d810cc73935dbef815d85049a26cc48a782a591c396139f018a0653e2fc",
++    "sub2api-spike/native-errors.mjs": "6367e40dc016e95acef8a39632bec28cea81a090d2cf59ce318ae62c165a5a4e",
++    "sub2api-spike/operator/backup-restore.sh": "3c97520aecea7454909d5efed00d7b7309c0ceb286afd101d60e69a67430e603",
++    "sub2api-spike/operator/scheduling.mjs": "2332f4b0a1c2a6da8e9a1d6afd8b91bc220f892dbca40f5af8639d2c7fd2fced",
++    "sub2api-spike/results.json": "205b5dcd3f4037b901542191bc9eb57ef425dc2cbe4a51d7e9f0f6fbc9bc7330",
++    "sub2api-spike/run-client.mjs": "f34cf495f4854bb4f58ac0c587e1253ff1c4d0e1d7b62fee20da354826fd4349",
++    "sub2api-spike/source-snapshot.json": "c9a5e62247c3ecc941780035c814ede20e7fe0b75a51402ce547da97c4b79dde"
++  },
++  "verification": {
++    "ledger_exact_unresolved_id_set": true,
++    "schema_and_patch_integrity_only": true,
++    "new_regression_tests_added": 0,
++    "fresh_engine_tests": "NOTRUN",
++    "fresh_live_tests": "NOTRUN"
++  }
++}
+diff --git a/sub2api-regression-audit/OPERATOR-REPLAY.md b/sub2api-regression-audit/OPERATOR-REPLAY.md
+new file mode 100644
+--- /dev/null
++++ b/sub2api-regression-audit/OPERATOR-REPLAY.md
+@@ -0,0 +1,39 @@
++# Bounded operator replay — prepared, NOTRUN
++
++This is a coordinator handoff, not permission for this worker to run containers, inspect keys, invoke genuine clients or write GitHub. All fixtures use synthetic data until the separately authorized three-client gate. No producer branch dependency is needed to read or schedule this plan. Integrate reviewed producers only for final replay; do not wait for them to finish the audit.
++
++## Fixed setup and stop rules
++
++1. Authenticate upstream parent `96f4c115c9749078f90cbf210a01d39baf3f53b6` against the hashed source inventory in `remaining-matrix.json`. Apply the reviewed reasoning patch, record patch SHA256/application result, build one immutable image and record its digest. Record the exact integrated harness SHA and fixture/client/config hashes. Do not use tags as proof. Record any mismatch between staged source and parent rather than applying guessed line patches.
++2. In one disposable owned project use private synthetic engine/PostgreSQL/Redis/upstream/broker networks, no public engine/admin/DB ports. Do not import production OAuth accounts. Use unique operation/case IDs. Disable automatic probes where supported; otherwise predeclare and count setup probes separately. No unsolicited provider requests.
++3. Establish healthy request and denial controls before injecting a fault. Limit preparation to 10 minutes; each ordinary fault to 30 seconds; each memory batch to 90 seconds. Maximum synthetic forwarding requests for this replay: 2000 including setup, the 500-request soak and repeat controls. Maximum synthetic OAuth requests: 128. Exceeding either ends the lane. Limit teardown to owned resources and record cleanup failures.
++4. Disable client and broker retries; verify engine behavior with the uncertain-effect fixture before paid work. Count issuer/provider requests, not exceptions. An uncertain outcome is terminal for that operation: inspect request/effect ledger, reconcile, and do not automatically retry the same account. A later corrected experiment gets a new ID, deliberate operator decision and separate receipt. Do not rerun known revoked identities indefinitely.
++5. Every receipt includes case ID, input fixture hash, observable red condition, expected/actual result, PASS/FAIL/NOTRUN, evidence boundary, image/harness/client/config versions, monotonic timing, request/effect count, resource measurements and limitations. Export only a positive metadata projection; no raw SSE/prompts/reasoning/credentials/auth homes/dumps or provider-key hashes. Absence of a telemetry field means NOTRUN for the corresponding gate.
++
++## Exact experiment checklist
++
++| Order / cases | Finite experiment | Red condition and acceptance |
++|---|---|---|
++| 1 / retry gate, E10/E11 | Four uncertainty placements per native protocol: accepted effect before first semantic byte, after committed frame, after tool-result acceptance, and lost connection while response is pending. 8 fault requests, one fresh healthy control per protocol. Use a pool-retry-eligible synthetic error as a negative control. | More than one upstream request/effect for any uncertainty case is FAIL. Require 1 request, no automatic account retry/failover, failed client evidence. A before-effect explicit rejection may have only deliberately authorized failover, recorded separately. Stop paid lane if not satisfied. |
++| 2 / C10 | One actual admin create with dropped acknowledgement after commit; one lost local durable save; one ambiguous promotion; one crash/restart/reconcile. At most 4 create operations, no replay of ambiguous creates. | On the old adapter expect active orphan authority. In the fix require quarantine with no routable key/group membership, no grant publication until durable verification, zero orphan inference, and reconciliation matching operation ID exactly once. Check A and B cannot schedule/read the pending account. |
++| 3 / D03 | Synthetic parent/control/FD sentinels through exact runner UID/PID/mount boundary. Run old same-UID child as negative control, then unprivileged agent/sibling probes after separation, including attempted artifact/config overwrite. | Any readable control/OIDC sentinel or control mutation is FAIL. Env-only negative control must demonstrate the original breakage. Agent gets only capability and sealed fixture; procfs/FD/mount authority is denied. Real-key scan is separate and trusted. |
++| 4 / E06/F03 | For Responses and Messages: default policy cancel after acknowledged early frame, before first output, broker revoke, capability expiry (8 requests). Force early data beyond writer buffering, acknowledge at client, hold upstream 10 s. Record cancel time, transport close, terminal time, active slots/provider sockets, one second request for capacity. Observe 2.5 s after cancel, then intentionally release upstream. Repeat opt-in only if a separately reviewed cancellation policy exists. | First prove cancel precedes terminal; otherwise inconclusive/NOTRUN. Original E06 abort oracle: upstream transport closes within 2.5 s, slot recovers, no automatic retry. Default deliberate drain remains FAIL to immediate-abort requirement even if accounting succeeds; report policy separately. Require terminal drain usage exactly once, or abort usage explicitly incomplete. Never claim remote spend stopped. |
++| 5 / E07 | 18 batches: 8/32/64 MiB × concurrency 1/5/20 × Responses/Messages. Split each batch's traffic between comments and valid text deltas; additionally one near-limit multiline event and one large tool-result per protocol (4 requests). Streaming discard observer; slow reads 25 ms apart. RSS sample 100 ms, cgroup peak, worker/socket counts from setup through 10 s post-drain. | Predeclare proposed review envelope: RSS increase ≤128 MiB +16 MiB per active stream, absolute engine RSS ≤512 MiB; disposable cgroup limit 768 MiB. Stop a batch at envelope or 90 s. Require byte/terminal/tool integrity, one upstream per request, no retained slots/workers/sockets and return within 32 MiB of baseline after quiescence. These are proposed acceptance limits, not measured guarantees. Payload-dependent growth or missing engine peak leaves full gate failing/unrun. |
++| 6 / E08/F01 | Two accounts in one explicitly allowed group, unrelated tenant sentinel. One HTTP429 fixture; read actual engine cooldown deadline. Try immediately and just after that deadline with 1 s margin, bounded at 5 minutes; disable both for no-available control; restore availability. | Before deadline no cooled account/no outside-group effect. After deadline eligible account recovers; unavailable pool fails honestly. Deadline beyond bound is NOTRUN recovery, not guessed engine defect. Record selection and attempts; no silent provider/model switch. |
++| 7 / F04/F05 | Two independently constructed/process refresh coordinators, real disposable Redis/PostgreSQL, injected synthetic HTTP issuer. At most 8 cases ×8 concurrent triggers: normal R0→R1 rotation; background/request race; reconnect during refresh; disable during refresh; lock held past TTL; Redis lock error; confirmed invalid_grant/revocation; rotated token with lost DB acknowledgement. One-shot barrier at issuer, persist fabricated tokens only. | Normal rotation: one effective issuer refresh, durable R1, later synthetic forward uses it. Contain lost cross-process locking/uncertainty without automatic reuse of consumed R0. Reauthorization wins stale refresh, disable stays unschedulable, genuine revoke denies new work/requires reconnect. Record exact expected semantics for degraded lock before run. Existing stub tests are controls, not this boundary. Never call this live OAuth proof. |
++| 8 / F06/F03/G02 | One committed stream per protocol; disable/remove account, request new work, allow old work its documented fate. Two crash cases (engine/broker) with held capacity, then fresh authorized control. | New work under disabled/closed authority denied with zero upstream effects; in-flight outcome honest; no orphan slots/duplicate retry after recovery. Explicitly distinguish slot release from still-running provider work. |
++| 9 / G04/G03 | Back up synthetic DB, restore into separate private instance, compare intended owned mappings/counts, start exact engine + broker with retained tombstones. Replay stale capability + same grant; create a new authorized run and request. Repeat deny checks with missing/corrupt broker ledger. | Stale cap/grant deny, zero upstream; new run works only on intended restored scope. Missing/corrupt ledger fails closed. Export mapping equality boolean/counts; dump remains private and is removed. Original networkless counts alone cannot pass. |
++| 10 / D02/E12/H05 | Synthetic key/prompt/tenant sentinels in HTTP error, SSE failed event, partial reset and crash (4 faults per protocol). Inspect private ops/logs/artifacts. Four accounting cases: exact terminal usage, partial missing usage, final-debit persistence failure, concurrent budget exhaustion; include reservation-release race. | Zero sentinel leaks across forbidden surfaces; errors remain errors. Usage/debit exactly once when authoritative, incomplete accounting explicit otherwise; no false zero debit/refund, duplicate charge, or budget overshoot under chosen strict budget policy. Count balances/reservations/durable usage, not fake sandbox balance. |
++| 11 / G05/G06 + all 77 | Reuse existing matrix, do not create source/mirrored tests. Replay 1/5/20 concurrency and ≤30 s /≤500-request synthetic soak with actual engine peak telemetry. Run both independent workspaces. Each of 77 IDs has a named receipt or explicit NOTRUN; retain earlier versions/failures. | No tenant crossover, duplicates, stuck work, false-green final, or memory-envelope violation; record latency distribution and request counts. No aggregate success percentage substitutes for per-boundary evidence. |
++| 12 / A01-A03/A04-A06/A08 | After retry/custody gates, coordinator plans exactly one genuine canary per client combination on the same engine+harness. Codex 0.159.2/MiMo mimo-v2.6-pro, Codex 0.159.2/OpenRouter openai/gpt-4.1, Claude Code 2.1.285/MiMo native Messages. Thinking enabled where supported; record effective request/provider mode. Unsupported proprietary features get distinct supported-error probes, not unsolicited agent work. | All three pass actual strict financial contract: separate source/rules reads, tool association, genuine assistant finding, independent numeric reproduction and terminal success. Empty/stale final FAIL, stdout substitution prohibited. A deterministic native reasoning-history fixture additionally proves preservation and OpenAI/OAuth defaults; it does not count as genuine canary. Original Actions FAIL remain. |
++
++F07/F08 remain NOTRUN unless a separately authorized disposable test subscription identity becomes available; this plan does not request or import one. F09 preserves the existing production pool without claiming live pool regression proof.
++
++## Narrow implementation locations for other owners
++
++- Lab owner: extend cancellation timestamps/barriers and streaming discard observer in `sub2api-runtime-lab/run.mjs` / `mock.mjs`; collect engine measurements through trusted operator instrumentation. Do not reinterpret existing receipts.
++- Harness owner: `customer.mjs` and durable adapter state for quarantine/publication/reconcile; runner isolation and workflow for trusted-control versus unprivileged-agent authority. Keep final evidence validator and fixture strict.
++- Engine owner, only after parent authentication: native reasoning-history account option; any separate abort experiment in account extra validation, native forward contexts/handlers and usage result/billing submission/cleanup. Audit recommends scope; it implements no engine changes.
++- Test owner: existing same-package OAuth endpoint seam plus real repository/Redis integration fixture. Run targeted `go test` for repository OAuth and service refresh packages only after dependencies and loopback permission are available. Missing Go/dependencies/forbidden listener => NOTRUN, not mocked replacement proof.
++
++End with independent exact-code review, trusted custody scans and teardown receipt listing only owned resources; retain old failed attempts alongside new receipts. Safe rollback uses the original digest and preserved pre-experiment synthetic DB/broker state, closes run capabilities, and explicitly reconciles in-flight effects. Never restore stale run authority through rollback. No operator step above was run by this worker.

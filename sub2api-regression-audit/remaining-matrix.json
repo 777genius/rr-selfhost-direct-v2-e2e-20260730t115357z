@@ -1,0 +1,537 @@
+{
+  "schema": "rr-sub2-regression-audit/v1",
+  "task_id": "rr-gateway-spike-20260930-regression-audit-w1",
+  "audit_date": "2026-10-01",
+  "delivery_scope": "audit/checklist only; no engine changes; no fresh runtime proof",
+  "baseline": {
+    "path": "sub2api-spike/results.json",
+    "basis_sha": "f05e6a4f451a45681c0bbc7b4b0ced17199ff339",
+    "total": 77,
+    "PASS": 58,
+    "FAIL": 5,
+    "NOTRUN": 14,
+    "unchanged": true
+  },
+  "provenance": {
+    "upstream_claimed_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+    "upstream_claimed_tag": "v0.2.11",
+    "staged_pin_verified": false,
+    "five_existing_snapshot_hashes_match": true,
+    "public_source_verification": "NOTRUN: raw.githubusercontent.com denied by sandbox domain allowlist",
+    "source_hash_semantics": "SHA256 fingerprints of current inspected bytes; not authentication of claimed revision",
+    "git_preflight": "One git status --short failed on inaccessible linked Git directory; not bypassed or retried",
+    "runtime_execution": "NOTRUN: Go absent; Docker/root/live operations prohibited; external checks coordinator-owned"
+  },
+  "cancellation_evidence_correction": {
+    "responses_receipt": "sub2api-spike/evidence/operator/first-20260930-remaining.json",
+    "upstream_normal_finish_ms": 6003,
+    "client_first_data_cancel_ms": 6011,
+    "proves_post_cancel_drain": false,
+    "messages_receipt": "sub2api-spike/evidence/operator/first-20260930-faults-fixed.json",
+    "messages_first_data_cancel_ms": 4,
+    "messages_still_open_at_followup": true,
+    "remote_stop_spend_proven": false
+  },
+  "remaining": [
+    {
+      "id": "A01",
+      "status": "FAIL",
+      "baseline_kind": "Real Actions",
+      "baseline_detail": "Исходные Actions 36775047872 и 36778603368 остаются FAIL. Диагностика 2026-10-01: Sub2 удаляет unencrypted reasoning; одинаковый replay без него -> no message, с ним -> message. reasoning.effort=none прошёл strict financial contract в hosted container, не новом Actions. См. MIMO-DIAGNOSIS.md.",
+      "evidence": [
+        "sub2api-spike/evidence/mimo-diagnosis/paired-replay.json",
+        "sub2api-spike/evidence/mimo-diagnosis/client-validation.json"
+      ],
+      "source_mechanism": "Reasoning-only completed can end a genuine Codex turn without final assistant message; unencrypted history normalization is implicated by the paired replay.",
+      "source_locations": "sub2api-spike/MIMO-DIAGNOSIS.md; staged openai_gateway_request_body.go:731; openai_gateway_forward.go",
+      "experiment_step": "12",
+      "experiment": "Native tool-history replay plus one genuine thinking-enabled Codex/MiMo canary on the reviewed build.",
+      "observable_red_condition": "Missing/stale assistant final, broken tool association or disabled thinking.",
+      "acceptance_oracle": [
+        "Strict financial validator and independent numeric reproduction pass.",
+        "Unencrypted reasoning preserved only for configured account; OpenAI/OAuth defaults retained."
+      ],
+      "practical_remediation": "Provider-aware opt-in native reasoning preservation; retain final-answer failure gate.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + genuine native client"
+    },
+    {
+      "id": "A08",
+      "status": "NOTRUN",
+      "baseline_kind": "Частичный контракт",
+      "baseline_detail": "Неизвестные routes/scopes отвергаются; proprietary Codex custom/tool_search/delegation и encrypted history не проверены реальным клиентом.",
+      "evidence": [
+        "sub2api-spike/results.json"
+      ],
+      "source_mechanism": "Route denial does not exercise proprietary custom/tool_search/delegation or encrypted-history behavior.",
+      "source_locations": "sub2api-spike/broker.mjs; sub2api-spike/run-client.mjs",
+      "experiment_step": "12",
+      "experiment": "One explicitly supported proprietary-feature probe per required native client feature; reject unsupported before provider effects.",
+      "observable_red_condition": "Unsupported feature creates paid effects, false success or wrong tool association.",
+      "acceptance_oracle": [
+        "Explicit supported behavior or honest pre-effect rejection.",
+        "No fallback/provider impersonation or fabricated safeguard."
+      ],
+      "practical_remediation": "Document unsupported features; add only required native feature fixture.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "C10",
+      "status": "FAIL",
+      "baseline_kind": "Независимый source review",
+      "baseline_detail": "Local recovery_required скрывает binding, но remote ambiguous create уже active/schedulable в рабочей группе. Нужна quarantine group без access keys и reconcile; текущий контракт не закрывает orphan authority.",
+      "evidence": [
+        "sub2api-review/REPORT.md",
+        "sub2api-spike/results.json"
+      ],
+      "source_mechanism": "Remote create commits in authorized group before ambiguous response; local recovery_required cannot remove remote authority.",
+      "source_locations": "sub2api-spike/customer.mjs:60-70",
+      "experiment_step": "2",
+      "experiment": "Actual admin create with lost acknowledgement/local save, ambiguous promotion, crash and reconcile.",
+      "observable_red_condition": "Any pending/orphan account schedules an upstream request or ambiguous operation creates a duplicate.",
+      "acceptance_oracle": [
+        "Pending account has no routable authority; A/B denial verified.",
+        "Operation reconciled once; durable publication only after verified promotion."
+      ],
+      "practical_remediation": "Quarantine group with no keys, durable operation identity, fail-closed publication/reconcile.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "D02",
+      "status": "FAIL",
+      "baseline_kind": "Настоящий sentinel engine + source review",
+      "baseline_detail": "Публичные failed SSE диагностические поля теперь удалены. Private Sub2API logs/ops при upstream error могут хранить raw body; запрет всех diagnostic secrets не доказан.",
+      "evidence": [
+        "sub2api-spike/evidence/operator/native-custody-fixed.json",
+        "sub2api-review/REPORT.md"
+      ],
+      "source_mechanism": "Public SSE projection does not redact private engine raw upstream diagnostics/ops.",
+      "source_locations": "staged openai_gateway_forward.go:1174; sub2api-spike/native-errors.mjs",
+      "experiment_step": "10",
+      "experiment": "HTTP/SSE/reset/crash synthetic diagnostic sentinels; trusted private ops/log/artifact scan.",
+      "observable_red_condition": "Any sentinel in forbidden private or exported diagnostic surface.",
+      "acceptance_oracle": [
+        "Zero disallowed matches; meaningful failure still visible.",
+        "Only count/boolean projection exported."
+      ],
+      "practical_remediation": "Minimize/redact diagnostic persistence and sanitize logging at source.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "D03",
+      "status": "FAIL",
+      "baseline_kind": "Независимый synthetic process proof",
+      "baseline_detail": "Master keys/auth homes/socket не монтируются. Однако агент с тем же UID может прочитать parent OIDC request env через procfs; отдельная PID/control isolation не реализована.",
+      "evidence": [
+        "sub2api-review/REPORT.md"
+      ],
+      "source_mechanism": "Child env allowlist leaves same-UID parent procfs and potential control FDs readable.",
+      "source_locations": "sub2api-spike/run-client.mjs:14; sub2api-review/REPORT.md:R07",
+      "experiment_step": "3",
+      "experiment": "Synthetic parent/OIDC/control-FD sentinels through exact runner isolation with same-UID negative control.",
+      "observable_red_condition": "Agent can read control sentinel, parent environ, inherited secret FD or mutate control artifacts.",
+      "acceptance_oracle": [
+        "Negative control reproduces original exposure.",
+        "Separated UID/PID/mount/FD authority denies reads and writes; fixture sealed."
+      ],
+      "practical_remediation": "Separate trusted exchange/control identity from unprivileged agent; isolate procfs/FDs/mounts.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "E06",
+      "status": "FAIL",
+      "baseline_kind": "Настоящий engine + synthetic upstream",
+      "baseline_detail": "Messages upstream не отменён за 1.2 s; Responses продолжил inference/drain до 6 s. Не считать broker AbortSignal гарантией остановки provider spend.",
+      "evidence": [
+        "sub2api-spike/evidence/operator/first-20260930-faults-fixed.json",
+        "sub2api-spike/evidence/operator/first-20260930-remaining.json"
+      ],
+      "source_mechanism": "WithoutCancel and writer-disconnect usage drain are deliberate; old Responses receipt cancels after upstream completion, so post-cancel drain duration is unproved.",
+      "source_locations": "staged gateway_usage_billing.go:573/583; openai_gateway_forward.go:1042; openai_gateway_messages_anthropic_native.go:96/470; sub2api-runtime-lab/run.mjs:111",
+      "experiment_step": "4",
+      "experiment": "Acknowledged early native frame then cancel while upstream blocked; repeat before-output/revoke/expiry; measure usage and local capacity separately.",
+      "observable_red_condition": "Cancel precedes terminal yet upstream transport remains open beyond 2.5 s, slot stuck or usage/paid effect silently lost.",
+      "acceptance_oracle": [
+        "Record t_cancel < t_terminal or classify inconclusive.",
+        "Abort oracle requires transport close and capacity recovery; default drain remains FAIL for immediate-abort requirement.",
+        "Default drain accounting/opt-in partial uncertainty reported independently; no remote stop-spend claim."
+      ],
+      "practical_remediation": "Consider native API-key opt-in only with accounting uncertainty/reconciliation and lifecycle changes; no engine patch here.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "E07",
+      "status": "NOTRUN",
+      "baseline_kind": "Частичный real engine proof",
+      "baseline_detail": "8.39 MB slow-consumer поток PASS за29.15 s,1upstream. Client RSS +27.68MB. Engine peak RSS под этим прогоном не измерялся, поэтому полный bounded-memory gate NOT RUN.",
+      "evidence": [
+        "sub2api-spike/evidence/operator/first-20260930-remaining.json"
+      ],
+      "source_mechanism": "Client retains chunks; comment-only slow stream and post-load engine RSS cannot establish peak or accumulator bounds.",
+      "source_locations": "sub2api-runtime-lab/run.mjs:91/285; staged openai_gateway_response_handling.go:344; sub2api-spike/native-errors.mjs",
+      "experiment_step": "5",
+      "experiment": "8/32/64 MiB, both protocols, concurrency 1/5/20, discard observer, real engine RSS/cgroup peak and post-drain slots.",
+      "observable_red_condition": "Memory exceeds predeclared envelope or grows with payload, lost bytes/terminal, stuck workers or multiple attempts.",
+      "acceptance_oracle": [
+        "Engine RSS/peak measured through all batches; proposed envelope explicit.",
+        "Text/tool/multiline frames plus comments, integrity and worker/slot recovery proven."
+      ],
+      "practical_remediation": "Instrument engine; bound retained frame/document/output buffers and worker lifetime if experiment fails.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "E08",
+      "status": "NOTRUN",
+      "baseline_kind": "Частичный real engine proof",
+      "baseline_detail": "429 group isolation/cooldown rejection PASS. Recovery expectation2.3s не прошла, реальный cooldown deadline не измерен; это не объявляется доказанным engine bug.",
+      "evidence": [
+        "sub2api-spike/evidence/operator/first-20260930-faults-fixed.json"
+      ],
+      "source_mechanism": "Retry-After value is not necessarily scheduler cooldown deadline; 2.3 s recovery test did not prove deadline-relative recovery.",
+      "source_locations": "sub2api-runtime-lab/run.mjs:243; sub2api-spike/operator/scheduling.mjs",
+      "experiment_step": "6",
+      "experiment": "Read actual deadline, pre-deadline deny and post-deadline request in exclusive allowed group within 5 min.",
+      "observable_red_condition": "Early reuse, unauthorized identity selection, or continued denial after verified eligibility deadline.",
+      "acceptance_oracle": [
+        "Cooldown enforced and recovery timed to engine state.",
+        "Sentinel identity/model/group unchanged; attempts recorded."
+      ],
+      "practical_remediation": "Use measured deadline; fix scheduler only after validated reproduction.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "E12",
+      "status": "NOTRUN",
+      "baseline_kind": "Частичный контракт/source risk",
+      "baseline_detail": "Broker public error projection проверена; отсутствие prompts/master keys во всех private engine ops/logs не доказано.",
+      "evidence": [
+        "sub2api-review/REPORT.md",
+        "sub2api-spike/results.json"
+      ],
+      "source_mechanism": "Public broker error projection leaves private raw partial-stream/ops/log storage unverified.",
+      "source_locations": "sub2api-spike/broker.mjs; staged openai_gateway_forward.go:1174",
+      "experiment_step": "10",
+      "experiment": "Partial reset/timeout/crash carrying synthetic prompt, key and cross-tenant markers; inspect trusted private surfaces.",
+      "observable_red_condition": "Partial failure persists prohibited markers or exposes another tenant response.",
+      "acceptance_oracle": [
+        "Zero disallowed sentinel matches with surface inventory.",
+        "No false successful review or raw export."
+      ],
+      "practical_remediation": "Limit/redact private error and crash custody; keep public native failure fence.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "F01",
+      "status": "NOTRUN",
+      "baseline_kind": "Частичный engine proof",
+      "baseline_detail": "Two-account selection/unavailable/precommit failover наблюдались; полный timed cooldown recovery gate остаётся непроверенным.",
+      "evidence": [
+        "sub2api-spike/evidence/operator/first-20260930-lifecycle.json"
+      ],
+      "source_mechanism": "Two-account selection/disable/precommit failover does not prove timed cooldown recovery.",
+      "source_locations": "sub2api-spike/operator/scheduling.mjs:34-39; sub2api-runtime-lab/run.mjs:243",
+      "experiment_step": "6",
+      "experiment": "Two account availability plus actual cooldown deadline recovery and no-available-account control.",
+      "observable_red_condition": "Selection crosses allowed group, cooled/disabled account used or eligible pool never recovers.",
+      "acceptance_oracle": [
+        "Selection/no-available/cooldown recovery observed via distinct sentinels.",
+        "No model/provider switch or uncertain automatic retry."
+      ],
+      "practical_remediation": "Extend existing scheduler replay with deadline observation, not duplicate selection mock.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "F03",
+      "status": "NOTRUN",
+      "baseline_kind": "Частичный engine/contract",
+      "baseline_detail": "Per-account concurrency=1 и broker concurrency лимиты PASS. Engine crash/cancel capacity lifecycle не полностью доказан; cancel drain FAIL.",
+      "evidence": [
+        "sub2api-spike/evidence/operator/first-20260930-lifecycle.json",
+        "sub2api-spike/evidence/operator/engine-restart.json"
+      ],
+      "source_mechanism": "Per-account concurrency proof is incomplete for cancel/crash; local slot release may coexist with detached upstream work.",
+      "source_locations": "staged openai_gateway_handler.go:2216/2307; sub2api-runtime-lab/run.mjs:270",
+      "experiment_step": "4,8",
+      "experiment": "Held stream cancel/crash, count slot and provider active work, then one fresh synthetic control.",
+      "observable_red_condition": "Leaked/double-released slot or concurrent upstream work exceeding documented capacity.",
+      "acceptance_oracle": [
+        "Per-account/global bounds and post-fault recovery measured.",
+        "Transport lifetime distinguished from local capacity."
+      ],
+      "practical_remediation": "Idempotent lifecycle release; bound detached drains and ensure real work matches capacity policy.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "F04",
+      "status": "NOTRUN",
+      "baseline_kind": "Нет test OAuth identity",
+      "baseline_detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены.",
+      "evidence": [
+        "sub2api-spike/results.json"
+      ],
+      "source_mechanism": "Redis lock error degrades to process-local lock; cross-process TTL/reread/rotation and stale write race need durable boundary proof.",
+      "source_locations": "staged oauth_refresh_api.go:200/259/350; openai_oauth_service.go:19; openai_oauth_service_test.go:40",
+      "experiment_step": "7",
+      "experiment": "Two coordinators real Redis/PostgreSQL and synthetic one-use HTTP issuer; rotation/background/reconnect/TTL/Redis-loss races.",
+      "observable_red_condition": "Multiple effective refreshes, consumed-token reuse, stale overwrite or disabled account revival.",
+      "acceptance_oracle": [
+        "Normal race has one effective issuer refresh and durable R1 used by synthetic gateway.",
+        "Cross-process uncertainty contained; concurrent reauthorization/status wins stale refresh."
+      ],
+      "practical_remediation": "Use existing test endpoint injection; harden distributed containment/version updates only if reproduced.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "F05",
+      "status": "NOTRUN",
+      "baseline_kind": "Нет test OAuth identity",
+      "baseline_detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены.",
+      "evidence": [
+        "sub2api-spike/results.json"
+      ],
+      "source_mechanism": "Issuer rotation plus failed DB persistence or stale invalid_grant can leave credential state ambiguous; unit stubs do not prove scheduling lifecycle.",
+      "source_locations": "staged oauth_refresh_api.go:269/350; openai_token_provider.go:172; token_refresh_service.go",
+      "experiment_step": "7",
+      "experiment": "Synthetic revoke/invalid_grant/401 plus rotated token/lost persist acknowledgement and concurrent reauthorization.",
+      "observable_red_condition": "Revoked account still admitted, stale error disables new authority or consumed token automatically retried.",
+      "acceptance_oracle": [
+        "Confirmed revoke denies work/requires reconnect.",
+        "Reauthorized credential remains active; unknown persistence reconciles without same-account replay."
+      ],
+      "practical_remediation": "Version-conditional error handling, quarantine uncertain token state and reconnect projection.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "F06",
+      "status": "NOTRUN",
+      "baseline_kind": "Частичный контракт",
+      "baseline_detail": "Our workspace revoke закрывает authority в mock контракте; actual engine in-flight account removal/disable и reuse не проверены.",
+      "evidence": [
+        "sub2api-spike/evidence/operator/first-20260930-lifecycle.json"
+      ],
+      "source_mechanism": "Adapter mock revoke/new-request scheduling does not establish actual engine in-flight disable/removal semantics.",
+      "source_locations": "sub2api-spike/operator/scheduling.mjs:46; sub2api-spike/customer.mjs",
+      "experiment_step": "8",
+      "experiment": "Committed native stream; disable/remove account; deny new work; observe old stream and clean capacity.",
+      "observable_red_condition": "New request uses disabled/deleted account or old work falsely succeeds/duplicates.",
+      "acceptance_oracle": [
+        "Document actual in-flight policy per protocol.",
+        "New authority denied with zero upstream effects and no stuck slot."
+      ],
+      "practical_remediation": "Synchronize authority invalidation/selection; document bounded in-flight behavior.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "F07",
+      "status": "NOTRUN",
+      "baseline_kind": "Нет test OAuth identity",
+      "baseline_detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены.",
+      "evidence": [
+        "sub2api-spike/results.json"
+      ],
+      "source_mechanism": "No authorized disposable Codex subscription identity; API-key or synthetic token tests cannot prove subscription login/session/refresh.",
+      "source_locations": "sub2api-spike/PLAN.md:F07; staged openai_token_provider.go",
+      "experiment_step": "separate identity lane",
+      "experiment": "Only after separate authorization: test identity login, refresh, native tool turns/session affinity and revoke.",
+      "observable_red_condition": "Real test subscription fails refresh/tool association/session affinity or revocation admission.",
+      "acceptance_oracle": [
+        "Genuine test-only subscription receipts with identity/key custody.",
+        "Production pool untouched; no fabricated live proof."
+      ],
+      "practical_remediation": "Keep NOTRUN without disposable test identity; synthetic F04/F05 remain separate.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "live-test-subscription"
+    },
+    {
+      "id": "F08",
+      "status": "NOTRUN",
+      "baseline_kind": "Нет test OAuth identity",
+      "baseline_detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены.",
+      "evidence": [
+        "sub2api-spike/results.json"
+      ],
+      "source_mechanism": "No authorized disposable Claude subscription identity; synthetic lifecycle cannot establish live Claude subscription behavior.",
+      "source_locations": "sub2api-spike/PLAN.md:F08; staged claude_token_provider.go",
+      "experiment_step": "separate identity lane",
+      "experiment": "Only after separate authorization: test identity login, refresh, native Messages tool turns and revoke.",
+      "observable_red_condition": "Live test subscription fails rotation/tool blocks or remains usable after revoke.",
+      "acceptance_oracle": [
+        "Genuine isolated subscription receipts and custody.",
+        "No production account import."
+      ],
+      "practical_remediation": "Keep NOTRUN absent test identity; do not repurpose production credentials.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "live-test-subscription"
+    },
+    {
+      "id": "G04",
+      "status": "NOTRUN",
+      "baseline_kind": "Частичный actual restore",
+      "baseline_detail": "Networkless PG restore: accounts10,groups10,keys9,users10,links8,migrations289 совпали; dump удалён. Admission с восстановленным engine + stale cap в одной цепочке NOT RUN.",
+      "evidence": [
+        "sub2api-spike/evidence/operator/backup-restore.json"
+      ],
+      "source_mechanism": "Networkless table-count restore does not prove restored-engine admission and retained broker tombstones together.",
+      "source_locations": "sub2api-spike/operator/backup-restore.sh; sub2api-spike/broker.mjs",
+      "experiment_step": "9",
+      "experiment": "Separate restored engine plus retained broker ledger; stale cap/grant replay, new scoped grant, missing/corrupt ledger denial.",
+      "observable_red_condition": "Restored permanent keys revive stale run access or missing ledger admits replay.",
+      "acceptance_oracle": [
+        "Stale cap and grant denied with zero effects.",
+        "New authorized run uses intended restored account; ledger loss fails closed."
+      ],
+      "practical_remediation": "Preserve durable tombstones across restore/rollback; validate combined admission chain.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "G05",
+      "status": "NOTRUN",
+      "baseline_kind": "Частичный actual load proof",
+      "baseline_detail": "1/5/20 concurrency:0errors;20 p50=46ms,p95=231ms.30s soak485requests:0errors,0retries,0stuck,p50=10ms,p95=12ms. Peak engine RSS не измерялся; после load60.07MiB, не peak. Это synthetic local latency, не provider SLA.",
+      "evidence": [
+        "sub2api-spike/evidence/operator/first-20260930-faults-fixed.json"
+      ],
+      "source_mechanism": "1/5/20 and soak request/latency receipts lack engine peak memory; observer RSS/post-load snapshot is not peak.",
+      "source_locations": "sub2api-runtime-lab/run.mjs:332; sub2api-spike/REPORT.md",
+      "experiment_step": "5,11",
+      "experiment": "Same bounded soak ≤30 s/≤500 requests with actual peak RSS, cross-tenant sentinels, attempts and stuck sockets.",
+      "observable_red_condition": "Peak exceeds envelope, unexpected request/effect counts, crossover or retained worker/socket.",
+      "acceptance_oracle": [
+        "Measured p50/p95/error/attempt counts plus peak/steady/post-drain engine memory.",
+        "No synthetic local latency claim as provider SLA."
+      ],
+      "practical_remediation": "Add operator telemetry and discard observer; reuse existing load rather than new platform.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    },
+    {
+      "id": "H05",
+      "status": "NOTRUN",
+      "baseline_kind": "Source audit",
+      "baseline_detail": "Budget reservation/final debit/fail-open accounting изучены; полный synthetic debit/refund/double-billing gate не реализован. Fake sandbox balance не production billing.",
+      "evidence": [
+        "sub2api-spike/results.json"
+      ],
+      "source_mechanism": "Budget reservation can fail open; final usage debit/refund/double-billing is not proven by source review or fake balance.",
+      "source_locations": "staged billing_inflight_reservation.go:18/208/259/272; gateway_usage_billing.go:565",
+      "experiment_step": "10",
+      "experiment": "Real disposable durable balance/reservation/usage records for complete, incomplete, persist-failure and concurrent exhaustion cases.",
+      "observable_red_condition": "Overshoot under selected strict policy, double debit/refund or absent usage treated as zero charge.",
+      "acceptance_oracle": [
+        "Authoritative usage finalized once; incomplete pending state explicit.",
+        "Budget admission/final debit/release observed at durable boundary."
+      ],
+      "practical_remediation": "Choose fail-closed product budget policy, idempotent settlement and uncertain-usage reconciliation.",
+      "planned_execution_status": "NOTRUN",
+      "execution_owner": "coordinator",
+      "boundary": "exact engine/harness + synthetic boundary"
+    }
+  ],
+  "integration_gates": [
+    {
+      "id": "I01",
+      "status": "NOTRUN",
+      "requirement": "All 3 genuine native clients pass strict financial fixture with thinking enabled where supported on same exact patched image and harness.",
+      "observable_red_condition": "Any empty/stale/fabricated final, changed model/protocol, disabled thinking or mismatched build.",
+      "experiment_step": "12"
+    },
+    {
+      "id": "I02",
+      "status": "NOTRUN",
+      "requirement": "No automatic same-account retry after accepted/uncertain effects at client, broker, engine or token refresh layers.",
+      "observable_red_condition": "More than 1 upstream request/effect after uncertainty, including before semantic output.",
+      "experiment_step": "1,7"
+    },
+    {
+      "id": "I03",
+      "status": "NOTRUN",
+      "requirement": "Replay all 77 original scenario IDs with explicit boundary receipts/NOTRUN; independent review exact code, custody and owned teardown; keep every historical failure.",
+      "observable_red_condition": "Missing scenario, invalid provenance, promotion by source-only/mock proof, discarded old failure, residual owned secrets/resources.",
+      "experiment_step": "11,12"
+    }
+  ],
+  "file_sha256": {
+    ".spike-inputs/upstream/backend/internal/config/config.go": "c46cafc4a9821d15a2d24934d9beab411c1963ba9dae0888aad53f523b672f41",
+    ".spike-inputs/upstream/backend/internal/handler/openai_gateway_handler.go": "53f5831d51019249f0545c2b69a490ee94a5321fdd1f34ead7a7ca4b3f9682c1",
+    ".spike-inputs/upstream/backend/internal/repository/openai_oauth_service.go": "b59d39225286b25809e5eddf09fd6d034d2b6681bd19efadb4eb3abdeaacdad6",
+    ".spike-inputs/upstream/backend/internal/repository/openai_oauth_service_test.go": "d5de05b9b8f2ef70cd23dbfd261ddf97cae89bedfb98052952881b2e28162314",
+    ".spike-inputs/upstream/backend/internal/service/billing_inflight_reservation.go": "1388a30510c50e081a15bd45b48eb03f688b330ecd50e9c99cb70dac66386e19",
+    ".spike-inputs/upstream/backend/internal/service/gateway_usage_billing.go": "97cb8d9473119c6b21075cc761c544a975276c2c816fef597762ee0d00d9e1b5",
+    ".spike-inputs/upstream/backend/internal/service/oauth_refresh_api.go": "60e98afb0fecb99ad27adb197ac311d78d65a42a7e752f5aabf9be7cc1566270",
+    ".spike-inputs/upstream/backend/internal/service/oauth_refresh_api_test.go": "3be9fe6abad0467c3b8ccf6b33ed3bd4065dbe001656b838fb2c9edcdeea2177",
+    ".spike-inputs/upstream/backend/internal/service/openai_gateway_forward.go": "a3a20c891f67ae6268a2cd4af8363aeba1e2c1853305746aa1a40f27d3bd898e",
+    ".spike-inputs/upstream/backend/internal/service/openai_gateway_messages_anthropic_native.go": "88258388e24fa739150996c9bb39fb94448d0c421af5473af09b084126d28bf0",
+    ".spike-inputs/upstream/backend/internal/service/openai_gateway_request_body.go": "b7cf920f1013a2cd0dbfdf9c0d306da7deeff94e2fb25f764b242f23fe4f6bcb",
+    ".spike-inputs/upstream/backend/internal/service/openai_gateway_response_handling.go": "83d5155c10776ad6f7d00ea31c18b77681f4b8fef772cd321ab85072580d8827",
+    ".spike-inputs/upstream/backend/internal/service/openai_token_provider.go": "5a88259bc6f9fe2474cfae081bb5d6d1c4bd2173d631bbe31d1f0dd202a96fff",
+    ".spike-inputs/upstream/backend/internal/service/token_refresh_service.go": "030445d6638fc209485282ea3715647f3302bf302cd632a9c4c2d0fdf38d6131",
+    ".spike-inputs/upstream/backend/internal/service/token_refresh_service_test.go": "08ce82cba71c39e3ce7186829d0b04a3d95a5f10344966f376edbac7e3c682e8",
+    "sub2api-fork/PLAN.md": "7faa6dbb7775a6619d9f130dc1fba199670c31d9d12ca4e7e2b7d3ccd8b1eeb0",
+    "sub2api-review/REPORT.md": "1a23c1b1ec02548db6e46c978f510420807a30933ec7ab1febf81d5e5272d15a",
+    "sub2api-runtime-lab/mock.mjs": "8e24e0a4177234c8e203fb0582ec3c35f6b0c44ba0ca80719bb5ca1deb03366e",
+    "sub2api-runtime-lab/run.mjs": "cf21f6abd14733e209f8cf383645e2145dbd55dd4237716459e8cee4ef06d111",
+    "sub2api-runtime-lab/wire.mjs": "1f3247de20b7b559cb864f30f6be86a63d1287b08998ba3e10713700435ca5d0",
+    "sub2api-spike/MIMO-DIAGNOSIS.md": "4db72d6d8ca3db9003c866a684af768684e14df577e4cefc23c1ce963fca223b",
+    "sub2api-spike/PLAN.md": "17b9cd683d9f51a900cf7b1b4044911e25f3ddc72790ebfb52a4a0ec1e3c0439",
+    "sub2api-spike/REPORT.md": "f02ca763b409766b743f3bc322e83b1b66fbcf6d5e63a48289d1b65d69153361",
+    "sub2api-spike/broker.mjs": "9b8a7951d80dab2c90c13bdd3408631255b96b64e8ee3534c26b8b64d281ba24",
+    "sub2api-spike/customer.mjs": "a1468ef850ffb9185534cdd12186f1787f68b482ace108034d94b870efceb80d",
+    "sub2api-spike/evidence/mimo-diagnosis/client-validation.json": "68cd8851683d32a548c75d3b2758a3a52514783e00656184184162c0501ef091",
+    "sub2api-spike/evidence/mimo-diagnosis/paired-replay.json": "ad99d8f6cc55313882f1e9eb33822ba0cf30c36ea03ae5f8a14fd32565e7d1ed",
+    "sub2api-spike/evidence/operator/backup-restore.json": "0530cc026066d96af0f6fe664ce80e791ef275e2cd65891a3c2d6523467976a7",
+    "sub2api-spike/evidence/operator/engine-restart.json": "932fe0defbfe93c84cd6088340d89f0b943bec0be43f996a78514409ac1424b3",
+    "sub2api-spike/evidence/operator/first-20260930-baseline.json": "98496f3c56a09b3df5cda094d1a940ab9269cc42e901a8b68f923b6b26af8067",
+    "sub2api-spike/evidence/operator/first-20260930-faults-fixed.json": "8ced5a51e4b642db1b4be94cd63eb36014c8a423d2ca36aaab3892dfddaacafd",
+    "sub2api-spike/evidence/operator/first-20260930-faults.json": "ddc5bb430125c06efccc2135346406753959c7e273e6d979e962f244d9bb75fe",
+    "sub2api-spike/evidence/operator/first-20260930-lifecycle.json": "3e6e3546c7e77277a1970bf434a667c87f97616f499e7229a7d13e291a10776e",
+    "sub2api-spike/evidence/operator/first-20260930-remaining.json": "7bea1a2288ab9ccb639652439c48ff3658f674ff252e2a10f1516ad810dfa6cb",
+    "sub2api-spike/evidence/operator/lab-source-hashes.json": "fa2833fc2b11546723d1b4dcfe6ab422f79dfb363f606d4f076398a956d3ce6b",
+    "sub2api-spike/evidence/operator/native-custody-fixed.json": "094b185825e88ba149fee75b393f82de7da37438828af70bff742c42abc1021c",
+    "sub2api-spike/evidence/source-manifest.json": "12316d810cc73935dbef815d85049a26cc48a782a591c396139f018a0653e2fc",
+    "sub2api-spike/native-errors.mjs": "6367e40dc016e95acef8a39632bec28cea81a090d2cf59ce318ae62c165a5a4e",
+    "sub2api-spike/operator/backup-restore.sh": "3c97520aecea7454909d5efed00d7b7309c0ceb286afd101d60e69a67430e603",
+    "sub2api-spike/operator/scheduling.mjs": "2332f4b0a1c2a6da8e9a1d6afd8b91bc220f892dbca40f5af8639d2c7fd2fced",
+    "sub2api-spike/results.json": "205b5dcd3f4037b901542191bc9eb57ef425dc2cbe4a51d7e9f0f6fbc9bc7330",
+    "sub2api-spike/run-client.mjs": "f34cf495f4854bb4f58ac0c587e1253ff1c4d0e1d7b62fee20da354826fd4349",
+    "sub2api-spike/source-snapshot.json": "c9a5e62247c3ecc941780035c814ede20e7fe0b75a51402ce547da97c4b79dde"
+  },
+  "verification": {
+    "ledger_exact_unresolved_id_set": true,
+    "schema_and_patch_integrity_only": true,
+    "new_regression_tests_added": 0,
+    "fresh_engine_tests": "NOTRUN",
+    "fresh_live_tests": "NOTRUN"
+  }
+}
