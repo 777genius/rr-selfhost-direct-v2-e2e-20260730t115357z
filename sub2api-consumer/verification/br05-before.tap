@@ -1,0 +1,28 @@
+✖ BR05 unavailable telemetry stays unknown in actual roundtrip failure receipt (4.976011ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67.381872
+
+✖ failing tests:
+
+test at sub2api-consumer/operator.test.mjs:9:1
+✖ BR05 unavailable telemetry stays unknown in actual roundtrip failure receipt (4.976011ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== null
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/consumer-glue-w1/sub2api-consumer/operator.test.mjs:31:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: null,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

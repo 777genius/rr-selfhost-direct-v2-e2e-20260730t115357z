@@ -1,0 +1,27 @@
+✔ stock admin create contract is denied before any remote write (3.222952ms)
+✔ offline boundary authentic omitted-group fixture completes stock roundtrip (186.41472ms)
+✔ offline boundary authentic omitted-group fixture reconciles full stock list and get (326.455246ms)
+✔ offline boundary actual in-flight group remap compensates at every promotion await (492.463723ms)
+✔ offline boundary replaced deleted credentials templates and membership authority stop promotion (900.66323ms)
+✔ offline boundary authority changes during template and credential awaits prevent duplicate (125.590246ms)
+✔ offline boundary remapped existing reads exports and mutations compensate before publication (479.206455ms)
+✔ offline boundary contradictory null malformed or lite group authority never publishes (2962.520197ms)
+✔ offline boundary malformed lite recovery list and contradictory fetchOwned are refused (155.241378ms)
+✔ offline boundary uncertain compensation fences current replaced authority durably (118.730074ms)
+✔ offline boundary recovery rechecks remaps during list get and promotion (382.371358ms)
+✔ offline boundary replacement remap during old retirement compensates new account (230.686624ms)
+✔ offline boundary replaced authority during failed compensation revocation remains fenced (99.079086ms)
+✔ offline boundary matching group representations and null redacted credentials are valid full DTOs (99.051029ms)
+✔ offline boundary prepared template identity and scope mutation cannot duplicate (294.262938ms)
+✔ offline boundary acknowledged interrupted promotion retains explicit retire and complete recovery (259.08399ms)
+✔ offline consumer trusted probe policy survives preparation copy and update (104.461153ms)
+✔ offline consumer unverified installation denies before admin effects (73.384717ms)
+✔ offline consumer lost probe flags cannot reach scheduling or publication (1058.481748ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8437.610859

@@ -1,0 +1,27 @@
+✔ BR05 unavailable telemetry stays unknown in actual roundtrip failure receipt (7.969721ms)
+✔ BR05 counters require observed cumulative effects and real drain acknowledgement (0.767998ms)
+✔ BR05 independent full DTO gate rejects active grouped foreign or lite templates (2.151502ms)
+✔ A06 successful separate shell-wrapped rules read validates actual source and finding (2.564481ms)
+✔ A06 malformed and fabricated financial success fail inherited validator (0.4364ms)
+✔ A10 E04 streamed UTF8 and missing native terminal rejected (8.905737ms)
+✔ signed verified identity yields only a positive identity receipt (3.926946ms)
+✔ spoofed runtime and malformed grant deny before an agent can execute (1.424303ms)
+✔ BR04 integrated mismatches deny before any agent effects and receipt (32.582138ms)
+✔ BR04 integrated valid binding projects exact identity and preserves high reasoning (3.278493ms)
+✔ BR04 model metadata cannot authorize mismatched run (1.996162ms)
+✔ BR04 receipt still requires successful terminal and numeric financial finding (5.751784ms)
+✔ BR04 workflow rejects every mismatched receipt before publication (6.296529ms)
+✔ BR04 caller projects both other supported native mappings (4.540754ms)
+✔ BR04 unsealed import path aborts before agent effects and receipt (3.080596ms)
+✔ uid1001 Actions service and agent cannot serve as control parent (0.836635ms)
+✔ clean child environment rejects control tokens and arbitrary overrides (0.732956ms)
+✔ fixed control contract validates selectors and token destination (4.990184ms)
+✔ fixed control input has a hard byte limit (1.07974ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 157.958384

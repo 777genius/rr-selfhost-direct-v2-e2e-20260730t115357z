@@ -1,6 +1,8 @@
 import { mkdir, writeFile, readFile, rm, chown } from 'node:fs/promises';
 import { join } from 'node:path';
-import { requireControl, readControlInput, privateControlHome, agentHome, cleanAgentEnv, spawnAgent, safeAgentFile, verifyFixture, verifyTools, agentIdentity } from './runner-isolation.mjs';
+import { fileURLToPath } from 'node:url';
+import { bindGrantedRun } from './granted-run.mjs';
+import { requireControl, readControlInput, privateControlHome, agentHome, cleanAgentEnv, spawnAgent, safeAgentFile, verifyFixture, verifyTools, agentIdentity, sealedPath } from './runner-isolation.mjs';
 import { financialEvidence, parseFindingDocument } from './evidence.mjs';
 if (Number(process.versions.node.split('.')[0]) !== 24) throw Error('Node 24 required');
 requireControl();
@@ -8,20 +10,14 @@ const runtime = await readControlInput();
 if (runtime.workflowSHA !== (await readFile('/opt/rr-sub2-harness/reviewed-workflow.sha', 'utf8')).trim()) throw Error('Reviewed workflow SHA mismatch');
 const { provider, agent } = runtime;
 const broker = 'http://broker:8787';
-const controlHome = await privateControlHome();
-const home = await agentHome(controlHome);
+let controlHome, home;
 const fixture = '/opt/rr-gateway-spike-fixture';
-let env = cleanAgentEnv(home);
+let env;
 let phase = 'fixture', completed = false;
 const prompt = 'Review the implementation and business rules in this directory. Actually read wallet.mjs and BUSINESS_RULES.md with tools. For Codex read the implementation in a separate tool call running exactly cat wallet.mjs, then read rules with cat BUSINESS_RULES.md; do not combine the commands. For Claude use Read. Identify material financial correctness issues. Do not modify files. Return only JSON with a findings array. Each finding has file, function, summary, and example containing numeric initial_balance, amount, and final_balance. Use an empty findings array if there are no issues. Choose your own concrete example for each issue and report the actual final_balance produced by the current implementation. For Codex run a local reproduction with tools using node to import withdraw from ./wallet.mjs, and emit JSON with numeric initial_balance, amount, final_balance; verify your example before reporting it.';
 const execute = (binary, args, onLine = () => {}) => spawnAgent(binary, args, { cwd: fixture, env, onLine });
 async function configDirectory(path) { await mkdir(path, { mode: 0o700 }); await chown(path, agentIdentity.uid, agentIdentity.gid); }
 try {
-  await verifyFixture(fixture); await verifyTools();
-  phase = 'version';
-  const version = (await execute(agent, ['--version'])).trim();
-  const expected = agent === 'codex' ? '0.159.2' : '2.1.285';
-  if (!(agent === 'codex' ? /^codex-cli 0\.159\.2$/ : /^2\.1\.285 \(Claude Code\)$/).test(version)) throw Error('Installed client version does not match pinned canary');
   phase = 'oidc'; const oidcURL = new URL(runtime.oidcURL);
   if (oidcURL.protocol !== 'https:' || !oidcURL.hostname.endsWith('.actions.githubusercontent.com') || !runtime.oidcToken) throw Error('Missing trusted GitHub OIDC runtime');
   oidcURL.searchParams.set('audience', 'review-router-gateway-spike');
@@ -30,8 +26,21 @@ try {
   const { value } = await oidc.json();
   phase = 'grant'; const grant = await fetch(`${broker}/grant`, { method: 'POST', headers: { authorization: `Bearer ${value}`, 'content-type': 'application/json' }, body: JSON.stringify({ provider, protocol: agent === 'codex' ? 'responses' : 'messages' }), signal: AbortSignal.timeout(15000), redirect: 'error' });
   if (!grant.ok) throw Error('Broker grant failed');
-  const { capability, model } = await grant.json();
+  const granted = await grant.json();
+  const identity = bindGrantedRun(granted, { runID: runtime.runID, attempt: runtime.runAttempt, workflowSHA: runtime.workflowSHA, provider, agent });
+  const { capability, model } = granted;
   if (!/^[A-Za-z0-9_-]{43}$/.test(capability) || typeof model !== 'string') throw Error('Invalid grant response');
+  phase = 'fixture';
+  // Fixed launcher verifies harness.sha256 before Node imports; also deny writable
+  // installed paths here. Seal the binder and all transitive imports in that manifest.
+  for (const path of ['./run-client.mjs', './granted-run.mjs', './runner-isolation.mjs', './evidence.mjs', '../gateway-spike/evidence.mjs']) await sealedPath(fileURLToPath(new URL(path, import.meta.url)));
+  controlHome = await privateControlHome(); home = await agentHome(controlHome); env = cleanAgentEnv(home);
+  await verifyFixture(fixture); await verifyTools();
+  phase = 'version';
+  const version = (await execute(agent, ['--version'])).trim();
+  const expected = agent === 'codex' ? '0.159.2' : '2.1.285';
+  if (!(agent === 'codex' ? /^codex-cli 0\.159\.2$/ : /^2\.1\.285 \(Claude Code\)$/).test(version)) throw Error('Installed client version does not match pinned canary');
+
   const events = []; const collect = line => { try { events.push(JSON.parse(line)); } catch { /* Non-JSON diagnostic is never evidence. */ } };
   phase = 'agent'; let raw, review;
   if (agent === 'codex') {
@@ -64,7 +73,7 @@ try {
     if (!/^node\s/.test(cmd) || !/withdraw/.test(cmd) || !/wallet\.mjs/.test(cmd)) return false;
     try { const n = JSON.parse(i.aggregated_output.trim()); return ['initial_balance', 'amount', 'final_balance'].every(k => Number.isFinite(n[k]) && n[k] === numeric[k]); } catch { return false; }
   })) throw Error('Codex did not prove own numeric local reproduction');
-  const evidence = { ...financialEvidence(agent, events, review, provider), id: agent === 'claude' ? 'A03' : provider === 'mimo' ? 'A01' : 'A02', evidence_kind: 'real-Actions', independent_numeric_reproduction: true, workflow_sha: runtime.workflowSHA, run_id: runtime.runID, run_attempt: runtime.runAttempt, node: process.version, client_version: expected, transport: agent === 'codex' ? 'responses' : 'messages' };
+  const evidence = { ...financialEvidence(agent, events, review, provider), id: agent === 'claude' ? 'A03' : provider === 'mimo' ? 'A01' : 'A02', evidence_kind: 'real-Actions', independent_numeric_reproduction: true, workflow_sha: identity.workflowSHA, run_id: identity.runID, run_attempt: identity.attempt, provider: identity.provider, agent, node: process.version, client_version: expected, transport: identity.protocol };
   // Only positive-projected evidence crosses back to the uid1001 workflow.
   process.stdout.write(JSON.stringify(evidence) + '\n');
   completed = true;

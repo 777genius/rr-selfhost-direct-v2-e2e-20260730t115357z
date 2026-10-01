@@ -42,24 +42,39 @@ function stockGroups(a) {
   if (slices.some(x => !isDeepStrictEqual(x, ids))) throw fault(502, 'account_groups_conflict');
   return ids;
 }
+// Installation input is supplied only by sealed server/operator configuration.
+// It is not proof by itself: coordinator binds it to observed patched-image gates.
+export const probePatchSHA256 = '7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45';
+export function requireProbeInstallation(installation) {
+  if (installation?.standardMode !== true || installation?.openaiDisableCapabilityProbe !== true ||
+      typeof installation?.engineDigest !== 'string' || !/^sha256:[a-f0-9]{64}$/.test(installation.engineDigest) || installation?.probePatchSHA256 !== probePatchSHA256)
+    throw fault(503, 'probe_contract_unverified');
+}
+const probeFlagValid = a => a.platform !== 'openai' || a.extra?.openai_disable_capability_probe === true;
 export class AdminAPI {
-  constructor({ baseURL, adminKey, timeoutMs = 10000 }) { this.baseURL = baseURL; this.adminKey = adminKey; this.timeoutMs = timeoutMs; }
+  constructor({ baseURL, adminKey, timeoutMs = 10000, installation }) {
+    this.baseURL = baseURL; this.adminKey = adminKey; this.timeoutMs = timeoutMs;
+    Object.defineProperty(this, 'installation', { value: Object.freeze({ ...installation }), enumerable: true });
+  }
   async createQuarantined(body, { templateID, workspace, provider, protocol, intentID, checkpoint = () => {} } = {}) {
     // Stock POST /accounts ignores status/schedulable and auto-binds defaults.
     // Duplicate instead persists an unschedulable copy and its group set in one
     // transaction. Only a trusted, per-workspace ungrouped template is eligible.
     if (!Number.isSafeInteger(templateID) || templateID < 1) throw fault(503, 'quarantine_template_required');
+    requireProbeInstallation(this.installation);
+    // Trusted policy wins even for direct server callers passing a false flag.
+    body = { ...body, extra: { ...body.extra, ...(body.platform === 'openai' ? { openai_disable_capability_probe: true } : {}) } };
     const path = `/accounts/${templateID}`;
     checkpoint(); const template = await this.call('GET', path); checkpoint();
     const groups = stockGroups(template);
     const marker = template.extra?.rr_quarantine_template;
     if (marker?.workspace !== workspace || marker?.provider !== provider || marker?.protocol !== protocol ||
         template.type !== 'apikey' || template.platform !== body.platform || template.status !== 'inactive' || template.schedulable !== false ||
-        template.id !== templateID || groups.length || !template.name?.startsWith('rr-sub2-spike-20260930-')) throw fault(409, 'quarantine_template_denied');
+        template.id !== templateID || !probeFlagValid(template) || groups.length || !template.name?.startsWith('rr-sub2-spike-20260930-')) throw fault(409, 'quarantine_template_denied');
     const prepared = await this.call('PUT', path, { ...body, extra: { ...body.extra, rr_quarantine_template: marker }, status: 'inactive', group_ids: [] });
     checkpoint(); const preparedGroups = stockGroups(prepared);
     if (prepared.id !== templateID || prepared.type !== body.type || prepared.platform !== body.platform ||
-        prepared.status !== 'inactive' || prepared.schedulable !== false || preparedGroups.length || prepared.name !== body.name ||
+        prepared.status !== 'inactive' || prepared.schedulable !== false || !probeFlagValid(prepared) || preparedGroups.length || prepared.name !== body.name ||
         !isDeepStrictEqual(prepared.extra?.rr_quarantine_template, marker) || !isDeepStrictEqual(prepared.extra?.rr_quarantine, body.extra.rr_quarantine)) throw fault(409, 'quarantine_template_drift');
     // Intentionally exactly one create attempt, even with an idempotency key.
     return this.call('POST', `${path}/duplicate`, {}, { 'Idempotency-Key': intentID });
@@ -123,7 +138,7 @@ export async function customerAdapter({ statePath, admin, workspaces, credential
       // Sub2API groups restrict routing, not upstream credential ownership.
       const groups = stockGroups(a);
       if (a.id !== b.upstreamID || a.platform !== providerProfiles[`${b.provider}:${b.protocol}`]?.platform ||
-          a.type !== 'apikey' || b.quarantineOwner && !matches(a, b) || groups.length !== 1 || groups[0] !== expected) throw fault(409, 'group_drift');
+          a.type !== 'apikey' || !probeFlagValid(a) || b.quarantineOwner && !matches(a, b) || groups.length !== 1 || groups[0] !== expected) throw fault(409, 'group_drift');
       return { a, b };
     } catch (e) { return failClosed(b, e); }
   }
@@ -151,12 +166,16 @@ export async function customerAdapter({ statePath, admin, workspaces, credential
     if (a.id !== b.upstreamID || a.status !== 'inactive' || !quarantined(a) || b.quarantineOwner && !matches(a, b)) throw fault(502, 'compensation_unconfirmed');
   }
   async function promote(identity, b, guard) {
+    requireProbeInstallation(admin.installation);
+    // Re-read before even group attachment; recovery cannot revive a lost flag.
+    const before = await checked(guard, () => admin.call('GET', `/accounts/${b.upstreamID}`));
+    if (before.id !== b.upstreamID || !matches(before, b) || !quarantined(before) || !probeFlagValid(before)) throw fault(409, 'probe_policy_drift');
     guard.check(); const group = guard.group(`${b.provider}:${b.protocol}`);
     if (!Number.isSafeInteger(group) || group < 1) throw fault(403, 'routing_denied');
     // Ownership is durable before any active workspace group is attached.
     b.state = 'bound'; await checked(guard, save);
     const validate = (a, status, schedulable) => {
-      if (a.id !== b.upstreamID || !matches(a, b) || a.status !== status || a.schedulable !== schedulable ||
+      if (a.id !== b.upstreamID || !probeFlagValid(a) || !matches(a, b) || a.status !== status || a.schedulable !== schedulable ||
           !isDeepStrictEqual(groupsOf(a), [group])) throw fault(502, 'promotion_invalid');
     };
     validate(await checked(guard, () => admin.call('PUT', `/accounts/${b.upstreamID}`, { group_ids: [group], status: 'inactive' })), 'inactive', false);
@@ -192,13 +211,13 @@ export async function customerAdapter({ statePath, admin, workspaces, credential
     state.bindings[id] = b;
     try {
       await checked(guard, save);
-      const extra = profile.platform === 'openai' ? { openai_responses_mode: 'force_responses', openai_passthrough: true } : { anthropic_passthrough: true };
+      const extra = profile.platform === 'openai' ? { openai_disable_capability_probe: true, openai_responses_mode: 'force_responses', openai_passthrough: true } : { anthropic_passthrough: true };
       if (input.provider === 'mimo' && input.protocol === 'responses') extra.openai_preserve_compatible_reasoning = true;
       extra.rr_quarantine = markerOf(b);
       const a = await admin.createQuarantined({ name: baseNameOf(b), platform: profile.platform, type: 'apikey', credentials: { api_key: credential, base_url: profile.baseURL, model_mapping: { [profile.model]: profile.model } }, extra, concurrency: 2, priority: 1, rate_multiplier: 1 }, { templateID: guard.template(`${input.provider}:${input.protocol}`), workspace: identity.workspace, provider: input.provider, protocol: input.protocol, intentID: id, checkpoint: guard.check });
       if (!Number.isSafeInteger(a?.id) || a.id < 1 || !matches(a, b)) throw fault(502, 'quarantine_invalid');
       b.upstreamID = a.id;
-      guard.check(); if (!quarantined(a)) throw fault(502, 'quarantine_invalid');
+      guard.check(); if (!probeFlagValid(a) || !quarantined(a)) throw fault(502, 'quarantine_invalid');
       await checked(guard, save);
       await checked(guard, () => quarantine(b, guard));
       const result = await promote(identity, b, guard); guard.check(); return result;
@@ -245,7 +264,7 @@ export async function customerAdapter({ statePath, admin, workspaces, credential
             if (action === 'update' && (Object.keys(input).some(k => k !== 'concurrency') || !Number.isSafeInteger(input.concurrency) || input.concurrency < 1 || input.concurrency > 2)) throw fault(400, 'customer_routing_denied');
             await checked(guard, () => onAuthorityChange(identity.workspace)); mutated = true;
             const updated = await checked(guard, () => admin.call(action === 'refresh' ? 'POST' : 'PUT', `/accounts/${b.upstreamID}${action === 'refresh' ? '/refresh' : ''}`, action === 'refresh' ? {} : action === 'pause' ? { status: 'inactive' } : { concurrency: input.concurrency }));
-            if (!isDeepStrictEqual(stockGroups(updated), [guard.group(`${b.provider}:${b.protocol}`)]) || updated.id !== b.upstreamID || b.quarantineOwner && !matches(updated, b)) throw fault(409, 'group_drift');
+            if (!probeFlagValid(updated) || !isDeepStrictEqual(stockGroups(updated), [guard.group(`${b.provider}:${b.protocol}`)]) || updated.id !== b.upstreamID || b.quarantineOwner && !matches(updated, b)) throw fault(409, 'group_drift');
             result = publicAccount(updated, b);
           } else throw fault(404, 'action_denied');
         }

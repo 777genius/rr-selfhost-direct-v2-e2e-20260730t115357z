@@ -1,0 +1,34 @@
+[
+  {
+    "path": "sub2api-spike/customer.mjs",
+    "exit_code": 0
+  },
+  {
+    "path": "sub2api-spike/customer.test.mjs",
+    "exit_code": 0
+  },
+  {
+    "path": "sub2api-spike/run-client.mjs",
+    "exit_code": 0
+  },
+  {
+    "path": "sub2api-spike/run-client.test.mjs",
+    "exit_code": 0
+  },
+  {
+    "path": "sub2api-spike/operator/admin-roundtrip.mjs",
+    "exit_code": 0
+  },
+  {
+    "path": "sub2api-spike/operator/live-setup.mjs",
+    "exit_code": 0
+  },
+  {
+    "path": "sub2api-consumer/operator.test.mjs",
+    "exit_code": 0
+  },
+  {
+    "path": "sub2api-consumer/retire-owned.mjs",
+    "exit_code": 0
+  }
+]

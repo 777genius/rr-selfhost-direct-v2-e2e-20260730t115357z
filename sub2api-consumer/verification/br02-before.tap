@@ -1,0 +1,71 @@
+✖ offline consumer trusted probe policy survives preparation copy and update (127.574879ms)
+✖ offline consumer unverified installation denies before admin effects (96.232324ms)
+✖ offline consumer lost probe flags cannot reach scheduling or publication (111.14597ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 0
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 402.710672
+
+✖ failing tests:
+
+test at sub2api-spike/customer.test.mjs:493:1
+✖ offline consumer trusted probe policy survives preparation copy and update (127.574879ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - true
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/consumer-glue-w1/sub2api-spike/customer.test.mjs:496:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-spike/customer.test.mjs:503:1
+✖ offline consumer unverified installation denies before admin effects (96.232324ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    Comparison {
+  +   code: 'quarantine_template_drift'
+  -   code: 'probe_contract_unverified'
+    }
+  
+      at async TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/consumer-glue-w1/sub2api-spike/customer.test.mjs:507:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: quarantine_template_drift
+        at fault (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/consumer-glue-w1/sub2api-spike/util.mjs:3:54)
+        at AdminAPI.createQuarantined (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/consumer-glue-w1/sub2api-spike/customer.mjs:63:162)
+        at async connectOwned (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/consumer-glue-w1/sub2api-spike/customer.mjs:198:17)
+        at async file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/consumer-glue-w1/sub2api-spike/customer.mjs:215:20,
+    expected: { code: 'probe_contract_unverified' },
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at sub2api-spike/customer.test.mjs:511:1
+✖ offline consumer lost probe flags cannot reach scheduling or publication (111.14597ms)
+  AssertionError [ERR_ASSERTION]: Missing expected rejection.
+      at async TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/consumer-glue-w1/sub2api-spike/customer.test.mjs:516:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: undefined,
+    operator: 'rejects',
+    diff: 'simple'
+  }

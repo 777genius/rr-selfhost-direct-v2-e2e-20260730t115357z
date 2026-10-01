@@ -1,0 +1,48 @@
+✖ BR04 integrated mismatches deny before any agent effects and receipt (7.99599ms)
+✔ BR04 integrated valid binding projects exact identity and preserves high reasoning (3.067901ms)
+✖ BR04 model metadata cannot authorize mismatched run (2.451617ms)
+✔ BR04 receipt still requires successful terminal and numeric financial finding (5.051484ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 2
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 77.33139
+
+✖ failing tests:
+
+test at sub2api-spike/run-client.test.mjs:59:1
+✖ BR04 integrated mismatches deny before any agent effects and receipt (7.99599ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  undefined !== 1
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/consumer-glue-w1/sub2api-spike/run-client.test.mjs:62:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-spike/run-client.test.mjs:76:1
+✖ BR04 model metadata cannot authorize mismatched run (2.451617ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  undefined !== 1
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/consumer-glue-w1/sub2api-spike/run-client.test.mjs:78:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

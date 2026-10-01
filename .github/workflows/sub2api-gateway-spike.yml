@@ -45,7 +45,14 @@ jobs:
           const code = await new Promise((resolve, reject) => { child.on('error', reject); child.on('close', resolve); });
           if (code !== 0 || size > 65536) throw Error('Trusted canary failed; inspect effects before any new run');
           const result = JSON.parse(out);
-          if (result.result !== 'passed' || result.workflow_sha !== input.workflowSHA) throw Error('Invalid control receipt');
+          const protocol = input.agent === 'codex' ? 'responses' : input.agent === 'claude' && input.provider === 'mimo' ? 'messages' : undefined;
+          if (!protocol || !['mimo', 'openrouter'].includes(input.provider) || result.result !== 'passed' ||
+              result.run_id !== input.runID || result.run_attempt !== input.runAttempt ||
+              result.workflow_sha !== input.workflowSHA || result.provider !== input.provider ||
+              result.agent !== input.agent || result.transport !== protocol ||
+              result.evidence_kind !== 'real-Actions' || result.tool_read_verified !== true ||
+              result.rules_read_verified !== true || result.terminal_verified !== true ||
+              result.independent_numeric_reproduction !== true) throw Error('Invalid control receipt');
           await mkdir('evidence', { recursive: true });
           await writeFile('evidence/result.json', JSON.stringify(result, null, 2) + '\n');
           NODE

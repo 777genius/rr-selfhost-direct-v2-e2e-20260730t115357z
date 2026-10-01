@@ -6,6 +6,8 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { AdminAPI, customerAdapter, testCustomerServer, safeProviderURL } from './customer.mjs';
 import { listen, stop, readJSON, send } from './util.mjs';
+// Synthetic server installation input; not actual engine verification.
+const installation = Object.freeze({ standardMode: true, openaiDisableCapabilityProbe: true, engineDigest: 'sha256:' + 'a'.repeat(64), probePatchSHA256: '7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45' });
 const stockEmptyAccount = JSON.parse(await readFile(new URL('../sub2api-boundary/fixtures/stock-empty-account.json', import.meta.url), 'utf8'));
 // Independent stock Go omitempty serialization, not adapter normalization.
 function stockWire(a) {
@@ -18,7 +20,7 @@ async function setup(t, { createFailure = false, inject = async () => {}, revoke
   const records = new Map(), observations = [], authorityChanges = []; let next = 1;
   // HTTP fault lab exercises the inspected duplicate transport contract.
   // It cannot prove the engine transaction; real-admin receipt remains required.
-  const templates = new Map([['a', 101], ['b', 102]].map(([workspace, id]) => [id, { ...structuredClone(stockEmptyAccount), id, name: 'rr-sub2-spike-20260930-template', type: 'apikey', platform: 'openai', status: 'inactive', schedulable: false, group_ids: [], extra: { rr_quarantine_template: { workspace, provider: 'mimo', protocol: 'responses' } } }]));
+  const templates = new Map([['a', 101], ['b', 102]].map(([workspace, id]) => [id, { ...structuredClone(stockEmptyAccount), id, name: 'rr-sub2-spike-20260930-template', type: 'apikey', platform: 'openai', status: 'inactive', schedulable: false, group_ids: [], extra: { openai_disable_capability_probe: true, rr_quarantine_template: { workspace, provider: 'mimo', protocol: 'responses' } } }]));
   const adminServer = http.createServer(async (req, res) => {
     observations.push({ method: req.method, path: req.url, headers: req.headers });
     if (req.headers['x-api-key'] !== 'synthetic-shared-admin') { send(res, 401, { code: 401 }); return; }
@@ -44,7 +46,7 @@ async function setup(t, { createFailure = false, inject = async () => {}, revoke
   });
   const adminURL = await listen(adminServer);
   const workspaces = { a: { members: { owner: 'owner', member: 'member' }, groups: { 'mimo:responses': 11 } }, b: { members: { owner: 'owner' }, groups: { 'mimo:responses': 22 } } };
-  const config = { onAuthorityChange: async workspace => { authorityChanges.push(workspace); await revoke(workspaces, workspace); }, statePath: join(dir, 'customer.json'), admin: new AdminAPI({ baseURL: adminURL, adminKey: 'synthetic-shared-admin' }), workspaces, quarantineTemplates: { a: { 'mimo:responses': 101 }, b: { 'mimo:responses': 102 } }, credentialProfiles: { a: { 'mimo:responses': 'synthetic-upstream-a' }, b: { 'mimo:responses': 'synthetic-upstream-b' } } };
+  const config = { onAuthorityChange: async workspace => { authorityChanges.push(workspace); await revoke(workspaces, workspace); }, statePath: join(dir, 'customer.json'), admin: new AdminAPI({ installation, baseURL: adminURL, adminKey: 'synthetic-shared-admin' }), workspaces, quarantineTemplates: { a: { 'mimo:responses': 101 }, b: { 'mimo:responses': 102 } }, credentialProfiles: { a: { 'mimo:responses': 'synthetic-upstream-a' }, b: { 'mimo:responses': 'synthetic-upstream-b' } } };
   const adapter = await customerAdapter(config);
   const customer = testCustomerServer({ adapter, testOnly: true, identities: { 'synthetic-owner-a': { workspace: 'a', user: 'owner' }, 'synthetic-member-a': { workspace: 'a', user: 'member' }, 'synthetic-owner-b': { workspace: 'b', user: 'owner' } } });
   const url = await listen(customer);
@@ -197,7 +199,7 @@ test('OpenRouter Responses and MiMo Messages retain their native configuration',
   const r = await setup(t);
   for (const [provider, protocol, platform, templateID, group] of [['openrouter','responses','openai',103,12], ['mimo','messages','anthropic',104,13]]) {
     const key = `${provider}:${protocol}`;
-    r.templates.set(templateID, { ...structuredClone(stockEmptyAccount), id: templateID, name: 'rr-sub2-spike-20260930-template', type: 'apikey', platform, status: 'inactive', schedulable: false, group_ids: [], extra: { rr_quarantine_template: { workspace: 'a', provider, protocol } } });
+    r.templates.set(templateID, { ...structuredClone(stockEmptyAccount), id: templateID, name: 'rr-sub2-spike-20260930-template', type: 'apikey', platform, status: 'inactive', schedulable: false, group_ids: [], extra: { openai_disable_capability_probe: true, rr_quarantine_template: { workspace: 'a', provider, protocol } } });
     r.workspaces.a.groups[key] = group; r.config.quarantineTemplates.a[key] = templateID; r.config.credentialProfiles.a[key] = 'synthetic-upstream';
     assert.equal((await r.call('owner-a', 'POST', '/accounts', { provider, protocol })).status, 200);
     const a = [...r.records.values()].at(-1); assert.equal(a.platform, platform); assert.equal(Object.hasOwn(a.extra, 'openai_preserve_compatible_reasoning'), false);
@@ -257,7 +259,8 @@ async function offlineLab(t, { hook = async () => {}, ambiguous = false } = {}) 
   t.after(() => rm(dir, { recursive: true, force: true }));
   const workspaces = { a: { members: { owner: 'owner', member: 'member' }, groups: { 'mimo:responses': 11 } } };
   const records = new Map(), trace = [], revoked = []; let template = structuredClone(stockEmptyAccount), next = 1;
-  const admin = new AdminAPI({ baseURL: 'https://unused.invalid', adminKey: 'synthetic-only' });
+  template.extra.openai_disable_capability_probe = true;
+  const admin = new AdminAPI({ installation, baseURL: 'https://unused.invalid', adminKey: 'synthetic-only' });
   const config = { statePath: join(dir, 'customer.json'), admin, workspaces,
     credentialProfiles: { a: { 'mimo:responses': 'synthetic-only' } }, quarantineTemplates: { a: { 'mimo:responses': 101 } },
     onAuthorityChange: async workspace => { revoked.push(workspace); await hook('revoked', { workspaces, config, records }); } };
@@ -483,5 +486,36 @@ test('offline boundary acknowledged interrupted promotion retains explicit retir
     if (decision === 'retire') { assert.equal(result.retired, true); assert.equal(r.records.size, 0); }
     else { assert.equal(result.status, 'active'); assert.equal(r.records.get(1).schedulable, true); assert.deepEqual(r.records.get(1).group_ids, [11]); }
     assert.equal(r.trace.filter(x => x.path.endsWith('/duplicate')).length, 1);
+  }
+});
+
+// BR02: replacing Extra drops the real engine guard before credential PUT.
+test('offline consumer trusted probe policy survives preparation copy and update', async t => {
+  const r = await offlineLab(t); const account = await r.connect();
+  const put = r.trace.find(x => x.path === '/accounts/101' && x.method === 'PUT');
+  assert.equal(put.body.extra.openai_disable_capability_probe, true);
+  assert.equal(r.records.get(1).extra.openai_disable_capability_probe, true);
+  await r.adapter.operate(r.identity, 'update', account.id, { concurrency: 1 });
+  assert.equal(r.records.get(1).extra.openai_disable_capability_probe, true);
+  await assert.rejects(r.adapter.operate(r.identity, 'update', account.id, { concurrency: 1, openai_disable_capability_probe: false }), { code: 'customer_routing_denied' });
+});
+// Missing installation evidence must deny before a credential-bearing write.
+test('offline consumer unverified installation denies before admin effects', async t => {
+  const r = await offlineLab(t); r.config.admin = new AdminAPI({ baseURL: 'https://unused.invalid', adminKey: 'synthetic-only' });
+  const calls = []; r.config.admin.call = async (...args) => { calls.push(args); return structuredClone(stockEmptyAccount); };
+  const a = await customerAdapter(r.config);
+  await assert.rejects(a.operate(r.identity, 'connect', null, { provider: 'mimo', protocol: 'responses' }), { code: 'probe_contract_unverified' });
+  assert.equal(calls.length, 0);
+});
+// A lying/misconfigured engine can drop the persisted guard at each boundary.
+test('offline consumer lost probe flags cannot reach scheduling or publication', async t => {
+  for (const stage of ['template-get', 'template-put', 'duplicate', 'group-attach', 'activate']) for (const flag of [undefined, false, 'true']) {
+    const r = await offlineLab(t, { hook: async (event, { dto }) => {
+      if (event === stage) dto.extra.openai_disable_capability_probe = flag;
+    } });
+    await assert.rejects(r.connect());
+    assert.equal(r.trace.some(x => x.body?.schedulable === true), false);
+    assert.equal([...r.records.values()].some(x => x.schedulable), false);
+    assert.deepEqual(await r.adapter.operate(r.identity, 'list'), []);
   }
 });
