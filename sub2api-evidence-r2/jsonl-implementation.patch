@@ -1,0 +1,372 @@
+--- a/sub2api-spike/evidence.mjs
++++ b/sub2api-spike/evidence.mjs
+@@ -1,54 +1,64 @@
+ import { normalizeEvidence } from '../gateway-spike/evidence.mjs';
+ export { normalizeEvidence };
+ export function parseFindingDocument(review) {
+   const parsed = JSON.parse(review.trim().replace(/^```(?:json)?\s*\n([\s\S]*)\n```$/, '$1'));
+   return Array.isArray(parsed) ? { findings: parsed } : parsed;
+ }
+ // Only completed Node wallet/withdraw commands can prove the reported example.
+ export function codexNumericEvidence(event, example) {
+   const item = event?.item;
+   if (event?.type !== 'item.completed' || item?.type !== 'command_execution' || item.exit_code !== 0 || item.status !== 'completed') return false;
+   if (typeof item.command !== 'string' || typeof item.aggregated_output !== 'string') return false;
+   let command = item.command.trim();
+   const wrapped = /^\/bin\/(?:bash|sh|zsh) -(?:lc|c) (['"])([\s\S]*)\1$/.exec(command);
+   if (wrapped) command = wrapped[2];
+   if (!/^node\s/.test(command) || !/withdraw/.test(command) || !/wallet\.mjs/.test(command)) return false;
++  const numericObject = candidate => candidate !== null && typeof candidate === 'object' && !Array.isArray(candidate)
++    && ['initial_balance', 'amount', 'final_balance'].every(key => Number.isFinite(candidate[key]));
++  const matches = candidate => numericObject(candidate)
++    && ['initial_balance', 'amount', 'final_balance'].every(key => candidate[key] === example?.[key]);
++  let value;
+   try {
++    value = JSON.parse(item.aggregated_output.trim());
++  } catch (error) {
++    if (!(error instanceof SyntaxError)) return false;
++    const lines = item.aggregated_output.split('\n').map(line => line.trim()).filter(Boolean);
++    if (lines.length < 2) return false;
++    let rows;
++    try { rows = lines.map(line => JSON.parse(line)); } catch { return false; }
++    return rows.every(numericObject) && rows.some(matches);
++  }
++  return Array.isArray(value) ? value.some(matches) : matches(value);
+-    const value = JSON.parse(item.aggregated_output.trim());
+-    const matches = candidate => candidate !== null && typeof candidate === 'object' && !Array.isArray(candidate)
+-      && ['initial_balance', 'amount', 'final_balance'].every(key => Number.isFinite(candidate[key]) && candidate[key] === example?.[key]);
+-    return Array.isArray(value) ? value.some(matches) : matches(value);
+-  } catch { return false; }
+ }
+ // Transport evidence remains separate from genuine client tool/financial proof.
+ export async function nativeEvents(response, protocol, { maxBytes = 2 * 1024 * 1024 } = {}) {
+   if (!response.ok || !response.headers.get('content-type')?.includes('text/event-stream')) throw Error('Native HTTP failure');
+   const decoder = new TextDecoder('utf-8', { fatal: true }); let total = 0, pending = '', terminal = false; const events = [];
+   for await (const chunk of response.body) {
+     total += chunk.byteLength; if (total > maxBytes) throw Error('Stream evidence limit');
+     pending = (pending + decoder.decode(chunk, { stream: true })).replace(/\r\n/g, '\n');
+     let i;
+     while ((i = pending.indexOf('\n\n')) >= 0) {
+       const block = pending.slice(0, i); pending = pending.slice(i + 2);
+       const data = block.split('\n').filter(l => l.startsWith('data:')).map(l => l.slice(5).trimStart()).join('\n');
+       if (!data) continue;
+       let event; try { event = JSON.parse(data); } catch { throw Error('Malformed SSE'); }
+       if (terminal) throw Error('Events after terminal');
+       if (['error', 'response.failed', 'response.incomplete'].includes(event.type) || event.error) throw Error('Native error terminal');
+       if (protocol === 'responses' && event.type === 'response.completed') { if (event.response?.status !== 'completed') throw Error('Failed completion'); terminal = true; }
+       if (protocol === 'messages' && event.type === 'message_stop') terminal = true;
+       events.push(event);
+     }
+   }
+   pending += decoder.decode();
+   if (pending.trim() || !terminal) throw Error('Missing terminal event');
+   return events;
+ }
+ export function financialEvidence(agent, events, review, provider) {
+   const normalized = normalizeEvidence(agent, events, JSON.stringify(parseFindingDocument(review)), provider);
+   const exactRulesRead = command => typeof command === 'string' && (/^cat BUSINESS_RULES\.md$/.test(command.trim()) || /^\/bin\/(?:bash|sh|zsh) -(?:lc|c) (['"])cat BUSINESS_RULES\.md\1$/.test(command.trim()));
+   const rulesRead = agent === 'codex' ? events.some(e => e.type === 'item.completed' && e.item?.type === 'command_execution' && exactRulesRead(e.item.command) && e.item.exit_code === 0 && e.item.status === 'completed' && e.item.aggregated_output?.includes('strictly positive') && e.item.aggregated_output?.includes('withdraw')) : events.some(e => e.type === 'user' && e.message?.content?.some(b => b.type === 'tool_result' && !b.is_error && JSON.stringify(b.content).includes('strictly positive') && events.some(a => a.type === 'assistant' && a.message?.content?.some(t => t.type === 'tool_use' && t.id === b.tool_use_id && t.name === 'Read' && /BUSINESS_RULES\.md$/.test(t.input?.file_path ?? '')))));
+   const terminal = agent === 'codex' ? events.some(e => e.type === 'turn.completed') : events.some(e => e.type === 'result' && e.subtype === 'success' && !e.is_error);
+   if (!rulesRead || !terminal) throw Error('Missing separate rules read or successful terminal');
+   return { ...normalized, rules_read_verified: true, terminal_verified: true };
+ }
+--- a/sub2api-spike/evidence.test.mjs
++++ b/sub2api-spike/evidence.test.mjs
+@@ -1,73 +1,119 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
++import { readFileSync } from 'node:fs';
+ import { codexNumericEvidence, financialEvidence, nativeEvents } from './evidence.mjs';
+ import { withdraw } from '../gateway-spike/fixture/wallet.mjs';
+ const negative = { initial_balance: 100, amount: -10, final_balance: 110 };
+ const fractional = { initial_balance: 100, amount: 0.5, final_balance: 99.5 };
+ const nodeCommand = 'node --input-type=module -e "import { withdraw } from \'./wallet.mjs\'; /* reproduction */"';
+ const numericEvent = (output, command = nodeCommand) => ({ type: 'item.completed', item: { type: 'command_execution', command, exit_code: 0, status: 'completed', aggregated_output: output } });
++const actualProjection = JSON.parse(readFileSync(new URL('../sub2api-evidence-r2/numeric-jsonl-fixture.json', import.meta.url), 'utf8'));
++const actualRows = actualProjection.observations[0].rows;
++const actualJSONL = actualRows.map(row => JSON.stringify(row)).join('\n');
++test('numeric proof accepts actual run36869316283 strict JSONL matching either exact example', () => {
++  assert.equal(actualProjection.run_id, '36869316283');
++  assert.equal(actualProjection.observations[0].root_format, 'strict-JSONL');
++  assert.equal(actualProjection.observations[0].successful_node_wallet_reproduction, true);
++  for (const example of actualRows) {
++    assert.equal(codexNumericEvidence(numericEvent(actualJSONL), example), true);
++    assert.equal(codexNumericEvidence(numericEvent(` \r\n${actualJSONL.replaceAll('\n', '\r\n\t\r\n')}\r\n `), example), true);
++    assert.equal(codexNumericEvidence(numericEvent([...actualRows].reverse().map(row => JSON.stringify(row)).join('\n')), example), true);
++  }
++});
++test('strict JSONL consumes every nonblank line as a complete finite numeric object', () => {
++  const invalidLines = ['prose', '{broken', 'null', 'true', '100', '"text"', '[]', JSON.stringify(actualRows), '{}', JSON.stringify({ example: actualRows[0] }), ...JSON.stringify(actualRows[0], null, 2).split('\n')];
++  for (const key of Object.keys(actualRows[0])) {
++    for (const value of [String(actualRows[1][key]), null, true]) invalidLines.push(JSON.stringify({ ...actualRows[1], [key]: value }));
++    const missing = { ...actualRows[1] }; delete missing[key]; invalidLines.push(JSON.stringify(missing));
++    for (const value of ['1e999', '-1e999', 'NaN', 'Infinity']) invalidLines.push(JSON.stringify(actualRows[1]).replace(`"${key}":${actualRows[1][key]}`, `"${key}":${value}`));
++  }
++  for (const line of invalidLines) for (const output of [`${line}\n${actualJSONL}`, `${actualJSONL}\n${line}`, `${JSON.stringify(actualRows[0])}\n${line}\n${JSON.stringify(actualRows[1])}`]) {
++    assert.equal(codexNumericEvidence(numericEvent(output), actualRows[0]), false, output);
++  }
++  // A one-line observation remains accepted through the whole-object path.
++  const single = actualProjection.observations[1].rows[0];
++  assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(single)), single), true);
++});
++test('strict JSONL compares all three finite fields in one exact example', () => {
++  for (const key of Object.keys(actualRows[0])) {
++    const rows = [{ ...actualRows[0], [key]: actualRows[0][key] + 1 }, actualRows[1]];
++    assert.equal(codexNumericEvidence(numericEvent(rows.map(row => JSON.stringify(row)).join('\n')), actualRows[0]), false);
++    assert.equal(codexNumericEvidence(numericEvent(actualJSONL), { ...actualRows[0], [key]: String(actualRows[0][key]) }), false);
++  }
++  const split = Object.keys(actualRows[0]).map(key => ({ ...actualRows[0], [key]: actualRows[0][key] + 1 }));
++  assert.equal(codexNumericEvidence(numericEvent(split.map(row => JSON.stringify(row)).join('\n')), actualRows[0]), false);
++});
++test('strict JSONL retains completed command admission and successful exit gates', () => {
++  const event = numericEvent(actualJSONL);
++  for (const mutation of [{ type: 'reasoning' }, { type: 'agent_message' }, { status: 'failed' }, { status: 'in_progress' }, { exit_code: 1 }, { exit_code: '0' }, { command: 'echo withdraw wallet.mjs' }, { command: 'cd /tmp && ' + nodeCommand }]) {
++    assert.equal(codexNumericEvidence({ ...event, item: { ...event.item, ...mutation } }, actualRows[0]), false);
++  }
++  assert.equal(codexNumericEvidence({ ...event, type: 'item.started' }, actualRows[0]), false);
++});
+ test('numeric proof accepts the existing complete JSON object', () => {
+   assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative)), negative), true);
++  assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative, null, 2)), negative), true);
+ });
+ test('numeric proof accepts canary two-object JSON array matching either reported example', () => {
+   const event = numericEvent(JSON.stringify([negative, fractional]));
+   assert.equal(codexNumericEvidence(event, negative), true);
+   assert.equal(codexNumericEvidence(event, fractional), true);
+   assert.equal(codexNumericEvidence(numericEvent(JSON.stringify([fractional, negative])), negative), true);
++  assert.equal(codexNumericEvidence(numericEvent(JSON.stringify([null, negative, 'irrelevant'], null, 2)), negative), true);
+ });
+ test('numeric proof preserves existing direct and shell-wrapped Node command matching', () => {
+   for (const shell of ['bash', 'sh', 'zsh']) for (const flag of ['c', 'lc']) for (const quote of ["'", '"']) {
+     assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), `/bin/${shell} -${flag} ${quote}${nodeCommand}${quote}`), negative), true);
+   }
+ });
+ test('numeric proof requires exact finite numbers in all three actual fields', () => {
+   for (const key of Object.keys(negative)) for (const value of [negative[key] + 1, String(negative[key]), null, true]) {
+     const wrong = { ...negative, [key]: value };
+     for (const output of [wrong, [fractional, wrong]]) assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(output)), negative), false);
+   }
+   for (const key of Object.keys(negative)) {
+     const missing = { ...negative }; delete missing[key];
+     assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(missing)), negative), false);
+     const overflow = JSON.stringify(negative).replace(`"${key}":${negative[key]}`, `"${key}":1e999`);
+     assert.equal(codexNumericEvidence(numericEvent(overflow), { ...negative, [key]: Infinity }), false);
+   }
+   assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative)), { ...negative, amount: '-10' }), false);
+ });
+ test('numeric proof parses the complete output and never scans fragments or nested objects', () => {
+   const json = JSON.stringify(negative);
++  for (const output of ['', '{bad', 'PASS', `log\n${json}`, `${json}\nlog`, `\u0060\u0060\u0060json\n${json}\n\u0060\u0060\u0060`, 'null', 'true', '100', JSON.stringify(json), '[]', '{}', JSON.stringify({ example: negative }), JSON.stringify([[negative]]), JSON.stringify([{ example: negative }])]) {
+-  for (const output of ['', '{bad', 'PASS', `log\n${json}`, `${json}\nlog`, `${json}\n${json}`, `\u0060\u0060\u0060json\n${json}\n\u0060\u0060\u0060`, 'null', 'true', '100', JSON.stringify(json), '[]', '{}', JSON.stringify({ example: negative }), JSON.stringify([[negative]]), JSON.stringify([{ example: negative }])]) {
+     assert.equal(codexNumericEvidence(numericEvent(output), negative), false, output);
+   }
+   assert.equal(codexNumericEvidence(numericEvent(` \n${json}\n `), negative), true);
+ });
+ test('numeric proof rejects failed or incomplete tools, reasoning, and wrong commands', () => {
+   const event = numericEvent(JSON.stringify(negative));
+   for (const type of ['item.started', 'turn.completed', 'reasoning', 'error']) assert.equal(codexNumericEvidence({ ...event, type }, negative), false);
+   for (const mutation of [{ type: 'reasoning' }, { type: 'agent_message' }, { status: 'failed' }, { status: 'in_progress' }, { status: undefined }, { exit_code: 1 }, { exit_code: '0' }, { exit_code: undefined }, { command: null }, { aggregated_output: negative }]) {
+     assert.equal(codexNumericEvidence({ ...event, item: { ...event.item, ...mutation } }, negative), false);
+   }
+   for (const command of ['cat wallet.mjs', 'echo withdraw wallet.mjs', 'node -e "console.log(1)"', 'node -e "withdraw()"', 'cd /tmp && ' + nodeCommand, '/usr/bin/' + nodeCommand, 'bash -lc ' + nodeCommand]) {
+     assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), command), negative), false);
+   }
+   assert.equal(codexNumericEvidence(null, negative), false);
+ });
+ test('A06 successful separate shell-wrapped rules read validates actual source and finding', () => {
+   const command = (cmd, text) => ({ type: 'item.completed', item: { type: 'command_execution', command: cmd, exit_code: 0, status: 'completed', aggregated_output: text } });
+   const review = JSON.stringify({ findings: [{ file: 'wallet.mjs', function: 'withdraw', summary: 'negative withdrawal increases balance', example: { initial_balance: 100, amount: -10, final_balance: 110 } }] });
+   const events = [command("/bin/bash -lc 'cat wallet.mjs'", 'export function withdraw\naccount.balance -= amount'), command("/bin/bash -lc 'cat BUSINESS_RULES.md'", 'A withdrawal must be strictly positive'), { type: 'turn.completed' }];
+   assert.equal(financialEvidence('codex', events, review, 'mimo').rules_read_verified, true);
+   assert.equal(financialEvidence('codex', events, JSON.stringify(JSON.parse(review).findings), 'mimo').terminal_verified, true);
+   events[1].item.aggregated_output = 'file read failed'; assert.throws(() => financialEvidence('codex', events, review, 'mimo'));
+ });
+ // Regression: malformed output or synthetic terminal/tool-only event counted as review.
+ test('A06 malformed and fabricated financial success fail inherited validator', () => {
+   for (const review of ['{bad', '{"findings":[]}', '{"findings":[{"file":"wallet.mjs"}]}']) assert.throws(() => financialEvidence('codex', [], review, 'mimo'));
+   const account = { balance: 100 }; const actual = withdraw(account, -10); assert.equal(actual.balance, 110); assert.equal(account.balance, 110);
+ });
+ // Regression: SSE delimiter CRLF or UTF-8 split corrupts/error event validates green.
+ test('A10 E04 streamed UTF8 and missing native terminal rejected', async () => {
+   const bytes = Buffer.from('event: response.completed\ndata: {"type":"response.completed","response":{"status":"completed"},"note":"金🙂"}\n\n');
+   let i = 0; const stream = new ReadableStream({ pull(c) { if (i === bytes.length) c.close(); else c.enqueue(bytes.subarray(i, ++i)); } });
+   const response = new Response(stream, { headers: { 'content-type': 'text/event-stream' } }); assert.equal((await nativeEvents(response, 'responses'))[0].note, '金🙂');
+   for (const body of ['data: {broken\n\n', 'data: {"type":"response.created"}\n\n', 'data: {"type":"response.failed"}\n\n']) await assert.rejects(nativeEvents(new Response(body, { headers: { 'content-type': 'text/event-stream' } }), 'responses'));
+ });
+--- a/sub2api-evidence-r2/client-contract.test.mjs
++++ b/sub2api-evidence-r2/client-contract.test.mjs
+@@ -1,90 +1,132 @@
+ // Local caller contract: synthetic agent I/O, real independent Node reproduction.
+ // This is not a coordinator/container/provider E2E or a real-Actions receipt.
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+ import { readFile } from 'node:fs/promises';
+ import { execFile } from 'node:child_process';
+ import { promisify } from 'node:util';
+ import { randomUUID } from 'node:crypto';
+ import { fileURLToPath } from 'node:url';
+ const execute = promisify(execFile);
++const actualProjection = JSON.parse(await readFile(new URL('./numeric-jsonl-fixture.json', import.meta.url), 'utf8'));
++const actualRows = actualProjection.observations[0].rows;
++const actualDocument = { findings: actualRows.map(example => ({ file: 'wallet.mjs', function: 'withdraw', summary: 'Invalid withdrawal is accepted', example })) };
++const actualNodeExpression = `import { withdraw } from "./wallet.mjs"; for (const {initial_balance,amount} of ${JSON.stringify(actualRows)}) console.log(JSON.stringify({initial_balance,amount,final_balance:withdraw({balance:initial_balance},amount).balance}));`;
+ const clientURL = new URL('../sub2api-spike/run-client.mjs', import.meta.url);
+ const fixture = fileURLToPath(new URL('../sub2api-spike/fixture/', import.meta.url));
+ const negative = { initial_balance: 100, amount: -10, final_balance: 110 };
+ const fractional = { initial_balance: 100, amount: 0.5, final_balance: 99.5 };
+ const document = { findings: [negative, fractional].map(example => ({ file: 'wallet.mjs', function: 'withdraw', summary: 'Invalid withdrawal is accepted', example })) };
+ const nodeExpression = 'import { withdraw } from "./wallet.mjs"; const examples = [{initial_balance:100,amount:-10},{initial_balance:100,amount:0.5}]; console.log(JSON.stringify(examples.map(({initial_balance,amount}) => ({initial_balance,amount,final_balance:withdraw({balance:initial_balance},amount).balance}))));';
+ const command = (cmd, output) => ({ type: 'item.completed', item: { type: 'command_execution', command: cmd, aggregated_output: output, exit_code: 0, status: 'completed' } });
+ async function run(options = {}) {
+   const source = await readFile(process.env.RUN_CLIENT_SOURCE ?? clientURL, 'utf8');
+   const wallet = await readFile(new URL('../sub2api-spike/fixture/wallet.mjs', import.meta.url), 'utf8');
+   const rules = await readFile(new URL('../sub2api-spike/fixture/BUSINESS_RULES.md', import.meta.url), 'utf8');
++  const sha = 'b'.repeat(40), receipts = [], sealed = [], effects = [], errors = [], independentExits = [], key = randomUUID();
+-  const sha = 'b'.repeat(40), receipts = [], sealed = [], effects = [], errors = [], key = randomUUID();
+   const events = options.events ?? [command('cat wallet.mjs', wallet), command('cat BUSINESS_RULES.md', rules),
++    command(`node --input-type=module -e '${options.nodeExpression ?? nodeExpression}'`, options.output ?? JSON.stringify([negative, fractional])), { type: 'turn.completed' }];
+-    command(`node --input-type=module -e '${nodeExpression}'`, options.output ?? JSON.stringify([negative, fractional])), { type: 'turn.completed' }];
+   const p = { versions: { node: '24.21.0' }, version: process.version, stdout: { write: value => receipts.push(JSON.parse(value)) } };
+   const io = {
+     process: p, console: { error: message => errors.push(message) }, mkdir: async () => {}, chown: async () => {}, rm: async () => {}, writeFile: async () => {}, readFile: async () => sha,
+     requireControl: () => {}, readControlInput: async () => ({ runID: '123', runAttempt: '2', workflowSHA: sha, provider: 'mimo', agent: 'codex', oidcURL: 'https://example.actions.githubusercontent.com/token', oidcToken: 'synthetic' }),
+     privateControlHome: async () => '/synthetic/control', agentHome: async () => '/synthetic/agent', cleanAgentEnv: () => ({}), agentIdentity: { uid: 1002, gid: 1002 },
+     sealedPath: async path => { sealed.push(path); if (options.sealDenied) throw Error('unsealed'); }, verifyFixture: async () => {}, verifyTools: async () => {},
+     safeAgentFile: async () => options.review ?? JSON.stringify(document),
+     fetch: async url => ({ ok: true, json: async () => String(url).includes('/grant') ? { runID: '123', attempt: '2', workflowSHA: sha, provider: 'mimo', protocol: 'responses', model: 'mimo-v2.6-pro', capability: 's'.repeat(43) } : { value: 'synthetic' } }),
+     spawnAgent: async (binary, args, { onLine }) => {
+       effects.push(binary);
+       if (args[0] === '--version') return 'codex-cli 0.159.2';
++      if (binary === 'node') {
++        try { const result = await execute(process.execPath, args, { cwd: fixture, timeout: 5000 }); independentExits.push(0); return result.stdout; }
++        catch (error) { independentExits.push(error.code); throw error; }
++      }
+-      if (binary === 'node') return (await execute(process.execPath, args, { cwd: fixture, timeout: 5000 })).stdout;
+       for (const event of events) onLine(JSON.stringify(event));
+       if (options.agentFailed) throw Error('agent failed');
+       return '';
+     },
+   };
+   globalThis[key] = io;
+   let injected = `const { ${Object.keys(io).join(', ')} } = globalThis[${JSON.stringify(key)}];\n`;
+   for (const line of source.split('\n')) {
+     if (/^import .*from '(node:fs\/promises|\.\/runner-isolation.mjs)'/.test(line)) continue;
+     const relocated = line.startsWith('import ') ? line.replace(/from '(\.\/[^']+)'/g, (_, path) => `from '${new URL(path, clientURL).href}'`) : line;
+     injected += relocated.replaceAll('import.meta.url', JSON.stringify(clientURL.href)) + '\n';
+   }
+   try { await import('data:text/javascript;base64,' + Buffer.from(injected).toString('base64')); }
+   finally { delete globalThis[key]; }
++  return { receipts, sealed, effects, errors, independentExits, exitCode: p.exitCode, events };
+-  return { receipts, sealed, effects, errors, exitCode: p.exitCode, events };
+ }
+ for (const [shape, output] of [['object', JSON.stringify(negative)], ['canary-shaped array', JSON.stringify([negative, fractional])]]) {
+   test(`caller accepts ${shape} with real independent reproduction`, async () => {
+     const result = await run({ output });
+     assert.equal(result.exitCode, undefined, JSON.stringify({ errors: result.errors, effects: result.effects }));
+     assert.equal(result.receipts.length, 1);
+     assert.equal(result.effects.filter(binary => binary === 'node').length, 1);
+     for (const gate of ['tool_read_verified', 'rules_read_verified', 'terminal_verified', 'independent_numeric_reproduction']) assert.equal(result.receipts[0][gate], true);
+     assert.ok(result.sealed.includes(fileURLToPath(new URL('../sub2api-spike/evidence.mjs', import.meta.url))));
+     assert.equal(Object.hasOwn(result.receipts[0], 'capability'), false);
+   });
+ }
+ test('caller accepts actual local Node wallet execution emitting both numeric examples', async () => {
+   const { stdout } = await execute(process.execPath, ['--input-type=module', '-e', nodeExpression], { cwd: fixture, timeout: 5000 });
+   assert.deepEqual(JSON.parse(stdout), [negative, fractional]);
+   const result = await run({ output: stdout });
+   assert.equal(result.exitCode, undefined);
+   assert.equal(result.receipts.length, 1);
+ });
++test('caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction', async () => {
++  const { stdout } = await execute(process.execPath, ['--input-type=module', '-e', actualNodeExpression], { cwd: fixture, timeout: 5000 });
++  assert.equal(stdout, actualRows.map(row => JSON.stringify(row)).join('\n') + '\n');
++  const result = await run({ output: stdout, review: JSON.stringify(actualDocument), nodeExpression: actualNodeExpression });
++  assert.equal(result.exitCode, undefined, JSON.stringify(result.errors));
++  assert.equal(result.receipts.length, 1);
++  assert.equal(result.effects.filter(binary => binary === 'node').length, 1);
++  assert.deepEqual(result.independentExits, [0]);
++  for (const gate of ['tool_read_verified', 'rules_read_verified', 'terminal_verified', 'independent_numeric_reproduction']) assert.equal(result.receipts[0][gate], true);
++  assert.equal(Object.hasOwn(result.receipts[0], 'capability'), false);
++  assert.deepEqual(result.sealed, ['./run-client.mjs', './granted-run.mjs', './runner-isolation.mjs', './evidence.mjs', '../gateway-spike/evidence.mjs'].map(path => fileURLToPath(new URL(path, clientURL))));
++});
++test('caller denies invalid JSONL lines and exact numeric mismatches', async () => {
++  const valid = actualRows.map(row => JSON.stringify(row)).join('\n');
++  const outputs = ['prose', '{broken', '[]', JSON.stringify(actualRows), JSON.stringify({ ...actualRows[1], amount: '25.5' }), JSON.stringify(actualRows[1]).replace('974.5', '1e999')].map(line => `${valid}\n${line}`);
++  outputs.push([{ ...actualRows[0], final_balance: 1049 }, actualRows[1]].map(row => JSON.stringify(row)).join('\n'));
++  for (const output of outputs) {
++    const result = await run({ output, review: JSON.stringify(actualDocument), nodeExpression: actualNodeExpression });
++    assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []);
++  }
++  const wrong = { findings: [{ ...actualDocument.findings[0], example: { ...actualRows[0], final_balance: 1049 } }] };
++  const result = await run({ output: [wrong.findings[0].example, actualRows[1]].map(row => JSON.stringify(row)).join('\n'), review: JSON.stringify(wrong), nodeExpression: actualNodeExpression });
++  assert.deepEqual(result.independentExits, [1]);
++  assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []);
++});
++test('caller retains reads, terminal, genuine final and successful tool requirements with JSONL', async () => {
++  const options = { output: actualRows.map(row => JSON.stringify(row)).join('\n'), review: JSON.stringify(actualDocument), nodeExpression: actualNodeExpression };
++  const { events } = await run(options);
++  const mutate = (index, changes) => events.map((event, i) => i === index ? { ...event, item: { ...event.item, ...changes } } : event);
++  const cases = [mutate(2, { exit_code: 1 }), mutate(2, { status: 'failed' }), mutate(2, { command: 'echo withdraw wallet.mjs' }), events.filter((_, i) => i !== 0), events.filter((_, i) => i !== 1), events.filter(event => event.type !== 'turn.completed'), [...events, { type: 'turn.failed' }]];
++  for (const selection of cases) { const result = await run({ ...options, events: selection }); assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []); }
++  for (const review of ['', 'reasoning about the wallet', '{bad', '{"findings":[]}']) {
++    const result = await run({ ...options, review }); assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []);
++  }
++});
+ test('caller denies bad own proof and independent reproduction mismatch', async () => {
+   for (const output of ['PASS', '{broken', JSON.stringify([{ ...negative, final_balance: 109 }]), JSON.stringify([{ ...negative, amount: '-10' }])]) {
+     const result = await run({ output }); assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []);
+   }
+   const wrong = { findings: [{ ...document.findings[0], example: { ...negative, final_balance: 109 } }] };
+   const result = await run({ review: JSON.stringify(wrong), output: JSON.stringify(wrong.findings[0].example) });
+   assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []);
+ });
+ test('caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals', async () => {
+   const { events } = await run();
+   const mutated = (index, changes) => events.map((event, i) => i === index ? { ...event, item: { ...event.item, ...changes } } : event);
+   const cases = [mutated(2, { exit_code: 1 }), mutated(2, { status: 'failed' }), mutated(2, { command: 'echo withdraw wallet.mjs' }), mutated(0, { exit_code: 1 }), mutated(1, { exit_code: 1 }), mutated(0, { command: 'cat wallet.mjs BUSINESS_RULES.md' }), events.filter((_, i) => i !== 0), events.filter((_, i) => i !== 1), events.filter(event => event.type !== 'turn.completed'), [...events, { type: 'turn.failed' }]];
+   for (const selection of cases) { const result = await run({ events: selection }); assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []); }
+ });
+ test('caller denies reasoning-only final, malformed final, agent failure and unsealed import', async () => {
+   for (const options of [{ review: '' }, { review: 'reasoning about the wallet' }, { review: '{bad' }, { review: '{"findings":[]}' }, { agentFailed: true }, { sealDenied: true }]) {
+     const result = await run(options); assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []);
+     if (options.sealDenied) assert.deepEqual(result.effects, []);
+   }
+ });
+--- /dev/null
++++ b/sub2api-evidence-r2/numeric-jsonl-fixture.json
+@@ -0,0 +1,34 @@
++{
++  "run_id": "36869316283",
++  "source": "actual-persisted-Codex-tool-output",
++  "raw_transcript_exported": false,
++  "observations": [
++    {
++      "root_format": "strict-JSONL",
++      "rows": [
++        {
++          "initial_balance": 1000,
++          "amount": -50,
++          "final_balance": 1050
++        },
++        {
++          "initial_balance": 1000,
++          "amount": 25.5,
++          "final_balance": 974.5
++        }
++      ],
++      "successful_node_wallet_reproduction": true
++    },
++    {
++      "root_format": "strict-JSONL",
++      "rows": [
++        {
++          "initial_balance": 10.5,
++          "amount": 1,
++          "final_balance": 9.5
++        }
++      ],
++      "successful_node_wallet_reproduction": true
++    }
++  ]
++}
+\ No newline at end of file

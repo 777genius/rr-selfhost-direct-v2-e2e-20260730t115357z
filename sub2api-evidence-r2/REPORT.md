@@ -1,3 +1,41 @@
+Fixed the actual strict JSONL numeric evidence rejection from MiMo + Codex HIGH run **36869316283**, whose reviewed workflow was **e3358801023d81211440c13af09ce205700ebe25**. Whole-output JSON object/array parsing remains first. Only a JSON syntax failure enables JSONL: at least two nonblank lines, every line a complete object containing all three finite numeric fields, with one row matching the reported initial_balance, amount, and final_balance exactly. No line is skipped except blank whitespace. Prose, malformed or partial JSON, arrays, nested candidates, missing fields, string numbers, overflow/nonfinite values, and mismatched examples fail. Existing object/array behavior, including pretty-printed complete documents, remains green.
+
+The root-supplied actual-numeric-jsonl-projection.json was read with actual-agent-projection.json and trusted-setup.json. Its two rows are 1000 / -50 / 1050 and 1000 / 25.5 / 974.5; the later 10.5 / 1 / 9.5 single-object observation still uses the whole-object path. The two-row output is reproduced with real local Node importing the actual sub2api-spike fixture wallet, printing one complete object per line, and comparing the entire stdout against the supplied rows. The top-level caller then performs its separate real Node reproduction of the selected negative example. A wrong reported final balance produces an observed independent process exit 1 and no receipt. The sanitized numeric-only projection is retained as numeric-jsonl-fixture.json (byte-identical to the supplied projection) so tests work without the temporary root inputs. No raw transcript is saved.
+
+run-client.mjs is byte-identical to the entry baseline. Command admission, completed item/status, numeric-zero exit, separate wallet/rules reads, genuine successful terminal and final-message file, inherited final finding validation, HIGH reasoning/model, grant binding, sealing of all imported modules, fixed receipt projection, and transcript custody remain intact. Caller tests verify the successful JSONL path and denial of failed tools, wrong commands, missing separate reads, missing/failed terminal, invalid/absent final, independent proof mismatch, and seal denial. No phase constants were needed; error output remains the existing fixed vocabulary without raw text.
+
+Exact RED and GREEN test command (same command in both states):
+
+```sh
+node --test --test-reporter=tap sub2api-spike/evidence.test.mjs sub2api-spike/run-client.test.mjs sub2api-evidence-r2/client-contract.test.mjs
+```
+
+RED: original object/array-only evidence.mjs bytes, final regression tests: **27 passed / 2 failed**, process exit **1**. Only the actual JSONL helper acceptance and actual JSONL top-level caller acceptance tests failed. jsonl-red.tap records this. The entry baseline helper was temporarily restored by a Node script and the fixed helper restored in its finally block; baseline hashes are in change-metrics.json. GREEN: fixed helper, identical tests: **29 passed / 0 failed**, process exit **0**, in jsonl-green.tap. Negative tests reject extra malformed/prose/array lines even when an earlier row matches; test all three numeric fields for strings/nonfinite/missing values and exact mismatches; reject a purported example assembled from different rows; retain successful command/item/exit requirements. Node is **v24.21.0**. Local agent/network/seal I/O is substituted; wallet and independent numeric execution are real local processes. These logs are local contract evidence, not a successful live-provider run.
+
+Syntax checks, all exit **0**:
+
+```sh
+node --check sub2api-spike/run-client.mjs
+node --check sub2api-spike/evidence.mjs
+node --check sub2api-spike/evidence.test.mjs
+node --check sub2api-evidence-r2/client-contract.test.mjs
+```
+
+Incremental LOC relative to this evidence-r4 entry baseline (line insertions/deletions; test fixture and report artifacts excluded):
+
+| File | Added | Removed | Final SHA-256 |
+| --- | ---: | ---: | --- |
+| sub2api-spike/run-client.mjs | 0 | 0 | 0cafcb8b3adf01f607b62786f7d95021deefddaba7b71a0c62b86ba0419f2565 |
+| sub2api-spike/evidence.mjs | 15 | 5 | 44f17424b5057ab94693809d05bc33db6305f065ead928f95aa0b066137f2160 |
+| sub2api-spike/evidence.test.mjs | 47 | 1 | 0b2a8eae3f3000598ddc868b0ee449c4c3ca12791343e6fb163fc6d74570bbb0 |
+| sub2api-evidence-r2/client-contract.test.mjs | 46 | 4 | 4c9d4eed62708962b86f396f69d00b9f582b34a0a331ea3753f012d95cfda3d8 |
+
+Production: **+15 / -5**. Tests: **+93 / -5**. Numeric fixture SHA-256: **13f41a252197709f3382adca88b3924132aa50fa3cb081e88ce83cc2790b5bbb**. change-metrics.json records baseline/final hashes and log hashes; jsonl-implementation.patch records the incremental source/test/fixture changes. Previous object/array metrics are retained as previous-change-metrics.json. Previous red.tap, caller-red.tap, green.tap, and implementation.patch remain intact. Their original report follows verbatim as historical evidence; its paths, LOC, hashes, and 22-test GREEN describe the previous revision, not this JSONL fix.
+
+**Coordinator paid E2E: NOT RUN.** The two previous actual failures remain failures: run36862418094 on 3004a4b required array support; run36869316283 on e335880 required strict JSONL support. Neither is promoted to live success by these local tests. No provider/network/credential, Docker/root/Go, Git mutation/push, or sub-agent action occurred. Git status could not resolve the linked worktree's unavailable gitdir; no Git writes were attempted. Integration/rebuild/reseal and the exact coordinator paid E2E remain controller responsibilities. No local implementation blocker remains. All writes are within the three owned source paths and sub2api-evidence-r2/, apart from disposable baseline snapshots in the authorized agent temporary directory. run-client.mjs required no change for this revision.
+
+Previous report (retained historical failures and validation):
+
 Implemented the numeric-object-or-array evidence fix for the reported MiMo + Codex HIGH canary 36862418094 on 3004a4b. The exported `codexNumericEvidence(event, example)` helper parses the complete command output once and accepts either a root JSON object or an immediate member of a root JSON array. The candidate's `initial_balance`, `amount`, and `final_balance` must all be finite numbers exactly equal to the reported example. Existing successful object evidence remains accepted.
 
 The provided independent diagnostic projections were inspected in place: separate wallet/rules reads succeeded; the reproduction command starts with Node and succeeded; the final projection contains the negative and fractional examples. The tool projection has an empty `numeric_outputs` list. The user-provided complete two-object array is reproduced by the local wallet execution test. No real transcript, credentials, or raw diagnostic data were copied or persisted. This report does not promote the failed canary to a successful Actions run.

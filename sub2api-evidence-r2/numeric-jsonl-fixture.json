@@ -1,0 +1,34 @@
+{
+  "run_id": "36869316283",
+  "source": "actual-persisted-Codex-tool-output",
+  "raw_transcript_exported": false,
+  "observations": [
+    {
+      "root_format": "strict-JSONL",
+      "rows": [
+        {
+          "initial_balance": 1000,
+          "amount": -50,
+          "final_balance": 1050
+        },
+        {
+          "initial_balance": 1000,
+          "amount": 25.5,
+          "final_balance": 974.5
+        }
+      ],
+      "successful_node_wallet_reproduction": true
+    },
+    {
+      "root_format": "strict-JSONL",
+      "rows": [
+        {
+          "initial_balance": 10.5,
+          "amount": 1,
+          "final_balance": 9.5
+        }
+      ],
+      "successful_node_wallet_reproduction": true
+    }
+  ]
+}

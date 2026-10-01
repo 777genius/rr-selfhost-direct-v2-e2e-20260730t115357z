@@ -1,19 +1,65 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { codexNumericEvidence, financialEvidence, nativeEvents } from './evidence.mjs';
 import { withdraw } from '../gateway-spike/fixture/wallet.mjs';
 const negative = { initial_balance: 100, amount: -10, final_balance: 110 };
 const fractional = { initial_balance: 100, amount: 0.5, final_balance: 99.5 };
 const nodeCommand = 'node --input-type=module -e "import { withdraw } from \'./wallet.mjs\'; /* reproduction */"';
 const numericEvent = (output, command = nodeCommand) => ({ type: 'item.completed', item: { type: 'command_execution', command, exit_code: 0, status: 'completed', aggregated_output: output } });
+const actualProjection = JSON.parse(readFileSync(new URL('../sub2api-evidence-r2/numeric-jsonl-fixture.json', import.meta.url), 'utf8'));
+const actualRows = actualProjection.observations[0].rows;
+const actualJSONL = actualRows.map(row => JSON.stringify(row)).join('\n');
+test('numeric proof accepts actual run36869316283 strict JSONL matching either exact example', () => {
+  assert.equal(actualProjection.run_id, '36869316283');
+  assert.equal(actualProjection.observations[0].root_format, 'strict-JSONL');
+  assert.equal(actualProjection.observations[0].successful_node_wallet_reproduction, true);
+  for (const example of actualRows) {
+    assert.equal(codexNumericEvidence(numericEvent(actualJSONL), example), true);
+    assert.equal(codexNumericEvidence(numericEvent(` \r\n${actualJSONL.replaceAll('\n', '\r\n\t\r\n')}\r\n `), example), true);
+    assert.equal(codexNumericEvidence(numericEvent([...actualRows].reverse().map(row => JSON.stringify(row)).join('\n')), example), true);
+  }
+});
+test('strict JSONL consumes every nonblank line as a complete finite numeric object', () => {
+  const invalidLines = ['prose', '{broken', 'null', 'true', '100', '"text"', '[]', JSON.stringify(actualRows), '{}', JSON.stringify({ example: actualRows[0] }), ...JSON.stringify(actualRows[0], null, 2).split('\n')];
+  for (const key of Object.keys(actualRows[0])) {
+    for (const value of [String(actualRows[1][key]), null, true]) invalidLines.push(JSON.stringify({ ...actualRows[1], [key]: value }));
+    const missing = { ...actualRows[1] }; delete missing[key]; invalidLines.push(JSON.stringify(missing));
+    for (const value of ['1e999', '-1e999', 'NaN', 'Infinity']) invalidLines.push(JSON.stringify(actualRows[1]).replace(`"${key}":${actualRows[1][key]}`, `"${key}":${value}`));
+  }
+  for (const line of invalidLines) for (const output of [`${line}\n${actualJSONL}`, `${actualJSONL}\n${line}`, `${JSON.stringify(actualRows[0])}\n${line}\n${JSON.stringify(actualRows[1])}`]) {
+    assert.equal(codexNumericEvidence(numericEvent(output), actualRows[0]), false, output);
+  }
+  // A one-line observation remains accepted through the whole-object path.
+  const single = actualProjection.observations[1].rows[0];
+  assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(single)), single), true);
+});
+test('strict JSONL compares all three finite fields in one exact example', () => {
+  for (const key of Object.keys(actualRows[0])) {
+    const rows = [{ ...actualRows[0], [key]: actualRows[0][key] + 1 }, actualRows[1]];
+    assert.equal(codexNumericEvidence(numericEvent(rows.map(row => JSON.stringify(row)).join('\n')), actualRows[0]), false);
+    assert.equal(codexNumericEvidence(numericEvent(actualJSONL), { ...actualRows[0], [key]: String(actualRows[0][key]) }), false);
+  }
+  const split = Object.keys(actualRows[0]).map(key => ({ ...actualRows[0], [key]: actualRows[0][key] + 1 }));
+  assert.equal(codexNumericEvidence(numericEvent(split.map(row => JSON.stringify(row)).join('\n')), actualRows[0]), false);
+});
+test('strict JSONL retains completed command admission and successful exit gates', () => {
+  const event = numericEvent(actualJSONL);
+  for (const mutation of [{ type: 'reasoning' }, { type: 'agent_message' }, { status: 'failed' }, { status: 'in_progress' }, { exit_code: 1 }, { exit_code: '0' }, { command: 'echo withdraw wallet.mjs' }, { command: 'cd /tmp && ' + nodeCommand }]) {
+    assert.equal(codexNumericEvidence({ ...event, item: { ...event.item, ...mutation } }, actualRows[0]), false);
+  }
+  assert.equal(codexNumericEvidence({ ...event, type: 'item.started' }, actualRows[0]), false);
+});
 test('numeric proof accepts the existing complete JSON object', () => {
   assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative)), negative), true);
+  assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative, null, 2)), negative), true);
 });
 test('numeric proof accepts canary two-object JSON array matching either reported example', () => {
   const event = numericEvent(JSON.stringify([negative, fractional]));
   assert.equal(codexNumericEvidence(event, negative), true);
   assert.equal(codexNumericEvidence(event, fractional), true);
   assert.equal(codexNumericEvidence(numericEvent(JSON.stringify([fractional, negative])), negative), true);
+  assert.equal(codexNumericEvidence(numericEvent(JSON.stringify([null, negative, 'irrelevant'], null, 2)), negative), true);
 });
 test('numeric proof preserves existing direct and shell-wrapped Node command matching', () => {
   for (const shell of ['bash', 'sh', 'zsh']) for (const flag of ['c', 'lc']) for (const quote of ["'", '"']) {
@@ -35,7 +81,7 @@ test('numeric proof requires exact finite numbers in all three actual fields', (
 });
 test('numeric proof parses the complete output and never scans fragments or nested objects', () => {
   const json = JSON.stringify(negative);
-  for (const output of ['', '{bad', 'PASS', `log\n${json}`, `${json}\nlog`, `${json}\n${json}`, `\u0060\u0060\u0060json\n${json}\n\u0060\u0060\u0060`, 'null', 'true', '100', JSON.stringify(json), '[]', '{}', JSON.stringify({ example: negative }), JSON.stringify([[negative]]), JSON.stringify([{ example: negative }])]) {
+  for (const output of ['', '{bad', 'PASS', `log\n${json}`, `${json}\nlog`, `\u0060\u0060\u0060json\n${json}\n\u0060\u0060\u0060`, 'null', 'true', '100', JSON.stringify(json), '[]', '{}', JSON.stringify({ example: negative }), JSON.stringify([[negative]]), JSON.stringify([{ example: negative }])]) {
     assert.equal(codexNumericEvidence(numericEvent(output), negative), false, output);
   }
   assert.equal(codexNumericEvidence(numericEvent(` \n${json}\n `), negative), true);

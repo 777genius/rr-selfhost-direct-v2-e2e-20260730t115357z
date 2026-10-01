@@ -13,12 +13,22 @@ export function codexNumericEvidence(event, example) {
   const wrapped = /^\/bin\/(?:bash|sh|zsh) -(?:lc|c) (['"])([\s\S]*)\1$/.exec(command);
   if (wrapped) command = wrapped[2];
   if (!/^node\s/.test(command) || !/withdraw/.test(command) || !/wallet\.mjs/.test(command)) return false;
+  const numericObject = candidate => candidate !== null && typeof candidate === 'object' && !Array.isArray(candidate)
+    && ['initial_balance', 'amount', 'final_balance'].every(key => Number.isFinite(candidate[key]));
+  const matches = candidate => numericObject(candidate)
+    && ['initial_balance', 'amount', 'final_balance'].every(key => candidate[key] === example?.[key]);
+  let value;
   try {
-    const value = JSON.parse(item.aggregated_output.trim());
-    const matches = candidate => candidate !== null && typeof candidate === 'object' && !Array.isArray(candidate)
-      && ['initial_balance', 'amount', 'final_balance'].every(key => Number.isFinite(candidate[key]) && candidate[key] === example?.[key]);
-    return Array.isArray(value) ? value.some(matches) : matches(value);
-  } catch { return false; }
+    value = JSON.parse(item.aggregated_output.trim());
+  } catch (error) {
+    if (!(error instanceof SyntaxError)) return false;
+    const lines = item.aggregated_output.split('\n').map(line => line.trim()).filter(Boolean);
+    if (lines.length < 2) return false;
+    let rows;
+    try { rows = lines.map(line => JSON.parse(line)); } catch { return false; }
+    return rows.every(numericObject) && rows.some(matches);
+  }
+  return Array.isArray(value) ? value.some(matches) : matches(value);
 }
 // Transport evidence remains separate from genuine client tool/financial proof.
 export async function nativeEvents(response, protocol, { maxBytes = 2 * 1024 * 1024 } = {}) {

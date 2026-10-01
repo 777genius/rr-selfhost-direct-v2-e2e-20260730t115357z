@@ -8,6 +8,10 @@ import { promisify } from 'node:util';
 import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 const execute = promisify(execFile);
+const actualProjection = JSON.parse(await readFile(new URL('./numeric-jsonl-fixture.json', import.meta.url), 'utf8'));
+const actualRows = actualProjection.observations[0].rows;
+const actualDocument = { findings: actualRows.map(example => ({ file: 'wallet.mjs', function: 'withdraw', summary: 'Invalid withdrawal is accepted', example })) };
+const actualNodeExpression = `import { withdraw } from "./wallet.mjs"; for (const {initial_balance,amount} of ${JSON.stringify(actualRows)}) console.log(JSON.stringify({initial_balance,amount,final_balance:withdraw({balance:initial_balance},amount).balance}));`;
 const clientURL = new URL('../sub2api-spike/run-client.mjs', import.meta.url);
 const fixture = fileURLToPath(new URL('../sub2api-spike/fixture/', import.meta.url));
 const negative = { initial_balance: 100, amount: -10, final_balance: 110 };
@@ -19,9 +23,9 @@ async function run(options = {}) {
   const source = await readFile(process.env.RUN_CLIENT_SOURCE ?? clientURL, 'utf8');
   const wallet = await readFile(new URL('../sub2api-spike/fixture/wallet.mjs', import.meta.url), 'utf8');
   const rules = await readFile(new URL('../sub2api-spike/fixture/BUSINESS_RULES.md', import.meta.url), 'utf8');
-  const sha = 'b'.repeat(40), receipts = [], sealed = [], effects = [], errors = [], key = randomUUID();
+  const sha = 'b'.repeat(40), receipts = [], sealed = [], effects = [], errors = [], independentExits = [], key = randomUUID();
   const events = options.events ?? [command('cat wallet.mjs', wallet), command('cat BUSINESS_RULES.md', rules),
-    command(`node --input-type=module -e '${nodeExpression}'`, options.output ?? JSON.stringify([negative, fractional])), { type: 'turn.completed' }];
+    command(`node --input-type=module -e '${options.nodeExpression ?? nodeExpression}'`, options.output ?? JSON.stringify([negative, fractional])), { type: 'turn.completed' }];
   const p = { versions: { node: '24.21.0' }, version: process.version, stdout: { write: value => receipts.push(JSON.parse(value)) } };
   const io = {
     process: p, console: { error: message => errors.push(message) }, mkdir: async () => {}, chown: async () => {}, rm: async () => {}, writeFile: async () => {}, readFile: async () => sha,
@@ -33,7 +37,10 @@ async function run(options = {}) {
     spawnAgent: async (binary, args, { onLine }) => {
       effects.push(binary);
       if (args[0] === '--version') return 'codex-cli 0.159.2';
-      if (binary === 'node') return (await execute(process.execPath, args, { cwd: fixture, timeout: 5000 })).stdout;
+      if (binary === 'node') {
+        try { const result = await execute(process.execPath, args, { cwd: fixture, timeout: 5000 }); independentExits.push(0); return result.stdout; }
+        catch (error) { independentExits.push(error.code); throw error; }
+      }
       for (const event of events) onLine(JSON.stringify(event));
       if (options.agentFailed) throw Error('agent failed');
       return '';
@@ -48,7 +55,7 @@ async function run(options = {}) {
   }
   try { await import('data:text/javascript;base64,' + Buffer.from(injected).toString('base64')); }
   finally { delete globalThis[key]; }
-  return { receipts, sealed, effects, errors, exitCode: p.exitCode, events };
+  return { receipts, sealed, effects, errors, independentExits, exitCode: p.exitCode, events };
 }
 for (const [shape, output] of [['object', JSON.stringify(negative)], ['canary-shaped array', JSON.stringify([negative, fractional])]]) {
   test(`caller accepts ${shape} with real independent reproduction`, async () => {
@@ -67,6 +74,41 @@ test('caller accepts actual local Node wallet execution emitting both numeric ex
   const result = await run({ output: stdout });
   assert.equal(result.exitCode, undefined);
   assert.equal(result.receipts.length, 1);
+});
+test('caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction', async () => {
+  const { stdout } = await execute(process.execPath, ['--input-type=module', '-e', actualNodeExpression], { cwd: fixture, timeout: 5000 });
+  assert.equal(stdout, actualRows.map(row => JSON.stringify(row)).join('\n') + '\n');
+  const result = await run({ output: stdout, review: JSON.stringify(actualDocument), nodeExpression: actualNodeExpression });
+  assert.equal(result.exitCode, undefined, JSON.stringify(result.errors));
+  assert.equal(result.receipts.length, 1);
+  assert.equal(result.effects.filter(binary => binary === 'node').length, 1);
+  assert.deepEqual(result.independentExits, [0]);
+  for (const gate of ['tool_read_verified', 'rules_read_verified', 'terminal_verified', 'independent_numeric_reproduction']) assert.equal(result.receipts[0][gate], true);
+  assert.equal(Object.hasOwn(result.receipts[0], 'capability'), false);
+  assert.deepEqual(result.sealed, ['./run-client.mjs', './granted-run.mjs', './runner-isolation.mjs', './evidence.mjs', '../gateway-spike/evidence.mjs'].map(path => fileURLToPath(new URL(path, clientURL))));
+});
+test('caller denies invalid JSONL lines and exact numeric mismatches', async () => {
+  const valid = actualRows.map(row => JSON.stringify(row)).join('\n');
+  const outputs = ['prose', '{broken', '[]', JSON.stringify(actualRows), JSON.stringify({ ...actualRows[1], amount: '25.5' }), JSON.stringify(actualRows[1]).replace('974.5', '1e999')].map(line => `${valid}\n${line}`);
+  outputs.push([{ ...actualRows[0], final_balance: 1049 }, actualRows[1]].map(row => JSON.stringify(row)).join('\n'));
+  for (const output of outputs) {
+    const result = await run({ output, review: JSON.stringify(actualDocument), nodeExpression: actualNodeExpression });
+    assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []);
+  }
+  const wrong = { findings: [{ ...actualDocument.findings[0], example: { ...actualRows[0], final_balance: 1049 } }] };
+  const result = await run({ output: [wrong.findings[0].example, actualRows[1]].map(row => JSON.stringify(row)).join('\n'), review: JSON.stringify(wrong), nodeExpression: actualNodeExpression });
+  assert.deepEqual(result.independentExits, [1]);
+  assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []);
+});
+test('caller retains reads, terminal, genuine final and successful tool requirements with JSONL', async () => {
+  const options = { output: actualRows.map(row => JSON.stringify(row)).join('\n'), review: JSON.stringify(actualDocument), nodeExpression: actualNodeExpression };
+  const { events } = await run(options);
+  const mutate = (index, changes) => events.map((event, i) => i === index ? { ...event, item: { ...event.item, ...changes } } : event);
+  const cases = [mutate(2, { exit_code: 1 }), mutate(2, { status: 'failed' }), mutate(2, { command: 'echo withdraw wallet.mjs' }), events.filter((_, i) => i !== 0), events.filter((_, i) => i !== 1), events.filter(event => event.type !== 'turn.completed'), [...events, { type: 'turn.failed' }]];
+  for (const selection of cases) { const result = await run({ ...options, events: selection }); assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []); }
+  for (const review of ['', 'reasoning about the wallet', '{bad', '{"findings":[]}']) {
+    const result = await run({ ...options, review }); assert.equal(result.exitCode, 1); assert.deepEqual(result.receipts, []);
+  }
 });
 test('caller denies bad own proof and independent reproduction mismatch', async () => {
   for (const output of ['PASS', '{broken', JSON.stringify([{ ...negative, final_balance: 109 }]), JSON.stringify([{ ...negative, amount: '-10' }])]) {

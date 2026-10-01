@@ -1,0 +1,217 @@
+TAP version 13
+# Subtest: caller accepts object with real independent reproduction
+ok 1 - caller accepts object with real independent reproduction
+  ---
+  duration_ms: 80.569022
+  type: 'test'
+  ...
+# Subtest: caller accepts canary-shaped array with real independent reproduction
+ok 2 - caller accepts canary-shaped array with real independent reproduction
+  ---
+  duration_ms: 68.855905
+  type: 'test'
+  ...
+# Subtest: caller accepts actual local Node wallet execution emitting both numeric examples
+ok 3 - caller accepts actual local Node wallet execution emitting both numeric examples
+  ---
+  duration_ms: 107.940721
+  type: 'test'
+  ...
+# Subtest: caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+not ok 4 - caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+  ---
+  duration_ms: 114.334641
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r4/sub2api-evidence-r2/client-contract.test.mjs:78:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    ["Spike failed at evidence; inspect effects privately before retry."]
+    
+    1 !== undefined
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r4/sub2api-evidence-r2/client-contract.test.mjs:82:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: caller denies invalid JSONL lines and exact numeric mismatches
+ok 5 - caller denies invalid JSONL lines and exact numeric mismatches
+  ---
+  duration_ms: 472.745123
+  type: 'test'
+  ...
+# Subtest: caller retains reads, terminal, genuine final and successful tool requirements with JSONL
+ok 6 - caller retains reads, terminal, genuine final and successful tool requirements with JSONL
+  ---
+  duration_ms: 506.426029
+  type: 'test'
+  ...
+# Subtest: caller denies bad own proof and independent reproduction mismatch
+ok 7 - caller denies bad own proof and independent reproduction mismatch
+  ---
+  duration_ms: 287.522175
+  type: 'test'
+  ...
+# Subtest: caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals
+ok 8 - caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals
+  ---
+  duration_ms: 570.150828
+  type: 'test'
+  ...
+# Subtest: caller denies reasoning-only final, malformed final, agent failure and unsealed import
+ok 9 - caller denies reasoning-only final, malformed final, agent failure and unsealed import
+  ---
+  duration_ms: 10.070993
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts actual run36869316283 strict JSONL matching either exact example
+not ok 10 - numeric proof accepts actual run36869316283 strict JSONL matching either exact example
+  ---
+  duration_ms: 1.960849
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r4/sub2api-spike/evidence.test.mjs:13:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r4/sub2api-spike/evidence.test.mjs:18:12)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.start (node:internal/test_runner/test:1262:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+  ...
+# Subtest: strict JSONL consumes every nonblank line as a complete finite numeric object
+ok 11 - strict JSONL consumes every nonblank line as a complete finite numeric object
+  ---
+  duration_ms: 1.395003
+  type: 'test'
+  ...
+# Subtest: strict JSONL compares all three finite fields in one exact example
+ok 12 - strict JSONL compares all three finite fields in one exact example
+  ---
+  duration_ms: 0.261584
+  type: 'test'
+  ...
+# Subtest: strict JSONL retains completed command admission and successful exit gates
+ok 13 - strict JSONL retains completed command admission and successful exit gates
+  ---
+  duration_ms: 0.149701
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts the existing complete JSON object
+ok 14 - numeric proof accepts the existing complete JSON object
+  ---
+  duration_ms: 0.130931
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts canary two-object JSON array matching either reported example
+ok 15 - numeric proof accepts canary two-object JSON array matching either reported example
+  ---
+  duration_ms: 0.143237
+  type: 'test'
+  ...
+# Subtest: numeric proof preserves existing direct and shell-wrapped Node command matching
+ok 16 - numeric proof preserves existing direct and shell-wrapped Node command matching
+  ---
+  duration_ms: 0.164392
+  type: 'test'
+  ...
+# Subtest: numeric proof requires exact finite numbers in all three actual fields
+ok 17 - numeric proof requires exact finite numbers in all three actual fields
+  ---
+  duration_ms: 0.260978
+  type: 'test'
+  ...
+# Subtest: numeric proof parses the complete output and never scans fragments or nested objects
+ok 18 - numeric proof parses the complete output and never scans fragments or nested objects
+  ---
+  duration_ms: 0.83633
+  type: 'test'
+  ...
+# Subtest: numeric proof rejects failed or incomplete tools, reasoning, and wrong commands
+ok 19 - numeric proof rejects failed or incomplete tools, reasoning, and wrong commands
+  ---
+  duration_ms: 0.278384
+  type: 'test'
+  ...
+# Subtest: A06 successful separate shell-wrapped rules read validates actual source and finding
+ok 20 - A06 successful separate shell-wrapped rules read validates actual source and finding
+  ---
+  duration_ms: 0.883683
+  type: 'test'
+  ...
+# Subtest: A06 malformed and fabricated financial success fail inherited validator
+ok 21 - A06 malformed and fabricated financial success fail inherited validator
+  ---
+  duration_ms: 0.210512
+  type: 'test'
+  ...
+# Subtest: A10 E04 streamed UTF8 and missing native terminal rejected
+ok 22 - A10 E04 streamed UTF8 and missing native terminal rejected
+  ---
+  duration_ms: 5.40051
+  type: 'test'
+  ...
+# Subtest: BR04 integrated mismatches deny before any agent effects and receipt
+ok 23 - BR04 integrated mismatches deny before any agent effects and receipt
+  ---
+  duration_ms: 23.791628
+  type: 'test'
+  ...
+# Subtest: BR04 integrated valid binding projects exact identity and preserves high reasoning
+ok 24 - BR04 integrated valid binding projects exact identity and preserves high reasoning
+  ---
+  duration_ms: 3.558436
+  type: 'test'
+  ...
+# Subtest: BR04 model metadata cannot authorize mismatched run
+ok 25 - BR04 model metadata cannot authorize mismatched run
+  ---
+  duration_ms: 1.952238
+  type: 'test'
+  ...
+# Subtest: BR04 receipt still requires successful terminal and numeric financial finding
+ok 26 - BR04 receipt still requires successful terminal and numeric financial finding
+  ---
+  duration_ms: 6.822621
+  type: 'test'
+  ...
+# Subtest: BR04 workflow rejects every mismatched receipt before publication
+ok 27 - BR04 workflow rejects every mismatched receipt before publication
+  ---
+  duration_ms: 6.730309
+  type: 'test'
+  ...
+# Subtest: BR04 caller projects both other supported native mappings
+ok 28 - BR04 caller projects both other supported native mappings
+  ---
+  duration_ms: 4.470887
+  type: 'test'
+  ...
+# Subtest: BR04 unsealed import path aborts before agent effects and receipt
+ok 29 - BR04 unsealed import path aborts before agent effects and receipt
+  ---
+  duration_ms: 1.864263
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 27
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2319.193993
