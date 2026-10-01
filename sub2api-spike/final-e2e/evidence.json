@@ -1,0 +1,846 @@
+{
+  "kind": "final-native-Sub2API-disposable-E2E-evidence",
+  "recorded_utc": "2026-10-01T19:40:43.167359+00:00",
+  "workflow_sha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+  "native_image": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+  "runner_build": {
+    "kind": "real-kernel-uid-boundary",
+    "image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a",
+    "base_image": "sha256:db03c4e35b40b92a48217dc97c0c7ff38d73b01d83bfe14aaf22d390c8939f4a",
+    "build_duration_s": 6.02,
+    "exit": 0,
+    "harness_manifest_sha256": "c9247d82031db153fb5570c2a62e96bff736154d567d5749df561cfee9303ce8",
+    "reviewed_workflow_sha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+    "live_provider_calls": 0,
+    "containment": {
+      "schema": 1,
+      "evidence_kind": "operator-uid-containment",
+      "status": "PASS",
+      "uid": 1002,
+      "gid": 1002,
+      "groups": [
+        1002
+      ],
+      "parent_environment_denied": true,
+      "sentinel_denied": true,
+      "tool_io": true,
+      "clean_env": [
+        "HOME",
+        "LANG",
+        "PATH",
+        "TMPDIR"
+      ],
+      "same_uid_negative_control_readable": true,
+      "fixture_pinned": true,
+      "hostile_output_symlink_rejected": true
+    }
+  },
+  "native84": {
+    "kind": "actual-native84-root-operator-proof",
+    "real_provider": false,
+    "status": "PASS",
+    "rows": 84,
+    "groups": {
+      "responses:account": 21,
+      "responses:user": 21,
+      "messages:account": 21,
+      "messages:user": 21
+    },
+    "provider_requests": 168,
+    "provider_effects": 168,
+    "active": 0,
+    "duplicate_or_rejected_dispatches": 0,
+    "owned_redis_key_checks": 420,
+    "owned_cleanup": true,
+    "original_deadlines": {
+      "setup_ms": 70000,
+      "active_ms": 35000,
+      "supervisor_ms": 1200000,
+      "cancel_observation_ms": 1250
+    },
+    "native_image": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+    "native_binary_sha256": "5e28306e531eac0abea49811f116dbbddb233c4e52ce3f7d63f9c71d949632fd",
+    "original_production_patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+    "build_header_adapted_patch_sha256": "b6c84836b4bc76f7613936f65767a30deaad468c6046d31d269028ce99d0d4ba",
+    "runtime_critical_source_bindings": {
+      "root-driver.py": "ba31a676fcc2d59a8d1077162dd7886c4f7fd244ad2ccc461806015986a0ecde",
+      "adapter.mjs": "7c5200d2f7d86ec11f2be6050ccfb35da55021ee1c34cf76de273a8c91b1e6be",
+      "prepare.py": "a24fc17e632ef578f289d7384b451d90fbe46ff6753c49d46cda17bf8a51116d",
+      "contracts.mjs": "adf4f64e2ae9d320a743c2657290bc72be0adb3919bfdca87657b292f7977245",
+      "redis.mjs": "b335a7d3eb3b062232ec71ac7132f48b11a89a00ec39e289011665fb6463634c",
+      "run.mjs": "e32258026ee0675635a216f1ba6578770fbc553bf72b11b17a716587c666ed35",
+      "native-sse.mjs": "a82680bbc8e62bed8ccb3fc39c6e4aad8e57431071f30d38c7cd295d594a8527",
+      "build-gate.py": "165e05a342d7f53e16122a9be1f27097251005bdd1516f6ab172ab64d4739b9a",
+      "build-manifest.json": "a1d9c2d8303aee2f6c748d52b57c0411bffe86c959628d5a5cd71c92056c4d9d",
+      "tls-server.ext": "50234c98fdeb8757d10c747e852ca78555b2123aaef9f1fda78e0f4b91b8dafc"
+    },
+    "original_receipt_sha256": {
+      "result.json": "dc3cd8644b645724e03c3874179e6165a732d952f2a0435916fad0953d86631d",
+      "final-provider.json": "c31f0f928240ee32025d1473b3e39c9ff7ebb9d9b998bef057779209d37eb66e",
+      "final-zero.json": "17e2c7d7060950a4e645b664bf682599dd53610258f1692fda949a28247b00e5",
+      "deployment.json": "d6e6aa6964e4cb83991a6ea69eff06d90901fc4d880a03e7b6c42af7d56df147"
+    },
+    "root_result_sha256": "221030d05c2506ca816e5459eb8dfc22e930fd29dc8fa446bb26200072cc4db5",
+    "expired_supervisor_recovery": {
+      "status": "PASS",
+      "kind": "actual-expired-root-negative-and-independent-owned-compensation",
+      "native_operator_started": false,
+      "inference_workload_started": false,
+      "harness_expiry_cleanup_original": "FAIL preserved",
+      "parent_compensation_bound_ms": 15000,
+      "parent_elapsed_ms": 1673.34,
+      "removed_exact_owned_ids": [
+        {
+          "name": "slot-367031b8bd5b-engine",
+          "id": "cdf7662dd62effe5de3e65ec5f95034e4b0afffe67b4ad7d0b3edbe35396aae2"
+        },
+        {
+          "name": "slot-367031b8bd5b-mock",
+          "id": "bd59d08ecff594925723ced5ed45f457e3bcf99c3fa08470d1c4011010271fa3"
+        },
+        {
+          "name": "slot-367031b8bd5b-redis",
+          "id": "cbbfa75fd396d047b42783fa045f79e0bc2b4f9adf7804bb946f2e71166af9ea"
+        },
+        {
+          "name": "slot-367031b8bd5b-postgres",
+          "id": "1f6c7016bae3aadc8228379d07625776c77c9759a532ced3a75ac8b8a034cba1"
+        }
+      ],
+      "absent_ambiguous_intention": [
+        "slot-367031b8bd5b-operator"
+      ],
+      "own_network_id": "df996f2dbefecf30fe8b7fba96c61217e5fcf9c2c6ed23e76f817631419d9589",
+      "original_failure_journal_preserved": true,
+      "no_lease_deletes_or_global_prune": true,
+      "scope": "Root operator recovery, not automated production guarantee"
+    },
+    "production_GO": false,
+    "memory_gate": "20/20 strict RSS-return FAIL unchanged",
+    "live_OAuth": "NOT RUN"
+  },
+  "canaries": {
+    "36913301414": {
+      "run_id": "36913301414",
+      "provider": "mimo",
+      "agent": "codex",
+      "new_provider_requests": 5,
+      "request_budget_ms": 120000,
+      "receipts": {
+        "trusted-setup.json": {
+          "kind": "exact-workflow-private-API-key-canary-setup",
+          "workflow_sha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+          "run_id": "36913301414",
+          "run_attempt": "1",
+          "runner_image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a",
+          "engine_image": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+          "network_proof": "PASS",
+          "usage_log_rows_before_runner": 38,
+          "broker": "rr-sub2-fork-20261001-broker-36913301414",
+          "runner_network": "rr-sub2-fork-20261001-runner-36913301414"
+        },
+        "network-boundary.json": {
+          "resources": [
+            {
+              "resource": "engine",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.4",
+              "port": 8080,
+              "reachable": false
+            },
+            {
+              "resource": "engine",
+              "network": "rr-sub2-fork-20261001-outbound",
+              "host": "172.26.0.2",
+              "port": 8080,
+              "reachable": false
+            },
+            {
+              "resource": "postgres",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.3",
+              "port": 5432,
+              "reachable": false
+            },
+            {
+              "resource": "postgres",
+              "network": "rr-sub2-fork-20261001-transport-r4-bootstrap",
+              "host": "172.28.0.2",
+              "port": 5432,
+              "reachable": false
+            },
+            {
+              "resource": "redis",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.2",
+              "port": 6379,
+              "reachable": false
+            }
+          ],
+          "broker_reachable": true,
+          "status": "PASS",
+          "run_id": "36913301414",
+          "image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a"
+        },
+        "runner-provider-custody.json": {
+          "status": "PASS",
+          "kind": "actual-terminal-runner-filesystem-custody",
+          "run_id": "36913301414",
+          "image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a",
+          "export_bytes": 2482480640,
+          "actual_raw_or_encoded_provider_key_hits": 0,
+          "host_binds": 0,
+          "config_logs_scanned": true,
+          "limit": "Terminal filesystem snapshot, not continuous process memory."
+        },
+        "own-run-teardown.json": {
+          "status": "PASS",
+          "run_id": "36913301414",
+          "own_runner_broker_network_removed": true,
+          "original_root_key_files_preserved": true,
+          "root_provider_fixtures_retained_for_next_planned_canaries": true
+        },
+        "actual-usage-after.json": [
+          {
+            "account_id": 79,
+            "count": 30,
+            "input_tokens": 28068,
+            "output_tokens": 11463
+          },
+          {
+            "account_id": 80,
+            "count": 5,
+            "input_tokens": 10698,
+            "output_tokens": 11467
+          },
+          {
+            "account_id": 81,
+            "count": 8,
+            "input_tokens": 15988,
+            "output_tokens": 603
+          }
+        ]
+      },
+      "receipt_sha256": {
+        "trusted-setup.json": "e47ba2a1161167b92199eabaac3c6c0c7aff9525517459b85f0208e981aca9f7",
+        "network-boundary.json": "ec898a5ca02e9969f8ea11eb8795589e8a103b2ca6fb78602640717f13da4707",
+        "runner-provider-custody.json": "086d3cea15fe9623bf913055244f394f14d28756a81ee8d8244977be494793e7",
+        "own-run-teardown.json": "ce7c3f2fea9ff393c64c4df6cdc3fa20a08c36de699b2898c4637fa8eea2f3b8",
+        "actual-usage-after.json": "c36532292cb0eee1c5c1092754b9788a0840d1bfe745d7feaec3d54f75578f56"
+      },
+      "published_actions_result": {
+        "schema": 1,
+        "provider": "mimo",
+        "agent": "codex",
+        "tool_read_verified": true,
+        "finding": {
+          "file": "fixture/wallet.mjs",
+          "issue": "negative withdrawal increases balance"
+        },
+        "result": "passed",
+        "rules_read_verified": true,
+        "terminal_verified": true,
+        "id": "A01",
+        "evidence_kind": "real-Actions",
+        "independent_numeric_reproduction": true,
+        "workflow_sha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+        "run_id": "36913301414",
+        "run_attempt": "1",
+        "node": "v24.21.0",
+        "client_version": "0.159.2",
+        "transport": "responses"
+      }
+    },
+    "36913671762": {
+      "run_id": "36913671762",
+      "provider": "openrouter",
+      "agent": "codex",
+      "new_provider_requests": 5,
+      "request_budget_ms": 120000,
+      "receipts": {
+        "trusted-setup.json": {
+          "kind": "exact-workflow-private-API-key-canary-setup",
+          "workflow_sha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+          "run_id": "36913671762",
+          "run_attempt": "1",
+          "runner_image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a",
+          "engine_image": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+          "network_proof": "PASS",
+          "usage_log_rows_before_runner": 43,
+          "broker": "rr-sub2-fork-20261001-broker-36913671762",
+          "runner_network": "rr-sub2-fork-20261001-runner-36913671762"
+        },
+        "network-boundary.json": {
+          "resources": [
+            {
+              "resource": "engine",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.4",
+              "port": 8080,
+              "reachable": false
+            },
+            {
+              "resource": "engine",
+              "network": "rr-sub2-fork-20261001-outbound",
+              "host": "172.26.0.2",
+              "port": 8080,
+              "reachable": false
+            },
+            {
+              "resource": "postgres",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.3",
+              "port": 5432,
+              "reachable": false
+            },
+            {
+              "resource": "postgres",
+              "network": "rr-sub2-fork-20261001-transport-r4-bootstrap",
+              "host": "172.28.0.2",
+              "port": 5432,
+              "reachable": false
+            },
+            {
+              "resource": "redis",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.2",
+              "port": 6379,
+              "reachable": false
+            }
+          ],
+          "broker_reachable": true,
+          "status": "PASS",
+          "run_id": "36913671762",
+          "image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a"
+        },
+        "runner-provider-custody.json": {
+          "status": "PASS",
+          "kind": "actual-terminal-runner-filesystem-custody",
+          "run_id": "36913671762",
+          "image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a",
+          "export_bytes": 2482475520,
+          "actual_raw_or_encoded_provider_key_hits": 0,
+          "host_binds": 0,
+          "config_logs_scanned": true,
+          "limit": "Terminal filesystem snapshot, not continuous process memory."
+        },
+        "own-run-teardown.json": {
+          "status": "PASS",
+          "run_id": "36913671762",
+          "own_runner_broker_network_removed": true,
+          "original_root_key_files_preserved": true,
+          "root_provider_fixtures_retained_for_next_planned_canaries": true
+        },
+        "actual-usage-after.json": [
+          {
+            "account_id": 79,
+            "count": 30,
+            "input_tokens": 28068,
+            "output_tokens": 11463
+          },
+          {
+            "account_id": 80,
+            "count": 5,
+            "input_tokens": 10698,
+            "output_tokens": 11467
+          },
+          {
+            "account_id": 81,
+            "count": 13,
+            "input_tokens": 24153,
+            "output_tokens": 1060
+          }
+        ]
+      },
+      "receipt_sha256": {
+        "trusted-setup.json": "0d743ed20fc1e588ffc3d8432050dba2133d060aba5dbeabe5c07ddf1762af29",
+        "network-boundary.json": "ba4fda83db7f689a2c98833fb4b9fda0262ea980b486eb4201601b60a7f415b7",
+        "runner-provider-custody.json": "0f16bdff5165b134de0a1fda3dfc84d4c948ca1f42520c18fc32616afbbdd79f",
+        "own-run-teardown.json": "1fbb1a145b1516c21a5df761941679de9eddf01ddb0195c9596b7a5aca6ab69c",
+        "actual-usage-after.json": "4c5fddbc09400a30160d22c087561b782171772f4e0161ef2d99b98f05f7a208"
+      },
+      "published_actions_result": {
+        "schema": 1,
+        "provider": "openrouter",
+        "agent": "codex",
+        "tool_read_verified": true,
+        "finding": {
+          "file": "fixture/wallet.mjs",
+          "issue": "negative withdrawal increases balance"
+        },
+        "result": "passed",
+        "rules_read_verified": true,
+        "terminal_verified": true,
+        "id": "A02",
+        "evidence_kind": "real-Actions",
+        "independent_numeric_reproduction": true,
+        "workflow_sha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+        "run_id": "36913671762",
+        "run_attempt": "1",
+        "node": "v24.21.0",
+        "client_version": "0.159.2",
+        "transport": "responses"
+      }
+    },
+    "36913874394": {
+      "run_id": "36913874394",
+      "provider": "mimo",
+      "agent": "claude",
+      "new_provider_requests": 4,
+      "request_budget_ms": 120000,
+      "receipts": {
+        "trusted-setup.json": {
+          "kind": "exact-workflow-private-API-key-canary-setup",
+          "workflow_sha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+          "run_id": "36913874394",
+          "run_attempt": "1",
+          "runner_image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a",
+          "engine_image": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+          "network_proof": "PASS",
+          "usage_log_rows_before_runner": 48,
+          "broker": "rr-sub2-fork-20261001-broker-36913874394",
+          "runner_network": "rr-sub2-fork-20261001-runner-36913874394"
+        },
+        "network-boundary.json": {
+          "resources": [
+            {
+              "resource": "engine",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.4",
+              "port": 8080,
+              "reachable": false
+            },
+            {
+              "resource": "engine",
+              "network": "rr-sub2-fork-20261001-outbound",
+              "host": "172.26.0.2",
+              "port": 8080,
+              "reachable": false
+            },
+            {
+              "resource": "postgres",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.3",
+              "port": 5432,
+              "reachable": false
+            },
+            {
+              "resource": "postgres",
+              "network": "rr-sub2-fork-20261001-transport-r4-bootstrap",
+              "host": "172.28.0.2",
+              "port": 5432,
+              "reachable": false
+            },
+            {
+              "resource": "redis",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.2",
+              "port": 6379,
+              "reachable": false
+            }
+          ],
+          "broker_reachable": true,
+          "status": "PASS",
+          "run_id": "36913874394",
+          "image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a"
+        },
+        "runner-provider-custody.json": {
+          "status": "PASS",
+          "kind": "actual-terminal-runner-filesystem-custody",
+          "run_id": "36913874394",
+          "image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a",
+          "export_bytes": 2482547200,
+          "actual_raw_or_encoded_provider_key_hits": 0,
+          "host_binds": 0,
+          "config_logs_scanned": true,
+          "limit": "Terminal filesystem snapshot, not continuous process memory."
+        },
+        "own-run-teardown.json": {
+          "status": "PASS",
+          "run_id": "36913874394",
+          "own_runner_broker_network_removed": true,
+          "original_root_key_files_preserved": true,
+          "root_provider_fixtures_retained_for_next_planned_canaries": true
+        },
+        "actual-usage-after.json": [
+          {
+            "account_id": 79,
+            "count": 30,
+            "input_tokens": 28068,
+            "output_tokens": 11463
+          },
+          {
+            "account_id": 80,
+            "count": 9,
+            "input_tokens": 14720,
+            "output_tokens": 36501
+          },
+          {
+            "account_id": 81,
+            "count": 13,
+            "input_tokens": 24153,
+            "output_tokens": 1060
+          }
+        ]
+      },
+      "receipt_sha256": {
+        "trusted-setup.json": "4c2a8760f20d1d6ad1bab88aac663425dc0350ca69e3e39f62f4186245b98c2a",
+        "network-boundary.json": "0ef896145dd4aabbbfb2ae59bbb58db855bb7c3feab47d6b12921d32c972689c",
+        "runner-provider-custody.json": "9e538e112165084e8fcfc3837c7ae42f526d25cc93a1b389fe0bebe36f83dbef",
+        "own-run-teardown.json": "477943292cb71e4c36d471fc3c46e1066f002a8fca6d929d730a76c1605c94e5",
+        "actual-usage-after.json": "4e164df03731eac1c46c6e06a6011500dadfe9bc84027761d5aa7ef752f42ba9"
+      },
+      "retained_original_failure": {
+        "status": "RETAINED_FAILURE",
+        "kind": "actual-MiMo-Messages-120s-total-timeout-followed-by-OIDC-expiry",
+        "events": [
+          {
+            "event": "request",
+            "code": "route_denied",
+            "duration_ms": 3
+          },
+          {
+            "event": "request",
+            "code": "route_denied",
+            "duration_ms": 1
+          },
+          {
+            "event": "request",
+            "code": "ok",
+            "duration_ms": 322
+          },
+          {
+            "event": "request",
+            "code": "route_denied",
+            "duration_ms": 0
+          },
+          {
+            "event": "request",
+            "code": "ok",
+            "duration_ms": 34442
+          },
+          {
+            "event": "request",
+            "code": "transport_failure",
+            "duration_ms": 120004
+          },
+          {
+            "event": "request",
+            "code": "transport_failure",
+            "duration_ms": 120002
+          },
+          {
+            "event": "request",
+            "code": "transport_failure",
+            "duration_ms": 22705
+          },
+          {
+            "event": "request",
+            "code": "capability_denied",
+            "duration_ms": 1
+          },
+          {
+            "event": "request",
+            "code": "capability_denied",
+            "duration_ms": 1
+          },
+          {
+            "event": "request",
+            "code": "capability_denied",
+            "duration_ms": 1
+          },
+          {
+            "event": "request",
+            "code": "capability_denied",
+            "duration_ms": 0
+          },
+          {
+            "event": "request",
+            "code": "capability_denied",
+            "duration_ms": 0
+          },
+          {
+            "event": "request",
+            "code": "capability_denied",
+            "duration_ms": 0
+          },
+          {
+            "event": "request",
+            "code": "capability_denied",
+            "duration_ms": 0
+          },
+          {
+            "event": "request",
+            "code": "capability_denied",
+            "duration_ms": 0
+          },
+          {
+            "event": "request",
+            "code": "capability_denied",
+            "duration_ms": 1
+          },
+          {
+            "event": "request",
+            "code": "capability_denied",
+            "duration_ms": 0
+          }
+        ],
+        "known_new_provider_requests": 2,
+        "provider_usage_rows_logged": true,
+        "native_engine_OOM": false,
+        "controlled_runner_stop_after_github_cancel_requested": true,
+        "next_experiment": "same exact SHA/image with declared300s total request budget; no change to native deadline gates or RSS acceptance",
+        "OIDC_access_limit": "capability cannot outlive exchanged JWT exp, normally5min; refresh not implemented in spike"
+      },
+      "final_usage_correction": {
+        "kind": "explicit-final-usage-observation-after-native-drain",
+        "observed_count_at_prior_failure_note": 7,
+        "initial_before_run": 5,
+        "final_after_complete_native_drain": 9,
+        "known_new_provider_requests": 4,
+        "meaning": "Original note recorded first two completed rows. Two already dispatched SDK retries finished draining later; all4 billed requests now known. Original note preserved, not reclassified as successful.",
+        "own_runner_broker_network_removed": true,
+        "custody": "PASS",
+        "request_budget_ms": 120000,
+        "canary_result": "CANCELLED_AFTER_UNRECOVERABLE_EXPIRY"
+      }
+    },
+    "36915189084": {
+      "run_id": "36915189084",
+      "provider": "mimo",
+      "agent": "claude",
+      "new_provider_requests": 2,
+      "request_budget_ms": 300000,
+      "receipts": {
+        "trusted-setup.json": {
+          "kind": "exact-workflow-private-API-key-canary-setup",
+          "declared_request_budget_ms": 300000,
+          "retained_original_120s_run": "36913874394",
+          "workflow_sha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+          "run_id": "36915189084",
+          "run_attempt": "1",
+          "runner_image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a",
+          "engine_image": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+          "network_proof": "PASS",
+          "usage_log_rows_before_runner": 52,
+          "broker": "rr-sub2-fork-20261001-broker-36915189084",
+          "runner_network": "rr-sub2-fork-20261001-runner-36915189084"
+        },
+        "network-boundary.json": {
+          "resources": [
+            {
+              "resource": "engine",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.4",
+              "port": 8080,
+              "reachable": false
+            },
+            {
+              "resource": "engine",
+              "network": "rr-sub2-fork-20261001-outbound",
+              "host": "172.26.0.2",
+              "port": 8080,
+              "reachable": false
+            },
+            {
+              "resource": "postgres",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.3",
+              "port": 5432,
+              "reachable": false
+            },
+            {
+              "resource": "postgres",
+              "network": "rr-sub2-fork-20261001-transport-r4-bootstrap",
+              "host": "172.28.0.2",
+              "port": 5432,
+              "reachable": false
+            },
+            {
+              "resource": "redis",
+              "network": "rr-sub2-fork-20261001-control",
+              "host": "172.24.0.2",
+              "port": 6379,
+              "reachable": false
+            }
+          ],
+          "broker_reachable": true,
+          "status": "PASS",
+          "run_id": "36915189084",
+          "image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a"
+        },
+        "runner-provider-custody.json": {
+          "status": "PASS",
+          "kind": "actual-terminal-runner-filesystem-custody",
+          "run_id": "36915189084",
+          "image": "sha256:f4971c169942227e808ccac24e3e740525f3dd149ac974a0e760b554c6ceec5a",
+          "export_bytes": 2482482176,
+          "actual_raw_or_encoded_provider_key_hits": 0,
+          "host_binds": 0,
+          "config_logs_scanned": true,
+          "limit": "Terminal filesystem snapshot, not continuous process memory."
+        },
+        "own-run-teardown.json": {
+          "status": "PASS",
+          "run_id": "36915189084",
+          "own_runner_broker_network_removed": true,
+          "original_root_key_files_preserved": true,
+          "root_provider_fixtures_retained_for_next_planned_canaries": true
+        },
+        "actual-usage-after.json": [
+          {
+            "account_id": 79,
+            "count": 30,
+            "input_tokens": 28068,
+            "output_tokens": 11463
+          },
+          {
+            "account_id": 80,
+            "count": 11,
+            "input_tokens": 19022,
+            "output_tokens": 44676
+          },
+          {
+            "account_id": 81,
+            "count": 13,
+            "input_tokens": 24153,
+            "output_tokens": 1060
+          }
+        ]
+      },
+      "receipt_sha256": {
+        "trusted-setup.json": "5495b0b4ff907be0e5be277d04b386a3df53fbb47dcca23537f4e0414b69d783",
+        "network-boundary.json": "3cb9af5c0b27fee610e25dbfcc0f318b30639f138ea29e00544f10b7430525c5",
+        "runner-provider-custody.json": "9c34cebeca40ce0f1bf2cc8368ec9bffa00c2d26480e268144a6cbcc5291c796",
+        "own-run-teardown.json": "2bbff32c7459566658c123e6494ebbe75564644c4ddca49b7ccf9a4834c51f70",
+        "actual-usage-after.json": "3404a447e78f11e6262fe6547a10242392b0ce8f7f3a86bedf43a1ca41835c4e"
+      },
+      "published_actions_result": {
+        "schema": 1,
+        "provider": "mimo",
+        "agent": "claude",
+        "tool_read_verified": true,
+        "finding": {
+          "file": "fixture/wallet.mjs",
+          "issue": "negative withdrawal increases balance"
+        },
+        "result": "passed",
+        "rules_read_verified": true,
+        "terminal_verified": true,
+        "id": "A03",
+        "evidence_kind": "real-Actions",
+        "independent_numeric_reproduction": true,
+        "workflow_sha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+        "run_id": "36915189084",
+        "run_attempt": "1",
+        "node": "v24.21.0",
+        "client_version": "2.1.285",
+        "transport": "messages"
+      }
+    }
+  },
+  "final_owned_services_stop": {
+    "kind": "exact-owned-disposable-services-stop",
+    "status": "PASS",
+    "services": [
+      {
+        "name": "rr-sub2-fork-20261001-engine",
+        "id": "221138df7cd87406975a08be0c1ab456520023823e6fc817958c99d7aa2baab9",
+        "before_running": true,
+        "after_running": false,
+        "exit_code": 0
+      },
+      {
+        "name": "rr-sub2-fork-20261001-transport-w1-mock",
+        "id": "12386e373e2f54833b5b3a8a3abdbb59c3de5eacb6df3f95fa77b95e81ef6666",
+        "before_running": true,
+        "after_running": false,
+        "exit_code": 0
+      },
+      {
+        "name": "rr-sub2-fork-20261001-transport-r4-redis",
+        "id": "b4be6cfc6413f840f49790db28d871bb2109ac2e729db6f29e163c3c4d75dd8c",
+        "before_running": true,
+        "after_running": false,
+        "exit_code": 0
+      },
+      {
+        "name": "rr-sub2-fork-20261001-oauth-redis",
+        "id": "ec826f94a0bd0b6bb78847fba90a4adb63249dd709f010a3cc77f43780072e5a",
+        "before_running": true,
+        "after_running": false,
+        "exit_code": 0
+      },
+      {
+        "name": "rr-sub2-fork-20261001-redis",
+        "id": "acd9b09e2bbd15652e681ecc4958b61cac85661f90c21c2d9b76521b0faca8af",
+        "before_running": true,
+        "after_running": false,
+        "exit_code": 0
+      },
+      {
+        "name": "rr-sub2-fork-20261001-postgres",
+        "id": "ff4a94f0fb1d137b8d56095568604d7b00829367f5afbe6510734ee247a468b7",
+        "before_running": true,
+        "after_running": false,
+        "exit_code": 0
+      }
+    ],
+    "containers_data_and_images_retained_for_reuse": true,
+    "production_or_account_pool_changed": false,
+    "root_provider_files_unchanged": true,
+    "no_owned_test_services_running": true
+  },
+  "production_reviewrouter_changed": false,
+  "subscription_account_pool_changed": false,
+  "memory_acceptance": {
+    "functional_load": "20/20PASS686syntheticrequests",
+    "strict_RSS_return": "20/20FAIL unchanged",
+    "proven_indefinite_leak": false,
+    "physical_continuous_RSS_bound": "NOT PROVEN"
+  },
+  "long_job_access": "OIDC refresh NOT IMPLEMENTED in spike; capability cannot outlive exchanged JWT exp, commonly5min",
+  "live_OAuth": "NOT RUN",
+  "populated_migration243_upgrade": "NO-GO",
+  "production_GO": false,
+  "github_fork_published": false,
+  "github_actions": {
+    "36913301414": {
+      "conclusion": "success",
+      "databaseId": 36913301414,
+      "headSha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+      "status": "completed",
+      "url": "https://github.com/777genius/rr-selfhost-direct-v2-e2e-20260730t115357z/actions/runs/36913301414"
+    },
+    "36913671762": {
+      "conclusion": "success",
+      "databaseId": 36913671762,
+      "headSha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+      "status": "completed",
+      "url": "https://github.com/777genius/rr-selfhost-direct-v2-e2e-20260730t115357z/actions/runs/36913671762"
+    },
+    "36915189084": {
+      "conclusion": "success",
+      "databaseId": 36915189084,
+      "headSha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+      "status": "completed",
+      "url": "https://github.com/777genius/rr-selfhost-direct-v2-e2e-20260730t115357z/actions/runs/36915189084"
+    },
+    "36913874394": {
+      "conclusion": "cancelled",
+      "databaseId": 36913874394,
+      "headSha": "3c230702f3fb6e333b290bedb66419374bee9a9c",
+      "status": "completed",
+      "url": "https://github.com/777genius/rr-selfhost-direct-v2-e2e-20260730t115357z/actions/runs/36913874394"
+    }
+  },
+  "workflow_state": "disabled_manually",
+  "github_ephemeral_runners_remaining": [],
+  "independent_auth_audit": {
+    "accepted_commit": "1d569cf3349b0b447c586df44f048517a2765bba",
+    "source_checks": 8,
+    "file": "../../sub2api-auth-timeout-audit/REPORT.md",
+    "scope": "Offline independent source review; final Claude PASS verified by parent after audit inputs were frozen",
+    "long_job_proposed_work": "60-120 working LOC +100-180 test LOC; authorization policy change, not implemented"
+  }
+}
