@@ -1,0 +1,58 @@
+--- a/sub2api-regression-lab/run.mjs
++++ b/sub2api-regression-lab/run.mjs
+@@ -5,8 +5,9 @@
+ import { admin, control, fetchJSON, loadConfig, save, mono, sleep, must, MiB } from './common.mjs';
+ import { request, success } from './client.mjs';
+ import { models, CALL, TOOL } from './wire.mjs';
+-import { cancellationVerdict, uncertaintyVerdict, telemetryVerdict } from './receipts.mjs';
++import { cancellationVerdict, uncertaintyVerdict } from './receipts.mjs';
+ import { cases, budget } from './plan.mjs';
++import { telemetryVerdict } from '../sub2api-telemetry-analysis/adapter-proposal.mjs';
+ const out = '/evidence';
+ async function waitFor(c, id, predicate, ms = 6000) {
+   const end = Math.min(mono() + ms, c.deadline);
+@@ -160,14 +161,21 @@
+   } catch { return []; }
+ }
+ async function load(c, spec, tenant, row, clients) {
+-  const meta = { id: spec.id, ...c.observed, streams: spec.streams, started_ms: mono(), ended_ms: null };
++  // Coordinator must refresh deployment/config and inspect a new container per case.
++  const ready = JSON.parse(await readFile(`/telemetry/${spec.id}.ready.json`, 'utf8'));
++  must(ready.schema === 'fresh-lifetime-v1' && ready.fresh_container_inspected === true &&
++    ready.engine_pid === c.observed.engine_pid && ready.instance === c.observed.instance &&
++    ready.container_id === c.observed.container_id, 'FRESH_ENGINE_HANDSHAKE_REQUIRED');
++  const identity = Object.fromEntries(['pid_start_ticks', 'cgroup_path', 'cgroup_device', 'cgroup_inode', 'container_id'].map(k => [k, ready[k]]));
++  const meta = { id: spec.id, ...c.observed, ...identity, streams: spec.streams,
++    telemetry_ready: ready, started_ms: mono(), ended_ms: null };
+   await save(`${out}/${spec.id}.start.json`, { ...meta, run_id: c.run_id });
+   row.telemetry_boundary = meta;
+   let watchdogBusy = false, stopping = false;
+   const watchdog = setInterval(async () => {
+     if (watchdogBusy || stopping) return; watchdogBusy = true;
+     try {
+-      const v = telemetryVerdict(await telemetry(spec.id), meta, { final: false });
++      const v = telemetryVerdict(await telemetry(spec.id), meta, ready, { final: false });
+       if (v.status === 'FAIL') { stopping = true; row.safety_stop = v; for (const p of clients) p.cancel(); await control(c, 'stop', { id: spec.id }); }
+     } catch { row.safety_stop_control_failed = true; stopping = true; for (const p of clients) p.cancel(); }
+     finally { watchdogBusy = false; }
+@@ -194,7 +202,7 @@
+     row.status = valid && !row.safety_stop ? 'PASS' : 'FAIL'; row.reason = valid ? 'FINITE_STREAM_PROTOCOL_AND_EFFECT_GATE' : 'LOAD_LOSS_DUPLICATE_OR_STUCK';
+     meta.ended_ms = mono(); await save(`${out}/${spec.id}.end.json`, meta);
+     await sleep(2000);
+-    row.memory_envelope = telemetryVerdict(await telemetry(spec.id), meta);
++    row.memory_envelope = telemetryVerdict(await telemetry(spec.id), meta, ready);
+     if (row.memory_envelope.status === 'FAIL') row.status = 'FAIL';
+     row.acceptance_status = row.status === 'PASS' && row.memory_envelope.status === 'NOT RUN' ? 'NOT RUN' : row.status;
+   } finally { clearInterval(watchdog); }
+--- a/sub2api-regression-lab/common.mjs
++++ b/sub2api-regression-lab/common.mjs
+@@ -27,7 +27,8 @@
+   return c;
+ }
+ export function verifyDeployment(expected, observed) {
+-  for (const key of ['source_sha', 'image', 'instance', 'variant', 'patch_sha256', 'source_manifest_sha256', 'cgroup_limit_bytes'])
++  must(/^[a-f0-9]{64}$/.test(expected.container_id ?? ''), 'ACTUAL_CONTAINER_ID_REQUIRED');
++  for (const key of ['source_sha', 'image', 'instance', 'variant', 'patch_sha256', 'source_manifest_sha256', 'cgroup_limit_bytes', 'container_id'])
+     must(expected[key] === observed[key], 'DEPLOYED_PIN_MISMATCH');
+   must(observed.inspected === true && Number.isSafeInteger(observed.engine_pid) && observed.engine_pid > 0 && observed.clock === 'linux-CLOCK_MONOTONIC', 'DEPLOYMENT_OBSERVATION_REQUIRED');
+   return { ...expected, engine_pid: observed.engine_pid, clock: observed.clock };
