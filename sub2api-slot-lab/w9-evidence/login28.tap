@@ -1,0 +1,36 @@
+✔ known native 429 waits exactly Retry-After once; request bytes, redirect and signal retained (5.0394ms)
+✔ invalid header null fails without retry (0.972913ms)
+✔ invalid header  fails without retry (0.565612ms)
+✔ invalid header 0 fails without retry (0.458174ms)
+✔ invalid header 01 fails without retry (0.554423ms)
+✔ invalid header -1 fails without retry (0.434871ms)
+✔ invalid header 1.0 fails without retry (0.564601ms)
+✔ invalid header 1e1 fails without retry (0.406312ms)
+✔ invalid header 61 fails without retry (0.48939ms)
+✔ invalid header 99999999999999999999999 fails without retry (0.525314ms)
+✔ invalid header Thu, 01 Oct 2026 18:00:00 GMT fails without retry (0.323985ms)
+✔ 401 exactly one dispatch (0.346587ms)
+✔ 403 exactly one dispatch (0.223344ms)
+✔ 500 exactly one dispatch (0.193159ms)
+✔ 503 exactly one dispatch (0.218467ms)
+✔ network exactly one dispatch (0.439182ms)
+✔ unknown 429 effect no retry (0.334971ms)
+✔ second native 429 no third dispatch (0.407188ms)
+✔ near zero admission budget no dispatch (0.346455ms)
+✔ wait plus normal response cannot fit no retry (0.365355ms)
+✔ 60 second header cannot extend original 35 second deadline (0.371887ms)
+✔ sleep deadline overrun no retry dispatch (0.428801ms)
+✔ body limit preserved (0.65187ms)
+✔ code rejection preserved (0.330649ms)
+✔ valid boundary 1 waits exactly once (0.479791ms)
+✔ valid boundary 60 waits exactly once (0.309714ms)
+✔ known 429 with rejected API code cannot retry (0.492187ms)
+✔ malformed response cannot retry (0.406666ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 127.0937

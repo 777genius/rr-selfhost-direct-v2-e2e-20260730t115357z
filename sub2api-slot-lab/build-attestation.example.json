@@ -1,0 +1,41 @@
+{
+  "upstream_commit": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "image": "ROOT_VERIFIED_MERGED_NATIVE_IMAGE@sha256:REQUIRED",
+  "components": {
+    "native": {
+      "path": "/PUBLIC_CHECKOUT/sub2api-fork/patches/native-reasoning.patch",
+      "sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5"
+    },
+    "probe": {
+      "path": "/PUBLIC_CHECKOUT/sub2api-probe-fork/patches/disable-capability-probe.patch",
+      "sha256": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45"
+    },
+    "cancellation_w3": {
+      "path": "/ROOT_OWNED/actual-cancellation-w3.patch",
+      "sha256": "46b48c5ad31ebf6c1f1f524af4f7a62a8d5e886a7b3d1132a6bc3fb2e99b6baa"
+    },
+    "memory_w2": {
+      "path": "/ROOT_OWNED/actual-memory-w2.patch",
+      "sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239"
+    }
+  },
+  "source_manifest_sha256": "ROOT_PINNED_FINAL_REVIEWED_PRODUCER_MANIFEST_SHA256",
+  "binary_sha256": "REQUIRED_ACTUAL_NATIVE_ENGINE_ELF_SHA256",
+  "image_config_sha256": "REQUIRED_CANONICAL_DOCKER_IMAGE_CONFIG_SHA256",
+  "api_key_slots": "stats-only",
+  "trusted_cancel_flag": "native_api_key_cancel_on_disconnect",
+  "schema": "slot-root-actual-image-build-v1",
+  "status": "BUILT",
+  "trust_model": "external-root-build-receipt",
+  "build_id": "ROOT_BUILD_PIPELINE_OBSERVED_BUILD_ID",
+  "image_id": "sha256:ROOT_OBSERVED_IMAGE_ID",
+  "component_provenance": {
+    "native": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5",
+    "probe": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45",
+    "cancellation_w3": "46b48c5ad31ebf6c1f1f524af4f7a62a8d5e886a7b3d1132a6bc3fb2e99b6baa",
+    "memory_w2": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239"
+  },
+  "source_fingerprint_sha256": "REVIEWED_FULL_SOURCE_MAP_FINGERPRINT",
+  "build_input_source_fingerprint_sha256": "SAME_OBSERVED_BUILD_INPUT_FINGERPRINT",
+  "production_patch_sha256": "ROOT_PINNED_FINAL_REVIEWED_PRODUCTION_PATCH_SHA256"
+}

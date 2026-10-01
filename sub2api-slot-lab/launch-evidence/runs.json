@@ -1,0 +1,51 @@
+{
+  "node-34.tap": {
+    "command": [
+      "node",
+      "--test",
+      "--test-reporter=tap",
+      "sub2api-slot-lab/offline.test.mjs",
+      "sub2api-slot-lab/recovery-contract.test.mjs"
+    ],
+    "exit": 0
+  },
+  "python-15.txt": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "sub2api-slot-lab",
+      "-p",
+      "*_test.py"
+    ],
+    "exit": 0
+  },
+  "launch-red.txt": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "sub2api-slot-lab",
+      "-p",
+      "launch_transport_test.py"
+    ],
+    "exit": 1
+  },
+  "launch-green.txt": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "sub2api-slot-lab",
+      "-p",
+      "launch_transport_test.py"
+    ],
+    "exit": 0
+  }
+}

@@ -1,0 +1,21 @@
+test_complete_inert_schema_accepts_and_mismatched_actual_build_rejects (build_contract_test.Build.test_complete_inert_schema_accepts_and_mismatched_actual_build_rejects) ... ok
+test_empty_unreviewed_missing_maps_and_source_patch_disagreement_reject (build_contract_test.Build.test_empty_unreviewed_missing_maps_and_source_patch_disagreement_reject) ... ok
+test_external_pin_is_required_and_rejects_changed_manifest_bytes (build_contract_test.Build.test_external_pin_is_required_and_rejects_changed_manifest_bytes) ... ok
+test_descriptor_read_does_not_reopen_replaced_leaf (custody_contract_test.Boundary.test_descriptor_read_does_not_reopen_replaced_leaf) ... ok
+test_final_symlink_and_nonregular_file_are_denied (custody_contract_test.Boundary.test_final_symlink_and_nonregular_file_are_denied) ... ok
+test_historical_empty_build_is_rejected_before_launch (custody_contract_test.Boundary.test_historical_empty_build_is_rejected_before_launch) ... ok
+test_private_exact_0600 (custody_contract_test.Boundary.test_private_exact_0600) ... ok
+test_private_rejects_symlink_ancestor (custody_contract_test.Boundary.test_private_rejects_symlink_ancestor) ... ok
+test_native_process_selection_and_all_other_transport_constraints (launch_transport_test.NativeLaunch.test_native_process_selection_and_all_other_transport_constraints) ... ok
+test_emitted_config_and_environment_pass_native_output_predicate (logging_preflight_test.LoggingPreflight.test_emitted_config_and_environment_pass_native_output_predicate) ... ok
+test_ambiguous_create_is_inspected_and_removed_only_if_owned (offline_test.IsolationTests.test_ambiguous_create_is_inspected_and_removed_only_if_owned) ... ok
+test_cleanup_foreign_container_or_network_is_never_removed (offline_test.IsolationTests.test_cleanup_foreign_container_or_network_is_never_removed) ... ok
+test_create_intent_is_durable_before_docker_and_no_ports_or_restart (offline_test.IsolationTests.test_create_intent_is_durable_before_docker_and_no_ports_or_restart) ... ok
+test_exact_small_canonical_assembly_is_reproducible_and_refuses_reuse (offline_test.IsolationTests.test_exact_small_canonical_assembly_is_reproducible_and_refuses_reuse) ... ok
+test_existing_output_preflight_never_owns_or_changes_existing_directory (offline_test.IsolationTests.test_existing_output_preflight_never_owns_or_changes_existing_directory) ... ok
+test_expired_absolute_deadline_cannot_start_docker_even_during_cleanup (offline_test.IsolationTests.test_expired_absolute_deadline_cannot_start_docker_even_during_cleanup) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 0.657s
+
+OK

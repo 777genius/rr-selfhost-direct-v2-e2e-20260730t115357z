@@ -1,0 +1,8 @@
+{
+  "module": "/opt/subscription-runtime/releases/b3a8f4bccdd796ac4001ebfa191eeb35c8709995/dist/worker-codex/codex-goal-handoff-artifacts.js",
+  "status": "UNAVAILABLE_IN_CHILD_SANDBOX",
+  "read_error": "[Errno 2] No such file or directory: '/opt/subscription-runtime/releases/b3a8f4bccdd796ac4001ebfa191eeb35c8709995/dist/worker-codex/codex-goal-handoff-artifacts.js'",
+  "scanner_ran": false,
+  "scanner_enabled_required": true,
+  "parent_action": "Run existing normal capture fingerprint scanner ON against final owned Git delivery scope before integration. No scanner/config/scope/policy changes authorized or performed."
+}

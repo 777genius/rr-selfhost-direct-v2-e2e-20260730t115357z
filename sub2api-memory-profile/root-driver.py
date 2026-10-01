@@ -45,7 +45,8 @@ class Driver:
                 CGO_ENABLED='0',GOOS='linux',GOARCH='amd64',GOCACHE=self.c['compilation_cache'],GOMODCACHE=self.c['modules_cache'],GOMAXPROCS='2')
         return self.toolchain_env
     def cmd(self,args,timeout=30,input=None,env=None):
-        if self.deadline: timeout=max(.1,min(timeout,(self.deadline-mono())/1000))
+        if self.deadline is not None: timeout=min(timeout,(self.deadline-mono())/1000)
+        require(timeout>0,'COMMAND_DEADLINE')
         r=subprocess.run(args,input=input,env=env,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=timeout)
         require(r.returncode==0,'COMMAND_FAILED');return r.stdout
     def docker(self,*args,**kw): return self.cmd(['docker',*args],**kw)
@@ -169,6 +170,20 @@ class Driver:
         code=int(self.docker('wait',name,timeout=timeout).decode().strip())
         obj=self.own(name);self.docker('rm','-v',obj['Id']);self.containers.remove(name)
         require(code==0,'ADAPTER_STOP')
+    def wait_postgres(self, pg):
+        # PG18 bootstrap accepts connections before DB creation and final exec.
+        ready=min(self.deadline,mono()+30000)
+        while mono()<ready:
+            try:
+                result=self.docker('exec',pg,'sh','-c','test "$(cat /proc/1/comm)" = postgres && PGOPTIONS="-c default_transaction_read_only=on" exec psql -X -qAt -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 1"',
+                                   timeout=min(2,(ready-mono())/1000))
+                if mono()<ready and result.strip()==b'1': return
+            except (ValueError, subprocess.TimeoutExpired):
+                pass
+            remaining=(ready-mono())/1000
+            if remaining>0: time.sleep(min(.25,remaining))
+        raise ValueError('PRIVATE_DB_READY_TIMEOUT')
+
     def launch(self):
         self.started=mono();self.deadline=self.started+600000
         write(self.private/'supervisor.json',{'deadline_ms':self.deadline});os.chown(self.private/'supervisor.json',1000,1000)
@@ -181,11 +196,7 @@ class Driver:
             redis_args+=['--mount',f'type=bind,src={self.private}/redis-profile.conf,dst=/rr-profile-redis.conf,readonly']
             redis_command=('redis-server','/rr-profile-redis.conf')
         self.create('redis',self.c['redis_image'],redis_args,redis_command)
-        for _ in range(60):
-            r=subprocess.run(['docker','exec',pg,'pg_isready','-U',self.env['DATABASE_USER']],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=3)
-            if r.returncode==0:break
-            time.sleep(.25)
-        else:raise ValueError('PRIVATE_DB_READY_TIMEOUT')
+        self.wait_postgres(pg)
         self.docker('exec','-i',pg,'psql','-v','ON_ERROR_STOP=1','-U',self.env['DATABASE_USER'],'-d',self.env['DATABASE_DBNAME'],input=self.snapshot.read_bytes(),timeout=30)
         # Dedicated groups/users/accounts are created by the actual native setup.
         # Reject snapshots containing any usable upstream accounts.

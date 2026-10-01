@@ -1,0 +1,114 @@
+--- a/sub2api-slot-lab/root-driver.py
++++ b/sub2api-slot-lab/root-driver.py
+@@ -53,6 +53,18 @@
+     spec=importlib.util.spec_from_file_location('slot_build_gate', HERE/'build-gate.py')
+     gate=importlib.util.module_from_spec(spec); spec.loader.exec_module(gate)
+     return gate.verify(c, load(HERE/'build-manifest.json'), private_read)
++
++def certificate_commands(tls):
++    tls=Path(tls)
++    return [
++      ['openssl','req','-x509','-newkey','rsa:2048','-nodes','-sha256','-days','2',
++       '-subj','/CN=Disposable slot lab CA','-addext','basicConstraints=critical,CA:TRUE',
++       '-addext','keyUsage=critical,keyCertSign,cRLSign','-keyout',str(tls/'ca.key'),'-out',str(tls/'ca.crt')],
++      ['openssl','req','-new','-newkey','rsa:2048','-nodes','-sha256','-subj','/CN=mock',
++       '-keyout',str(tls/'server.key'),'-out',str(tls/'server.csr')],
++      ['openssl','x509','-req','-sha256','-days','2','-in',str(tls/'server.csr'),
++       '-CA',str(tls/'ca.crt'),'-CAkey',str(tls/'ca.key'),'-set_serial','1',
++       '-extfile',str(HERE/'tls-server.ext'),'-out',str(tls/'server.crt')]]
+ 
+ class Driver:
+     def __init__(self,c,output):
+@@ -112,7 +124,7 @@
+         config={'server':{'host':'0.0.0.0','port':8080,'mode':'release','max_request_body_size':2097152}, 'run_mode':'standard',
+           'database':{'host':'postgres','port':5432,'user':self.dbuser,'password':e['DATABASE_PASSWORD'],'dbname':self.dbname,'sslmode':'disable'},
+           'redis':{'host':'redis','port':6379,'password':redis_password,'db':0}, 'jwt':{'secret':e['JWT_SECRET'],'expire_hour':24},
+-          'security':{'url_allowlist':{'enabled':True,'allow_insecure_http':True,'allow_private_hosts':True,'upstream_hosts':['mock']}},
++          'security':{'url_allowlist':{'enabled':True,'allow_insecure_http':False,'allow_private_hosts':True,'upstream_hosts':['mock']}},
+           'gateway':{'max_body_size':2097152,'text_max_body_size':2097152,'max_account_switches':0,'max_account_switches_gemini':0,'failover_on_400':False,
+             'log_upstream_error_body':False,'response_header_timeout':30,'openai_response_header_timeout':30,
+             'scheduling':{'sticky_session_wait_timeout':'15s','fallback_wait_timeout':'15s','sticky_session_max_waiting':3,'fallback_max_waiting':3}},
+@@ -120,14 +132,24 @@
+         # JSON is valid YAML and avoids handwritten secret escaping.
+         dump(self.private/'config.yaml',config)
+         safe_env={'SKIP_SETUP':'true','CONFIG_FILE':'/private/config.yaml','DATA_DIR':'/app/data','RUN_MODE':'standard',
+-                  'LOG_OUTPUT_TO_FILE':'false','LOG_OUTPUT_TO_STDOUT':'true','TOTP_ENCRYPTION_KEY':e.get('TOTP_ENCRYPTION_KEY',secrets.token_hex(32))}
++                  'SSL_CERT_FILE':'/private/tls/ca.crt','LOG_OUTPUT_TO_FILE':'false','LOG_OUTPUT_TO_STDOUT':'true','TOTP_ENCRYPTION_KEY':e.get('TOTP_ENCRYPTION_KEY',secrets.token_hex(32))}
+         (self.private/'engine.env').write_text(''.join(k+'='+v+'\n' for k,v in safe_env.items())); (self.private/'engine.env').chmod(0o600)
+         self.lab={'run_id':self.run_id,'admin_bearer':lab['admin_bearer'],'redis_password':redis_password,
+           'control_token':secrets.token_hex(32),'sentinels':{p:'rr-synthetic-'+secrets.token_hex(24) for p in ('responses','messages')},
+-          'mock_url':'http://mock:8099','engine_url':'http://sub2api:8080',
++          'mock_url':'https://mock:8099','engine_url':'http://sub2api:8080',
+           'deployment':{k:self.build[k] for k in ('image','binary_sha256','source_manifest_sha256','image_config_sha256')}}
+         dump(self.private/'lab.json',self.lab); dump(self.private/'supervisor.json',{'deadline_ms':self.deadline-15000})
+         for key in ('engine_image','node_image','postgres_image','redis_image'): self.docker('image','inspect',self.c[key])
++    def generate_tls(self):
++        # Root runtime only. No certificate/key bytes or hashes enter evidence.
++        need(os.geteuid()==0, 'ROOT_ONLY')
++        tls=self.private/'tls'; tls.mkdir(mode=0o700)
++        old=os.umask(0o077)
++        try:
++            for command in certificate_commands(tls): self.cmd(command)
++            for p in tls.iterdir(): p.chmod(0o600)
++        finally: os.umask(old)
++
+     def snapshot_bytes(self):
+         data=private_read(self.snapshot); need(hashlib.sha256(data).hexdigest()==self.snapshot_sha,'PRIVATE_FIXTURE_BYTES'); return data
+     def sql(self,query):
+@@ -159,7 +181,7 @@
+         self.redis=self.create('redis',self.c['redis_image'],['--network-alias','redis','--user','0:0','--memory','128m',
+           '--cap-drop','ALL','--entrypoint','redis-server','--tmpfs','/data:rw,size=16m','--mount',f'type=bind,src={self.private}/redis.conf,dst=/private/redis.conf,readonly'],
+           ('/private/redis.conf',))
+-        node_args=['--user','0:0','--read-only','--cap-drop','ALL','--tmpfs','/tmp:rw,size=16m','--memory','256m','--workdir','/lab',
++        node_args=['--env','NODE_EXTRA_CA_CERTS=/private/tls/ca.crt','--user','0:0','--read-only','--cap-drop','ALL','--tmpfs','/tmp:rw,size=16m','--memory','256m','--workdir','/lab',
+           '--mount',f'type=bind,src={self.root}/code,dst=/lab,readonly','--mount',f'type=bind,src={self.private},dst=/private',
+           '--mount',f'type=bind,src={self.evidence},dst=/evidence']
+         self.mock=self.create('mock',self.c['node_image'],['--network-alias','mock',*node_args],('node','sub2api-regression-lab/mock.mjs'))
+@@ -167,7 +189,8 @@
+         # ports/networks. No read-write mount of product source or auth homes.
+         self.engine=self.create('engine',self.c['engine_image'],['--network-alias','sub2api','--user','0:0','--memory','768m',
+           '--cap-drop','ALL','--entrypoint','/app/sub2api','--tmpfs','/app/data:rw,size=64m','--tmpfs','/tmp:rw,size=32m','--env-file',str(self.private/'engine.env'),
+-          '--mount',f'type=bind,src={self.private}/config.yaml,dst=/private/config.yaml,readonly'])
++          '--mount',f'type=bind,src={self.private}/config.yaml,dst=/private/config.yaml,readonly',
++          '--mount',f'type=bind,src={self.private}/tls/ca.crt,dst=/private/tls/ca.crt,readonly'])
+         obj=self.own(self.engine); image=json.loads(self.docker('image','inspect',self.c['engine_image']))[0]
+         config_hash=hashlib.sha256(json.dumps(image['Config'],sort_keys=True,separators=(',',':')).encode()).hexdigest()
+         need(config_hash==self.build['image_config_sha256'],'ACTUAL_IMAGE_CONFIG_BINDING')
+@@ -228,7 +251,7 @@
+     def stop(*_): raise ValueError('OPERATOR_INTERRUPTED')
+     for sig in (signal.SIGTERM,signal.SIGINT): signal.signal(sig,stop)
+     status='FAIL'; reason=None
+-    try: d.prepare(); d.launch(); status='PASS'
++    try: d.prepare(); d.generate_tls(); d.launch(); status='PASS'
+     except Exception as e: reason=str(e) if isinstance(e,ValueError) else 'OPERATOR_RUNTIME_FAILED'
+     finally:
+         for sig in (signal.SIGTERM,signal.SIGINT): signal.signal(sig,signal.SIG_IGN)
+--- a/sub2api-slot-lab/prepare.py
++++ b/sub2api-slot-lab/prepare.py
+@@ -51,6 +51,15 @@
+       req.socket.once('close', onSocketClose);""")
+     mock = replace_once(mock, 'r.finished = res.writableFinished; active--;',
+                         "r.finished = res.writableFinished; if (r.finished) req.socket.off('close', onSocketClose); active--;")
++    # Owned generated delta only: native HTTPS wraps the existing handler.
++    mock = replace_once(mock, "import http from 'node:http';", "import https from 'node:https';")
++    mock = replace_once(mock, 'export function createMock({ control_token, sentinels }) {',
++                        'export function createMock({ control_token, sentinels, tls }) {')
++    mock = replace_once(mock, 'const server = http.createServer(async (req, res) => {',
++                        'const server = https.createServer(tls, async (req, res) => {')
++    mock = replace_once(mock, "new URL(req.url, 'http://mock')", "new URL(req.url, 'https://mock')")
++    mock = replace_once(mock, 'const server = createMock(c); server.listen',
++                        "const tls = { key: await readFile('/private/tls/server.key'), cert: await readFile('/private/tls/server.crt'), minVersion: 'TLSv1.2' };\n    const server = createMock({ ...c, tls }); server.listen")
+     selected['sub2api-regression-lab/mock.mjs'] = mock.encode()
+     wire = selected['sub2api-regression-lab/wire.mjs'].decode()
+     wire = replace_once(wire, 'export class Inspector {', 'class HistoricalInspector {')
+--- a/sub2api-slot-lab/run.mjs
++++ b/sub2api-slot-lab/run.mjs
+@@ -144,7 +144,7 @@
+   requireFact(process.getuid() === 0 && /^v24\./.test(process.version), 'ROOT_NODE24_ONLY');
+   const c = JSON.parse(await readFile('/private/lab.json', 'utf8'));
+   const supervisor = JSON.parse(await readFile('/private/supervisor.json', 'utf8'));
+-  requireFact(c.engine_url === 'http://sub2api:8080' && c.mock_url === 'http://mock:8099' && supervisor.deadline_ms > mono(), 'PRIVATE_TOPOLOGY_OR_DEADLINE');
++  requireFact(c.engine_url === 'http://sub2api:8080' && c.mock_url === 'https://mock:8099' && supervisor.deadline_ms > mono(), 'PRIVATE_TOPOLOGY_OR_DEADLINE');
+   c.supervisor_deadline = supervisor.deadline_ms; c.deadline = Math.min(supervisor.deadline_ms, mono() + 30000);
+   await mkdir('/evidence', { recursive: true, mode: 0o700 });
+   await pollUntil(async deadline => {

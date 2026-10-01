@@ -1,0 +1,59 @@
+{
+  "bounded_offline_complete": true,
+  "verified_immutable_input_hashes": 236,
+  "w8_files_preserved_byte_exact": 100,
+  "only_inherited_source_change": "login-boundary.test.mjs",
+  "omitted_archive": "w6-evidence/frozen-tls-code.tar",
+  "archive_input_retained_sha256": "397d3132fa833b338d5dc00eaa0c92fff4b7213a13c2cafde3294c93b635c530",
+  "critical10_actual_sha256": {
+    "root-driver.py": "ba31a676fcc2d59a8d1077162dd7886c4f7fd244ad2ccc461806015986a0ecde",
+    "adapter.mjs": "7c5200d2f7d86ec11f2be6050ccfb35da55021ee1c34cf76de273a8c91b1e6be",
+    "prepare.py": "a24fc17e632ef578f289d7384b451d90fbe46ff6753c49d46cda17bf8a51116d",
+    "contracts.mjs": "adf4f64e2ae9d320a743c2657290bc72be0adb3919bfdca87657b292f7977245",
+    "redis.mjs": "b335a7d3eb3b062232ec71ac7132f48b11a89a00ec39e289011665fb6463634c",
+    "run.mjs": "e32258026ee0675635a216f1ba6578770fbc553bf72b11b17a716587c666ed35",
+    "native-sse.mjs": "a82680bbc8e62bed8ccb3fc39c6e4aad8e57431071f30d38c7cd295d594a8527",
+    "build-gate.py": "165e05a342d7f53e16122a9be1f27097251005bdd1516f6ab172ab64d4739b9a",
+    "build-manifest.json": "a1d9c2d8303aee2f6c748d52b57c0411bffe86c959628d5a5cd71c92056c4d9d",
+    "tls-server.ext": "50234c98fdeb8757d10c747e852ca78555b2123aaef9f1fda78e0f4b91b8dafc"
+  },
+  "critical10_match_independent_review": true,
+  "profile_root_driver_sha256": "56c79a155352ee3e7626277eb79ba0ce61c11d8cca11eda7b21ec7961f3972cc",
+  "profile_matches_approved_input": true,
+  "node_results": {
+    "full68.tap": {
+      "tests": 68,
+      "pass": 68,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "phase5.tap": {
+      "tests": 5,
+      "pass": 5,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "login28.tap": {
+      "tests": 28,
+      "pass": 28,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    }
+  },
+  "deadline_python": {
+    "tests": 5,
+    "pass": 5
+  },
+  "public_runtime_assembled_without_archive": true,
+  "scanner_status": "Module unavailable in sandbox; parent must run normal scanner ON",
+  "native84": "Parent reported actual PASS; child did not execute or independently validate live run",
+  "paid_canaries_and_live_e2e_owner": "parent",
+  "git_metadata": "Unavailable in linked-worktree sandbox; no Git writes",
+  "previous_goal_turn_classification": "No prior goal turn provided; this turn makes verified progress and completes bounded offline work"
+}

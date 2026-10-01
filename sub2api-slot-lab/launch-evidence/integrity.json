@@ -1,0 +1,39 @@
+{
+  "baseline_changed_files": [
+    "root-driver.py"
+  ],
+  "baseline_byte_identical_files": [
+    ".gitignore",
+    "README.md",
+    "RED.md",
+    "REPORT.md",
+    "RUNBOOK.md",
+    "adapter.mjs",
+    "artifact-hashes.json",
+    "build-attestation.example.json",
+    "build-gate.py",
+    "build-manifest.json",
+    "build_contract_test.py",
+    "contracts.mjs",
+    "custody_contract_test.py",
+    "native-sse.mjs",
+    "offline.test.mjs",
+    "offline_test.py",
+    "prepare.py",
+    "recovery-contract.test.mjs",
+    "redis.mjs",
+    "root-config.example.json",
+    "run.mjs",
+    "source-inspection.json"
+  ],
+  "full_candidate_files_verified_against_supplied_input_hashes": 3795,
+  "root_result_input_sha256": "36154fd53d0ae071a6fe41d990a51aecbef65678beb63e9cfa82999f24affb54",
+  "root_result_output_sha256": "36154fd53d0ae071a6fe41d990a51aecbef65678beb63e9cfa82999f24affb54",
+  "node_original": 34,
+  "python_original": 14,
+  "python_added": 1,
+  "launch_red_exit": 1,
+  "launch_green_exit": 0,
+  "actual_e2e": "NOT RUN; all 84 required",
+  "previous_output_hash_manifest_sha256": "d194787ffe19b9855d7aaf397454c34f9d82ae795c1431b27dad3c2267539584"
+}

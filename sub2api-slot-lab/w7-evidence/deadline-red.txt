@@ -1,0 +1,99 @@
+test_expired_no_dispatch (__main__.Deadlines.test_expired_no_dispatch) ... FAIL
+test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) ... 
+  test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='slot', limit=60000, start=0) ... FAIL
+  test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='slot', limit=30000, start=29990) ... FAIL
+  test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='slot', limit=30000, start=29999.99) ... FAIL
+  test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='profile', limit=60000, start=0) ... FAIL
+  test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='profile', limit=30000, start=29990) ... FAIL
+  test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='profile', limit=30000, start=29999.99) ... FAIL
+test_on_time_success_is_accepted (__main__.Deadlines.test_on_time_success_is_accepted) ... ok
+test_remaining_supervisor_budget_not_raised (__main__.Deadlines.test_remaining_supervisor_budget_not_raised) ... FAIL
+test_requested_near_zero_timeout_not_raised (__main__.Deadlines.test_requested_near_zero_timeout_not_raised) ... FAIL
+
+======================================================================
+FAIL: test_expired_no_dispatch (__main__.Deadlines.test_expired_no_dispatch)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/deadline-regression.py", line 44, in test_expired_no_dispatch
+    run.assert_not_called()
+  File "/usr/lib/python3.12/unittest/mock.py", line 905, in assert_not_called
+    raise AssertionError(msg)
+AssertionError: Expected 'run' to not have been called. Called 1 times.
+Calls: [call(['inert'], input=None, env=None, stdout=-1, stderr=-3, timeout=0.1),
+ call().returncode.__eq__(0)].
+
+======================================================================
+FAIL: test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='slot', limit=60000, start=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/deadline-regression.py", line 20, in test_late_success_actual_command_boundary
+    with self.assertRaisesRegex(ValueError,'PRIVATE_DB_READY_TIMEOUT'):d.wait_postgres('pg')
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='slot', limit=30000, start=29990)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/deadline-regression.py", line 20, in test_late_success_actual_command_boundary
+    with self.assertRaisesRegex(ValueError,'PRIVATE_DB_READY_TIMEOUT'):d.wait_postgres('pg')
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='slot', limit=30000, start=29999.99)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/deadline-regression.py", line 20, in test_late_success_actual_command_boundary
+    with self.assertRaisesRegex(ValueError,'PRIVATE_DB_READY_TIMEOUT'):d.wait_postgres('pg')
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='profile', limit=60000, start=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/deadline-regression.py", line 20, in test_late_success_actual_command_boundary
+    with self.assertRaisesRegex(ValueError,'PRIVATE_DB_READY_TIMEOUT'):d.wait_postgres('pg')
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='profile', limit=30000, start=29990)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/deadline-regression.py", line 20, in test_late_success_actual_command_boundary
+    with self.assertRaisesRegex(ValueError,'PRIVATE_DB_READY_TIMEOUT'):d.wait_postgres('pg')
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) (kind='profile', limit=30000, start=29999.99)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/deadline-regression.py", line 20, in test_late_success_actual_command_boundary
+    with self.assertRaisesRegex(ValueError,'PRIVATE_DB_READY_TIMEOUT'):d.wait_postgres('pg')
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_remaining_supervisor_budget_not_raised (__main__.Deadlines.test_remaining_supervisor_budget_not_raised)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/deadline-regression.py", line 32, in test_remaining_supervisor_budget_not_raised
+    self.assertLessEqual(calls[0],(100-99.99)/1000)
+AssertionError: 0.05 not less than or equal to 1.0000000000005115e-05
+
+======================================================================
+FAIL: test_requested_near_zero_timeout_not_raised (__main__.Deadlines.test_requested_near_zero_timeout_not_raised)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/deadline-regression.py", line 27, in test_requested_near_zero_timeout_not_raised
+    self.assertEqual(calls,[.000001])
+AssertionError: Lists differ: [0.1] != [1e-06]
+
+First differing element 0:
+0.1
+1e-06
+
+- [0.1]
++ [1e-06]
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.094s
+
+FAILED (failures=9)

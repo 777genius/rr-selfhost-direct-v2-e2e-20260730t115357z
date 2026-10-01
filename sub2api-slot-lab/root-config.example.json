@@ -1,0 +1,16 @@
+{
+  "synthetic_only": true,
+  "engine_image": "ROOT_VERIFIED_NATIVE_PROBE_CANCELLATION_W3_MEMORY_W2@sha256:REQUIRED",
+  "node_image": "node:24.21.0-alpine@sha256:ROOT_VERIFIED_DIGEST",
+  "postgres_image": "postgres:18-alpine@sha256:ROOT_VERIFIED_DIGEST",
+  "redis_image": "redis:7-alpine@sha256:ROOT_VERIFIED_DIGEST",
+  "fixture_dir": "/ROOT_OWNED/fresh-private-transport-synthetic-fixture",
+  "fixture_attestation_sha256": "REQUIRED_SHA256_OF_PRIVATE_profile-fixture.json",
+  "build_attestation": "/ROOT_OWNED/merged-build-attestation.json",
+  "build_attestation_sha256": "REQUIRED_SHA256_OF_ATTESTATION",
+  "canonical_base_root": null,
+  "reviewed_merged_manifest": "/PUBLIC_REVIEWED/final-merged-producer-manifest.json",
+  "reviewed_merged_manifest_sha256": "EXTERNALLY_ROOT_PINNED_REVIEWED_FINAL_MANIFEST_SHA256",
+  "production_patch": "/PUBLIC_REVIEWED/final-merged-production.patch",
+  "production_patch_sha256": "EXTERNALLY_ROOT_PINNED_REVIEWED_FINAL_PATCH_SHA256"
+}

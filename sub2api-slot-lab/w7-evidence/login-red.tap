@@ -1,0 +1,150 @@
+✖ known native 429 waits exactly Retry-After once; request bytes, redirect and signal retained (1.755251ms)
+✔ invalid header null fails without retry (0.952818ms)
+✔ invalid header  fails without retry (0.219599ms)
+✔ invalid header 0 fails without retry (0.147857ms)
+✔ invalid header 01 fails without retry (0.149775ms)
+✔ invalid header -1 fails without retry (0.143115ms)
+✔ invalid header 1.0 fails without retry (0.771579ms)
+✔ invalid header 1e1 fails without retry (0.20222ms)
+✔ invalid header 61 fails without retry (0.202444ms)
+✔ invalid header 99999999999999999999999 fails without retry (0.269396ms)
+✔ invalid header Thu, 01 Oct 2026 18:00:00 GMT fails without retry (0.153003ms)
+✔ 401 exactly one dispatch (0.219431ms)
+✔ 403 exactly one dispatch (0.096007ms)
+✔ 500 exactly one dispatch (0.098976ms)
+✔ 503 exactly one dispatch (0.097947ms)
+✔ network exactly one dispatch (0.175858ms)
+✔ unknown 429 effect no retry (0.11017ms)
+✖ second native 429 no third dispatch (0.643893ms)
+✖ near zero admission budget no dispatch (0.269265ms)
+✔ wait plus normal response cannot fit no retry (0.132842ms)
+✔ 60 second header cannot extend original 35 second deadline (0.119625ms)
+✖ sleep deadline overrun no retry dispatch (0.462219ms)
+✔ body limit preserved (0.328395ms)
+✔ code rejection preserved (0.192072ms)
+✖ valid boundary 1 waits exactly once (0.161152ms)
+✖ valid boundary 60 waits exactly once (0.087068ms)
+✖ known 429 with rejected API code cannot retry (0.220652ms)
+✔ malformed response cannot retry (0.121835ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 21
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 86.029003
+
+✖ failing tests:
+
+test at sub2api-slot-lab/login-boundary.test.mjs:16:1
+✖ known native 429 waits exactly Retry-After once; request bytes, redirect and signal retained (1.755251ms)
+  Error: CONTROL_OR_ADMIN_REJECTED
+      at must (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/w7-runtime/sub2api-regression-lab/common.mjs:7:63)
+      at fetchJSON (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/w7-runtime/sub2api-regression-lab/common.mjs:45:3)
+      at async file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:17:19
+      at async run (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:14:7) {
+    labCode: 'CONTROL_OR_ADMIN_REJECTED'
+  }
+
+test at sub2api-slot-lab/login-boundary.test.mjs:24:1
+✖ second native 429 no third dispatch (0.643893ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 2
+  
+      at file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:24:122
+      at async run (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:14:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-slot-lab/login-boundary.test.mjs:25:1
+✖ near zero admission budget no dispatch (0.269265ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at run.deadline (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:25:125)
+      at async run (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:14:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-slot-lab/login-boundary.test.mjs:28:1
+✖ sleep deadline overrun no retry dispatch (0.462219ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   2000
+  - ]
+  
+      at run.oversleep (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:28:156)
+      at async run (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:14:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ 2000 ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-slot-lab/login-boundary.test.mjs:31:29
+✖ valid boundary 1 waits exactly once (0.161152ms)
+  Error: CONTROL_OR_ADMIN_REJECTED
+      at must (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/w7-runtime/sub2api-regression-lab/common.mjs:7:63)
+      at fetchJSON (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/w7-runtime/sub2api-regression-lab/common.mjs:45:3)
+      at async run.deadline (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:31:139)
+      at async run (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:14:7) {
+    labCode: 'CONTROL_OR_ADMIN_REJECTED'
+  }
+
+test at sub2api-slot-lab/login-boundary.test.mjs:31:29
+✖ valid boundary 60 waits exactly once (0.087068ms)
+  Error: CONTROL_OR_ADMIN_REJECTED
+      at must (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/w7-runtime/sub2api-regression-lab/common.mjs:7:63)
+      at fetchJSON (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/w7-runtime/sub2api-regression-lab/common.mjs:45:3)
+      at async run.deadline (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:31:139)
+      at async run (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:14:7) {
+    labCode: 'CONTROL_OR_ADMIN_REJECTED'
+  }
+
+test at sub2api-slot-lab/login-boundary.test.mjs:32:1
+✖ known 429 with rejected API code cannot retry (0.220652ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /ADMIN_API_REJECTED/. Input:
+  
+  'Error: CONTROL_OR_ADMIN_REJECTED'
+  
+      at async run.replies.response (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:32:95)
+      at async run (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:14:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: CONTROL_OR_ADMIN_REJECTED
+        at must (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/w7-runtime/sub2api-regression-lab/common.mjs:7:63)
+        at fetchJSON (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/w7-runtime/sub2api-regression-lab/common.mjs:45:3)
+        at async waitForActual (node:assert:646:5)
+        at async strict.rejects (node:assert:769:25)
+        at async run.replies.response (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:32:95)
+        at async run (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/login-boundary.test.mjs:14:7),
+    expected: /ADMIN_API_REJECTED/,
+    operator: 'rejects',
+    diff: 'simple'
+  }

@@ -1,0 +1,43 @@
+✔ matrix is exactly 20 opt-in cycles per protocol/lane plus four default controls, unique requests (2.215014ms)
+✔ exact numeric owned Redis namespaces and rejection of non-owned IDs (0.435881ms)
+✔ real-handler queue shape requires correct lane, pending lease and original first members (0.670504ms)
+✔ RED mutations: waiter, pending lease, retained active lease, forced close, late close and duplicate effect all fail (0.746442ms)
+✔ deadline counts slow observation overhead and never restarts after timeout (0.579734ms)
+✔ deadline also counts assertion overhead after an otherwise timely observation (0.209737ms)
+✔ RESP parser handles arbitrary partial frames, null GET, arrays and redacted Redis errors offline (3.613076ms)
+✔ Redis snapshot requests only read-only exact keys and rejects malformed real-count replies (1.005996ms)
+✔ actual Redis leak cardinalities and near-expiry TTLs remain available for failure evidence (0.642102ms)
+✔ late invalid or expiring failure snapshots fail closed without throwing past resource cleanup (0.535593ms)
+✔ reused genuine SSE fixtures validate fragmented Responses and Messages healthy terminals (127.533782ms)
+✔ actual admin adapter persists trusted opt-in/default, limits and stable native key, journals create before transport (60.259091ms)
+✔ responses: actual existing healthy mock remains valid (15.789565ms)
+✔ responses: review malformed reproduction fails recovery (0.959672ms)
+✔ responses: reject start (0.964301ms)
+✔ responses: reject terminal (6.08648ms)
+✔ responses: reject usage (5.284537ms)
+✔ responses: reject usage-conflict (2.272175ms)
+✔ responses: reject id (2.385854ms)
+✔ responses: reject delta (1.092997ms)
+✔ responses: reject duplicate (4.155238ms)
+✔ responses: reject junk (2.283156ms)
+✔ responses: reject tool (0.388564ms)
+✔ messages: actual existing healthy mock remains valid (1.143692ms)
+✔ messages: review malformed reproduction fails recovery (0.192783ms)
+✔ messages: reject start (0.580406ms)
+✔ messages: reject terminal (0.707767ms)
+✔ messages: reject usage (0.713211ms)
+✔ messages: reject usage-conflict (0.740133ms)
+✔ messages: reject id (0.926013ms)
+✔ messages: reject delta (2.61596ms)
+✔ messages: reject duplicate (1.612458ms)
+✔ messages: reject junk (1.896364ms)
+✔ messages: reject tool (2.02316ms)
+✔ generated mock creates one native HTTPS server with the existing handler, without a listening socket (101.562488ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 300.229537

@@ -1,0 +1,25 @@
+{
+  "schema": "slot-lab-preparation-v1",
+  "canonical_helper_sha256": "f17745f9210eb4d84e2ef20deb8697e6096bc688e8016d9c2157b51f8b152494",
+  "canonical_base_commit": "3004a4b16e03588ee62c0ed7fe2751e0e53300e0",
+  "verified_runtime_files": 4,
+  "selected_runtime_before": {
+    "sub2api-regression-lab/common.mjs": "c6b50fb270c95d5aff4b6fbf3b54d5b4c9fb95fb8d75b4e7d7122c237357de75",
+    "sub2api-regression-lab/client.mjs": "c3a772ed23202367f87f1fcf19099b8d9d060843096b7acd8c288d1cde5cdd47",
+    "sub2api-regression-lab/wire.mjs": "1e91fdbd45e9c8c4d4dc1aa8595f03c71642222b036a0db979e186ab5a2f392c",
+    "sub2api-regression-lab/mock.mjs": "a253781f03a7cfaba12e46fde023e3d4af3572cc9e14e305f4e438fdc22bca38"
+  },
+  "prepared_files": {
+    "sub2api-regression-lab/common.mjs": "c6b50fb270c95d5aff4b6fbf3b54d5b4c9fb95fb8d75b4e7d7122c237357de75",
+    "sub2api-regression-lab/client.mjs": "c3a772ed23202367f87f1fcf19099b8d9d060843096b7acd8c288d1cde5cdd47",
+    "sub2api-regression-lab/wire.mjs": "e4ae5c694dbb49be580b0eaf0cf24cb5505fa5406f0db53c6dc3e3de2bafbcb6",
+    "sub2api-regression-lab/mock.mjs": "0bc2ccf54607e216425cb5794b2f229a3b00845073845150a7fde554bc72aa8b",
+    "sub2api-slot-lab/contracts.mjs": "adf4f64e2ae9d320a743c2657290bc72be0adb3919bfdca87657b292f7977245",
+    "sub2api-slot-lab/redis.mjs": "b335a7d3eb3b062232ec71ac7132f48b11a89a00ec39e289011665fb6463634c",
+    "sub2api-slot-lab/adapter.mjs": "7c5200d2f7d86ec11f2be6050ccfb35da55021ee1c34cf76de273a8c91b1e6be",
+    "sub2api-slot-lab/run.mjs": "285b3b377f447dd36441e76aad93d1a598e7f6c57fd6ff605bc4c99965d7b099",
+    "sub2api-slot-lab/native-sse.mjs": "a82680bbc8e62bed8ccb3fc39c6e4aad8e57431071f30d38c7cd295d594a8527"
+  },
+  "product_source_changes": [],
+  "actual_gateway_redis_docker_tests": "NOT RUN"
+}

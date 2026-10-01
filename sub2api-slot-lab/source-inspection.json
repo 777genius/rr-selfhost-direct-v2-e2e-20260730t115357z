@@ -1,0 +1,24 @@
+{
+  "schema": "slot-lab-source-inspection-v1",
+  "inspection_only": "Actual supplied native/probe source; cancellation W3 and memory W2 are pending and NOT verified here.",
+  "inputs": {
+    "backend/internal/repository/concurrency_cache.go": "18baec9e04ef85ef6875718a40eb78b35714fc2a545f07f50abdaedb6ddf94d7",
+    "backend/internal/service/concurrency_service.go": "2fc0db74eb333a3a9a021778b02228efbf1b49a1a23ea0b47dadfeeed52e906b",
+    "backend/internal/handler/gateway_helper.go": "18ba089a95681c8ab61ebcec03acaaad8feea993db9dc3386791809b287ce5e4",
+    "backend/internal/handler/openai_gateway_handler.go": "53f5831d51019249f0545c2b69a490ee94a5321fdd1f34ead7a7ca4b3f9682c1",
+    "backend/internal/handler/gateway_handler.go": "4e497837a47ddaf894c43abc7b2157600d61e7ce953dedabc5cbb6fe7347abfd",
+    "backend/internal/config/config.go": "c46cafc4a9821d15a2d24934d9beab411c1963ba9dae0888aad53f523b672f41",
+    "backend/internal/setup/setup.go": "bda4511299c345fab5c05202471f090c7ca32d1d911ad5a4d91f7762419e7d04"
+  },
+  "discovered_keys": {
+    "account": "concurrency:account:<numeric-account-id>",
+    "user": "concurrency:user:<numeric-user-id>",
+    "api_key": "concurrency:api_key:<numeric-api-key-id>",
+    "account_wait": "wait:account:<numeric-account-id>",
+    "user_wait": "concurrency:wait:<numeric-user-id>"
+  },
+  "api_key_slots": "Stats-only tracked with acquired user request lease; counts asserted from real Redis, never used to infer an admission cap.",
+  "handler_queue_admission": "Both handlers acquire user slot first. Account pending therefore retains a second user/API-key request slot. User pending has no second acquired user/API-key slot.",
+  "native_cancel_flag_in_supplied_source": "ABSENT; requires external Cancellation W3 merge",
+  "lease_proof": "Root run must record real Redis ZCARD/ZRANGE/GET/PTTL; these source hashes are key-discovery evidence only."
+}

@@ -1,0 +1,46 @@
+✖ actual setup retries only native login and preserves default binding, private custody and cleanup (17.578232ms)
+✔ actual setup never retries /admin/groups POST429 (5.624888ms)
+✔ actual setup never retries /admin/accounts POST429 (3.753705ms)
+✔ actual setup never retries /admin/users POST429 (5.527125ms)
+✖ actual setup never retries /keys POST429 (6.338332ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 3
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 166.718638
+
+✖ failing tests:
+
+test at sub2api-slot-lab/setup-rate-limit.test.mjs:36:1
+✖ actual setup retries only native login and preserves default binding, private custody and cleanup (17.578232ms)
+  Error: CONTROL_OR_ADMIN_REJECTED
+      at must (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/w7-runtime/sub2api-regression-lab/common.mjs:7:63)
+      at fetchJSON (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/w7-runtime/sub2api-regression-lab/common.mjs:45:3)
+      at async setup (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/w7-runtime/sub2api-slot-lab/adapter-old.mjs:27:16)
+      at async file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/setup-rate-limit.test.mjs:37:15
+      at async fixture (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/setup-rate-limit.test.mjs:34:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    labCode: 'CONTROL_OR_ADMIN_REJECTED'
+  }
+
+test at sub2api-slot-lab/setup-rate-limit.test.mjs:46:79
+✖ actual setup never retries /keys POST429 (6.338332ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/setup-rate-limit.test.mjs:47:65
+      at async fixture (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-final-repair-w7/sub2api-slot-lab/setup-rate-limit.test.mjs:34:7)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
