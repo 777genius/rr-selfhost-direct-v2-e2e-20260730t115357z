@@ -1,0 +1,76 @@
+--- a/backend/internal/service/gateway_anthropic_passthrough.go
++++ b/backend/internal/service/gateway_anthropic_passthrough.go
+@@ -427,17 +427,22 @@
+ 		line string
+ 		err  error
+ 	}
+-	events := make(chan scanEvent, 16)
++	// One queued line plus the producer's current line; no frame-size reduction.
++	events := make(chan scanEvent, 1)
++	var deliveryPending atomic.Bool
++	var lastReadAt int64
+ 	done := make(chan struct{})
+ 	sendEvent := func(ev scanEvent) bool {
++		deliveryPending.Store(true)
++		defer deliveryPending.Store(false)
+ 		select {
+ 		case events <- ev:
++			atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 			return true
+ 		case <-done:
+ 			return false
+ 		}
+ 	}
+-	var lastReadAt int64
+ 	atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 	go func(scanBuf *sseScannerBuf64K) {
+ 		defer putSSEScannerBuf64K(scanBuf)
+@@ -571,6 +576,10 @@
+ 			}
+ 
+ 		case <-intervalCh:
++			// Producer backpressure and queued work are downstream delay, not upstream idle.
++			if deliveryPending.Load() || len(events) > 0 {
++				continue
++			}
+ 			lastRead := time.Unix(0, atomic.LoadInt64(&lastReadAt))
+ 			if time.Since(lastRead) < streamInterval {
+ 				continue
+--- a/backend/internal/service/openai_gateway_messages_anthropic_native.go
++++ b/backend/internal/service/openai_gateway_messages_anthropic_native.go
+@@ -346,17 +346,22 @@
+ 		line string
+ 		err  error
+ 	}
+-	events := make(chan scanEvent, 16)
++	// One queued line plus the producer's current line; no frame-size reduction.
++	events := make(chan scanEvent, 1)
++	var deliveryPending atomic.Bool
++	var lastReadAt int64
+ 	done := make(chan struct{})
+ 	sendEvent := func(ev scanEvent) bool {
++		deliveryPending.Store(true)
++		defer deliveryPending.Store(false)
+ 		select {
+ 		case events <- ev:
++			atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 			return true
+ 		case <-done:
+ 			return false
+ 		}
+ 	}
+-	var lastReadAt int64
+ 	atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 	go func(scanBuf *sseScannerBuf64K) {
+ 		defer putSSEScannerBuf64K(scanBuf)
+@@ -487,6 +492,10 @@
+ 			}
+ 
+ 		case <-intervalCh:
++			// Producer backpressure and queued work are downstream delay, not upstream idle.
++			if deliveryPending.Load() || len(events) > 0 {
++				continue
++			}
+ 			lastRead := time.Unix(0, atomic.LoadInt64(&lastReadAt))
+ 			if time.Since(lastRead) < streamInterval {
+ 				continue

@@ -1,0 +1,27 @@
+{
+  "base": ".spike-inputs/candidate/sub2api-stream-memory-fork",
+  "base_production_patch_sha256": "5f1e3abf6cc0fa8369f615a3e509eb9890915252dded83fda9b7e2f916313ccd",
+  "files": [
+    {
+      "after_sha256": "81a4de0bb2d3baac55e75e1202295b62852fb3242dc248ee099adc76b7973a79",
+      "before_sha256": "93baafd90df032bb5880ecf44037bcfb82e928ff7826324cd124edd46bf73c4b",
+      "kind": "production",
+      "overlay_path": "production/backend/internal/service/openai_gateway_passthrough.go",
+      "patch": "patches/w2-prefix-ownership.production.patch",
+      "path": "backend/internal/service/openai_gateway_passthrough.go"
+    },
+    {
+      "after_sha256": "933131f9371e3dd6f4f9ceb8dc4cbe0c432ebb6a68b69204ab3d2f73942c7b8e",
+      "before_sha256": null,
+      "kind": "tests",
+      "overlay_path": "tests/backend/internal/service/stream_memory_replay_handoff_test.go",
+      "patch": "patches/w2-prefix-ownership.tests.patch",
+      "path": "backend/internal/service/stream_memory_replay_handoff_test.go"
+    }
+  ],
+  "integration": "Apply the full production/tests patches to exact frozen combined source, OR apply W2 delta patches to exact W1; never both. Merge changed shared source at hunk level.",
+  "patches": {
+    "patches/w2-prefix-ownership.production.patch": "8a5cc1205d70e51a62d406f833d6ea23476281a208e0c45307e23d47a8b530ab",
+    "patches/w2-prefix-ownership.tests.patch": "472a8ea89778accbedfd2e9c3a9f560700b37b31c4b8fe1decabc7df13190062"
+  }
+}

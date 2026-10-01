@@ -1,0 +1,42 @@
+--- a/backend/internal/service/openai_gateway_passthrough.go
++++ b/backend/internal/service/openai_gateway_passthrough.go
+@@ -1912,8 +1912,11 @@
+ 			logger.LegacyPrintf("service.openai_gateway", "[OpenAI passthrough] Prefix cleanup: %v", err)
+ 		}
+ 	}()
+-	// The caller's deadline/cancellation bounds prefix reads. After output starts,
+-	// retain the existing usage-drain policy. Closing Body interrupts Scanner.Read.
++	// The caller's deadline/cancellation bounds prefix reads until replay handoff.
++	// Ownership is separate from successful semantic output: a failed prefix or
++	// first semantic write must retain the existing upstream usage-drain policy.
++	// Closing Body interrupts Scanner.Read.
++	prefixOwnsCancellation := true
+ 	stopPrefixCancel := context.AfterFunc(ctx, func() { _ = resp.Body.Close() })
+ 	defer stopPrefixCancel()
+ 
+@@ -1970,6 +1973,7 @@
+ 			return true
+ 		}
+ 		stopPrefixCancel()
++		prefixOwnsCancellation = false
+ 		stopKeepalive()
+ 		// CommitTo closes the spool and releases strict-stage backing storage.
+ 		if err := prefix.CommitTo(w); err != nil {
+@@ -2023,7 +2027,7 @@
+ 	}
+ 
+ 	for documentScanner.Scan() {
+-		if !clientOutputStarted && ctx.Err() != nil {
++		if prefixOwnsCancellation && ctx.Err() != nil {
+ 			return resultWithUsage(), fmt.Errorf("stream usage incomplete before output: %w", ctx.Err())
+ 		}
+ 		line := documentScanner.Text()
+@@ -2258,7 +2262,7 @@
+ 			break
+ 		}
+ 	}
+-	if !clientOutputStarted && ctx.Err() != nil {
++	if prefixOwnsCancellation && ctx.Err() != nil {
+ 		return resultWithUsage(), fmt.Errorf("stream usage incomplete before output: %w", ctx.Err())
+ 	}
+ 	ensureResponseFailedTerminal()

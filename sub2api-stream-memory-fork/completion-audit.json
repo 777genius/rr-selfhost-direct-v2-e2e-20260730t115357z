@@ -1,0 +1,77 @@
+{
+  "delivery_complete": true,
+  "runtime_verified": false,
+  "scope": "Exact copied W1 ownership repair, unchanged independent regressions, full and W1-incremental patches, source-after/hashes, offline verification and STOP",
+  "requirements": [
+    {
+      "requirement": "Copy exact W1 first",
+      "status": "VERIFIED",
+      "evidence": "evidence/w1-copy.json"
+    },
+    {
+      "requirement": "Mandatory supplied independent P1 review",
+      "status": "INSPECTED; source-proven mismatch repaired",
+      "evidence": "evidence/w2-verification.json"
+    },
+    {
+      "requirement": "Distinct prefix cancellation ownership at callback handoff and both guards",
+      "status": "VERIFIED exact minimal source change",
+      "evidence": "patches/w2-prefix-ownership.production.patch"
+    },
+    {
+      "requirement": "Prescribed two real-writer old-API cases unchanged; usage 7/5; native flag absent",
+      "status": "BYTE EXACT; controller repaired Go run NOT RUN by W2",
+      "evidence": "tests/backend/internal/service/stream_memory_replay_handoff_test.go"
+    },
+    {
+      "requirement": "Retain original32/native292/probe63, no skips",
+      "status": "W1 receipts supplied; original tests byte exact; W2 runner requires35/292/63 and zero skips; integrated rerun pending",
+      "evidence": "evidence/w2-verification.json, run-go.py"
+    },
+    {
+      "requirement": "Pre-prefix cancel/deadline; protected stream; no unsafe retry; accounting unknown; default drain unchanged",
+      "status": "VERIFIED source preservation by exact projection to W1; runtime NOT RUN",
+      "evidence": "verify-w2.py"
+    },
+    {
+      "requirement": "Strict64KiB/8MiB; anonymous0600/nil buffer; Messagesqueue1 and genuine idle",
+      "status": "Original relevant W1 source and tests BYTE EXACT",
+      "evidence": "evidence/w2-verification.json"
+    },
+    {
+      "requirement": "Full frozen combined source patches plus W1 delta; exact source-after/hash/gofmt/report",
+      "status": "VERIFIED 13 full applications,2 delta applications,9 gofmt files,21 preservation pins,6976 input pins",
+      "evidence": "SOURCE.json, W2-DELTA.json, REPORT.md, evidence/offline-verification.json"
+    },
+    {
+      "requirement": "Four-file overlap to be conflict-merged by controller; no overlay on changed source",
+      "status": "HANDOFF; no changed shared source written",
+      "evidence": "ROOT-COMMANDS.md"
+    },
+    {
+      "requirement": "No memory threshold/GC change; no prohibited execution; bounded10min STOP",
+      "status": "SATISFIED",
+      "evidence": "REPORT.md"
+    }
+  ],
+  "production_change": {
+    "added_lines": 106,
+    "path": "patches/production.patch",
+    "removed_lines": 30,
+    "sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239"
+  },
+  "blockers": [],
+  "handoff_gates_pending": [
+    "Controller conflict-aware four-file integration",
+    "Actual repaired/merged Go and race",
+    "Integrated35/native292/probe63 with zero skips",
+    "Separate profile/live work if pursued"
+  ],
+  "risks": [
+    "Callback already firing can close upstream body; unchanged W1 caveat",
+    "Integrated cancellation source absent; exact W2 hashes do not prove merged behavior",
+    "No repaired Go compilation or runtime execution by W2",
+    "Stage limits are ownership bounds, not process RSS guarantees"
+  ],
+  "stop": true
+}
