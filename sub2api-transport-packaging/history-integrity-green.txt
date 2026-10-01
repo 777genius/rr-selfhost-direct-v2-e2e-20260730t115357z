@@ -1,0 +1,14 @@
+test_ancestor_symlink (__main__.HistoryIntegrityTests.test_ancestor_symlink) ... ok
+test_appended_component_symlink_control (__main__.HistoryIntegrityTests.test_appended_component_symlink_control) ... ok
+test_audit_regular_history_control (__main__.HistoryIntegrityTests.test_audit_regular_history_control) ... ok
+test_audit_root_symlink_control (__main__.HistoryIntegrityTests.test_audit_root_symlink_control) ... ok
+test_corrupted_history_control (__main__.HistoryIntegrityTests.test_corrupted_history_control) ... ok
+test_higher_ancestor_symlink (__main__.HistoryIntegrityTests.test_higher_ancestor_symlink) ... ok
+test_historical_root_symlink (__main__.HistoryIntegrityTests.test_historical_root_symlink) ... ok
+test_input_hashes_symlink (__main__.HistoryIntegrityTests.test_input_hashes_symlink) ... ok
+test_regular_history_control (__main__.HistoryIntegrityTests.test_regular_history_control) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.911s
+
+OK

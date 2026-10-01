@@ -1,0 +1,16 @@
+test_bad_delta_context_and_result_and_bounds (packaging_tests.PackagingTests.test_bad_delta_context_and_result_and_bounds) ... ok
+test_controller_replacements_and_audit_without_prior_delivery (packaging_tests.PackagingTests.test_controller_replacements_and_audit_without_prior_delivery) ... ok
+test_default_archive_is_fixed_sha_and_rejects_links (packaging_tests.PackagingTests.test_default_archive_is_fixed_sha_and_rejects_links) ... ok
+test_exact_prior_and_runtime_and_plan (packaging_tests.PackagingTests.test_exact_prior_and_runtime_and_plan) ... ok
+test_full_base_verified_before_delta (packaging_tests.PackagingTests.test_full_base_verified_before_delta) ... ok
+test_missing_base_file (packaging_tests.PackagingTests.test_missing_base_file) ... ok
+test_no_output_on_bad_input_or_overwrite (packaging_tests.PackagingTests.test_no_output_on_bad_input_or_overwrite) ... ok
+test_overlay_and_adapter_corruption (packaging_tests.PackagingTests.test_overlay_and_adapter_corruption) ... ok
+test_path_traversal_and_absolute_and_noncanonical (packaging_tests.PackagingTests.test_path_traversal_and_absolute_and_noncanonical) ... ok
+test_symlink_base_file (packaging_tests.PackagingTests.test_symlink_base_file) ... ok
+test_wrong_base_hash (packaging_tests.PackagingTests.test_wrong_base_hash) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.546s
+
+OK

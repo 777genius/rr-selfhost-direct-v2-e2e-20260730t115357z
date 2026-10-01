@@ -1,0 +1,426 @@
+{
+  "sub2api-spike/broker.mjs": {
+    "base_sha256": "742b1d166670a18eae27475c5cd5ab5fb3e770bbbb92706e885ee11d33aa900a",
+    "prior_sha256": "9b8a7951d80dab2c90c13bdd3408631255b96b64e8ee3534c26b8b64d281ba24",
+    "edits": [
+      {
+        "start": 18,
+        "end": 18,
+        "new": "  await ledgerLock.writeFile(String(process.pid)); await ledgerLock.sync();\n",
+        "old_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "start": 19,
+        "end": 20,
+        "new": "  const disk = await loadJSON(ledgerPath, { schema: 1, runs: {} });\n  if (disk.schema !== 1 || !disk.runs || Array.isArray(disk.runs)) throw Error('Invalid ledger');\n",
+        "old_sha256": "4e3cacf20d5726307b122bc5cf45db65d3d0bf86bf07f907155a2471ccbc9ea5"
+      },
+      {
+        "start": 22,
+        "end": 34,
+        "new": "  try { await persist(); } catch (e) { await ledgerLock.close(); releaseLock(); throw e; } // Before admission.\n  await ledgerLock.close();\n",
+        "old_sha256": "bcbb36e17e9263a581f23cf20ecbba79bf2cc02cbfc9683bc01b015ce00e183b"
+      },
+      {
+        "start": 43,
+        "end": 47,
+        "new": "        let claims; try { claims = await verifyOIDC(bearer(req)); } catch { throw fault(401, 'oidc_denied'); }\n",
+        "old_sha256": "e8251e81e65d2cd35f0352f8a7de6ecf8060a9ad5b31d59c21b0b98452fb80f9"
+      },
+      {
+        "start": 49,
+        "end": 53,
+        "new": "        const scope = scopes[`${input.provider}:${input.protocol}`]; if (!scope) throw fault(400, 'unsupported_scope');\n",
+        "old_sha256": "8e0f99e48b109cc485860a0d675e49d3d24d066de265bcca8c17641c4fbbecbb"
+      },
+      {
+        "start": 61,
+        "end": 62,
+        "new": "          const grant = { capability: randomBytes(32).toString('base64url'), session: randomUUID(), scope, binding, workspace, attempt: claims.attempt, expires, requests: 0, active: 0, closed: false, controllers: new Set() };\n",
+        "old_sha256": "d1e19c6bfa1c6f8cb564fa685884a44fb0bfe3f0978f0a6715f488f216ab44b6"
+      },
+      {
+        "start": 65,
+        "end": 66,
+        "new": "        send(res, 200, { capability: g.capability, model: scope.model, expires: g.expires }); return;\n",
+        "old_sha256": "a71dbcd8b2e9b6674df7e5252feb15ea1c31da01719021bbb74873cb095ad969"
+      }
+    ],
+    "added_lines": 9,
+    "deleted_lines": 23
+  },
+  "sub2api-spike/customer.mjs": {
+    "base_sha256": "b8bd9c31fe4de4a4fd8ba04b6c9d25161f07476a928f65228b2b716b22be7508",
+    "prior_sha256": "a1468ef850ffb9185534cdd12186f1787f68b482ace108034d94b870efceb80d",
+    "edits": [
+      {
+        "start": 2,
+        "end": 3,
+        "new": "",
+        "old_sha256": "d1ca3a1ce53a6b53de9f172a3b5411d754d3e26ee63b1331831178a1e8555e3d"
+      },
+      {
+        "start": 5,
+        "end": 8,
+        "new": "  'mimo:responses': { platform: 'openai', baseURL: 'https://token-plan-sgp.xiaomimimo.com/v1', model: 'mimo-v2.6-pro' },\n  'mimo:messages': { platform: 'anthropic', baseURL: 'https://token-plan-sgp.xiaomimimo.com/anthropic', model: 'mimo-v2.6-pro' },\n  'openrouter:responses': { platform: 'openai', baseURL: 'https://openrouter.ai/api/v1', model: 'openai/gpt-4.1' }\n",
+        "old_sha256": "f4f66e12e7c813dd80d742ca6f52332cf7895768d13fa0fcc0e3d6bc69b67e7d"
+      },
+      {
+        "start": 14,
+        "end": 53,
+        "new": "",
+        "old_sha256": "21b2fb66329be5d11f769df22be251e945f9b34de5efa476947de86ea84cf605"
+      },
+      {
+        "start": 54,
+        "end": 83,
+        "new": "  constructor({ baseURL, adminKey, timeoutMs = 10000 }) { this.baseURL = baseURL; this.adminKey = adminKey; this.timeoutMs = timeoutMs; }\n  async call(method, path, body) {\n    const r = await fetch(`${this.baseURL}/api/v1/admin${path}`, { method, headers: { 'x-api-key': this.adminKey, 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body), redirect: 'error', signal: AbortSignal.timeout(this.timeoutMs) });\n",
+        "old_sha256": "552c4018769ea7e2be3162ca1cc1670d8589f3f35e01f42ffb799edb6a68fb98"
+      },
+      {
+        "start": 94,
+        "end": 96,
+        "new": "export async function customerAdapter({ statePath, admin, workspaces, credentialProfiles, onAuthorityChange = async () => {} }) {\n  const state = await loadJSON(statePath, { schema: 1, bindings: {} });\n",
+        "old_sha256": "66e600c8a5494bc129c0460a201115c4519fe3dd0dfb216cad48ef874597ae92"
+      },
+      {
+        "start": 97,
+        "end": 99,
+        "new": "",
+        "old_sha256": "8f1bc312fd8fdae548b0c5adca466c0921e17fac44892cb3865865fb7ba231fc"
+      },
+      {
+        "start": 102,
+        "end": 108,
+        "new": "",
+        "old_sha256": "d515f8c3b85be2295135c728ddc252af61b058c535394f21235b50a5031c423f"
+      },
+      {
+        "start": 111,
+        "end": 112,
+        "new": "    if (!w || w.suspended || !role || manage && !['owner', 'manager'].includes(role)) throw fault(403, 'membership_denied');\n",
+        "old_sha256": "ba804e6419d4d879629c8a31b156333e61f396dd3526f17e2b984e0a4842e1cb"
+      },
+      {
+        "start": 114,
+        "end": 129,
+        "new": "",
+        "old_sha256": "d1abfc16c5d26a2ea2cbf4c627e0a4bdec69d93bf4afe4776dc905c6cadb12a8"
+      },
+      {
+        "start": 132,
+        "end": 143,
+        "new": "  async function fetchOwned(identity, id) {\n    const b = owned(identity, id); const a = await admin.call('GET', `/accounts/${b.upstreamID}`);\n    const expected = workspaces[identity.workspace].groups[`${b.provider}:${b.protocol}`];\n    // Sub2API groups restrict routing, not upstream credential ownership.\n    const groups = a.group_ids ?? a.groups?.map(g => g.id);\n    if (!Array.isArray(groups) || groups.length !== 1 || groups[0] !== expected) throw fault(409, 'group_drift');\n    return { a, b };\n",
+        "old_sha256": "7e706e3cb12b3dbe72c0ea9ecc0de0b36a89bca4d7a25f4b896e8b683888f289"
+      },
+      {
+        "start": 144,
+        "end": 224,
+        "new": "  async function connectOwned(w, identity, input, replacingID) {\n        if (Object.keys(input).some(k => !['provider', 'protocol'].includes(k))) throw fault(400, 'customer_routing_denied');\n        const profile = providerProfiles[`${input.provider}:${input.protocol}`];\n        const group = w.groups?.[`${input.provider}:${input.protocol}`];\n        const credentialRef = credentialProfiles?.[identity.workspace]?.[`${input.provider}:${input.protocol}`];\n        const credential = typeof credentialRef === 'function' ? await credentialRef() : credentialRef;\n        if (!profile || !group || !credential) throw fault(400, 'unsupported_account');\n        safeProviderURL(profile.baseURL);\n        if (Object.values(state.bindings).some(b => b.workspace === identity.workspace && b.provider === input.provider && b.protocol === input.protocol && b.id !== replacingID && ['creating', 'recovery_required', 'deleting', 'replacing'].includes(b.state))) throw fault(409, 'recovery_required');\n        const id = randomBytes(16).toString('hex');\n        const b = { id, workspace: identity.workspace, provider: input.provider, protocol: input.protocol, state: 'creating' };\n        state.bindings[id] = b; await save();\n        // Persist intention BEFORE remote create. An ambiguous failure remains\n        // recovery_required: no automatic create retry or authority publication.\n        try {\n          const a = await admin.call('POST', '/accounts', { name: `rr-sub2-spike-20260930-${id}`, platform: profile.platform, type: 'apikey', credentials: { api_key: credential, base_url: profile.baseURL, model_mapping: { [profile.model]: profile.model } }, extra: profile.platform === 'openai' ? { openai_responses_mode: 'force_responses', openai_passthrough: true } : { anthropic_passthrough: true }, group_ids: [group], concurrency: 2, priority: 1, rate_multiplier: 1 });\n          if (!Number.isSafeInteger(a.id) || a.id < 1) throw fault(502, 'invalid_account_id');\n          b.upstreamID = a.id; b.state = 'active'; await save(); return publicAccount(a, b);\n        } catch (e) { b.state = 'recovery_required'; await save(); throw e; }\n",
+        "old_sha256": "5d8113eb96df5488e7d7139d876e1881d90d7f8afce0891b4adc591aefec3bd4"
+      },
+      {
+        "start": 228,
+        "end": 279,
+        "new": "      const w = membership(identity, !['list', 'read'].includes(action));\n      if (action === 'connect') return connectOwned(w, identity, input);\n      if (action === 'list') {\n        const out = []; for (const b of Object.values(state.bindings)) if (b.workspace === identity.workspace && b.state === 'active') { const { a } = await fetchOwned(identity, b.id); out.push(publicAccount(a, b)); } return out;\n",
+        "old_sha256": "bed1f8f67398bce96ee65a86ce6cb58fda3d1ba0c21856114c6787bf28a1be1d"
+      },
+      {
+        "start": 280,
+        "end": 315,
+        "new": "      const { a, b } = await fetchOwned(identity, id);\n      if (action === 'read') return publicAccount(a, b);\n      if (action === 'export') {\n        // Exercise credential-bearing source route privately, only publish the\n        // same metadata projection. Export is deliberately non-restorable.\n        await admin.call('GET', `/accounts/data?ids=${b.upstreamID}&include_proxies=false`);\n        return { schema: 1, restorable: false, account: publicAccount(a, b) };\n      }\n      if (action === 'delete') {\n        b.state = 'deleting'; await save(); await onAuthorityChange(identity.workspace);\n        await admin.call('DELETE', `/accounts/${b.upstreamID}`); b.state = 'deleted'; await save(); return { deleted: true };\n      }\n      if (action === 'replace') {\n        if (Object.keys(input).length) throw fault(400, 'customer_routing_denied');\n        b.state = 'replacing'; await save(); await onAuthorityChange(identity.workspace);\n        await admin.call('PUT', `/accounts/${b.upstreamID}`, { status: 'inactive' });\n        const replacement = await connectOwned(w, identity, { provider: b.provider, protocol: b.protocol }, b.id);\n        await admin.call('DELETE', `/accounts/${b.upstreamID}`); b.state = 'deleted'; await save(); return replacement;\n      }\n      if (action === 'refresh') {\n        // API-key accounts have no OAuth lifecycle. Report it honestly.\n        if (a.type !== 'oauth') throw fault(409, 'refresh_requires_oauth');\n        await onAuthorityChange(identity.workspace);\n        await admin.call('POST', `/accounts/${b.upstreamID}/refresh`, {});\n        return publicAccount(await admin.call('GET', `/accounts/${b.upstreamID}`), b);\n      }\n      if (action === 'pause' || action === 'update') {\n        if (action === 'update' && (Object.keys(input).some(k => k !== 'concurrency') || !Number.isSafeInteger(input.concurrency) || input.concurrency < 1 || input.concurrency > 2)) throw fault(400, 'customer_routing_denied');\n        await onAuthorityChange(identity.workspace);\n        const updated = await admin.call('PUT', `/accounts/${b.upstreamID}`, action === 'pause' ? { status: 'inactive' } : { concurrency: input.concurrency });\n        return publicAccount(updated, b);\n      }\n      throw fault(404, 'action_denied');\n",
+        "old_sha256": "528ff67078885f1bbac95b3997ec17d05aa7197f18249407fb041a4bcf76b276"
+      }
+    ],
+    "added_lines": 72,
+    "deleted_lines": 275
+  },
+  "sub2api-spike/customer.test.mjs": {
+    "base_sha256": "1d39fb49db0eb85853ab159e66f66d8a27d955418a400133c8b0f73414969eef",
+    "prior_sha256": "99dde693551afa15511c34357ef018582ea840d9dcd9f5fd5fe5efcc39350909",
+    "edits": [
+      {
+        "start": 3,
+        "end": 4,
+        "new": "import { mkdtemp, rm, readFile } from 'node:fs/promises';\n",
+        "old_sha256": "08bc98222b8c0b9f316060fb2d86b25c1fa0d477ebd31224cd73aef7bb92b227"
+      },
+      {
+        "start": 8,
+        "end": 18,
+        "new": "async function setup(t, { createFailure = false } = {}) {\n",
+        "old_sha256": "6016f0cc18c6019d9779e30c2f255cdc8443e27c662e780283cd6b83a365b38f"
+      },
+      {
+        "start": 19,
+        "end": 23,
+        "new": "  const records = new Map(), observations = []; let next = 1;\n  // Faithful SOURCE API transport fake, explicitly NOT a live Sub2API instance.\n",
+        "old_sha256": "c35e3953ac1b48c647b5a5507c8a734e5e379171cbb893e5ef52fb0876910264"
+      },
+      {
+        "start": 28,
+        "end": 33,
+        "new": "    if (req.method === 'POST' && u.pathname.endsWith('/accounts')) {\n      const b = await readJSON(req); const a = { ...b, id: next++, status: 'active', name: 'synthetic-credential-in-name', extra: { nested: 'synthetic-refresh-in-extra' } }; records.set(a.id, a);\n",
+        "old_sha256": "f2848daced98e9a15d048dda9a60a6de9cb7793070d22cd9be04c2b307064f28"
+      },
+      {
+        "start": 34,
+        "end": 35,
+        "new": "      send(res, 200, { code: 0, data: a }); return;\n",
+        "old_sha256": "4d9eb10202801e8452c60bb8535490113f5c2ad290daff1211297bef4f2ce095"
+      },
+      {
+        "start": 36,
+        "end": 39,
+        "new": "    const a = records.get(id); if (!a) { send(res, 404, { code: 404 }); return; }\n",
+        "old_sha256": "0c2ed8fb5b8df29c24fb9b79d8cb20a5b92cd55bc4ffb46ac5f9463fd3f5b3d3"
+      },
+      {
+        "start": 40,
+        "end": 45,
+        "new": "    if (req.method === 'PUT') Object.assign(a, await readJSON(req));\n    send(res, 200, { code: 0, data: a });\n",
+        "old_sha256": "9e3a632eebd9d59e7432e69637962e8079c52e06ed57c0fa13cb949066ae25cf"
+      },
+      {
+        "start": 48,
+        "end": 49,
+        "new": "  const config = { statePath: join(dir, 'customer.json'), admin: new AdminAPI({ baseURL: adminURL, adminKey: 'synthetic-shared-admin' }), workspaces, credentialProfiles: { a: { 'mimo:responses': 'synthetic-upstream-a' }, b: { 'mimo:responses': 'synthetic-upstream-b' } } };\n",
+        "old_sha256": "ca72b824930df8d6c22ee416b8c932dc8873e89df19357f5447532303ab84887"
+      },
+      {
+        "start": 55,
+        "end": 56,
+        "new": "  return { dir, config, records, observations, workspaces, adapter, call, connect };\n",
+        "old_sha256": "50d3ead64e74f374bbc23a554e42de98a690a714dcdda03de605ee3c19cde47a"
+      },
+      {
+        "start": 92,
+        "end": 94,
+        "new": "",
+        "old_sha256": "34362cb2671055b6ed0d202f687726d476fd76241b4ed75053359bff9195ad31"
+      },
+      {
+        "start": 116,
+        "end": 521,
+        "new": "",
+        "old_sha256": "b2e736c547415e44924fa9075ccefca9836b5663988599be309b0c941cd0b3ad"
+      }
+    ],
+    "added_lines": 12,
+    "deleted_lines": 438
+  },
+  "sub2api-spike/oidc.mjs": {
+    "base_sha256": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647",
+    "prior_sha256": "a7d2f5fe71e8aa7a7ba279f327ab608c02ddbdbe05d50e03438c316ac48406e3",
+    "edits": [
+      {
+        "start": 27,
+        "end": 28,
+        "new": "    return { runID: c.run_id, attempt: String(c.run_attempt), expires: c.exp * 1000 };\n",
+        "old_sha256": "4758ebe540f0ddf5fe50b98108e25c06639df012ea7cd954fe89833bef1a607e"
+      }
+    ],
+    "added_lines": 1,
+    "deleted_lines": 1
+  },
+  "sub2api-spike/oidc.test.mjs": {
+    "base_sha256": "f2854c96fc6a513f6af713f027f61b68cb738688a519d2910334a5844f0b9716",
+    "prior_sha256": "d44efc8c00b783f0a20e581fefc72d0c320a8f9717a4627a6489561560e1e1b1",
+    "edits": [
+      {
+        "start": 8,
+        "end": 10,
+        "new": "  const c = await verifier()(token()); assert.equal(c.runID, '123'); assert.equal(c.attempt, '1');\n",
+        "old_sha256": "32f264009de5cc8c0218f16c41a813370acbb9437241739bcffde49ee5c8528f"
+      },
+      {
+        "start": 19,
+        "end": 20,
+        "new": "  for (const change of [{ iss: 'wrong' }, { aud: ['review-router-gateway-spike'] }, { repository: 'other' }, { repository_id: '1' }, { repository_owner_id: '1' }, { workflow_ref: 'other' }, { workflow_sha: 'b'.repeat(40) }, { ref: 'refs/heads/other' }, { event_name: 'pull_request' }, { run_id: null }, { run_attempt: 0 }, { exp: 1 }, { nbf: 9999999999 }, { iat: 'bad' }]) await assert.rejects(verifier()(token(change)));\n",
+        "old_sha256": "cb057a457a1edf7d04eb5aecb68c379fb3707cec21daaa5346671874072e0820"
+      }
+    ],
+    "added_lines": 2,
+    "deleted_lines": 3
+  },
+  "sub2api-spike/operator/admin-roundtrip.mjs": {
+    "base_sha256": "3535ce99223d632c7e0ccce719ac9201f6fb883b4a436d0973f472b08a2380c8",
+    "prior_sha256": "64c13139293c5f6237aafc5b5759b8e986407d9b753568e64bc1daf6bb5498d2",
+    "edits": [
+      {
+        "start": 0,
+        "end": 1,
+        "new": "// TRUSTED CONTROL CONTAINER ONLY. Actual Sub2API API roundtrip, zero model requests.\n",
+        "old_sha256": "ff96396e967d62a87da1efee7ea6100f2e4dea806611b051de9e927798efb198"
+      },
+      {
+        "start": 4,
+        "end": 7,
+        "new": "",
+        "old_sha256": "5ec596705020fdf3ca064415fccf2bd2e16474753aaccfac833f60871eecc451"
+      },
+      {
+        "start": 8,
+        "end": 16,
+        "new": "const receipt = { schema: 1, evidence_kind: 'synthetic-container', status: 'FAIL', stage: 'login', node: process.version, upstream_requests: 0, duration_ms: 0, results: [], exposed_fields: [], limitation: 'Actual admin API only; not native gateway, real Actions, OAuth or membership/SSO proof.' };\nconst started = Date.now();\nconst privateJSON = async (name, value) => writeFile(join(privateDir, name), JSON.stringify(value, null, 2) + '\\n', { mode: 0o600 });\nasync function api(method, path, body, auth) {\n  const r = await fetch(`${baseURL}/api/v1${path}`, { method, headers: { 'content-type': 'application/json', ...(auth ? { authorization: `Bearer ${auth}` } : {}) }, body: body === undefined ? undefined : JSON.stringify(body), redirect: 'error', signal: AbortSignal.timeout(10000) });\n  if (!r.ok) throw Error(`HTTP_${r.status}`); const j = await r.json(); if (j.code !== 0) throw Error('API_ERROR'); return j.data;\n}\ntry {\n  // Journal refuses ambiguous/rerun setup; inspect private state before a new run.\n  await writeFile(join(privateDir, 'roundtrip-started.json'), JSON.stringify({ started }), { flag: 'wx', mode: 0o600 });\n  const login = await api('POST', '/auth/login', JSON.parse(await readFile(join(privateDir, 'login.json'), 'utf8')));\n  if (typeof login.access_token !== 'string') throw Error('LOGIN_TOKEN_MISSING');\n  receipt.stage = 'admin_key'; const key = await api('POST', '/admin/settings/admin-api-key/regenerate', {}, login.access_token);\n  if (typeof key.key !== 'string') throw Error('ADMIN_KEY_MISSING');\n  await writeFile(join(privateDir, 'admin.key'), key.key, { mode: 0o600 });\n  const admin = new AdminAPI({ baseURL, adminKey: key.key }); const workspaces = {};\n  receipt.stage = 'groups_users_keys';\n  for (const [i, workspace] of ['a', 'b'].entries()) {\n    const group = await admin.call('POST', '/groups', { name: `rr-sub2-spike-20260930-${workspace}-responses`, platform: 'openai', rate_multiplier: 1, is_exclusive: true, subscription_type: 'standard', fallback_group_id: null, fallback_group_id_on_invalid_request: null });\n    workspaces[workspace] = { members: { owner: 'owner', member: 'member' }, groups: { 'mimo:responses': group.id } };\n    await privateJSON('roundtrip-workspaces.json', workspaces);\n    const password = `synthetic-user-password-${workspace}-20260930`;\n    const user = await admin.call('POST', '/users', { email: `rr-sub2-spike-20260930-${workspace}@example.invalid`, password, role: 'user', balance: 100, concurrency: 2, allowed_groups: [group.id], restrict_public_groups: true });\n    const userLogin = await api('POST', '/auth/login', { email: user.email, password });\n    const access = await api('POST', '/keys', { name: `rr-sub2-spike-20260930-${workspace}`, group_id: group.id, custom_key: `synthetic-private-gateway-key-${workspace}-20260930` }, userLogin.access_token);\n    await writeFile(join(privateDir, `workspace-${workspace}.key`), access.key, { mode: 0o600 });\n    workspaces[workspace].userID = user.id; workspaces[workspace].keyID = access.id;\n    await privateJSON('roundtrip-workspaces.json', workspaces);\n",
+        "old_sha256": "973c9ca6c2f154e39aba1592ee120715fac2f3b9a3f2de4f5fff1f093776a152"
+      },
+      {
+        "start": 17,
+        "end": 98,
+        "new": "  receipt.stage = 'customer_adapter';\n  const adapter = await customerAdapter({ statePath: '/state/customer-roundtrip.json', admin, workspaces, credentialProfiles: { a: { 'mimo:responses': 'synthetic-upstream-a' }, b: { 'mimo:responses': 'synthetic-upstream-b' } } });\n  const a = await adapter.operate({ workspace: 'a', user: 'owner' }, 'connect', null, { provider: 'mimo', protocol: 'responses' });\n  const b = await adapter.operate({ workspace: 'b', user: 'owner' }, 'connect', null, { provider: 'mimo', protocol: 'responses' });\n  const listA = await adapter.operate({ workspace: 'a', user: 'owner' }, 'list');\n  const listB = await adapter.operate({ workspace: 'b', user: 'owner' }, 'list');\n  if (listA.length !== 1 || listA[0].id !== a.id || listB.length !== 1 || listB[0].id !== b.id) throw Error('TENANT_LIST_FAILURE');\n  const state = JSON.parse(await readFile('/state/customer-roundtrip.json', 'utf8'));\n  // Inspect exposed credential FIELD NAMES only; no values/raw API exports escape.\n  const raw = await admin.call('GET', `/accounts/${state.bindings[a.id].upstreamID}`);\n  receipt.exposed_fields = Object.keys(raw.credentials ?? {}).sort();\n  await adapter.operate({ workspace: 'a', user: 'owner' }, 'update', a.id, { concurrency: 1 });\n  await adapter.operate({ workspace: 'a', user: 'owner' }, 'pause', a.id);\n  const exported = await adapter.operate({ workspace: 'a', user: 'owner' }, 'export', a.id);\n  if (JSON.stringify(exported).includes('synthetic-upstream') || JSON.stringify(exported).includes(key.key)) throw Error('CUSTODY_FAILURE');\n  for (const action of ['read', 'update', 'pause', 'delete', 'refresh', 'export']) {\n    let denied = false; try { await adapter.operate({ workspace: 'b', user: 'owner' }, action, a.id, { concurrency: 1 }); } catch (e) { denied = e.status === 404; }\n    if (!denied) throw Error('TENANT_FAILURE');\n",
+        "old_sha256": "70efb4df4a43a8bb4e6d8d3c88a372ef91cbe275af37ca5443c5fa1b6040c1d0"
+      },
+      {
+        "start": 99,
+        "end": 111,
+        "new": "  for (const action of ['update', 'pause', 'delete', 'refresh', 'export']) {\n    let denied = false; try { await adapter.operate({ workspace: 'a', user: 'member' }, action, a.id, { concurrency: 1 }); } catch (e) { denied = e.status === 403; }\n    if (!denied) throw Error('ROLE_FAILURE');\n  }\n  await adapter.operate({ workspace: 'a', user: 'owner' }, 'delete', a.id); await adapter.operate({ workspace: 'b', user: 'owner' }, 'delete', b.id);\n  receipt.status = 'PASS'; receipt.stage = 'done';\n  for (const id of ['C01', 'C02', 'C03', 'C07', 'D05']) receipt.results.push({ id, status: 'PASS', upstream_requests: 0, limitation: receipt.limitation });\n} catch (e) { receipt.failure_code = /^[A-Z_0-9]+$/.test(e.message) ? e.message : 'ADMIN_ROUNDTRIP_FAILURE'; process.exitCode = 1; }\nfinally { receipt.duration_ms = Date.now() - started; await writeFile('/receipts/admin-roundtrip.json', JSON.stringify(receipt, null, 2) + '\\n'); }\n",
+        "old_sha256": "aa04b4f34ba893d1e1b6bfe183e2847960c7bcb2958ce0a288d042c865a4feb0"
+      }
+    ],
+    "added_lines": 56,
+    "deleted_lines": 105
+  },
+  "sub2api-spike/run-client.mjs": {
+    "base_sha256": "484d454a3aacf25c3ea2e21e9400bbaa1fbd5b1615b485c24e6088bc881d2599",
+    "prior_sha256": "f34cf495f4854bb4f58ac0c587e1253ff1c4d0e1d7b62fee20da354826fd4349",
+    "edits": [
+      {
+        "start": 0,
+        "end": 2,
+        "new": "import { mkdtemp, mkdir, writeFile, readFile, rm, stat } from 'node:fs/promises';\nimport { tmpdir } from 'node:os';\nimport { join, resolve, dirname } from 'node:path';\n",
+        "old_sha256": "da8342b1c9dd6fecc6964bd16eae8f92f1dc552e42bee2baf035e826b86d1bbf"
+      },
+      {
+        "start": 3,
+        "end": 5,
+        "new": "import { spawn } from 'node:child_process';\n",
+        "old_sha256": "f99dd9eca1fae2291afaa59cbf75bbe5725b994dc6197b353c16f040859f26b0"
+      },
+      {
+        "start": 7,
+        "end": 11,
+        "new": "const [provider, agent = 'codex'] = process.argv.slice(2);\nif (!['mimo', 'openrouter'].includes(provider) || !['codex', 'claude'].includes(agent) || (agent === 'claude' && provider !== 'mimo')) throw Error('Unsupported provider/agent combination');\n",
+        "old_sha256": "3035f83fa0f0e74bc8b2b3a9004b82c2e9f95fbc8a5feeb7bcd141926c610d32"
+      },
+      {
+        "start": 12,
+        "end": 15,
+        "new": "const home = await mkdtemp(join(tmpdir(), 'rr-sub2-spike-20260930-client-'));\nconst sourceFixture = resolve(dirname(fileURLToPath(import.meta.url)), 'fixture');\nconst fixture = '/opt/rr-gateway-spike-fixture'; // Operator-pinned read-only snapshot in the disposable runner image.\nconst env = { PATH: process.env.PATH, LANG: 'C.UTF-8', HOME: home, TMPDIR: home };\n",
+        "old_sha256": "5bf1e8cc2108e2701de167c2a62345adf1591398ef2fcd45ed07c8068152a6c5"
+      },
+      {
+        "start": 17,
+        "end": 19,
+        "new": "function execute(binary, args, onLine = () => {}) {\n  return new Promise((resolvePromise, reject) => {\n    const p = spawn(binary, args, { cwd: fixture, env, stdio: ['ignore', 'pipe', 'pipe'] });\n    let output = '', pending = '', diagnostic = '', size = 0;\n    const timer = setTimeout(() => { p.kill('SIGTERM'); setTimeout(() => p.kill('SIGKILL'), 5000).unref(); }, 12 * 60 * 1000); timer.unref();\n    p.stdout.on('data', b => { size += b.length; if (size > 16 * 1024 * 1024) { p.kill('SIGKILL'); reject(Error('Agent output too large')); return; } output += b; pending += b; const lines = pending.split('\\n'); pending = lines.pop(); for (const line of lines) onLine(line); });\n    // Retain failures privately in the disposable runner, never in Actions logs/artifacts.\n    p.stderr.on('data', b => { if (diagnostic.length < 65536) diagnostic += b.toString().slice(0, 65536 - diagnostic.length); });\n    p.on('error', e => { clearTimeout(timer); reject(e); });\n    p.on('close', async code => { clearTimeout(timer); if (pending) onLine(pending); if (code !== 0) {\n      try { await writeFile(join(home, 'private-events.jsonl'), output, { mode: 0o600 }); await writeFile(join(home, 'private-stderr.txt'), diagnostic, { mode: 0o600 }); } catch {}\n      reject(Error('Agent command failed; inspect ephemeral runtime privately'));\n    } else resolvePromise(output); });\n  });\n}\n",
+        "old_sha256": "f01d63f08062ea3205ef092c4b4fbc78879d98c6b280acb13629903a4b1ee814"
+      },
+      {
+        "start": 20,
+        "end": 22,
+        "new": "  if (process.getuid() === 0) throw Error('Unprivileged disposable runner required');\n  const directory = await stat(fixture);\n  if (directory.uid !== 0 || directory.mode & 0o222) throw Error('Fixture directory must be sealed');\n  for (const file of ['wallet.mjs', 'BUSINESS_RULES.md']) {\n    const info = await stat(join(fixture, file));\n    if (info.uid !== 0 || info.mode & 0o222 || !(await readFile(join(fixture, file))).equals(await readFile(join(sourceFixture, file)))) throw Error('Sealed fixture must match checked-out source');\n  }\n  phase = 'version';\n  const version = (await execute(agent, ['--version'])).trim();\n  const expected = agent === 'codex' ? '0.159.2' : '2.1.285';\n  if (!version.includes(expected)) throw Error('Installed client version does not match pinned canary');\n  phase = 'oidc'; const oidcURL = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);\n  if (oidcURL.protocol !== 'https:' || !oidcURL.hostname.endsWith('.actions.githubusercontent.com') || !process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN) throw Error('Missing trusted GitHub OIDC runtime');\n",
+        "old_sha256": "a75f34c856889f5e55cbe709fe42d59b54da15c34ba8c0e25eee332b6c88f485"
+      },
+      {
+        "start": 23,
+        "end": 24,
+        "new": "  const oidc = await fetch(oidcURL, { headers: { authorization: `Bearer ${process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN}` }, signal: AbortSignal.timeout(10000), redirect: 'error' });\n",
+        "old_sha256": "046b38bc4c8fba7954af2a2bdec2f8f7f823b3c2170ab7aaa7f53212ae741282"
+      },
+      {
+        "start": 28,
+        "end": 31,
+        "new": "  const { capability, model } = await grant.json();\n",
+        "old_sha256": "fe4156d1021b40681c13c23457a1de08dd5fafe2041c97f6b2507d367f37a616"
+      },
+      {
+        "start": 32,
+        "end": 43,
+        "new": "  console.log(`::add-mask::${capability}`);\n",
+        "old_sha256": "1282b3a2ba8bc7e207b192a621f4fb00ddeaed6bb52dc9188e7ab08e5c4e5836"
+      },
+      {
+        "start": 46,
+        "end": 49,
+        "new": "    env.CODEX_HOME = join(home, 'codex'); env.SPIKE_RUN_CAPABILITY = capability; await mkdir(env.CODEX_HOME);\n    const config = `model = ${JSON.stringify(model)}\\nmodel_provider = \"spike\"\\nweb_search = \"disabled\"\\n[model_providers.spike]\\nname = \"Run gateway\"\\nbase_url = \"${broker}/v1\"\\nenv_key = \"SPIKE_RUN_CAPABILITY\"\\nwire_api = \"responses\"\\nrequires_openai_auth = false\\nrequest_max_retries = 0\\nstream_max_retries = 0\\nsupports_websockets = false\\n`;\n",
+        "old_sha256": "32b8bef1c87aefca11c10e7efa3c2b2ff8c980e762203f42453ba9c3e3f52995"
+      },
+      {
+        "start": 50,
+        "end": 51,
+        "new": "",
+        "old_sha256": "f4757c6f089baf78c29e95c8186b8ad93abb369eb0f68035490286f94a46443f"
+      },
+      {
+        "start": 53,
+        "end": 54,
+        "new": "    review = await readFile(join(home, 'review.txt'), 'utf8');\n",
+        "old_sha256": "a70dc131ebf61e57eaf94518f5c97e7aa9a95ea31ffd2c898d2b980253c6ea87"
+      },
+      {
+        "start": 55,
+        "end": 56,
+        "new": "    env.CLAUDE_CONFIG_DIR = join(home, 'claude'); await mkdir(env.CLAUDE_CONFIG_DIR);\n",
+        "old_sha256": "1ca39713a7a58571dd08a935e42ba8b807f6aa77995274a6a5d8a2380b8e8624"
+      },
+      {
+        "start": 60,
+        "end": 61,
+        "new": "    await writeFile(join(home, 'review.txt'), review, { mode: 0o600 });\n",
+        "old_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      {
+        "start": 62,
+        "end": 63,
+        "new": "  await writeFile(join(home, 'events.jsonl'), raw, { mode: 0o600 });\n",
+        "old_sha256": "958dcb5f2e84eb00350cccce689eaee72b9f09a9eb8f54a5f087f0ba7aec90cc"
+      },
+      {
+        "start": 75,
+        "end": 78,
+        "new": "  const evidence = { ...financialEvidence(agent, events, review, provider), id: agent === 'claude' ? 'A03' : provider === 'mimo' ? 'A01' : 'A02', evidence_kind: 'real-Actions', independent_numeric_reproduction: true, workflow_sha: process.env.GITHUB_SHA, run_id: process.env.GITHUB_RUN_ID, run_attempt: process.env.GITHUB_RUN_ATTEMPT, node: process.version, client_version: expected, transport: agent === 'codex' ? 'responses' : 'messages' };\n  const output = resolve('evidence'); // Workflow uses owned sub2api-spike cwd.\n  await mkdir(output, { recursive: true }); await writeFile(join(output, 'result.json'), JSON.stringify(evidence, null, 2) + '\\n');\n  console.log('Verified tool read and financial finding; normalized evidence saved.');\n",
+        "old_sha256": "ea31bb60ec01a7a4b68b6d203932f47f65d201cd89c2cd5fbffe3d5df26bf224"
+      },
+      {
+        "start": 80,
+        "end": 82,
+        "new": "  console.error(`Spike failed at ${phase}; no raw transcript published. Operator must inspect private disposable runtime before retry.`); process.exitCode = 1;\n} finally { if (completed) await rm(home, { recursive: true, force: true }); }\n",
+        "old_sha256": "bad3e95aee8540da4bb504b6593889eba59af8b7d59fec32ebc6e6f42c3dce60"
+      }
+    ],
+    "added_lines": 53,
+    "deleted_lines": 43
+  },
+  "sub2api-spike/serve.mjs": {
+    "base_sha256": "fb2ec7e3aa5eadb60cde72d25f2004d77e8ece52de318d5c53abca14a190275c",
+    "prior_sha256": "749cd722f800661c89cb73f0ada8566fd395495d9e14e3fc48f94a0a52105f24",
+    "edits": [
+      {
+        "start": 1,
+        "end": 2,
+        "new": "",
+        "old_sha256": "73da14009b4cd003397899d9f04ddd0b16ecb7cdef4f61c0be41885fc84f7753"
+      },
+      {
+        "start": 4,
+        "end": 16,
+        "new": "import { AdminAPI, customerAdapter, testCustomerServer, providerProfiles } from './customer.mjs';\nif (Number(process.versions.node.split('.')[0]) !== 24) throw Error('Node 24 required');\nconst config = JSON.parse(await readFile(process.argv[2], 'utf8'));\n// Trusted server-only file; never mount into Actions. No caller picks a URL/key.\nfor (const [name, scope] of Object.entries(config.scopes)) {\n  const expected = providerProfiles[name];\n  if (!expected || scope.model !== expected.model || scope.protocol !== name.split(':')[1] || scope.baseURL !== 'http://sub2api:8080') throw Error('Invalid private native scope');\n  for (const [workspace, b] of Object.entries(scope.workspaces)) {\n    if (b.groupID !== config.workspaces[workspace]?.groups?.[name]) throw Error('Group metadata mismatch');\n    b.key = (await readFile(b.keyFile, 'utf8')).trim(); if (!b.key) throw Error('Missing private key');\n",
+        "old_sha256": "9f2b7d298a7596f87f8586d5c1086ddf578f1df09c564e057469da2c8c939e62"
+      },
+      {
+        "start": 18,
+        "end": 25,
+        "new": "const workspaces = config.workspaces;\nconst resolveWorkspace = claims => config.runBindings?.[`${claims.runID}:${claims.attempt}`];\nconst isWorkspaceActive = workspace => !workspaces[workspace]?.suspended && workspaces[workspace]?.members?.[config.runUsers?.[workspace]];\nconst server = await createBroker({ ...config, verifyOIDC: sub2OIDCVerifier(config.oidc), resolveWorkspace, isWorkspaceActive, log: record => process.stdout.write(JSON.stringify(record) + '\\n') });\nif (config.customer && (!config.customer.listenHost || ['0.0.0.0', '::'].includes(config.customer.listenHost))) throw Error('Control binding required');\nserver.listen(8787, '0.0.0.0');\nif (config.customer) {\n  if (!config.customer.listenHost || ['0.0.0.0', '::'].includes(config.customer.listenHost)) throw Error('Customer listener must bind operator-approved control-network IP');\n  const credentials = {};\n  for (const [workspace, profiles] of Object.entries(config.customer.credentialFiles)) {\n    credentials[workspace] = {}; for (const [scope, path] of Object.entries(profiles)) credentials[workspace][scope] = async () => (await readFile(path, 'utf8')).trim();\n  }\n  const admin = new AdminAPI({ baseURL: config.customer.baseURL, adminKey: (await readFile(config.customer.adminKeyFile, 'utf8')).trim() });\n  const adapter = await customerAdapter({ statePath: config.customer.statePath, admin, workspaces, credentialProfiles: credentials, onAuthorityChange: workspace => server.revokeWorkspace(workspace) });\n  // Kept on private CONTROL network in operator topology. Never exposed to runner.\n  testCustomerServer({ adapter, identities: config.customer.identities, testOnly: config.customer.testOnly }).listen(8788, config.customer.listenHost);\n",
+        "old_sha256": "dcf185b9cf97b7270972acc97ecb15482a397ad9a7accccf881dd17b1d62c244"
+      },
+      {
+        "start": 26,
+        "end": 90,
+        "new": "for (const signal of ['SIGTERM', 'SIGINT']) process.on(signal, () => { server.close(() => process.exit(0)); server.closeAllConnections(); });\n",
+        "old_sha256": "0e3d24966506adf775162916f024879a8d0bd7951a4de4cd6db6a2b0ac79d4b9"
+      }
+    ],
+    "added_lines": 27,
+    "deleted_lines": 84
+  }
+}

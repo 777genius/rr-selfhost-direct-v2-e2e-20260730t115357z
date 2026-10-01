@@ -1,0 +1,20 @@
+{
+  "runtime_tar_sha256": "fb5f52748ba6120fba9dbfcc34da43949c3c8ab1f2c8bf6203638458bfd849ec",
+  "runtime_tar_location": "controller-managed immutable retention; not available to worker",
+  "runtime_ledger_sha256": "640fa09a654115ddba443c8913152e44d6204c24401d3073ebb8855e0e68e0fd",
+  "prior_files": 102,
+  "runtime_files": 103,
+  "unchanged_fixture": {
+    "path": "sub2api-spike/broker.test.mjs",
+    "sha256": "d9320ab9e2e08c5381328723dfc03f79a73c34da0d64c84b0e84cb6512a75051",
+    "base_equals_prior": true
+  },
+  "base_pin_authority": "supplied extracted public base; Git authenticity not independently checked in broken linked worktree",
+  "supplied_actual_root_retention_receipt": {
+    "source": ".spike-inputs/actual-root-gates.json",
+    "source_sha256": "9367dd28d3988d01025608bfd9e0ee999cc3809060e6197fa4b189bc49019588",
+    "retention_sha256": "6e21fd05dccb0dfe217a6f5f39ccb9f8a1e2a7877c07fd616d5f14fef1c42114",
+    "physical_archive_verified_by_worker": false,
+    "relationship_to_historical_runtime_tar": "separate root receipt claim; does not replace original runtime_tar_sha256"
+  }
+}

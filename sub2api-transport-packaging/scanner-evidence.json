@@ -1,0 +1,48 @@
+{
+  "actual_root_gates": {
+    "source": ".spike-inputs/actual-root-gates.json",
+    "sha256": "9367dd28d3988d01025608bfd9e0ee999cc3809060e6197fa4b189bc49019588",
+    "reconstruction_status": "PASS",
+    "public_base_sha": "3004a4b16e03588ee62c0ed7fe2751e0e53300e0",
+    "scanner": "PENDING",
+    "scope": "supplied pre-repair root fixed-Git reconstruction receipt; not a receipt for this repaired final assembly"
+  },
+  "normal_capture": {
+    "completion": "root reports normal capture completed without throwing",
+    "worker_observation": "both supplied fingerprint artifacts parse successfully and contain baseCommit, changedPaths and patchSha256; neither provides a scanner verdict or PASS field",
+    "fingerprints": {
+      "transport-package-w1-normal-fingerprint.json": {
+        "sha256": "3431ded01737f6b5aafa56b810a7d69186cbe750c8707142b018b1eeb205091a",
+        "fields": [
+          "baseCommit",
+          "changedPaths",
+          "patchSha256"
+        ],
+        "baseCommit": "413b450769744f95611e630a24a77d12f3491c6c",
+        "patchSha256": "c59ec46428dc247d5c0837572d9e9eb6a84db75e2c27ec24017b83ffceada8b2",
+        "changed_paths": 29,
+        "PASS_field_present": false,
+        "scanner_verdict": null
+      },
+      "transport-r4-normal-fingerprint.json": {
+        "sha256": "64a40e4f4f66fe7f7a989aff89bd256c1e915354da6edcfe9b6ff66e667cff4c",
+        "fields": [
+          "baseCommit",
+          "changedPaths",
+          "patchSha256"
+        ],
+        "baseCommit": "e3358801023d81211440c13af09ce205700ebe25",
+        "patchSha256": "9d1b6079b692f2dbf1589746c650bb368e83c4a86121c28524ef98332025b96a",
+        "changed_paths": 95,
+        "PASS_field_present": false,
+        "scanner_verdict": null
+      }
+    }
+  },
+  "scanner_verification": "PENDING",
+  "actual_current_broker_mark_reviewed": "root must invoke after final assembly; not available or run in this worker",
+  "root_final_assembly": "PENDING; only disposable offline assembly tested here",
+  "fresh_independent_review": "PENDING after root final assembly",
+  "final_acceptance": "PENDING mandatory scanner receipt and fresh independent review",
+  "scanner_behavior_modified": false
+}

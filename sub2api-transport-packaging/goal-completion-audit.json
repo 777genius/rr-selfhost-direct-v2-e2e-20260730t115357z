@@ -1,0 +1,28 @@
+{
+  "goal": "Independently review exact numeric-object/array/strict-JSONL canary evidence repair with real regression tests, deliver report then STOP.",
+  "verdict": "APPROVE within offline review scope",
+  "source_sha256": {
+    "sub2api-spike/evidence.mjs": "44f17424b5057ab94693809d05bc33db6305f065ead928f95aa0b066137f2160",
+    "sub2api-spike/run-client.mjs": "3308b5cbaaf2b5be10d616ace4a1e47a24e013fa944514ae61054fd37d7fb490",
+    "gateway-spike/evidence.mjs": "f21567866c5c3433809d60af26223d8a6341becc2cf7500e1be4f4b9b56c9755",
+    "sub2api-evidence-r2/client-contract.test.mjs": "629088ea085ea86707748155cdb2df439c28024a33e94285deef9f4cac382080",
+    "sub2api-spike/fixture/wallet.mjs": "c47fcdfb32c95bf1ede68c01a3705084a658ecbd2882ab21ca4e8cc5fc658f71",
+    "sub2api-evidence-r2/jsonl-implementation.patch": "05e5b40af9b1ed17bd44e30aba6d9b4562a9eae1df0fea91d84008f7e48485a1"
+  },
+  "fresh_canonical_tests": {
+    "pass": 37,
+    "fail": 0
+  },
+  "fresh_independent_tests": {
+    "pass": 4,
+    "fail": 0
+  },
+  "exact_historical_jsonl_baseline": {
+    "pass": 3,
+    "fail": 1,
+    "expected_failure": "real wallet strict-JSONL acceptance"
+  },
+  "live_e2e": "NOT RUN",
+  "packaging_normal_scanner": "NOT RUN; mandatory controller integration gate",
+  "production_changes": false
+}

@@ -1,0 +1,102 @@
+test_ancestor_symlink (__main__.HistoryIntegrityTests.test_ancestor_symlink) ... FAIL
+test_appended_component_symlink_control (__main__.HistoryIntegrityTests.test_appended_component_symlink_control) ... ok
+test_audit_regular_history_control (__main__.HistoryIntegrityTests.test_audit_regular_history_control) ... ok
+test_audit_root_symlink_control (__main__.HistoryIntegrityTests.test_audit_root_symlink_control) ... ok
+test_corrupted_history_control (__main__.HistoryIntegrityTests.test_corrupted_history_control) ... ok
+test_higher_ancestor_symlink (__main__.HistoryIntegrityTests.test_higher_ancestor_symlink) ... FAIL
+test_historical_root_symlink (__main__.HistoryIntegrityTests.test_historical_root_symlink) ... FAIL
+test_input_hashes_symlink (__main__.HistoryIntegrityTests.test_input_hashes_symlink) ... FAIL
+test_regular_history_control (__main__.HistoryIntegrityTests.test_regular_history_control) ... ok
+
+======================================================================
+FAIL: test_ancestor_symlink (__main__.HistoryIntegrityTests.test_ancestor_symlink)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/sub2api-transport-packaging/history-integrity_test.py", line 56, in test_ancestor_symlink
+    self.rejects(self.cli(alias))
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/sub2api-transport-packaging/history-integrity_test.py", line 27, in rejects
+    self.assertNotEqual(result.returncode, 0, result.stdout)
+AssertionError: 0 == 0 : {
+  "integrity": "PASS",
+  "provided_files": 150,
+  "prior_files": 102,
+  "historical": {
+    "FAIL": 11,
+    "NOT RUN": 9
+  },
+  "effects": 686,
+  "history_reexecuted": false,
+  "original_verdict": "REQUESTCHANGES"
+}
+
+
+======================================================================
+FAIL: test_higher_ancestor_symlink (__main__.HistoryIntegrityTests.test_higher_ancestor_symlink)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/sub2api-transport-packaging/history-integrity_test.py", line 64, in test_higher_ancestor_symlink
+    self.rejects(self.cli(alias/package.name))
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/sub2api-transport-packaging/history-integrity_test.py", line 27, in rejects
+    self.assertNotEqual(result.returncode, 0, result.stdout)
+AssertionError: 0 == 0 : {
+  "integrity": "PASS",
+  "provided_files": 150,
+  "prior_files": 102,
+  "historical": {
+    "FAIL": 11,
+    "NOT RUN": 9
+  },
+  "effects": 686,
+  "history_reexecuted": false,
+  "original_verdict": "REQUESTCHANGES"
+}
+
+
+======================================================================
+FAIL: test_historical_root_symlink (__main__.HistoryIntegrityTests.test_historical_root_symlink)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/sub2api-transport-packaging/history-integrity_test.py", line 47, in test_historical_root_symlink
+    self.rejects(self.cli(package))
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/sub2api-transport-packaging/history-integrity_test.py", line 27, in rejects
+    self.assertNotEqual(result.returncode, 0, result.stdout)
+AssertionError: 0 == 0 : {
+  "integrity": "PASS",
+  "provided_files": 150,
+  "prior_files": 102,
+  "historical": {
+    "FAIL": 11,
+    "NOT RUN": 9
+  },
+  "effects": 686,
+  "history_reexecuted": false,
+  "original_verdict": "REQUESTCHANGES"
+}
+
+
+======================================================================
+FAIL: test_input_hashes_symlink (__main__.HistoryIntegrityTests.test_input_hashes_symlink)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/sub2api-transport-packaging/history-integrity_test.py", line 73, in test_input_hashes_symlink
+    self.rejects(self.cli(package))
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/sub2api-transport-packaging/history-integrity_test.py", line 27, in rejects
+    self.assertNotEqual(result.returncode, 0, result.stdout)
+AssertionError: 0 == 0 : {
+  "integrity": "PASS",
+  "provided_files": 150,
+  "prior_files": 102,
+  "historical": {
+    "FAIL": 11,
+    "NOT RUN": 9
+  },
+  "effects": 686,
+  "history_reexecuted": false,
+  "original_verdict": "REQUESTCHANGES"
+}
+
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.749s
+
+FAILED (failures=4)

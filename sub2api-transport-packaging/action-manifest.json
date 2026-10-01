@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "mode": "Root final assembly of repaired owned package; installed wrappers remain unchanged; original replace rows retain historical precondition claims",
+  "owned_directory": "sub2api-transport-packaging",
+  "replace": [
+    {
+      "target": "sub2api-transport-r4/prepare-standalone.py",
+      "source": "sub2api-transport-packaging/replacements/prepare-standalone.py",
+      "before_sha256": "5d5fa7d9b248700f1642651453635dc15d7b93d8e9561c49ab045b98889de084",
+      "after_sha256": "58b7500b9d68087ac8e4fa67f0dfe5e144e9f14f9f17887d85c93291d4c47ea4",
+      "retain_original_as": "sub2api-transport-r4/packaging-retention/prepare-standalone.py"
+    },
+    {
+      "target": "sub2api-transport-r4/verify-provenance.py",
+      "source": "sub2api-transport-packaging/replacements/verify-provenance.py",
+      "before_sha256": "d4a8a876d180320c263d1f08ef1b1f2a1c5b1f17e4b7740fb1d1042e9703051c",
+      "after_sha256": "7586480b1a05cc87df4db003cd86da68012e0975c59099d072f15a88412e8c1b",
+      "retain_original_as": "sub2api-transport-r4/packaging-retention/verify-provenance.py"
+    },
+    {
+      "target": "sub2api-transport-r4/audit.py",
+      "source": "sub2api-transport-packaging/replacements/audit.py",
+      "before_sha256": "71b9d5be1112b8792ca8846470251d7c224d6ae0f9ada43b39990019f7f486e7",
+      "after_sha256": "12e30da03e1c4b1028cc1b21257ed10adb2ff60ab51f14af3a390b2a7df3b641",
+      "retain_original_as": "sub2api-transport-r4/packaging-retention/audit.py"
+    }
+  ],
+  "remove": [
+    {
+      "target": "sub2api-transport-r4/historical-input/prior-code",
+      "file_preconditions_manifest": "sub2api-transport-packaging/prior-hashes.json",
+      "files": 102,
+      "requires": "all 102 rebuilt bytes verified; root immutable runtime retention verified"
+    }
+  ],
+  "install_documentation": {
+    "source": "sub2api-transport-packaging/COORDINATOR-PACKAGING.md",
+    "target": "sub2api-transport-r4/COORDINATOR-PACKAGING-V2.md"
+  },
+  "preserve": [
+    "sub2api-transport-r4/output-hashes.json",
+    "sub2api-transport-r4/historical-input/INPUT-HASHES.json",
+    "sub2api-transport-r4/overlay",
+    "all historical evidence and verdicts"
+  ],
+  "required_gates": [
+    "exact reconstruction 102 prior hashes",
+    "exact reconstruction 103 runtime hashes",
+    "same --plan output",
+    "provenance PASS",
+    "audit PASS",
+    "normal unmodified handoff scanner PASS",
+    "fresh independent review of repaired root final assembly",
+    "actual current broker mark_reviewed scanner receipt bound to exact final assembly"
+  ],
+  "normal_scanner_status": "PENDING in actual-root-gates.json; normal capture fingerprints have no PASS field; actual current broker mark_reviewed scanner receipt required",
+  "automatic_network": false,
+  "git_writes": false,
+  "repair": {
+    "source": "sub2api-transport-packaging/verify-provenance.py",
+    "frozen_before_sha256": "75b7d5742e00f8928799fa2206f86519b4ac1e1517bf3e429b7d950cb35148e1",
+    "after_sha256": "cb2624819941057b9b3cb61399e9f8354080830c0a2048acc327c76c40293a04",
+    "installed_wrappers": "unchanged: verify after_sha256 of each existing replace row; preserve retained originals against before_sha256; do not overwrite originals with installed wrappers",
+    "package_ledger": "sub2api-transport-packaging/artifact-hashes.json",
+    "root_final_assembly": "required after this handoff; disposable offline assembly verified",
+    "fresh_independent_review": "required after root final assembly",
+    "broker_scanner": "root invokes actual current broker mark_reviewed on exact final assembly; preserve scanner behavior and findings; capture completion is not scanner verification"
+  }
+}
