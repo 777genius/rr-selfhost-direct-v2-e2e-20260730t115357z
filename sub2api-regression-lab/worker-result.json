@@ -1,0 +1,53 @@
+{
+  "schema": "transport-lab-w1-worker/v1",
+  "objective": "Deliver executable bounded transport-lab-w1 experiments and honest regression evidence.",
+  "delivery_status": "SCOPED FIXTURES PREPARED; ACTUAL ENGINE NOT RUN",
+  "owned_scope": "sub2api-regression-lab/",
+  "source_changes_elsewhere": false,
+  "git_operations": "One unsuccessful linked-worktree preflight; no subsequent git operation, add, commit or push.",
+  "handoff": {
+    "report": "sub2api-regression-lab/REPORT.md",
+    "runbook": "sub2api-regression-lab/RUNBOOK.md",
+    "private_config_template": "sub2api-regression-lab/config.example.json",
+    "compose_template": "sub2api-regression-lab/compose.example.yaml",
+    "commands": ["init.mjs", "mock.mjs", "run.mjs --plan", "run.mjs --case <case>", "stages.mjs <stage>", "cleanup.mjs <case>"],
+    "scoped_patch": "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-transport-lab-w1/tmp/agent/transport-lab-w1-artifacts/scoped.patch"
+  },
+  "plan": {
+    "cancellation_cells": 12,
+    "uncertainty_cells": 8,
+    "memory_cells": 18,
+    "soak_batches": 2,
+    "soak_requests": 500,
+    "nominal_requests_with_explicit_preparation": 722,
+    "max_actual_attempts_including_probes": 2000,
+    "max_batch_ms": 90000
+  },
+  "verification": {
+    "socket_free_contracts": {"status":"PASS", "count":7, "evidence":"sub2api-regression-lab/validation.json"},
+    "syntax": {"status":"PASS", "files":11},
+    "http_socket_contracts": {"status":"NOT RUN", "count":10, "reason":"Sandbox denied loopback HTTP access."},
+    "actual_engine_cells": {"status":"NOT RUN", "count":40, "reason":"No Go executable; root coordinator executes isolated containers after review."},
+    "engine_memory_envelope": {"status":"NOT RUN", "reason":"Actual engine-PID/cgroup measurements absent."},
+    "live_provider_or_agent_evidence": {"status":"NOT RUN", "reason":"Outside this synthetic transport lane."}
+  },
+  "preserved_regressions": [
+    "Default usage drain must retain FAIL to immediate-abort oracle; no accounting or cancellation guarantee changed.",
+    "No upstream fault exercised is inconclusive, never PASS.",
+    "Tiny buffered Responses frames are not acknowledged semantic output.",
+    "A patched deployment cannot be labeled as original."
+  ],
+  "integration_requirements": [
+    "Coordinator checks linked git metadata/locks and applies the scoped patch with iliya identity.",
+    "Provide actual inspected immutable deployment/source manifest, synthetic private admin session and internal-only mock egress.",
+    "Run full socket tests and all finite real-engine batches; attach actual root Go-PID telemetry and preserve failures.",
+    "Reconcile any ambiguous create intentions and verify teardown of only owned resources."
+  ],
+  "limitations": [
+    "Fixture and receipt validation is not engine execution or live-provider proof.",
+    "Deployment inspection and telemetry are coordinator-supplied; no independent image attestation or root collector runs here.",
+    "Large streams use bounded semantic/tool frames plus comments; a single 64MiB semantic frame is not covered.",
+    "Automatic retry evidence is finite through terminal/quiescent batch boundaries.",
+    "Linked-worktree Git status/lock verification could not finish because repository metadata is unavailable."
+  ]
+}

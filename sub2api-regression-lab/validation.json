@@ -1,0 +1,25 @@
+{
+  "schema": "transport-lab-w1-validation/v1",
+  "node": "v24.21.0",
+  "evidence_kind": "isolated-protocol-and-receipt-contract",
+  "command": "node --test --test-name-pattern='split UTF-8|missing upstream|usage-drain|client RSS|patched image|unterminated' sub2api-regression-lab/lab.test.mjs",
+  "result": { "status": "PASS", "tests": 7, "passed": 7, "failed": 0 },
+  "contracts": [
+    {"boundary":"Responses split UTF-8/near-limit tool/terminal", "status":"PASS"},
+    {"boundary":"Messages split UTF-8/near-limit tool/terminal", "status":"PASS"},
+    {"boundary":"Unreached upstream cannot pass uncertainty", "status":"PASS"},
+    {"boundary":"Usage-drain receipt fails immediate-abort oracle", "status":"PASS"},
+    {"boundary":"Client/missing telemetry cannot pass engine-memory gate", "status":"PASS"},
+    {"boundary":"Deployment mismatch rejected", "status":"PASS"},
+    {"boundary":"Error/unterminated SSE rejected", "status":"PASS"}
+  ],
+  "full_suite_attempt": {
+    "status": "NOT RUN",
+    "reason": "Sandbox tool rejected HTTP access to 127.0.0.1; a prior listen-only probe was not proof of HTTP access.",
+    "http_socket_contracts": 10
+  },
+  "syntax": { "status": "PASS", "mjs_files": 11 },
+  "engine_experiments": { "status": "NOT RUN", "batches": 40, "reason": "Go absent from PATH; Docker execution belongs to coordinator." },
+  "engine_memory_envelopes": { "status": "NOT RUN", "reason": "No actual root Go-PID/cgroup telemetry supplied." },
+  "budget_inspection": { "planned_control_and_inference_requests": 722, "automatic_create_probes": "count actual at execution", "global_attempt_cap": 2000, "soak_total": 500 }
+}
