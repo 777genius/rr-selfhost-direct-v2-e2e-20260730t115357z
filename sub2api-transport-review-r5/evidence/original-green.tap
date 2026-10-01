@@ -1,0 +1,16 @@
+✔ actual load driver accepts exact-volume valid control (1.85736ms)
+✔ REGRESSION: actual load driver must reject one extra downstream byte (0.768683ms)
+✔ REGRESSION: actual load driver must reject upstream byte loss despite downstream padding (0.586644ms)
+✔ REGRESSION: actual load driver must reject missing near2MiB frame (0.584241ms)
+✔ REGRESSION: actual load driver must reject numeric array byte canary (0.577437ms)
+✔ actual load driver rejects numeric object byte canary (1.082234ms)
+✔ 40case matrix contains exact cross product and two 250-request soaks (0.510374ms)
+✔ adapter rejects JSON numeric objects and arrays without coercion (1.988157ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 66.705631

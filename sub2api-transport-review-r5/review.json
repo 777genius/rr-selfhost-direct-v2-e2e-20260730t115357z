@@ -1,0 +1,29 @@
+{
+  "verdict": "APPROVE",
+  "scope": "exact frozen r4 offline repair and patch integration only",
+  "actual_engine_status": "NOT RUN",
+  "physical_interval_rss_status": "NOTPROVEN",
+  "blockers": [],
+  "ownership": "sub2api-transport-review-r5/ only",
+  "tests": {
+    "candidate_node_pass": 27,
+    "independent_node_pass": 4,
+    "original_historical_pass": 4,
+    "original_historical_expected_fail": 4,
+    "original_repaired_pass": 8,
+    "canonical_reconstructed_pass": 8,
+    "frozen_reconstructed_pass": 8,
+    "candidate_python_pass": 9,
+    "independent_python_pass": 3
+  },
+  "exact_hashes": {
+    ".spike-inputs/candidate/sub2api-transport-r4/lab-overlay.patch": "e991506378bbe3c51dd193bf6b48b9eaa9257c15b084aaeed7d7e52a886d2b26",
+    ".spike-inputs/candidate/sub2api-transport-r4/frozen-root-overlay.patch": "e991506378bbe3c51dd193bf6b48b9eaa9257c15b084aaeed7d7e52a886d2b26",
+    ".spike-inputs/candidate/sub2api-transport-r4/overlay/sub2api-regression-lab/run.mjs": "1105d7cadfe10f5d5d4de25f4bd9f2cb41348ca92eb3463bf487584ec71a0f0e",
+    ".spike-inputs/candidate/sub2api-transport-r4/adapter.mjs": "a58d895ae26621e3fd1e13d891010736f21db902bfef127588f170e466288e86",
+    ".spike-inputs/candidate/sub2api-transport-r4/collector.py": "b9b90fe86861d8e58e75750b104c14627de45d5a212a5f8e971d3d4b47643c58",
+    ".spike-inputs/candidate/sub2api-transport-r4/historical-input/execution.json": "c1152dfe52e4d81a2dd3417679711a34aae38ac72744b1a37e45abfacdf6f761"
+  },
+  "source_changes": false,
+  "historical_execution_rerun": false
+}

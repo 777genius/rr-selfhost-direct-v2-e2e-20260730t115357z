@@ -1,0 +1,40 @@
+✔ before-test history remains11FAIL9NOTRUN/686 attempts and all cleanup (0.791837ms)
+✔ documented Linux6.8 raw decline remains raw with sampled maxima, never physical bound (0.895762ms)
+✔ raw HWM below RSS allowed; missing metrics and fabricated exact values fail closed (1.362061ms)
+✔ PID, cgroup, executable, freshness, baseline and source clock stay strict (1.512191ms)
+✔ limit, cgroup peak regression,250ms gaps, slow reads, fake resets/goroutines rejected (0.438449ms)
+✔ 512absolute/128+16perstream/768cgroup bounds unchanged (0.512053ms)
+✔ full5second tail, acknowledged DONE, and actual endpoint within5sec mandatory;32MiB retained (0.883996ms)
+✔ cgroup charge smaller than processRSS valid and never substituted for RSS (0.515904ms)
+✔ actual load driver accepts exact-volume valid control (3.18193ms)
+✔ REGRESSION: actual load driver must reject one extra downstream byte (1.030478ms)
+✔ REGRESSION: actual load driver must reject upstream byte loss despite downstream padding (1.062213ms)
+✔ REGRESSION: actual load driver must reject missing near2MiB frame (1.003873ms)
+✔ REGRESSION: actual load driver must reject numeric array byte canary (4.33821ms)
+✔ actual load driver rejects numeric object byte canary (1.877756ms)
+✔ 40case matrix contains exact cross product and two 250-request soaks (0.899269ms)
+✔ adapter rejects JSON numeric objects and arrays without coercion (3.109905ms)
+{"strict_jsonl_invalid_numeric_cases":93,"actual_function":"load","engine":"NOT RUN"}
+✔ strict JSONL numeric evidence cannot pass or poison aggregation in actual load (67.705813ms)
+✔ exact upstream/downstream body volumes for all18 cells; protocol conversion mismatch stays FAIL (44.476868ms)
+✔ near-limit frame qualification has exact integer boundaries and no cap equality (1.755779ms)
+✔ protocol/effect/terminal/text/tool/comment gates and numeric soak boundary remain strict (10.988127ms)
+{"synthetic_mock_http_duplex":[{"protocol":"responses","mib":8,"wire_bytes":8388608,"max_frame_bytes":2008693},{"protocol":"responses","mib":32,"wire_bytes":33554432,"max_frame_bytes":2008693},{"protocol":"responses","mib":64,"wire_bytes":67108864,"max_frame_bytes":2008693},{"protocol":"messages","mib":8,"wire_bytes":8388608,"max_frame_bytes":1998992},{"protocol":"messages","mib":32,"wire_bytes":33554432,"max_frame_bytes":1998992},{"protocol":"messages","mib":64,"wire_bytes":67108864,"max_frame_bytes":1998992}],"attempts":6,"effects":6,"active":0}
+✔ actual adopted mock over HTTP/Duplex: exact8/32/64MiB and native bounded terminal/effects (332.85057ms)
+✔ actual adopted mock over HTTP/Duplex: paced1/5/20 streams preserve one effect and cleanup (12195.0729ms)
+{"paced_messages_http_duplex":[{"mib":32,"bytes":33554432,"duration_ms":16006.376657009125,"transport":null},{"mib":64,"bytes":67108864,"duration_ms":32008.717950940132,"transport":null}],"attempts":34,"effects":34,"active":0}
+✔ Messages32/64MiB slow discard completes within original65sec deadline over HTTP/Duplex (48019.13175ms)
+{"original_client_transport":"deadline","bytes_before_deadline":177907,"deadline_ms":1800,"kind":"in-memory-duplex-not-kernelTCP"}
+✔ historical per-chunk5ms delay fails1800ms deadline on small fragments over realHTTP parser (1807.432377ms)
+{"fallback_http_parser_pacing_ms":[1003.6401399374008,1002.9462820291519],"wire_bytes":2097152,"kind":"in-memory-duplex-not-kernelTCP"}
+✔ HTTP parser fallback:2MiB/s cumulative byte debt across512/64K fragments (2007.611358ms)
+✔ HTTP parser fallback:deadline/cancel promptly close stream once and stop pacing (81.800752ms)
+✔ bounded native near2MiB frames parse fragmented UTF8 and full terminals (88.747152ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 60633.920219

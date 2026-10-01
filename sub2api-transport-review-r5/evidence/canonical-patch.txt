@@ -1,0 +1,24 @@
+File sub2api-regression-lab/client.mjs is read-only; trying to patch anyway
+checking file sub2api-regression-lab/client.mjs
+File sub2api-regression-lab/common.mjs is read-only; trying to patch anyway
+checking file sub2api-regression-lab/common.mjs
+File sub2api-regression-lab/compose.example.yaml is read-only; trying to patch anyway
+checking file sub2api-regression-lab/compose.example.yaml
+File sub2api-regression-lab/mock.mjs is read-only; trying to patch anyway
+checking file sub2api-regression-lab/mock.mjs
+File sub2api-regression-lab/run.mjs is read-only; trying to patch anyway
+checking file sub2api-regression-lab/run.mjs
+File sub2api-regression-lab/wire.mjs is read-only; trying to patch anyway
+checking file sub2api-regression-lab/wire.mjs
+File sub2api-regression-lab/client.mjs is read-only; trying to patch anyway
+patching file sub2api-regression-lab/client.mjs
+File sub2api-regression-lab/common.mjs is read-only; trying to patch anyway
+patching file sub2api-regression-lab/common.mjs
+File sub2api-regression-lab/compose.example.yaml is read-only; trying to patch anyway
+patching file sub2api-regression-lab/compose.example.yaml
+File sub2api-regression-lab/mock.mjs is read-only; trying to patch anyway
+patching file sub2api-regression-lab/mock.mjs
+File sub2api-regression-lab/run.mjs is read-only; trying to patch anyway
+patching file sub2api-regression-lab/run.mjs
+File sub2api-regression-lab/wire.mjs is read-only; trying to patch anyway
+patching file sub2api-regression-lab/wire.mjs
