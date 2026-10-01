@@ -1,0 +1,967 @@
+--- a/sub2api-memory-profile/REPORT.md
++++ b/sub2api-memory-profile/REPORT.md
+@@ -1,19 +1,29 @@
+-Delivered a disposable profiling harness under `sub2api-memory-profile/` only. Production source and other projects were not edited. Root, Docker, Go build/tests, network, providers, keys/authentication and subagents were **NOT RUN**. This is an edit/test/handoff result; no Git writes were performed. The controller owns actual compilation/execution and integration.
++The W1 package was copied into `sub2api-memory-profile/` and only this directory was edited. The reusable producer now incorporates the actual successful root wrapper adaptations: PG18 tmpfs at `/var/lib/postgresql`; the synthetic fixture Redis password in a private readonly config mount; the verified root local Docker base tag with an image-ID assertion; `COPY --chmod=755`; and Go compilation with `GOMAXPROCS=2` and an explicitly configured compilation cache. Runtime memory settings, thresholds, burst schedule, scanner/frame/volume gates, effect identity, full idle tails, and cleanup requirements stay fixed. Password values never enter commands or exported receipts.
+ 
+-The supplied numeric canary repair passes independent executable regressions against the current implementation: real local Node wallet execution emitting an exact numeric object, array and strict JSONL; rejection of mixed malformed/prose lines, nonfinite/string/null/container/boolean scalars, row assembly, unsuccessful tools and wrong commands. These tests call the current evidence function and the actual wallet; they are not source-text assertions. This supports the local canary evidence repair, not a provider/Actions E2E claim.
++`test_producer.py` intercepts `subprocess.run` while executing the actual driver's build and service-launch methods. It checks the generated Dockerfile, compiler environment, tag-inspection ordering and PostgreSQL/Redis container arguments, and exercises wrong-image, missing-field, wrong-type and unexpected service-option rejection. It runs no Docker, Go or root operation. A reviewed toolchain receipt must pin the Go executable, Go1.27.1 stdlib source hashes and compilation-cache path; preflight compares the actual installed stdlib with those hashes. The cache path is attested, not claimed to be a byte audit of every changing cache entry.
+ 
+-Current frozen evidence supersedes the older audit's 16-case inventory. All **20 historical execution summaries** retain functional PASS, empirical RSS return **FAIL**, and physical RSS NOTPROVEN. **18 memory cases** have raw public receipt/telemetry/DONE files, all independently replayed exactly with the original RSS adapter, including both 64MiB/N20 cases. The two soak FAILs are preserved at summary scope; raw soak files are not supplied here. No leak, RSS plateau, physical interval bound or reliability acceptance is inferred.
++The source gate verified 3,487 supplied input hashes, all 3,323 source-after hashes and 12 reconstructed operator-after files. The W1 default `source-manifest.json`, `profiling.patch`, profiling Go file and profile runner remain byte-identical. Source provenance is recorded separately from new input custody. This W2 input bundle omits the actual root collector and frozen stdlib. Preparation requires the exact collector from root's retained successful run (accepted before or after the burst-ID overlay), and an externally reviewed W1 toolchain freeze. It rejects the older repository collector rather than substituting its different bytes. Its required final collector hash is `a5165669fee17b9da362aa7a31fdac690e1c29bd785a9a51955155648f3997a3`.
+ 
+-`prepare.py` verified **4,817** supplied input hashes, including the actual isolated root driver, frozen audit/plan, actual receipts and **1,204 stdlib entries**. It independently checks the **21 native/probe changed source files** and reconstructs required operator bytes against the actual operator manifest, including its container-ID adaptation. It overlays one new build-tagged file in the actual `backend/cmd/server` main package. `source-manifest.json` records all **3,323 source-after hashes**, operator-after hashes, tag/toolchain and historical pins. `profiling.patch` is the concrete source/runner/collector overlay. Standalone supplied gofmt reports no differences.
++Root reports completed fixed N5 runs 00000009/10 and matched idle controls 00000011/12: ten bursts, 50 scenario requests and 400MiB per protocol, all cleanup zero. These used the same `bdb8ef4` binary prefix containing historical native/probe source and profiling, with different derived-image receipts. No W2 memory or W3 cancellation source ran. Attempts 00000001–08 failed before cases, with zero effects and cleanup failures, and remain archived failures. Full run/build/binary, case/READY/DONE, checkpoint/profile and cleanup receipts were not supplied to this worker; their complete runtime gates are root-reported, not independently re-certified here.
+ 
+-The Go instrumentation samples numeric ReadMemStats/NumGoroutine fields nominally every 100ms and writes heap/allocs/goroutine binary profiles only into the test-owned env directory. It adds no HTTP profiler. Ordered profile checkpoints have separate scalar/GC brackets for each kind, bounded files and atomic acknowledgements. Matching-source review confirms these are sampled, weighted, potentially two-cycle-delayed profiles, **not fresh-GC snapshots**. ReadMemStats reports current allocator counters, not immediate reachability. No forced GC, FreeOSMemory, memory tuning or threshold change is included. See `SEMANTICS.md` for exact source locations and limitations.
++`audit_actual.py` independently checks all four supplied runtime NDJSON streams, finds comparison allocator snapshots in the workload streams and matched allocator differences in the control streams, recomputes OLS trends using Python's statistics implementation, and checks stable process/cgroup identity, within-burst sampling timing and RSS endpoint values in raw telemetry. It also audits the supplied pprof tops. Its result is `DIAGNOSTIC_ONLY` in `evidence/actual-audit.json`; it lists the missing evidence explicitly. RSS endpoint values alone do not verify an entire DONE/tail/return contract.
+ 
+-`root-driver.py` is based on the supplied actual driver and exact native functions. It clones the existing synthetic private DB into owned Postgres, starts owned private Redis, uses an internal network without host ports, compiles a distinct binary and derived image offline, checks the running executable hash, and retains one engine/tenant throughout each lane. Required operator-private snapshot/attestation, immutable service images and populated matching Go toolchain/module cache are prerequisites; placeholders deliberately fail preflight. File logging is disabled and stdout discarded; no body/environment logs are collected. Account definitions/IDs stay fixed between bursts; balance, usage and billing state can change.
++Postwarmup means checkpoints 3–10, excluding baseline and the first two bursts. The independently recomputed slopes are:
+ 
+-Both the broad **N1×10, N5×10, N20×5** schedule (160 finite 8MiB requests per protocol) and a separate **N5×10** lane are executable. Every burst retains the original full-frame/volume/attempt/effect/active/RSS tail gates and five-second idle tail. Every stream now has an exact admitted ID and body-free completion record mapped to a unique mock sequence/effect. A fresh-instance no-scenario-work control reproduces measured checkpoint times, with startup/setup/preparation recorded separately. Each lane is bounded to 600 seconds plus 20 seconds of cleanup reserve, stops on ambiguous/unsafe effects, and never restarts to fill missing evidence. Historical RSS failures and new empirical failures remain failures even when a safe diagnostic lane continues.
++| Observation per second | Responses | Messages |
++| --- | ---: | ---: |
++| ReadMemStats HeapAlloc, MiB/s | -0.461 | -0.045 |
++| Occupied HeapInuse spans, MiB/s | -0.460 | -0.046 |
++| Sampled historical pprof inuse_space, MiB/s | -0.121 | +0.036 |
++| RSS endpoint observations, MiB/s | -0.428 | +0.117 |
++| Cumulative TotalAlloc, MiB/s | +40.640 | +20.885 |
+ 
+-The independent analyzer verifies the entire exact source/operator bundle and binary hash, strict finite scalar fields, complete JSONL, process/checkpoint/cycle identity, actual weighted protobuf profile aggregates, exact request mapping, unchanged kernel collector verdicts, full idle tails and cleanup. It reports every checkpoint, natural-cycle allocator observations, sampled heap/allocation trends, released memory, RSS/socket observations, postwarmup fixed-N per-burst slopes and matched-control differences. Missing or incomplete evidence is rejected. Lack of later natural cycles leaves live-heap attribution INCONCLUSIVE; no automated leak/no-leak/plateau green is emitted.
++No burst checkpoint has two subsequent natural cycles: Responses records 0 after nine bursts and 1 after burst nine; Messages records 0 after all ten. The sampled heap is therefore ineligible for postburst live-root attribution. The final Responses ReadMemStats HeapAlloc is about 73.53MiB while the historical weighted pprof inuse_space is about 89.80MiB; Messages is about 90.39MiB versus 51.84MiB. These are different measurements at different collection epochs, not contradictory live-heap estimates. Cumulative allocation growth is throughput evidence, not retained growth.
+ 
+-Validation: **26 Node tests passed** and **10 Python tests passed**, including hundreds of scalar/identity/effect mutations, profile corruption/missing checkpoint rejection, cleanup failures, and a complete analyzer data path through repeated frozen real RSS observations plus explicitly synthetic runtime/protobuf data. All staged Node/Python sources pass syntax checks; all staged source/operator after hashes match. Synthetic analyzer data is not a Go/runtime receipt. Actual Go native/HTTP/WS regression tests, compilation, Docker and root profiling remain **NOT RUN** as requested.
++`NewContentModerationService` is the largest flat allocation in both final tops: 27.47MiB, 30.59% of Responses and 52.99% of Messages. The actual constructor allocates the fixed async queue at initialization (`content_moderation.go:607`, wired once at `wire_gen.go:274`). Scanner and stream allocation stacks are historical allocation sites; they do not identify current owners, lost slots or orphan readers. Goroutine totals are about 165 and matched differences near zero, not ownership counters. No data-labeled leak, indefinite leak/plateau, physical interval bound or RSS fix is proven. All 20 actual historical RSS failures remain failures; older incomplete repository inventory remains incomplete too.
+ 
+-Limits: no active handler/reader, body-owner, slot/waiter, reservation, billing queue or idle pool counters are invented. The separate frozen 20-cycle pending-slot/cancel lane is not implemented. The main staircase, fixed-N5 and matched no-work schedules are implemented; none has been executed by this worker. Stack-owner review and stronger exact ownership instrumentation remain necessary before attributing retention to orphan readers, slots, billing or pools. See `RUNBOOK.md` for reproducible controller commands, prerequisites and stop conditions. Handoff complete; STOP.
++Future reviewed stream/cancel inputs are opt-in. `reviewed_source.py` applies one or two externally hash-pinned unified patches to verified native Go files, with exact before/after hashes and file lists; it supports modification/addition, not fuzzy matching or deletion. It preserves the profiling file, dependency/toolchain files, operator bundle and allowed base image. The merged manifest requires an explicitly pinned future binary hash. `analyze.py --expected-manifest` can accept that explicit reviewed manifest, validating its base and complete changed-file map. Default legacy acceptance is fixed, and old receipts cannot be promoted to merged-source evidence. Future native/HTTP/WS regressions and stream/cancel runtime/ownership gates remain separate controller work; merely applying cancellation source does not implement the separate 20-cycle cancellation scenario.
++
++Validation: 16 Python tests passed, one legacy full analyzer fixture class skipped because its complete W1 raw fixtures are absent; seven Node tests passed. Actual numeric audit and source audit passed at their stated scope. All package Python and Node syntax was checked. No Go, Docker, root, network, provider/key/authentication, Git write or subagent action was run. The unchanged Go overlay's exact SHA matches W1; gofmt was unavailable in this supplied bundle. Original W1 test claims are retained under `evidence/w1-original/`, not represented as W2 verification.
++
++Root rerun prerequisites and exact commands are in `RUNBOOK.md`. The workspace patch is left intact for the controller. Fresh root verification of this reusable producer and future source/runtime gates remain outstanding; the full goal is not marked complete. STOP.
+--- a/sub2api-memory-profile/RUNBOOK.md
++++ b/sub2api-memory-profile/RUNBOOK.md
+@@ -1,56 +1,72 @@
+-This is an executable disposable source harness. The worker has **not run root, Go compilation, Docker, network, providers, or authentication**. Execute runtime commands only as the project controller on the pinned isolated root machine. All outputs are new test-owned directories. Never apply the instrumentation to a production checkout or call a public profiling port.
++The worker performs offline source/numeric/producer-contract verification only. The commands in the controller block below are instructions for the pinned isolated root machine; they were not run here. Integrate only `sub2api-memory-profile/` through the project controller lifecycle. No worker Git writes are needed.
+ 
+-First supply the existing synthetic `transport-isolated-r4` private fixture as a frozen clone: `snapshot.sql`, the matching `engine.env`, and private `lab.json`. Use the isolated synthetic database, never the live-provider database. The dump must have zero nondeleted upstream accounts; the actual setup creates its own exclusive account/group/user/key once per lane. Redis starts as a fresh owned private clone with persistence disabled, using the same pinned Redis image. This avoids attaching any shared container or network. The original driver reused shared services and restarted the engine per case; this driver does neither. A snapshot/export is an operator prerequisite, not an action performed by this worker.
++Run the current offline checks from the project root:
+ 
+-Place `profile-fixture.json` beside those files, with **actual** SHA-256 hashes, not placeholders:
++```sh
++PYTHONDONTWRITEBYTECODE=1 python3 sub2api-memory-profile/prepare.py --verify-only --out sub2api-memory-profile/evidence/source-audit.json
++PYTHONDONTWRITEBYTECODE=1 python3 sub2api-memory-profile/audit_actual.py --out sub2api-memory-profile/evidence/actual-audit.json
++PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s sub2api-memory-profile -p 'test_*.py' -v
++node --test sub2api-memory-profile/offline.test.mjs
++```
++
++`SOURCE_ONLY` verifies the current frozen native/profiling source and available operator bytes. It is explicit about the missing collector/toolchain runtime inputs. The skipped legacy analyzer fixture test requires the complete original W1 `actual-execution` fixture tree. The actual numeric audit uses supplied comparison/runtime/telemetry files; it cannot substitute for missing case/DONE/profile/build/cleanup receipts. W1 test outputs are archived in `evidence/w1-original/`.
++
++Run from this W2 worktree with its supplied `.spike-inputs` bundle (input-manifest SHA-256 `cb701348c9b6115977e824bb37659cbcd5c782e9678f9e95004c2b13b26a9b7a`). The older W1 input tree has a different layout and cannot replace that bundle. For the root rerun, retain the existing synthetic `transport-isolated-r4` snapshot, private environment, lab config, fixture attestation and pinned service image digests from successful run 09. Do not copy raw private inputs into this repository. The driver still requires zero nondeleted upstream accounts, standard billing, exact fixture hashes, an internal owned network, no host ports and one setup/engine/tenant throughout each finite lane. An expired private synthetic bearer stops admission.
++
++Use the root operator's existing actual Go1.27.1 executable/hash and prepopulated module cache. The original reviewed W1 stdlib freeze must supply `runtime/mprof.go`, `runtime/mstats.go`, `runtime/pprof/pprof.go` and `runtime/pprof/protomem.go`. Do not generate expected hashes from an unreviewed replacement toolchain. The producer compares these expected hashes to the actual Go installation at preflight. The compilation cache must be the operator-verified Go1.27.1 cache from the successful root wrapper, configured as `compilation_cache`; compilation alone gets `GOMAXPROCS=2`.
++
++Recover the exact collector from run 09's retained `stage/code/sub2api-transport-r4/collector.py`, or W1's original actual collector. The staged hash must be `a5165669fee17b9da362aa7a31fdac690e1c29bd785a9a51955155648f3997a3`; the pre-overlay original hash is `99964d6e4581b25b582f27f2ff8ce2fe54866dd2448dd9f452af39860d13a5de`. The older checked-in collector has different bytes and is rejected. Keep the default W1 source manifest fixed.
++
++Controller commands (substitute actual owned paths; use fresh outputs after 12):
++
++```sh
++python3 sub2api-memory-profile/operator_config.py \
++  --old-config /OWNED/private/root-config-w1.json \
++  --out /OWNED/private/root-config-w2.json \
++  --receipt /OWNED/private/reviewed-toolchain-w2.json \
++  --stdlib-freeze /OWNED/memory-profile-w1/.spike-inputs/go-stdlib \
++  --compilation-cache /OWNED/fork-build/gocache \
++  --collector-source /OWNED/profile-responses-fixed-00000009/stage/code/sub2api-transport-r4/collector.py
++python3 sub2api-memory-profile/prepare.py --collector-source /OWNED/profile-responses-fixed-00000009/stage/code/sub2api-transport-r4/collector.py --stage /OWNED/source-check-w2
++python3 sub2api-memory-profile/root-driver.py --config /OWNED/private/root-config-w2.json --out /OWNED/profile-responses-fixed-00000013 --protocol responses --lane fixed
++python3 sub2api-memory-profile/root-driver.py --config /OWNED/private/root-config-w2.json --out /OWNED/profile-responses-control-00000014 --protocol responses --lane control --match /OWNED/profile-responses-fixed-00000013
++python3 sub2api-memory-profile/analyze.py /OWNED/profile-responses-fixed-00000013 --control /OWNED/profile-responses-control-00000014 --out /OWNED/profile-responses-comparison-w2.json
++python3 sub2api-memory-profile/root-driver.py --config /OWNED/private/root-config-w2.json --out /OWNED/profile-messages-fixed-00000015 --protocol messages --lane fixed
++python3 sub2api-memory-profile/root-driver.py --config /OWNED/private/root-config-w2.json --out /OWNED/profile-messages-control-00000016 --protocol messages --lane control --match /OWNED/profile-messages-fixed-00000015
++python3 sub2api-memory-profile/analyze.py /OWNED/profile-messages-fixed-00000015 --control /OWNED/profile-messages-control-00000016 --out /OWNED/profile-messages-comparison-w2.json
++```
++
++The migration tool writes private files mode 0600, emits no configuration values and refuses existing outputs. It records expected stdlib hashes from the reviewed freeze. `root-config.example.json` documents all required public shape fields; placeholders fail validation. The canonical base tag remains a fixture pin; removing its last tag could delete the preexisting bare-ID image before the control. The reusable driver no longer needs `actual-root-wrapper.py`: PG18 uses parent-directory tmpfs; Redis shares only the synthetic private password via a readonly file; Docker builds from a canonical root local tag verified against the fixed base ID; COPY installs an executable; the build uses the reviewed cache. Each run records its own binary, derived image, verified base-tag receipt and Dockerfile hashes. Controls require the same binary/source, while different derived-image hashes are allowed and recorded.
++
++The fixed lane remains N5×10, 50 finite 8MiB streams / 400MiB per protocol, with full five-second RSS tails and separate preparation effects. Matched controls perform no scenario work and reproduce workload checkpoint times. Optional staircase remains N1×10, N5×10, N20×5: 160 requests / 1,280MiB per protocol, invoked with `--lane staircase`; its control references that completed lane. Measurement is bounded to 600 seconds, a burst needs 110 seconds remaining reserve, cleanup has a separate 20-second reserve. Stop on ambiguous identity/effects, incomplete frames/volume/terminal evidence, active streams, collector/safety/budget failures. No restart, retry, forced GC, peak reset or threshold adjustment fills gaps. Failed/partial cleanup prevents COMPLETE.
++
++Preserve attempts 01–08 as pre-case failures. Do not rerun into old outputs. Retain full run/source/input/build/base-tag receipts, binary, setup/burst/cleanup receipts, raw RSS/READY/DONE, runtime NDJSON, checkpoint acknowledgements and binary profiles. Export only body-free evidence. Private Redis config and private fixtures stay in the operator's private directory; no password value is passed in Docker arguments or public receipts. Root must verify this W2 producer afresh; successful wrapper receipts remain W1 evidence.
++
++To prepare reviewed future stream/cancel source, supply a separate exact JSON input:
+ 
+ ```json
+ {
+-  "source": "transport-isolated-r4",
+-  "status": "PASS",
+-  "real_provider_keys_copied": false,
+-  "images": {"postgres": "ACTUAL_NAME@sha256:ACTUAL_DIGEST", "redis": "ACTUAL_NAME@sha256:ACTUAL_DIGEST"},
+-  "hashes": {"snapshot.sql": "ACTUAL_HASH", "engine.env": "ACTUAL_HASH", "lab.json": "ACTUAL_HASH"}
++  "schema": "rrsub2profile-reviewed-v1",
++  "base_manifest_sha256": "8a8103f73486912aa86f972fd2914bbff295d91126483447930da15ca227f704",
++  "base_image": "sha256:6df1cc33771f1bc94028cc18440a13e7d31a3513331bbb8d7d686584d19b79e2",
++  "binary_sha256": "REVIEWED_ACTUAL_MERGED_BINARY_SHA256",
++  "patches": [
++    {
++      "path": "/OWNED/reviewed/stream.patch",
++      "sha256": "REVIEWED_PATCH_SHA256",
++      "files": {
++        "backend/internal/service/EXACT_CHANGED_FILE.go": {
++          "before_sha256": "EXACT_BASE_FILE_SHA256",
++          "after_sha256": "EXACT_RESULT_FILE_SHA256"
++        }
++      }
++    }
++  ]
+ }
+ ```
+ 
+-`lab.json` must retain the real **synthetic** private admin bearer and two synthetic sentinel labels from that fixture; an expired bearer causes a stop. Keep the fixture and configuration root-owned mode 0700/0600, do not publish their contents, and do not copy any real provider credentials. The driver restores the dump into a new owned Postgres container and checks zero active accounts before admitting requests. It reuses the actual native setup/load/cleanup functions. Account **definitions and IDs** remain the same between bursts; balances, usage, billing records and caches can change. Do not describe all account state as unchanged.
++One or two patches are accepted, in explicit order; `before_sha256: null` denotes an explicitly listed new native Go file. Existing files require exact before hashes; all results require exact after hashes. Only adding/modifying backend Go source is supported. The profiling file, dependency/toolchain files, historical manifest fields, operator bytes and base image cannot change. Hash-pin this reviewed JSON in private root config as `reviewed_source` and `reviewed_source_sha256`; omit both for current legacy defaults. Preparation can be reviewed offline with `--reviewed-source /OWNED/reviewed/manifest.json --collector-source ... --stage /OWNED/reviewed-stage`. Root build must match the reviewed merged binary hash.
+ 
+-Copy `root-config.example.json` to a private operator location and fill actual immutable Postgres/Redis image references, fixture attestation hash, local Go 1.27.1 executable/hash and a populated Go module cache. The driver does not pull images or download modules. It checks machine `d856d40da5ad4e23b4f67773e5942842`, amd64, at least 3GiB available RAM and 5GiB available disk, all supplied input hashes, exact combined native/probe source, and matching build toolchain stdlib. Standard billing remains enabled. Memory environment settings retain the fixture/base image values and are compared privately without logging them. Only profile directory and logging sink settings are overlaid: file logging is disabled; stdout is discarded by Docker's `none` log driver. No body/environment logs are collected.
++For a reviewed future run, analyze with `--expected-manifest /OWNED/reviewed-stage/source-manifest.json` and a fresh matched control. Default analyzer acceptance stays W1 exact. Explicit future acceptance proves configured source identity, not behavioral correctness. Run native/HTTP/WS regression and the required stream/cancel runtime/ownership gates separately. This package does not implement the separate 20-cycle pending-slot cancellation lane. Never promote existing W1 receipts to a new source or a future cancellation claim.
+ 
+-Start with the fixed N5 vertical slice and its time-matched control, separately for each protocol. Example controller commands (NOT RUN by this worker):
+-
+-```sh
+-python3 sub2api-memory-profile/root-driver.py --config /OWNED/private/root-config.json --out /OWNED/profile-responses-fixed-00000001 --protocol responses --lane fixed
+-python3 sub2api-memory-profile/root-driver.py --config /OWNED/private/root-config.json --out /OWNED/profile-responses-control-00000002 --protocol responses --lane control --match /OWNED/profile-responses-fixed-00000001
+-python3 sub2api-memory-profile/analyze.py /OWNED/profile-responses-fixed-00000001 --control /OWNED/profile-responses-control-00000002 --out /OWNED/profile-responses-comparison.json
+-```
+-
+-Use matching distinct output directories for Messages. Each fixed lane is ten N5 bursts: 50 scenario requests, 400MiB exact wire volume, five-second collected idle tail after **each** burst, one engine and one owned tenant throughout. Control has the same startup/setup/healthy preparation but **zero scenario streams**. It reproduces the measured checkpoint elapsed times from the completed workload lane; it is not a guessed fixed-duration sleep. Setup effects are recorded separately from scenario effects.
+-
+-The broad schedule is also implemented, without requiring any production patch:
+-
+-```sh
+-python3 sub2api-memory-profile/root-driver.py --config /OWNED/private/root-config.json --out /OWNED/profile-responses-staircase-00000003 --protocol responses --lane staircase
+-```
+-
+-Run separately for Messages and create a matched control referencing each completed staircase lane. The exact order is N1×10, N5×10, N20×5 at 8MiB, **160 scenario requests / 1,280MiB per protocol**. Each lane has a 600-second measurement supervisor including engine startup/setup. A new burst requires 110 seconds of remaining reserve for its bounded client/collector/profile work. Cleanup gets a separate bounded 20-second reserve. The instrumentation has an independent 650-second limit. Admission stops on missing identity, ambiguous effects, incomplete volume/frame/terminal evidence, active mock streams, collector failure, safety exceedance or budget expiry. No restart/retry fills a missing burst. PARTIAL runs and cleanup failures remain partial and are rejected by the analyzer.
+-
+-The driver builds with `-tags=rrsub2profile -trimpath -buildvcs=false`, then builds a **new** derived image offline from the historical pinned base. It records actual new binary/image hashes and verifies the running `/proc/PID/exe` hash. All 3,323 source-after hashes and all operator-after hashes are checked. The historical image and binary are explicitly distinct. Startup/health execs finish before collection. Each original kernel collector retains sole-PID/cgroup/executable identity checks, whole-snapshot FD retries, unchanged 250ms timing rules, within-five-second return endpoint and full-tail DONE. The small collector overlay only accepts unique burst ID suffixes. Profiles are written after DONE and before the next collector, without an HTTP profiler.
+-
+-Each individual stream has an admitted `.rNN` ID, a body-free downstream completion record and one independently numbered mock attempt/effect. The analyzer rejects missing/duplicate IDs, incomplete or oversized frames, wrong exact volume, multiple effects, nonfinite or coerced numeric fields, checkpoint reuse, PID/cgroup/source/binary changes, cycle-counter forgery, missing profile kinds, partial JSONL, failed cleanup or shortened tails. It independently replays the original RSS adapter. A recorded RSS return FAIL stays FAIL. That failure alone may continue a bounded diagnostic lane; a sampled cap/delta/cgroup watchdog failure stops it. This distinction changes diagnostic admission, never the reliability verdict.
+-
+-Interpret all checkpoints and postwarmup slopes (first two bursts excluded explicitly), including cumulative allocations, natural-cycle allocator observations, sampled weighted heap profiles, heap inuse/idle/released, RSS and sockets. Fixed N5 separates completed burst count from maximum concurrency; compare against the matched no-work control to examine startup/background drift. A plateau over this finite window is not proof of indefinite boundedness. Missing later natural cycles produce INCONCLUSIVE attribution. Even with cycles, identifying retained roots requires stack-owner review using the retained compiled binary and the matching Go tool's **offline** pprof commands, for example `go tool pprof -top -sample_index=inuse_space /OWNED/run/build/profile-server /OWNED/run/profiles/checkpoint-010-heap.pb.gz`. This command reads an existing file and does not collect or request GC.
+-
+-Current instrumentation does **not** count active handlers/readers, upstream body owners, slots/waiters, reservation refs, billing queued/running tasks or idle pool owners. Those fields remain unavailable; mock active=0 and sockets do not prove their release. Goroutine stacks can guide attribution but do not fabricate orphan counts. The separate 20-cycle pending-slot/cancel lane from the frozen plan is **not implemented** here; no slot-cancellation or drain-lifetime claim is made. Existing native reasoning/reference fields and conversions are unchanged. Actual Go native/HTTP/WS regressions and the instrumented runtime run remain controller work, and must not be marked green from these Python/Node tests.
+-
+-Allowed offline verification commands, already run by the worker:
+-
+-```sh
+-python3 sub2api-memory-profile/prepare.py --record
+-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s sub2api-memory-profile -p 'test_*.py' -v
+-node --test sub2api-memory-profile/offline.test.mjs
+-.spike-inputs/gofmt -l sub2api-memory-profile/overlay/backend/cmd/server/rr_sub2_profile.go
+-```
+-
+-Retain `run.json`, staged source/operator manifest, build receipt, setup and cleanup receipts, all raw RSS/DONE files and all runtime/profile checkpoints. Keep private configuration/journals out of public evidence. The project controller applies/commits/pushes through its integration lifecycle; this worker leaves the new directory intact and stops.
++All numeric interpretation stays `DIAGNOSTIC_ONLY`: pprof is sampled/weighted and can lag two natural GC cycles; ReadMemStats is a current allocator snapshot and is not a reachable-root measurement. No postburst checkpoint in the supplied runs is cycle-eligible. The finite window cannot establish indefinite leak/plateau or RSS repair. Keep the 20 actual historical RSS FAILs negative. Inspect retained profile stacks with the matching toolchain offline only; allocation sites and goroutine totals do not establish orphan reader/slot ownership. See `SEMANTICS.md` and `REPORT.md`.
+--- a/sub2api-memory-profile/analyze.py
++++ b/sub2api-memory-profile/analyze.py
+@@ -13,15 +13,19 @@
+     require(p.is_file() and p.stat().st_size<=16*1024**2,'MISSING_OR_OVERSIZED_EVIDENCE')
+     return strict_json(p.read_text())
+ 
+-def analyze(root):
++def analyze(root, expected_manifest=None):
+     run=read(root/'run.json')
+     require(run['schema']=='rrsub2profile-run-v1' and run['status']=='COMPLETE','INCOMPLETE_RUN')
+     require(run['protocol'] in ('responses','messages'),'PROTOCOL_REQUIRED')
+     require(run['no_forced_gc'] is True and run['new_image_and_binary'] is True,'INSTRUMENTATION_ATTESTATION')
+     source=root/'stage/source-manifest.json'
+-    require(sha(source)==run['source_manifest_sha256']==sha(OWN/'source-manifest.json'),'SOURCE_MANIFEST_CHANGED')
++    expected_manifest=expected_manifest or OWN/'source-manifest.json'
++    require(sha(source)==run['source_manifest_sha256']==sha(expected_manifest),'SOURCE_MANIFEST_CHANGED')
+     sm=read(source)
+     require(sm['tag']=='rrsub2profile' and sm['go_version']=='go1.27.1','BUILD_TAG_TOOLCHAIN')
++    if sm.get('reviewed_source'):
++        validate_reviewed_manifest(sm)
++        require(run['build']['binary_sha256']==sm['reviewed_source']['binary_sha256'],'REVIEWED_BINARY_PIN')
+     for name,h in sm['source_after_sha256'].items():
+         require(sha(root/'stage'/name)==h,'SOURCE_AFTER_HASH')
+     for name,h in sm['operator_after_sha256'].items():
+@@ -132,6 +136,21 @@
+       'physical_interval_rss':'NOTPROVEN','leak_or_plateau_verdict':'UNPROVEN; compare fixed N5 against matched no-work control and inspect stack owners',
+       'input_run_sha256':sha(root/'run.json')}
+ 
++def validate_reviewed_manifest(sm):
++    from launch_contracts import BASE,digest
++    legacy=read(OWN/'source-manifest.json');r=sm['reviewed_source']
++    require(type(sm) is dict and set(sm)==set(legacy)|{'reviewed_source'},'REVIEWED_MANIFEST_FIELDS')
++    require(type(r) is dict and set(r)=={'schema','base_manifest_sha256','base_image','binary_sha256','patches','reviewed_manifest_sha256'} and r['schema']=='rrsub2profile-reviewed-v1' and digest(r['reviewed_manifest_sha256']) and r.get('base_manifest_sha256')==sha(OWN/'source-manifest.json') and r.get('base_image')==BASE and digest(r.get('binary_sha256')),'REVIEWED_MANIFEST_BASE')
++    require(type(r.get('patches')) is list and 1<=len(r['patches'])<=2,'REVIEWED_PATCH_LIST')
++    expected=dict(legacy['source_after_sha256']);changed=set()
++    for p in r['patches']:
++        require(type(p) is dict and set(p)=={'sha256','files'} and digest(p['sha256']) and type(p['files']) is dict and p['files'],'REVIEWED_PATCH_FIELDS')
++        for n,h in p['files'].items():
++            require(type(n) is str and n.startswith('backend/') and Path(n).as_posix()==n and '..' not in Path(n).parts and n.endswith('.go') and n!='backend/cmd/server/rr_sub2_profile.go' and type(h) is dict and set(h)=={'before_sha256','after_sha256'} and (h['before_sha256'] is None or digest(h['before_sha256'])) and digest(h['after_sha256']) and (n not in expected if h['before_sha256'] is None else h['before_sha256']==expected.get(n)),'REVIEWED_SOURCE_SCOPE')
++            expected[n]=h['after_sha256'];changed.add(n)
++    require(sm['source_after_sha256']==expected and sm['source_patch_files']==sorted(changed|set(legacy['source_patch_files'])),'REVIEWED_SOURCE_MAP')
++    require(all(sm[k]==v for k,v in legacy.items() if k not in ('source_after_sha256','source_patch_files')),'LEGACY_FIELDS_CHANGED')
++
+ def compare(work,control):
+     require(work['protocol']==control['protocol'] and control['lane']=='control' and work['lane'] in ('fixed','staircase'),'CONTROL_LANE_MISMATCH')
+     require(len(work['checkpoints'])==len(control['checkpoints']),'CONTROL_POINT_COUNT')
+@@ -144,11 +163,11 @@
+       'limitations':'startup/preparation identical definitions; balance/billing/idle pool owners require stack analysis; no leak or RSS acceptance verdict'}
+ 
+ if __name__=='__main__':
+-    ap=argparse.ArgumentParser();ap.add_argument('run',type=Path);ap.add_argument('--out',type=Path,required=True);ap.add_argument('--control',type=Path);a=ap.parse_args()
++    ap=argparse.ArgumentParser();ap.add_argument('run',type=Path);ap.add_argument('--out',type=Path,required=True);ap.add_argument('--control',type=Path);ap.add_argument('--expected-manifest',type=Path);a=ap.parse_args()
+     try:
+-        r=analyze(a.run)
++        r=analyze(a.run,a.expected_manifest)
+         if a.control:
+-            c=analyze(a.control); cr=read(a.control/'run.json');wr=read(a.run/'run.json')
++            c=analyze(a.control,a.expected_manifest); cr=read(a.control/'run.json');wr=read(a.run/'run.json')
+             require(cr['control_reference']['run_sha256']==sha(a.run/'run.json') and cr['build']['binary_sha256']==wr['build']['binary_sha256'],'CONTROL_REFERENCE_CHANGED')
+             r['matched_control']=compare(r,c)
+         a.out.write_text(json.dumps(r,indent=2,allow_nan=False)+'\n')
+--- /dev/null
++++ b/sub2api-memory-profile/audit_actual.py
+@@ -0,0 +1,80 @@
++#!/usr/bin/env python3
++"""Independent numeric audit of supplied root outputs, without Go/pprof/Docker.
++Comparison JSON is checked against runtime/telemetry where available. Missing
++run/build/DONE/profile bytes are explicit gaps, never treated as green gates.
++"""
++import argparse,hashlib,json,math,statistics
++from pathlib import Path
++from contracts import require,jsonl,samples_gate,strict_json,number,integer
++from prepare import verify_inputs,INPUT,OWN,sha
++METRICS=('heap_alloc_allocator','heap_objects_allocator','heap_inuse','heap_released','total_alloc','mallocs','goroutines')
++RUNTIME={'heap_alloc_allocator':'heap_alloc','heap_objects_allocator':'heap_objects','heap_inuse':'heap_inuse','heap_released':'heap_released','total_alloc':'total_alloc','mallocs':'mallocs','goroutines':'goroutines'}
++
++def audit(actual=INPUT/'actual'):
++    pins=verify_inputs();out={}
++    for protocol,index in [('responses',9),('messages',10)]:
++        root=actual/f'profile-{protocol}-fixed-{index:08d}'
++        control=actual/f'profile-{protocol}-control-{index+2:08d}'
++        comparison=strict_json((actual/f'profile-{protocol}-comparison-w1.json').read_text())
++        require(comparison['status']=='DIAGNOSTIC_ONLY' and comparison['protocol']==protocol and comparison['lane']=='fixed','ACTUAL_DIAGNOSTIC_IDENTITY')
++        points=comparison['checkpoints'];require(len(points)==11 and [p['checkpoint'] for p in points]==list(range(11)),'ACTUAL_POINTS')
++        rt=jsonl((root/'profiles/runtime.ndjson').read_text());samples_gate(rt,1)
++        crt=jsonl((control/'profiles/runtime.ndjson').read_text());samples_gate(crt,1)
++        for p in points:
++            require(all(number(p[k]) for k in METRICS+('elapsed_ms','num_gc')),'ACTUAL_POINT_NUMERIC')
++            matches=[r for r in rt if all(r[RUNTIME[k]]==p[k] for k in METRICS) and r['num_gc']==p['num_gc']]
++            require(matches,'POINT_NOT_IN_ACTUAL_RUNTIME')
++        recomputed={}
++        for name,series in [('all_checkpoints',points),('postwarmup_after_two_bursts',points[3:])]:
++            xs=[p['elapsed_ms']/1000 for p in series];sl={}
++            for k in METRICS:
++                sl[k]=statistics.linear_regression(xs,[p[k] for p in series]).slope
++                require(math.isclose(sl[k],comparison['slopes'][name][k],rel_tol=1e-10,abs_tol=1e-8),'ACTUAL_SLOPE_MISMATCH')
++            for k in ('inuse_space','inuse_objects','alloc_space','alloc_objects'):
++                v=statistics.linear_regression(xs,[p['profiles_sampled_weighted']['heap'][k] for p in series]).slope
++                require(math.isclose(v,comparison['slopes'][name]['sampled_heap_'+k+'_per_second'],rel_tol=1e-10,abs_tol=1e-8),'ACTUAL_SAMPLED_SLOPE_MISMATCH')
++                sl['sampled_heap_'+k+'_per_second']=v
++            if name.startswith('postwarmup'):
++                sl['rss_bytes_per_second']=statistics.linear_regression(xs,[p['rss_bytes'] for p in series]).slope
++                require(math.isclose(sl['rss_bytes_per_second'],comparison['slopes'][name]['rss_bytes_per_second'],rel_tol=1e-10),'ACTUAL_RSS_SLOPE_MISMATCH')
++            recomputed[name]=sl
++        rss_identity=None;previous_peak=0;max_sample_gap=0;max_sample_duration=0
++        identity_keys=('instance','engine_pid','pid_start_ticks','cgroup_path','cgroup_device','cgroup_inode','container_id','exe_device','exe_inode')
++        for p in points[1:]:
++            rows=jsonl((root/'telemetry'/f'memory-{protocol}-8-5-b{p["checkpoint"]:02d}.ndjson').read_text())
++            require(all(number(r[k]) for r in rows for k in ('mono_ms','sample_started_ms','sample_duration_ms','rss_bytes','smaps_rollup_rss_bytes','sockets')),'ACTUAL_RSS_FIELDS')
++            require(rows,'ACTUAL_RSS_EMPTY')
++            for i,r in enumerate(rows):
++                identity={k:r[k] for k in identity_keys}
++                require(all(integer(identity[k]) and identity[k]>0 for k in ('engine_pid','pid_start_ticks','cgroup_device','cgroup_inode','exe_device','exe_inode')),'ACTUAL_RSS_IDENTITY_FIELDS')
++                if rss_identity is None:rss_identity=identity
++                require(identity==rss_identity,'ACTUAL_RSS_PROCESS_CHANGED')
++                require(number(r['cgroup_peak_bytes']) and r['cgroup_peak_bytes']>=previous_peak and r['cgroup_limit_bytes']==805306368 and r['physical_interval_rss_upper_bound_bytes'] is None,'ACTUAL_CGROUP_IDENTITY')
++                previous_peak=r['cgroup_peak_bytes']
++                require(0<=r['sample_duration_ms']<=250 and abs(r['mono_ms']-r['sample_started_ms']-r['sample_duration_ms'])<.001,'ACTUAL_RSS_DURATION')
++                max_sample_duration=max(max_sample_duration,r['sample_duration_ms'])
++                if i:
++                    gap=r['mono_ms']-rows[i-1]['mono_ms'];require(0<=gap<=250,'ACTUAL_RSS_SAMPLE_GAP');max_sample_gap=max(max_sample_gap,gap)
++            require(any(r['phase']=='quiescent' and r['rss_bytes']==p['rss_bytes'] and r['smaps_rollup_rss_bytes']==p['smaps_rss_bytes'] and r['sockets']==p['sockets'] for r in rows),'ACTUAL_RSS_ENDPOINT_VALUE')
++            require(p['postburst_profile_cycle_eligible'] is False and type(p['natural_cycles_after_end']) is int and 0<=p['natural_cycles_after_end']<2,'ACTUAL_CYCLE_LIMITATION')
++        deltas=comparison['matched_control']['checkpoints'];require(len(deltas)==11,'ACTUAL_CONTROL_POINTS')
++        for w,d in zip(points,deltas):
++            require(d['checkpoint']==w['checkpoint'],'ACTUAL_CONTROL_ORDER')
++            require(any(r['heap_inuse']==w['heap_inuse']-d['allocator_heap_inuse_difference'] and r['heap_released']==w['heap_released']-d['released_difference'] and r['goroutines']==w['goroutines']-d['goroutines_difference'] for r in crt),'CONTROL_POINT_NOT_IN_RUNTIME')
++        top=(actual/f'profile-{protocol}-heap-top-w1.txt').read_text()
++        moderation=next(l.strip() for l in top.splitlines() if 'NewContentModerationService' in l)
++        require(moderation.startswith('27.47MB'),'ACTUAL_STATIC_MODERATION_TOP')
++        out[protocol]={'checkpoints':11,'runtime_samples':len(rt),'control_samples':len(crt),'postburst_natural_cycles':[p['natural_cycles_after_end'] for p in points[1:]],'postburst_profile_cycle_eligible':False,'stable_rss_process_identity':rss_identity,'max_within_burst_sample_gap_ms':max_sample_gap,'max_sample_duration_ms':max_sample_duration,
++          'slopes_independently_recomputed':recomputed,'checkpoint_10':points[-1],
++          'static_moderation_top':moderation,'comparison_sha256':sha(actual/f'profile-{protocol}-comparison-w1.json')}
++    return {'schema':'rrsub2profile-actual-audit-v1','status':'DIAGNOSTIC_ONLY','current_input_entries_verified':len(pins),'protocols':out,
++      'root_reported_scope':'fixed N5: 10 bursts, 50 requests, 400MiB per protocol; matched idle controls; cleanup 0; same bdb8ef4-prefix native/probe binary; no W2 memory or W3 cancellation patches',
++      'independently_verified_scope':'supplied input custody; runtime scalar contracts; checkpoint allocator snapshots present; OLS slopes; stable RSS process/cgroup identity and within-burst timing; RSS endpoint values present; matched control allocator differences present; supplied pprof text attribution',
++      'missing_actual_evidence':['full run/build receipts and complete binary hash','checkpoint acknowledgements and binary profiles','burst case/READY/DONE receipts and root cleanup receipts','actual collector source and frozen matching stdlib'],
++      'limitations':'Numeric observations are consistent with root report, not independent proof of missing resource/effect/tail/cleanup gates. No two natural cycles after any burst; weighted pprof is historical and not equal to current ReadMemStats. No indefinite leak/plateau, orphan reader/slot, data-labeled leak or RSS fix verdict.',
++      'historical_20_rss_return':'FAIL (unchanged)','future_source_runtime_gates':'reviewed stream/cancel source patches, exact build/binary pin, native/HTTP/WS regression and fresh runtime receipts required; no existing receipt promotion'}
++
++if __name__=='__main__':
++    ap=argparse.ArgumentParser();ap.add_argument('--out',type=Path,required=True);a=ap.parse_args()
++    result=audit();a.out.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
++    print(json.dumps({'status':result['status'],'output':str(a.out),'protocols':list(result['protocols'])}))
+--- /dev/null
++++ b/sub2api-memory-profile/launch_contracts.py
+@@ -0,0 +1,63 @@
++"""Validate producer inputs and generated subprocess payloads before effects.
++No Docker/Go calls; secret values are only compared in operator memory.
++"""
++from pathlib import Path
++import re
++from contracts import require
++BASE='sha256:6df1cc33771f1bc94028cc18440a13e7d31a3513331bbb8d7d686584d19b79e2'
++NODE='node:24.21.0-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1'
++BASE_TAG='rr-sub2-profile-base:6df1cc3-20261001'
++MACHINE='d856d40da5ad4e23b4f67773e5942842'
++def digest(v): return type(v) is str and re.fullmatch('[a-f0-9]{64}',v) is not None
++def image(v): return type(v) is str and re.fullmatch(r'[a-zA-Z0-9./:_-]+@sha256:[a-f0-9]{64}',v) is not None
++def config_gate(c):
++    require(type(c) is dict,'CONFIG_OBJECT')
++    paths=('fixture_dir','go_binary','modules_cache','compilation_cache','toolchain_receipt','collector_source')
++    hashes=('fixture_attestation_sha256','go_binary_sha256','toolchain_receipt_sha256')
++    require(all(type(c.get(k)) is str and Path(c[k]).is_absolute() for k in paths),'CONFIG_PATH_FIELDS')
++    require(all(digest(c.get(k)) for k in hashes),'CONFIG_HASH_FIELDS')
++    require(c.get('synthetic_only') is True,'SYNTHETIC_ONLY')
++    require(c.get('machine_id')==MACHINE and c.get('node_image')==NODE and c.get('base_image')==BASE,'FROZEN_PINS')
++    require(all(image(c.get(k)) for k in ('postgres_image','redis_image')),'DEPENDENCY_DIGESTS_REQUIRED')
++    require(('reviewed_source' in c)==('reviewed_source_sha256' in c),'REVIEWED_SOURCE_FIELDS')
++    if 'reviewed_source' in c:
++        require(type(c['reviewed_source']) is str and Path(c['reviewed_source']).is_absolute() and digest(c['reviewed_source_sha256']),'REVIEWED_SOURCE_FIELDS')
++
++def toolchain_gate(r,c):
++    require(type(r) is dict and set(r)=={'go_version','go_binary_sha256','stdlib_sha256','compilation_cache'},'TOOLCHAIN_RECEIPT_FIELDS')
++    require(r['go_version']=='go1.27.1' and r['go_binary_sha256']==c['go_binary_sha256'] and r['compilation_cache']==c['compilation_cache'],'TOOLCHAIN_CACHE_PIN')
++    names={'runtime/mprof.go','runtime/mstats.go','runtime/pprof/pprof.go','runtime/pprof/protomem.go'}
++    require(type(r['stdlib_sha256']) is dict and set(r['stdlib_sha256'])==names and all(digest(v) for v in r['stdlib_sha256'].values()),'STDLIB_RECEIPT_FIELDS')
++
++def build_gate(args,env,c):
++    require(type(args) is list and all(type(x) is str for x in args) and type(env) is dict,'BUILD_FIELDS')
++    require(len(args)==10 and args[0]==c['go_binary'] and args[1]=='-C' and args[3:7]==['build','-trimpath','-buildvcs=false','-tags=rrsub2profile'] and args[7]=='-o' and args[9]=='./cmd/server','BUILD_COMMAND')
++    fixed={'GOENV':'off','GOTOOLCHAIN':'local','GOWORK':'off','GOPROXY':'off','GOSUMDB':'off','CGO_ENABLED':'0','GOOS':'linux','GOARCH':'amd64','GOMAXPROCS':'2','GOCACHE':c['compilation_cache'],'GOMODCACHE':c['modules_cache']}
++    require(all(env.get(k)==v and type(env.get(k)) is str for k,v in fixed.items()) and set(env)<=set(fixed)|{'PATH','LANG'},'BUILD_ENVIRONMENT')
++
++def dockerfile_gate(text,tag):
++    require(type(text) is str and type(tag) is str and tag==BASE_TAG,'BASE_TAG_FIELDS')
++    lines=text.splitlines()
++    require(len(lines)==5 and lines[0]=='FROM '+tag and lines[1].split()==['COPY','--chmod=755','profile-server','/rr-profile-server'] and lines[2]=='USER 1000:1000' and lines[3]=='ENTRYPOINT ["/rr-profile-server"]' and lines[4]=='CMD []','GENERATED_IMAGE_CONFIGURATION')
++
++def service_gate(suffix,image_id,args,command,c,private,redis_password):
++    require(type(args) is list and all(type(x) is str for x in args) and type(command) in (list,tuple) and all(type(x) is str for x in command),'LAUNCH_FIELDS')
++    if suffix not in ('postgres','redis'): return
++    require(image_id==c[suffix+'_image'],'SERVICE_IMAGE_CHANGED')
++    def option(k):
++        require(args.count(k)==1 and args.index(k)+1<len(args),'LAUNCH_OPTION')
++        return args[args.index(k)+1]
++    require(option('--network-alias')==suffix,'SERVICE_NETWORK_ALIAS')
++    if suffix=='postgres':
++        require(len(args)==8 and set(args[::2])=={'--network-alias','--env-file','--tmpfs','--memory'},'POSTGRES_OPTIONS')
++        require(option('--tmpfs')=='/var/lib/postgresql' and option('--env-file')==str(private/'postgres.env') and option('--memory')=='512m' and not command,'POSTGRES_CONFIGURATION')
++    else:
++        require(len(args)==(6 if redis_password else 4) and set(args[::2])==({'--network-alias','--memory','--mount'} if redis_password else {'--network-alias','--memory'}),'REDIS_OPTIONS')
++        require(option('--memory')=='256m','REDIS_MEMORY')
++        if redis_password:
++            require(tuple(command)==('redis-server','/rr-profile-redis.conf') and option('--mount')==f'type=bind,src={private}/redis-profile.conf,dst=/rr-profile-redis.conf,readonly','REDIS_PRIVATE_CONFIG')
++            p=private/'redis-profile.conf'
++            import json
++            require(p.is_file() and p.stat().st_mode & 0o777==0o444 and p.read_text()=='save ""\nappendonly no\nrequirepass '+json.dumps(redis_password)+'\n','REDIS_CONFIG_CONTENT')
++        else:
++            require(tuple(command)==('redis-server','--save','','--appendonly','no') and '--mount' not in args,'REDIS_CONFIGURATION')
+--- a/sub2api-memory-profile/offline.test.mjs
++++ b/sub2api-memory-profile/offline.test.mjs
+@@ -4,32 +4,15 @@
+ import { execFileSync } from 'node:child_process';
+ import { fileURLToPath } from 'node:url';
+ import { codexNumericEvidence } from '../sub2api-spike/evidence.mjs';
+-import { telemetryVerdict } from '../.spike-inputs/transport-artifacts/adapter.mjs';
+-import { Inspector, fixture } from '../.spike-inputs/transport-artifacts/overlay/sub2api-regression-lab/wire.mjs';
++import { telemetryVerdict } from '../.spike-inputs/runtime/sub2api-transport-r4/adapter.mjs';
++import { Inspector, fixture } from '../.spike-inputs/runtime/sub2api-regression-lab/wire.mjs';
+ const json=p=>JSON.parse(readFileSync(p,'utf8')),MiB=1048576;
+-const input=new URL('../.spike-inputs/actual-execution/',import.meta.url);
++const history=json(new URL('../sub2api-transport-r4/historical-input/execution.json',import.meta.url));
++test('older 20-case inventory keeps FAIL and NOT RUN evidence',()=>{
++  assert.equal(history.results.length,20);
++  for(const r of history.results){assert.ok(['FAIL','NOT RUN'].includes(r.status));assert.ok(['FAIL','NOT RUN'].includes(r.memory.status));if(r.cleanup)assert.equal(r.cleanup.failures,0);}
++});
+ for(const protocol of ['responses','messages']) {
+-  const execution=json(new URL(protocol+'/execution.json',input));
+-  test('preserve all ten historical FAIL summaries '+protocol,()=>{
+-    assert.equal(execution.results.length,10);
+-    for(const r of execution.results){assert.equal(r.functional_status,'PASS');assert.equal(r.empirical_status,'FAIL');assert.equal(r.physical_interval_status,'NOTPROVEN');}
+-  });
+-  for(const name of readdirSync(new URL(protocol+'/',input)).filter(x=>x.startsWith('memory-'))) {
+-    const dir=new URL(protocol+'/'+name+'/',input),row=json(new URL('case.json',dir)),ready=json(new URL('telemetry.ready.json',dir)),done=json(new URL('telemetry.done.json',dir));
+-    const samples=readFileSync(new URL('telemetry.ndjson',dir),'utf8').trimEnd().split('\n').map(JSON.parse);
+-    const meta={...row.telemetry_boundary,ended_ms:done.ended_ms};
+-    test('exact current raw receipt '+name,()=>{
+-      assert.deepEqual(telemetryVerdict(samples,meta,ready,{done}),row.memory_envelope);
+-      assert.equal(row.memory_envelope.empirical_qualified_status,'FAIL');
+-      assert.equal(row.memory_envelope.physical_interval_rss_status,'NOTPROVEN');
+-      for(const altered of [{...done,full_tail_ms:4999},{...done,engine_pid:done.engine_pid+1},undefined])
+-        assert.equal(telemetryVerdict(samples,meta,ready,{done:altered}).empirical_qualified_status,'NOT RUN');
+-      for(const bad of [null,'0',{},[],1e999]) {
+-        const mutant=structuredClone(samples);mutant[1].rss_bytes=bad;
+-        assert.equal(telemetryVerdict(mutant,meta,ready,{done}).empirical_qualified_status,'NOT RUN');
+-      }
+-    });
+-  }
+   test('real full-frame 8MiB discard parser '+protocol,()=>{
+     const f=fixture(protocol,{near:true}),p=new Inspector(protocol);
+     const feed=b=>{for(let i=0;i<b.length;i+=32749)p.push(b.subarray(i,i+32749));};
+--- /dev/null
++++ b/sub2api-memory-profile/operator_config.py
+@@ -0,0 +1,31 @@
++#!/usr/bin/env python3
++"""Controller-only offline config migration; never exports private values.
++Read the existing synthetic config and reviewed W1 stdlib freeze. The actual
++Go executable/version/stdlib are checked separately by root-driver preflight.
++"""
++import argparse,json
++from pathlib import Path
++from contracts import require,strict_json
++from prepare import sha
++from launch_contracts import config_gate,toolchain_gate
++
++def migrate(old,out,receipt,freeze,cache,collector):
++    c=strict_json(old.read_text())
++    require(not out.exists() and not receipt.exists(),'OUTPUT_REUSE_DENIED')
++    require(sha(Path(c['go_binary']))==c['go_binary_sha256'],'TOOLCHAIN_PIN')
++    require(cache.is_dir() and collector.is_file(),'OFFLINE_INPUTS_MISSING')
++    r={'go_version':'go1.27.1','go_binary_sha256':c['go_binary_sha256'],'compilation_cache':str(cache),
++      'stdlib_sha256':{n:sha(freeze/n) for n in ('runtime/mprof.go','runtime/mstats.go','runtime/pprof/pprof.go','runtime/pprof/protomem.go')}}
++    c.update(compilation_cache=str(cache),toolchain_receipt=str(receipt),collector_source=str(collector))
++    receipt.write_text(json.dumps(r,indent=2)+'\n');receipt.chmod(0o600)
++    c['toolchain_receipt_sha256']=sha(receipt);config_gate(c);toolchain_gate(r,c)
++    out.write_text(json.dumps(c,indent=2)+'\n');out.chmod(0o600)
++
++if __name__=='__main__':
++    ap=argparse.ArgumentParser()
++    for key in ('old-config','out','receipt','stdlib-freeze','compilation-cache','collector-source'):ap.add_argument('--'+key,type=Path,required=True)
++    a=ap.parse_args()
++    try:
++        migrate(a.old_config.resolve(),a.out.resolve(),a.receipt.resolve(),a.stdlib_freeze.resolve(),a.compilation_cache.resolve(),a.collector_source.resolve())
++    except Exception:raise SystemExit('PRIVATE_CONFIG_MIGRATION_STOP_NO_VALUES_EXPORTED')
++    print('PRIVATE_CONFIG_AND_REVIEWED_TOOLCHAIN_RECEIPT_WRITTEN')
+--- a/sub2api-memory-profile/prepare.py
++++ b/sub2api-memory-profile/prepare.py
+@@ -13,7 +13,7 @@
+     return pins
+ 
+ def actual_code(name, expected):
+-    candidates = [INPUT/'transport-artifacts/overlay'/name,
++    candidates = [INPUT/'runtime'/name,
+                   INPUT/'transport-artifacts'/Path(name).name,
+                   INPUT/'transport-artifacts/historical-input/prior-code'/name, OWN.parent/name]
+     for p in candidates:
+@@ -25,27 +25,23 @@
+             if hashlib.sha256(b).hexdigest() == expected: return b
+     raise ValueError('ACTUAL_CODE_NOT_RECONSTRUCTABLE: '+name)
+ 
+-def generate(stage=None):
++def generate(stage=None, collector_source=None, reviewed=None, verify_only=False):
+     pins = verify_inputs()
++    if sha(OWN/'source-manifest.json')!=sha(INPUT/'candidate/sub2api-memory-profile/source-manifest.json'): raise ValueError('LEGACY_MANIFEST_CHANGED')
+     source = {str(p.relative_to(INPUT/'actual-source')):sha(p)
+               for p in (INPUT/'actual-source').rglob('*') if p.is_file()}
+     # The combined native/probe bytes are already present; never apply their
+     # patches again. Independently compare all 21 pinned changed source files.
+-    verified = json.loads((INPUT/'memory-audit/source-verification.json').read_text())
+-    count = 0
+-    for component in verified.values():
+-        for row in component.get('files', []):
+-            name = row.get('path', row.get('file'))
+-            if name:
+-                if source.get(name) != row['expected']: raise ValueError('COMBINED_SOURCE_PIN_MISMATCH: '+name)
+-                count += 1
+-    if count != 21: raise ValueError('COMBINED_SOURCE_COUNT')
+-    op = json.loads((INPUT/'actual-execution/responses/operator-code-manifest.json').read_text())
++    legacy = json.loads((INPUT/'candidate/sub2api-memory-profile/source-manifest.json').read_text())
++    expected = dict(legacy['source_after_sha256'])
++    expected.pop('backend/cmd/server/rr_sub2_profile.go')
++    if source != expected: raise ValueError('COMBINED_SOURCE_PIN_MISMATCH')
++    op = {'hashes': legacy['operator_after_sha256']}
+     needed = ['common.mjs','run.mjs','client.mjs','mock.mjs','wire.mjs','plan.mjs','receipts.mjs']
+     names = ['sub2api-regression-lab/'+n for n in needed] + [
+         'sub2api-spike/broker.mjs','sub2api-spike/util.mjs','sub2api-spike/native-errors.mjs',
+         'sub2api-transport-r4/adapter.mjs']
+-    code = {n:actual_code(n,op['hashes'][n]) for n in names}
++    code = {n:(INPUT/'runtime'/n).read_bytes() if n.endswith('/run.mjs') else actual_code(n,op['hashes'][n]) for n in names}
+     run = 'sub2api-regression-lab/run.mjs'
+     original = code[run].decode()
+     changed = original
+@@ -67,12 +63,30 @@
+         if changed.count(before)!=1: raise ValueError('ROOT_ADAPTER_OVERLAY_AMBIGUOUS')
+         changed=changed.replace(before,after)
+     code[run] = changed.encode()
+-    collector_before = (INPUT/'actual-execution/responses/actual-collector.py').read_text()
++    code['sub2api-memory-profile/profile-runner.mjs'] = (OWN/'profile-runner.mjs').read_bytes()
++    for n,b in code.items():
++        if hashlib.sha256(b).hexdigest()!=op['hashes'][n]: raise ValueError('OPERATOR_AFTER_PIN_MISMATCH: '+n)
++    source['backend/cmd/server/rr_sub2_profile.go']=sha(OWN/'overlay/backend/cmd/server/rr_sub2_profile.go')
++    if source!=legacy['source_after_sha256']: raise ValueError('SOURCE_AFTER_PIN_MISMATCH')
++    if verify_only:
++        return {'status':'SOURCE_ONLY','current_input_entries_verified':len(pins),'current_input_manifest_sha256':sha(INPUT/'INPUT-HASHES.json'),
++          'source_files_verified':len(source),'operator_files_verified':len(code),'legacy_manifest_sha256':sha(OWN/'source-manifest.json'),
++          'collector_after_sha256_required':op['hashes']['sub2api-transport-r4/collector.py'],
++          'missing_runtime_inputs':['exact root collector source (before or after burst suffix overlay)','externally reviewed matching Go1.27.1 stdlib/toolchain/cache receipt'],
++          'runtime':'NOT RUN','legacy_receipts_promoted':False},None
++    collector_path=collector_source or INPUT/'actual-execution/responses/actual-collector.py'
++    if not collector_path.is_file(): raise ValueError('MISSING_PINNED_ROOT_COLLECTOR: supply collector_source; legacy bytes required')
++    collector_before = collector_path.read_text()
++    after_needle='(memory-(responses|messages)-(8|32|64)-(1|5|20)(-b[0-9]{2})?|soak-(responses|messages))'
++    if hashlib.sha256(collector_before.encode()).hexdigest()==op['hashes']['sub2api-transport-r4/collector.py']:
++        collector_before=collector_before.replace(after_needle,'(memory-(responses|messages)-(8|32|64)-(1|5|20)|soak-(responses|messages))')
+     needle = '(memory-(responses|messages)-(8|32|64)-(1|5|20)|soak-(responses|messages))'
+     if collector_before.count(needle) != 1: raise ValueError('COLLECTOR_ID_OVERLAY_AMBIGUOUS')
+     collector_after = collector_before.replace(needle, '(memory-(responses|messages)-(8|32|64)-(1|5|20)(-b[0-9]{2})?|soak-(responses|messages))')
+     code['sub2api-transport-r4/collector.py'] = collector_after.encode()
+     code['sub2api-memory-profile/profile-runner.mjs'] = (OWN/'profile-runner.mjs').read_bytes()
++    for n,b in code.items():
++        if hashlib.sha256(b).hexdigest() != op['hashes'][n]: raise ValueError('OPERATOR_AFTER_PIN_MISMATCH: '+n)
+     go = OWN/'overlay/backend/cmd/server/rr_sub2_profile.go'
+     source['backend/cmd/server/rr_sub2_profile.go'] = sha(go)
+     source=dict(sorted(source.items()))
+@@ -82,28 +96,42 @@
+                   fromfile='a/sub2api-transport-r4/collector.py',tofile='b/sub2api-transport-r4/collector.py'))
+     parts += list(difflib.unified_diff(original.splitlines(True),changed.splitlines(True),
+                   fromfile='a/'+run,tofile='b/'+run))
+-    manifest = {'schema':'rrsub2profile-source-v1','tag':'rrsub2profile','go_version':'go1.27.1',
+-        'input_manifest_sha256':sha(INPUT/'INPUT-HASHES.json'),'input_entries_verified':len(pins),
+-        'historical':json.loads((INPUT/'actual-execution/responses/source-manifest.json').read_text()),
+-        'source_after_sha256':source,'operator_after_sha256':{n:hashlib.sha256(b).hexdigest() for n,b in code.items()},
+-        'instrumented_binary':'DISTINCT; MUST RECORD ACTUAL HASH AFTER ROOT BUILD',
+-        'runtime_run':'NOT RUN','source_patch_files':['backend/cmd/server/rr_sub2_profile.go'],
+-        'account_lifetime':'one setup per lane; unchanged definitions between bursts; balance/usage may change',
+-        'runtime_semantics':'sampled delayed heap; no fresh GC; see SEMANTICS.md'}
++    # Keep the W1 default manifest byte-for-byte fixed; current custody is
++    # reported separately, never substituted for old execution provenance.
++    if source != legacy['source_after_sha256']: raise ValueError('SOURCE_AFTER_PIN_MISMATCH')
++    manifest=legacy
++    source_bytes=None
++    if reviewed:
++        from reviewed_source import apply_reviewed
++        source_bytes={str(p.relative_to(INPUT/'actual-source')):p.read_bytes() for p in (INPUT/'actual-source').rglob('*') if p.is_file()}
++        receipt=apply_reviewed(reviewed,INPUT/'candidate/sub2api-memory-profile/source-manifest.json',source_bytes)
++        source_bytes['backend/cmd/server/rr_sub2_profile.go']=go.read_bytes()
++        manifest=dict(legacy)
++        manifest['reviewed_source']=receipt
++        manifest['source_after_sha256']={n:hashlib.sha256(b).hexdigest() for n,b in sorted(source_bytes.items())}
++        manifest['source_patch_files']=sorted(set(legacy['source_patch_files'])|{n for p in receipt['patches'] for n in p['files']})
+     if stage:
+         stage.mkdir(mode=0o700)
+         shutil.copytree(INPUT/'actual-source/backend',stage/'backend')
+         shutil.copyfile(go,stage/'backend/cmd/server/rr_sub2_profile.go')
++        if source_bytes is not None:
++            for name,b in source_bytes.items():
++                p=stage/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b)
+         for name,b in code.items():
+             p = stage/'code'/name; p.parent.mkdir(parents=True,exist_ok=True); p.write_bytes(b)
+-        (stage/'source-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
++        if reviewed: (stage/'source-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
++        else: shutil.copyfile(OWN/'source-manifest.json',stage/'source-manifest.json')
++        (stage/'input-verification.json').write_text(json.dumps({'current_input_manifest_sha256':sha(INPUT/'INPUT-HASHES.json'),'entries_verified':len(pins),'legacy_manifest_sha256':sha(OWN/'source-manifest.json')},indent=2)+'\n')
+         (stage/'profiling.patch').write_text(''.join(parts))
+     return manifest, ''.join(parts)
+ 
+ if __name__ == '__main__':
+-    ap=argparse.ArgumentParser(); ap.add_argument('--stage',type=Path); ap.add_argument('--record',action='store_true')
+-    a=ap.parse_args(); manifest,patch=generate(a.stage)
++    ap=argparse.ArgumentParser(); ap.add_argument('--stage',type=Path); ap.add_argument('--record',action='store_true');ap.add_argument('--collector-source',type=Path);ap.add_argument('--reviewed-source',type=Path);ap.add_argument('--verify-only',action='store_true');ap.add_argument('--out',type=Path)
++    a=ap.parse_args(); manifest,patch=generate(a.stage,a.collector_source,a.reviewed_source,a.verify_only)
++    if a.verify_only:
++        if a.out:a.out.write_text(json.dumps(manifest,indent=2)+'\n')
++        print(json.dumps(manifest));raise SystemExit(0)
+     if a.record:
+-        (OWN/'source-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+-        (OWN/'profiling.patch').write_text(patch)
+-    print(json.dumps({'verified':manifest['input_entries_verified'],'source_files':len(manifest['source_after_sha256']),'runtime':'NOT RUN'}))
++        if a.reviewed_source: raise ValueError('LEGACY_MANIFEST_REPLACEMENT_DENIED')
++        if (OWN/'profiling.patch').read_text()!=patch: raise ValueError('LEGACY_PATCH_CHANGED')
++    print(json.dumps({'verified':len(verify_inputs()),'source_files':len(manifest['source_after_sha256']),'runtime':'NOT RUN'}))
+--- /dev/null
++++ b/sub2api-memory-profile/reviewed_source.py
+@@ -0,0 +1,55 @@
++"""Thin offline extension: apply reviewed, exact hash-pinned native Go patches.
++No fuzzy matching, Git, downloads, platform abstraction, or receipt promotion.
++"""
++from pathlib import Path
++import hashlib,re
++from contracts import require,strict_json
++from launch_contracts import digest
++
++def sha_bytes(b):return hashlib.sha256(b).hexdigest()
++def apply_patch(files,text):
++    lines=text.splitlines(keepends=True);i=0;changed=set()
++    while i<len(lines):
++        if lines[i].startswith(('diff --git ','index ')):
++            i+=1;continue
++        require(lines[i].startswith('--- a/backend/') or lines[i]=='--- /dev/null\n','PATCH_OLD_PATH')
++        new_file=lines[i]=='--- /dev/null\n'
++        name=None if new_file else lines[i][6:].strip();i+=1
++        require(i<len(lines) and lines[i].startswith('+++ b/backend/'),'PATCH_NEW_PATH')
++        new_name=lines[i][6:].strip();require(new_file or name==new_name,'PATCH_NEW_PATH');name=new_name;i+=1
++        require((name not in files if new_file else name in files) and name.startswith('backend/') and name.endswith('.go') and name!='backend/cmd/server/rr_sub2_profile.go' and Path(name).as_posix()==name and '..' not in Path(name).parts and name not in changed,'PATCH_SOURCE_SCOPE')
++        old=[] if new_file else files[name].decode().splitlines(keepends=True);out=[];cursor=0;hunks=0
++        while i<len(lines) and lines[i].startswith('@@ '):
++            m=re.fullmatch(r'@@ -(\d+)(?:,(\d+))? \+(\d+)(?:,(\d+))? @@[^\n]*\n',lines[i]);require(m is not None,'PATCH_HUNK_HEADER')
++            start=max(0,int(m[1])-1);oldn=int(m[2] or 1);newn=int(m[4] or 1);i+=1
++            require(cursor<=start<=len(old),'PATCH_HUNK_ORDER');out+=old[cursor:start];cursor=start;seen_old=seen_new=0
++            require(int(m[3])-1==len(out),'PATCH_NEW_OFFSET')
++            while i<len(lines) and not lines[i].startswith(('@@ ','--- ','diff --git ','index ')):
++                l=lines[i];i+=1;require(l and l[0] in ' +-','PATCH_HUNK_LINE')
++                if l[0] in ' -':
++                    require(cursor<len(old) and old[cursor]==l[1:],'PATCH_CONTEXT_MISMATCH');cursor+=1;seen_old+=1
++                if l[0] in ' +':out.append(l[1:]);seen_new+=1
++            require((seen_old,seen_new)==(oldn,newn),'PATCH_HUNK_COUNTS');hunks+=1
++        require(hunks>0,'PATCH_MISSING_HUNKS');files[name]=''.join(out+old[cursor:]).encode();changed.add(name)
++    require(changed,'PATCH_EMPTY');return changed
++
++def apply_reviewed(path,legacy,source_bytes):
++    spec=strict_json(path.read_text())
++    require(type(spec) is dict and set(spec)=={'schema','base_manifest_sha256','base_image','binary_sha256','patches'},'REVIEWED_FIELDS')
++    require(spec['schema']=='rrsub2profile-reviewed-v1' and spec['base_manifest_sha256']==sha_bytes(legacy.read_bytes()),'REVIEWED_BASE_MANIFEST')
++    from launch_contracts import BASE
++    require(spec['base_image']==BASE and digest(spec['binary_sha256']),'REVIEWED_BASE_BINARY')
++    require(type(spec['patches']) is list and 1<=len(spec['patches'])<=2,'REVIEWED_PATCH_LIST')
++    receipts=[]
++    for row in spec['patches']:
++        require(type(row) is dict and set(row)=={'path','sha256','files'},'REVIEWED_PATCH_FIELDS')
++        require(type(row['path']) is str and Path(row['path']).is_absolute() and digest(row['sha256']),'REVIEWED_PATCH_PIN')
++        p=Path(row['path']);b=p.read_bytes();require(sha_bytes(b)==row['sha256'],'REVIEWED_PATCH_HASH')
++        fs=row['files'];require(type(fs) is dict and fs,'REVIEWED_FILE_MAP')
++        for name,h in fs.items():
++            require(type(h) is dict and set(h)=={'before_sha256','after_sha256'} and (h['before_sha256'] is None or digest(h['before_sha256'])) and digest(h['after_sha256']),'REVIEWED_FILE_HASH_FIELDS')
++            require((name not in source_bytes if h['before_sha256'] is None else name in source_bytes and sha_bytes(source_bytes[name])==h['before_sha256']),'REVIEWED_BEFORE_HASH')
++        changed=apply_patch(source_bytes,b.decode());require(changed==set(fs),'REVIEWED_PATCH_FILE_LIST')
++        require(all(sha_bytes(source_bytes[n])==fs[n]['after_sha256'] for n in changed),'REVIEWED_AFTER_HASH')
++        receipts.append({'sha256':row['sha256'],'files':fs})
++    return {'schema':spec['schema'],'base_manifest_sha256':spec['base_manifest_sha256'],'base_image':BASE,'binary_sha256':spec['binary_sha256'],'patches':receipts,'reviewed_manifest_sha256':sha_bytes(path.read_bytes())}
+--- a/sub2api-memory-profile/root-config.example.json
++++ b/sub2api-memory-profile/root-config.example.json
+@@ -9,5 +9,9 @@
+   "fixture_attestation_sha256": "REQUIRED_ACTUAL_HASH",
+   "go_binary": "/OWNED/go1.27.1/bin/go",
+   "go_binary_sha256": "REQUIRED_ACTUAL_HASH",
+-  "modules_cache": "/OWNED/prepopulated-verified-go-module-cache"
++  "modules_cache": "/OWNED/prepopulated-verified-go-module-cache",
++  "compilation_cache": "/OWNED/operator-verified-go1.27.1-compilation-cache",
++  "toolchain_receipt": "/OWNED/private/reviewed-toolchain.json",
++  "toolchain_receipt_sha256": "REQUIRED_ACTUAL_HASH",
++  "collector_source": "/OWNED/profile-responses-fixed-00000009/stage/code/sub2api-transport-r4/collector.py"
+ }
+--- a/sub2api-memory-profile/root-driver.py
++++ b/sub2api-memory-profile/root-driver.py
+@@ -6,6 +6,7 @@
+ import argparse, hashlib, importlib.util, json, os, re, shutil, subprocess, time
+ from contracts import require, strict_json, schedule, burst_gate, number, ContractError
+ from prepare import generate, sha, OWN, INPUT
++from launch_contracts import config_gate, toolchain_gate, build_gate, dockerfile_gate, service_gate, BASE_TAG
+ 
+ MACHINE='d856d40da5ad4e23b4f67773e5942842'
+ NODE='node:24.21.0-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1'
+@@ -33,7 +34,7 @@
+         self.c=c;self.root=root;self.protocol=protocol;self.lane=lane;self.match=match
+         self.name='rrsub2profile-'+protocol+'-'+lane+'-'+root.name[-8:]
+         require(re.fullmatch('[a-z0-9-]{1,100}',self.name),'OWNED_NAME')
+-        self.net=self.name+'-net';self.containers=[];self.network_id=None;self.image=None
++        self.net=self.name+'-net';self.containers=[];self.network_id=None;self.image=None;self.base_tag=None
+         self.deadline=None;self.collector=None;self.rows=[];self.checkpoints=[];self.cleanup_errors=[]
+         self.identity=None;self.started=None;self.baseline=None
+     def cmd(self,args,timeout=30,input=None,env=None):
+@@ -45,6 +46,7 @@
+     def own(self,name):
+         obj=self.inspect(name);require(obj['Config']['Labels'].get('rrsub2profile.owner')==self.name,'OWNERSHIP_CHANGED');return obj
+     def create(self,suffix,image,args,command=()):
++        service_gate(suffix,image,args,command,self.c,self.private,self.env.get('REDIS_PASSWORD'))
+         name=self.name+'-'+suffix
+         # Register before execution: ambiguous creates are inspected by owned name
+         # during cleanup; never retry a create or attach an existing container.
+@@ -53,6 +55,7 @@
+           '--network',self.net,'--log-driver','none','--no-healthcheck',*args,image,*command)
+         self.own(name);self.docker('start',name);return name
+     def preflight(self):
++        config_gate(self.c)
+         require(os.geteuid()==0,'ROOT_ONLY')
+         require(Path('/etc/machine-id').read_text().strip()==MACHINE,'MACHINE_PIN')
+         require(self.c['machine_id']==MACHINE and self.c['node_image']==NODE and self.c['base_image']==BASE,'FROZEN_PINS')
+@@ -81,9 +84,18 @@
+         require(self.cmd(['uname','-m']).decode().strip()=='x86_64','ARCH_PIN')
+         # This is a read-only comparison of the ACTUAL build toolchain stdlib.
+         goroot=Path(self.cmd([self.c['go_binary'],'env','GOROOT']).decode().strip())
+-        for n in ('runtime/mprof.go','runtime/mstats.go','runtime/pprof/pprof.go','runtime/pprof/protomem.go'):
+-            require(sha(goroot/'src'/n)==sha(INPUT/'go-stdlib'/n),'MATCHING_STDLIB_REQUIRED')
+-        manifest,_=generate(self.root/'stage');self.source=manifest
++        receipt=Path(self.c['toolchain_receipt'])
++        require(sha(receipt)==self.c['toolchain_receipt_sha256'],'TOOLCHAIN_RECEIPT_PIN')
++        self.toolchain=strict_json(receipt.read_text());toolchain_gate(self.toolchain,self.c)
++        require(Path(self.c['compilation_cache']).is_dir() and Path(self.c['modules_cache']).is_dir(),'OFFLINE_CACHE_REQUIRED')
++        for n,h in self.toolchain['stdlib_sha256'].items():
++            require(sha(goroot/'src'/n)==h,'MATCHING_STDLIB_REQUIRED')
++        reviewed=None
++        if 'reviewed_source' in self.c:
++            path=Path(self.c['reviewed_source'])
++            require(sha(path)==self.c['reviewed_source_sha256'],'REVIEWED_SOURCE_PIN')
++            reviewed=path
++        manifest,_=generate(self.root/'stage',collector_source=Path(self.c['collector_source']),reviewed=reviewed);self.source=manifest
+         self.code=self.root/'stage/code'
+         self.profile=self.root/'profiles';self.private=self.root/'private';self.evidence=self.root/'evidence';self.telemetry=self.root/'telemetry'
+         for p in (self.profile,self.private,self.evidence,self.telemetry):
+@@ -96,17 +108,25 @@
+         pg=''.join(k+'='+v+'\n' for k,v in {'POSTGRES_USER':self.env['DATABASE_USER'],
+              'POSTGRES_PASSWORD':self.env['DATABASE_PASSWORD'],'POSTGRES_DB':self.env['DATABASE_DBNAME']}.items())
+         (self.private/'postgres.env').write_text(pg);(self.private/'postgres.env').chmod(0o600)
++        self.prepare_redis()
+         self.snapshot=fixture/'snapshot.sql'
++    def prepare_redis(self):
++        if self.env.get('REDIS_PASSWORD'):
++            cfg=self.private/'redis-profile.conf'
++            cfg.write_text('save ""\nappendonly no\nrequirepass '+json.dumps(self.env['REDIS_PASSWORD'])+'\n');cfg.chmod(0o444)
+     def build(self):
+         b=self.root/'build';b.mkdir(mode=0o700)
+         context=b/'image';context.mkdir(mode=0o700)
+         env={k:v for k,v in os.environ.items() if k in ('PATH','LANG')}
+         env.update(GOENV='off',GOTOOLCHAIN='local',GOWORK='off',GOPROXY='off',GOSUMDB='off',
+-                   CGO_ENABLED='0',GOOS='linux',GOARCH='amd64',GOCACHE=str(b/'cache'),GOMODCACHE=self.c['modules_cache'])
++                   CGO_ENABLED='0',GOOS='linux',GOARCH='amd64',GOCACHE=self.c['compilation_cache'],GOMODCACHE=self.c['modules_cache'],GOMAXPROCS='2')
+         binary=b/'profile-server'
+-        self.cmd([self.c['go_binary'],'-C',str(self.root/'stage/backend'),'build','-trimpath','-buildvcs=false',
+-                  '-tags=rrsub2profile','-o',str(binary),'./cmd/server'],timeout=240,env=env)
++        args=[self.c['go_binary'],'-C',str(self.root/'stage/backend'),'build','-trimpath','-buildvcs=false','-tags=rrsub2profile','-o',str(binary),'./cmd/server']
++        build_gate(args,env,self.c)
++        self.cmd(args,timeout=240,env=env)
+         digest=sha(binary);require(digest!=OLD_BINARY,'BINARY_MUST_BE_DISTINCT')
++        if self.source.get('reviewed_source'):
++            require(digest==self.source['reviewed_source']['binary_sha256'],'REVIEWED_BINARY_PIN')
+         info=self.cmd([self.c['go_binary'],'version','-m',str(binary)]).decode()
+         require('go1.27.1' in info and '-tags=rrsub2profile' in info,'BINARY_BUILD_INFO')
+         # Only fixed build fields are retained; no environment values are logged.
+@@ -114,11 +134,19 @@
+           'fixture_attestation_sha256':self.c['fixture_attestation_sha256'],'engine_env_file_sha256':sha(self.private/'engine.env'),
+           'logging':'stdout discarded by Docker log-driver none; file sink disabled; no environment values exported'}
+         shutil.copyfile(binary,context/'profile-server')
+-        (context/'Dockerfile').write_text('FROM '+BASE+'\nCOPY profile-server /rr-profile-server\nUSER 1000:1000\nENTRYPOINT ["/rr-profile-server"]\nCMD []\n')
++        require(strict_json(self.docker('image','inspect',BASE).decode())[0]['Id']==BASE,'BASE_IMAGE_ID')
++        tag=BASE_TAG
++        self.base_tag=tag
++        self.docker('image','tag',BASE,tag)
++        require(strict_json(self.docker('image','inspect',tag).decode())[0]['Id']==BASE,'BASE_TAG_ID')
++        dockerfile='FROM '+tag+'\nCOPY --chmod=755 profile-server /rr-profile-server\nUSER 1000:1000\nENTRYPOINT ["/rr-profile-server"]\nCMD []\n'
++        dockerfile_gate(dockerfile,tag);(context/'Dockerfile').write_text(dockerfile)
++        write(self.root/'root-base-pin.json',{'kind':'offline-verified-base-tag','base_image_id':BASE,'tag':tag,'dockerfile_sha256':sha(context/'Dockerfile')})
+         self.docker('build','--network','none','--pull=false','--tag',self.name+'-image',str(context),timeout=60)
+         image=strict_json(self.docker('image','inspect',self.name+'-image').decode())[0]
++        require(type(image) is dict and type(image.get('Id')) is str and re.fullmatch('sha256:[a-f0-9]{64}',image['Id']),'DERIVED_IMAGE_ID')
+         self.image=image['Id'];require(self.image!=BASE,'IMAGE_MUST_BE_DISTINCT')
+-        self.build_info['image_id']=self.image
++        self.build_info.update(image_id=self.image,base_image_id=BASE,base_tag=tag,dockerfile_sha256=sha(context/'Dockerfile'),toolchain_receipt_sha256=self.c['toolchain_receipt_sha256'],compilation_gomaxprocs=2)
+         write(self.root/'build-receipt.json',self.build_info)
+     def node(self,mode,*args,timeout=40):
+         suffix='operator-'+mode+'-'+str(len(self.containers))
+@@ -135,8 +163,13 @@
+         write(self.private/'supervisor.json',{'deadline_ms':self.deadline});os.chown(self.private/'supervisor.json',1000,1000)
+         self.network_id=self.docker('network','create','--internal','--label','rrsub2profile.owner='+self.name,self.net).decode().strip()
+         pg=self.create('postgres',self.c['postgres_image'],['--network-alias','postgres','--env-file',str(self.private/'postgres.env'),
+-           '--tmpfs','/var/lib/postgresql/data','--memory','512m'])
+-        redis=self.create('redis',self.c['redis_image'],['--network-alias','redis','--memory','256m'],('redis-server','--save','','--appendonly','no'))
++           '--tmpfs','/var/lib/postgresql','--memory','512m'])
++        redis_args=['--network-alias','redis','--memory','256m']
++        redis_command=('redis-server','--save','','--appendonly','no')
++        if self.env.get('REDIS_PASSWORD'):
++            redis_args+=['--mount',f'type=bind,src={self.private}/redis-profile.conf,dst=/rr-profile-redis.conf,readonly']
++            redis_command=('redis-server','/rr-profile-redis.conf')
++        self.create('redis',self.c['redis_image'],redis_args,redis_command)
+         for _ in range(60):
+             r=subprocess.run(['docker','exec',pg,'pg_isready','-U',self.env['DATABASE_USER']],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,timeout=3)
+             if r.returncode==0:break
+@@ -273,6 +306,8 @@
+         if self.image:
+             try:self.docker('image','rm',self.name+'-image',timeout=3)
+             except Exception:self.cleanup_errors.append('OWNED_IMAGE_CLEANUP_UNVERIFIED')
++        # The verified canonical base tag remains a fixture pin. Removing its
++        # last tag could delete the preexisting bare-ID base before the control.
+         # Keep binary, source hashes, partial receipts and all profile artifacts.
+         write(self.root/'resource-cleanup.json',{'failures':len(self.cleanup_errors),'errors':self.cleanup_errors})
+     def run(self):
+--- /dev/null
++++ b/sub2api-memory-profile/test_actual.py
+@@ -0,0 +1,25 @@
++import copy,json,shutil,tempfile,unittest
++from pathlib import Path
++from audit_actual import audit,INPUT,OWN
++from contracts import ContractError
++class ActualNumericAudit(unittest.TestCase):
++    def test_actual_runtime_and_independent_slopes(self):
++        r=audit();self.assertEqual(r['status'],'DIAGNOSTIC_ONLY')
++        for p in r['protocols'].values():self.assertFalse(p['postburst_profile_cycle_eligible']);self.assertLess(max(p['postburst_natural_cycles']),2)
++        responses=r['protocols']['responses']['slopes_independently_recomputed']['postwarmup_after_two_bursts']
++        messages=r['protocols']['messages']['slopes_independently_recomputed']['postwarmup_after_two_bursts']
++        self.assertLess(responses['rss_bytes_per_second'],0);self.assertGreater(messages['rss_bytes_per_second'],0)
++        self.assertLess(responses['heap_inuse'],0);self.assertLess(messages['heap_inuse'],0)
++        self.assertGreater(messages['sampled_heap_inuse_space_per_second'],0)
++    def test_forged_point_trend_and_missing_runtime_scalar_rejected(self):
++        with tempfile.TemporaryDirectory(dir=OWN/'evidence') as td:
++            r=Path(td)/'actual';shutil.copytree(INPUT/'actual',r)
++            for f in r.rglob('*'):
++                if f.is_file():f.chmod(0o600)
++            p=r/'profile-responses-comparison-w1.json';original=p.read_bytes()
++            for mutate in [lambda x:x['checkpoints'][3].__setitem__('heap_inuse',1),lambda x:x['slopes']['postwarmup_after_two_bursts'].__setitem__('rss_bytes_per_second',0),lambda x:x['checkpoints'][3].__setitem__('postburst_profile_cycle_eligible',True)]:
++                obj=json.loads(original);mutate(obj);p.write_text(json.dumps(obj))
++                with self.assertRaises(ContractError):audit(r)
++            p.write_bytes(original)
++            rt=r/'profile-responses-fixed-00000009/profiles/runtime.ndjson';rows=rt.read_text().splitlines();first=json.loads(rows[0]);del first['num_gc'];rows[0]=json.dumps(first);rt.write_text('\n'.join(rows)+'\n')
++            with self.assertRaises(ContractError):audit(r)
+--- a/sub2api-memory-profile/test_analyzer.py
++++ b/sub2api-memory-profile/test_analyzer.py
+@@ -20,6 +20,8 @@
+ class EndToEndAnalyzer(unittest.TestCase):
+     @classmethod
+     def setUpClass(cls):
++        if not (INPUT/'actual-execution/responses/memory-responses-8-5/case.json').is_file():
++            raise unittest.SkipTest('W1 full raw run/collector/profile fixtures absent from supplied W2 package; no synthetic substitution')
+         cls.tmp=tempfile.TemporaryDirectory(dir=OWN/'evidence');cls.root=Path(cls.tmp.name);r=cls.root
+         generate(r/'stage')
+         binary=r/'build/profile-server';binary.parent.mkdir();binary.write_bytes(b'SYNTHETIC DATA TEST ONLY; NOT A GO BINARY')
+--- /dev/null
++++ b/sub2api-memory-profile/test_producer.py
+@@ -0,0 +1,98 @@
++"""Exercise the actual driver at subprocess.run; no Go/Docker/root actions."""
++import copy,importlib.util,json,subprocess,tempfile,unittest
++from pathlib import Path
++from unittest.mock import patch
++from contracts import ContractError
++from launch_contracts import BASE,NODE,MACHINE,BASE_TAG,config_gate,toolchain_gate,build_gate,dockerfile_gate,service_gate
++OWN=Path(__file__).resolve().parent
++spec=importlib.util.spec_from_file_location('root_driver',OWN/'root-driver.py');driver=importlib.util.module_from_spec(spec);spec.loader.exec_module(driver)
++
++def config(root):
++    return dict(machine_id=MACHINE,synthetic_only=True,base_image=BASE,node_image=NODE,
++      postgres_image='postgres:18@sha256:'+'a'*64,redis_image='redis:7@sha256:'+'b'*64,
++      fixture_dir=str(root/'fixture'),fixture_attestation_sha256='a'*64,
++      go_binary=str(root/'go/bin/go'),go_binary_sha256='b'*64,modules_cache=str(root/'modules'),
++      compilation_cache=str(root/'cache'),toolchain_receipt=str(root/'toolchain.json'),toolchain_receipt_sha256='c'*64,
++      collector_source=str(root/'actual-collector.py'))
++
++class Producer(unittest.TestCase):
++    def setUp(self):
++        self.tmp=tempfile.TemporaryDirectory(dir=OWN/'evidence');self.root=Path(self.tmp.name).resolve()/'producer00000001';self.root.mkdir();self.c=config(self.root)
++        self.d=driver.Driver(self.c,self.root,'responses','fixed',None);self.d.private=self.root/'private';self.d.private.mkdir()
++        self.d.env={'DATABASE_USER':'offline_fixture','DATABASE_DBNAME':'offline_fixture','REDIS_PASSWORD':'offline-synthetic-test-sentinel'}
++        self.d.profile=self.root/'profiles';self.d.profile.mkdir();self.d.source=json.loads((OWN/'source-manifest.json').read_text())
++        (self.d.private/'engine.env').write_text('OFFLINE=1\n')
++        self.d.prepare_redis()
++        self.calls=[]
++    def tearDown(self):self.tmp.cleanup()
++    def intercept(self,args,**kw):
++        self.calls.append((args,kw));out=b''
++        if args[0]==self.c['go_binary']:
++            if 'build' in args:Path(args[args.index('-o')+1]).write_bytes(b'OFFLINE TEST BINARY PLACEHOLDER')
++            else:out=b'profile-server: go1.27.1\n build -tags=rrsub2profile\n'
++        elif args[:3]==['docker','image','inspect']:
++            out=json.dumps([{'Id':('sha256:'+'f'*64 if args[3]==self.d.name+'-image' else BASE)}]).encode()
++        elif args[:3]==['docker','network','create']:out=b'offline-network-id'
++        elif args[:2]==['docker','inspect']:out=json.dumps([{'Config':{'Labels':{'rrsub2profile.owner':self.d.name}}}]).encode()
++        elif args[:2]==['docker','exec']:raise RuntimeError('OFFLINE_STOP_BEFORE_SERVICE_EXEC')
++        return subprocess.CompletedProcess(args,0,out,b'')
++    def test_actual_build_subprocess_and_generated_dockerfile(self):
++        with patch.object(driver.subprocess,'run',side_effect=self.intercept):self.d.build()
++        args,kw=next((a,k) for a,k in self.calls if a[0]==self.c['go_binary'] and 'build' in a)
++        self.assertEqual(kw['env']['GOMAXPROCS'],'2');self.assertEqual(kw['env']['GOCACHE'],self.c['compilation_cache'])
++        self.assertEqual({k:kw['env'].get(k) for k in ('GOGC','GOMEMLIMIT','GODEBUG')},{'GOGC':None,'GOMEMLIMIT':None,'GODEBUG':None})
++        build=next(a for a,k in self.calls if a[:2]==['docker','build'])
++        self.assertIn('--network',build);self.assertIn('none',build);self.assertIn('--pull=false',build)
++        text=(Path(build[-1])/'Dockerfile').read_text();dockerfile_gate(text,self.d.base_tag)
++        inspect_index=next(i for i,(a,k) in enumerate(self.calls) if a==['docker','image','inspect',self.d.base_tag])
++        build_index=next(i for i,(a,k) in enumerate(self.calls) if a[:2]==['docker','build'])
++        self.assertLess(inspect_index,build_index)
++        receipt=json.loads((self.root/'root-base-pin.json').read_text());self.assertEqual(receipt['base_image_id'],BASE)
++        actual=json.loads((OWN.parent/'.spike-inputs/actual/profile-responses-fixed-00000009/root-base-pin.json').read_text())
++        self.assertEqual(receipt['dockerfile_sha256'],actual['dockerfile_sha256'])
++        self.assertNotIn(self.d.env['REDIS_PASSWORD'],(self.root/'build-receipt.json').read_text())
++        for bad in [text.replace('--chmod=755','--chmod=644'),text.replace(self.d.base_tag,BASE),text.replace('USER 1000:1000','USER 0:0')]:
++            with self.assertRaises(ContractError):dockerfile_gate(bad,self.d.base_tag)
++        for key in ('GOMAXPROCS','GOCACHE','GOTOOLCHAIN','GOPROXY'):
++            for value in (None,True,2,[],{},'wrong'):
++                env=dict(kw['env']);env[key]=value
++                with self.subTest(key=key,value=value),self.assertRaises(ContractError):build_gate(args,env,self.c)
++    def test_wrong_local_tag_id_stops_before_image_build(self):
++        original=self.intercept
++        def bad(args,**kw):
++            if args==['docker','image','inspect',BASE_TAG]:
++                self.calls.append((args,kw));return subprocess.CompletedProcess(args,0,json.dumps([{'Id':'sha256:'+'0'*64}]).encode(),b'')
++            return original(args,**kw)
++        with patch.object(driver.subprocess,'run',side_effect=bad),self.assertRaisesRegex(ContractError,'BASE_TAG_ID'):self.d.build()
++        self.assertFalse(any(a[:2]==['docker','build'] for a,k in self.calls))
++    def test_actual_service_create_payloads_at_subprocess_boundary(self):
++        with patch.object(driver.os,'chown'),patch.object(driver.subprocess,'run',side_effect=self.intercept),self.assertRaisesRegex(RuntimeError,'OFFLINE_STOP'):
++            self.d.launch()
++        creates=[a for a,k in self.calls if a[:2]==['docker','create']];self.assertEqual(len(creates),2)
++        pg,redis=creates
++        self.assertEqual(pg[pg.index('--tmpfs')+1],'/var/lib/postgresql');self.assertEqual(pg[-1],self.c['postgres_image'])
++        self.assertEqual(redis[-3:],[self.c['redis_image'],'redis-server','/rr-profile-redis.conf'])
++        self.assertTrue(redis[redis.index('--mount')+1].endswith(',readonly'))
++        self.assertFalse(any(self.d.env['REDIS_PASSWORD'] in x for a,k in self.calls for x in a))
++        service_args=['--network-alias','postgres','--env-file',str(self.d.private/'postgres.env'),'--tmpfs','/var/lib/postgresql','--memory','512m']
++        for image in (BASE,None,True,[],{},self.c['redis_image']):
++            with self.assertRaises(ContractError):service_gate('postgres',image,service_args,(),self.c,self.d.private,None)
++        with self.assertRaises(ContractError):service_gate('postgres',self.c['postgres_image'],service_args[:-2],(),self.c,self.d.private,None)
++        with self.assertRaises(ContractError):service_gate('postgres',self.c['postgres_image'],service_args+['--tmpfs','/wrong'],(),self.c,self.d.private,None)
++        for extra in (['--privileged'],['--publish','5432:5432'],['--env','SYNTHETIC_VALUE=unapproved']):
++            with self.assertRaises(ContractError):service_gate('postgres',self.c['postgres_image'],service_args+extra,(),self.c,self.d.private,None)
++    def test_config_required_fields_types_and_toolchain_receipt(self):
++        config_gate(self.c)
++        for key in self.c:
++            for bad in (None,False,1,[],{}):
++                c=copy.deepcopy(self.c);c[key]=bad
++                with self.subTest(key=key,bad=bad),self.assertRaises(ContractError):config_gate(c)
++            c=copy.deepcopy(self.c);del c[key]
++            with self.assertRaises(ContractError):config_gate(c)
++        receipt={'go_version':'go1.27.1','go_binary_sha256':self.c['go_binary_sha256'],'compilation_cache':self.c['compilation_cache'],
++          'stdlib_sha256':{n:'f'*64 for n in ('runtime/mprof.go','runtime/mstats.go','runtime/pprof/pprof.go','runtime/pprof/protomem.go')}}
++        toolchain_gate(receipt,self.c)
++        for key in receipt:
++            for value in (None,True,[],{},'wrong'):
++                r=copy.deepcopy(receipt);r[key]=value
++                with self.assertRaises(ContractError):toolchain_gate(r,self.c)
+--- /dev/null
++++ b/sub2api-memory-profile/test_reviewed_source.py
+@@ -0,0 +1,35 @@
++import copy,json,tempfile,unittest
++from pathlib import Path
++from contracts import ContractError
++from reviewed_source import apply_reviewed,apply_patch,sha_bytes
++from launch_contracts import BASE
++from analyze import validate_reviewed_manifest
++OWN=Path(__file__).resolve().parent
++class ReviewedSource(unittest.TestCase):
++    def test_exact_reviewed_patch_and_new_go_file_without_git(self):
++        name='backend/internal/service/stream.go';old=b'package service\nvar limit = 1\n';new=b'package service\nvar limit = 2\n'
++        added='backend/internal/service/stream_test.go';added_bytes=b'package service\n'
++        text='--- a/'+name+'\n+++ b/'+name+'\n@@ -1,2 +1,2 @@\n package service\n-var limit = 1\n+var limit = 2\n--- /dev/null\n+++ b/'+added+'\n@@ -0,0 +1 @@\n+package service\n'
++        with tempfile.TemporaryDirectory(dir=OWN/'evidence') as td:
++            r=Path(td).resolve();legacy=r/'legacy.json';legacy.write_text('{}\n');p=r/'stream.patch';p.write_text(text)
++            manifest={'schema':'rrsub2profile-reviewed-v1','base_manifest_sha256':sha_bytes(legacy.read_bytes()),'base_image':BASE,'binary_sha256':'e'*64,
++              'patches':[{'path':str(p),'sha256':sha_bytes(p.read_bytes()),'files':{name:{'before_sha256':sha_bytes(old),'after_sha256':sha_bytes(new)},added:{'before_sha256':None,'after_sha256':sha_bytes(added_bytes)}}}]}
++            sp=r/'reviewed.json';sp.write_text(json.dumps(manifest));files={name:old};receipt=apply_reviewed(sp,legacy,files)
++            self.assertEqual(files,{name:new,added:added_bytes});self.assertEqual(receipt['binary_sha256'],'e'*64)
++            for mutation in [lambda s:s.__setitem__('base_image','sha256:'+'0'*64),lambda s:s.__setitem__('base_manifest_sha256','0'*64),lambda s:s.__setitem__('binary_sha256',True),
++                lambda s:s['patches'][0].__setitem__('sha256','0'*64),lambda s:s['patches'][0]['files'].pop(added),
++                lambda s:s['patches'][0]['files'][name].__setitem__('after_sha256','f'*64),lambda s:s['patches'][0].__setitem__('files',[]),lambda s:s['patches'][0].pop('path')]:
++                bad=copy.deepcopy(manifest);mutation(bad);sp.write_text(json.dumps(bad))
++                with self.assertRaises(ContractError):apply_reviewed(sp,legacy,{name:old})
++            for bad in [text.replace('var limit = 1','var limit = 3'),text.replace('-1,2','-1,8'),text.replace('+++ b/'+name,'+++ b/backend/go.mod'),text.replace(name,'backend/cmd/server/rr_sub2_profile.go')]:
++                with self.assertRaises(ContractError):apply_patch({name:old},bad)
++    def test_explicit_merged_manifest_keeps_legacy_base_and_exact_source_list(self):
++        legacy=json.loads((OWN/'source-manifest.json').read_text());sm=copy.deepcopy(legacy)
++        n='backend/internal/service/rr_reviewed_stream_test.go';after='e'*64
++        sm['source_after_sha256'][n]=after;sm['source_patch_files']=sorted(sm['source_patch_files']+[n])
++        sm['reviewed_source']={'schema':'rrsub2profile-reviewed-v1','base_manifest_sha256':sha_bytes((OWN/'source-manifest.json').read_bytes()),'base_image':BASE,'binary_sha256':'d'*64,'reviewed_manifest_sha256':'c'*64,
++          'patches':[{'sha256':'f'*64,'files':{n:{'before_sha256':None,'after_sha256':after}}}]}
++        validate_reviewed_manifest(sm)
++        for mutate in [lambda s:s.__setitem__('historical',{}),lambda s:s['source_after_sha256'].__setitem__('backend/go.mod','0'*64),lambda s:s['source_patch_files'].append('backend/go.mod'),lambda s:s['operator_after_sha256'].__setitem__('new.mjs','0'*64),lambda s:s['reviewed_source'].__setitem__('base_image','wrong')]:
++            bad=copy.deepcopy(sm);mutate(bad)
++            with self.assertRaises(ContractError):validate_reviewed_manifest(bad)

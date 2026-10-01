@@ -1,0 +1,42 @@
+test_expected_manifest_without_reviewed_receipt_rejects_unreviewed_source (__main__.Independent.test_expected_manifest_without_reviewed_receipt_rejects_unreviewed_source) ... FAIL
+test_preflight_toolchain_query_and_compile_share_sanitized_environment (__main__.Independent.test_preflight_toolchain_query_and_compile_share_sanitized_environment) ... FAIL
+test_private_outputs_exclusive_0600_at_creation (__main__.Independent.test_private_outputs_exclusive_0600_at_creation) ... FAIL
+
+======================================================================
+FAIL: test_expected_manifest_without_reviewed_receipt_rejects_unreviewed_source (__main__.Independent.test_expected_manifest_without_reviewed_receipt_rejects_unreviewed_source)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/profile-package-w3/sub2api-memory-profile/evidence/tmpt1_gceux/sub2api-memory-profile/test_w3_regressions.py", line 40, in test_expected_manifest_without_reviewed_receipt_rejects_unreviewed_source
+    self.assertNotEqual(cp.returncode,0);self.assertFalse(output.exists())
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_preflight_toolchain_query_and_compile_share_sanitized_environment (__main__.Independent.test_preflight_toolchain_query_and_compile_share_sanitized_environment)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/profile-package-w3/sub2api-memory-profile/evidence/tmpt1_gceux/sub2api-memory-profile/test_w3_regressions.py", line 104, in test_preflight_toolchain_query_and_compile_share_sanitized_environment
+    self.assertEqual(len(go_calls),4);self.assertTrue(all(kw['env']==build['env'] for kw in go_calls))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_private_outputs_exclusive_0600_at_creation (__main__.Independent.test_private_outputs_exclusive_0600_at_creation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/profile-package-w3/sub2api-memory-profile/evidence/tmpt1_gceux/sub2api-memory-profile/test_w3_regressions.py", line 65, in test_private_outputs_exclusive_0600_at_creation
+    self.assertEqual(observed,[]);self.assertEqual([m for m,f in first_modes],[0o600,0o600]);self.assertTrue(all(f & os.O_EXCL for m,f in first_modes));self.assertEqual(out.stat().st_mode&0o777,0o600);self.assertEqual(receipt.stat().st_mode&0o777,0o600)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [420] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+420
+
+- [420]
++ []
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.086s
+
+FAILED (failures=3)

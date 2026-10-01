@@ -1,0 +1,15 @@
+test_complete_data_path_decodes_profiles_and_replays_all_rss (test_analyzer.EndToEndAnalyzer.test_complete_data_path_decodes_profiles_and_replays_all_rss) ... ok
+test_missing_profile_checkpoint_identity_cycles_and_cleanup_rejected (test_analyzer.EndToEndAnalyzer.test_missing_profile_checkpoint_identity_cycles_and_cleanup_rejected) ... ok
+test_binary_profile_actual_field_layout_and_corruption (test_contracts.StrictContracts.test_binary_profile_actual_field_layout_and_corruption) ... ok
+test_burst_finite_fullframe_and_attempt_effect_contract (test_contracts.StrictContracts.test_burst_finite_fullframe_and_attempt_effect_contract) ... ok
+test_checkpoint_missing_identity_cycle_forgery_and_replay (test_contracts.StrictContracts.test_checkpoint_missing_identity_cycle_forgery_and_replay) ... ok
+test_jsonl_complete_duplicate_and_nonfinite (test_contracts.StrictContracts.test_jsonl_complete_duplicate_and_nonfinite) ... ok
+test_root_adapter_removes_only_verified_owned_container (test_contracts.StrictContracts.test_root_adapter_removes_only_verified_owned_container) ... ok
+test_runtime_fields_no_coercion_identity_cycles_gaps (test_contracts.StrictContracts.test_runtime_fields_no_coercion_identity_cycles_gaps) ... ok
+test_schedule_exact_requests_repetitions (test_contracts.StrictContracts.test_schedule_exact_requests_repetitions) ... ok
+test_slopes_known_observations_and_control_difference (test_contracts.StrictContracts.test_slopes_known_observations_and_control_difference) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 2.902s
+
+OK

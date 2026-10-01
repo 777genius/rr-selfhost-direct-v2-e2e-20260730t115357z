@@ -1,0 +1,46 @@
+{
+  "schema": "rrsub2profile-completion-audit-v1",
+  "previous_turn_classification": "progress",
+  "complete": false,
+  "requirements": [
+    {
+      "requirement": "copy supplied W1 package and preserve legacy/native/probe provenance",
+      "evidence": "source-audit.json; byte equality of source manifest, profiling patch, Go overlay and runner with supplied W1",
+      "result": "verified"
+    },
+    {
+      "requirement": "reusable PG18 tmpfs, private Redis readonly config, verified Docker base tag, executable COPY, Go1.27.1/cache/GOMAXPROCS2 corrections",
+      "evidence": "test_producer.py; all four tests pass; generated Dockerfile hash equals successful root receipt; root-driver.py and launch_contracts.py",
+      "result": "offline producer verified; new root execution unverified"
+    },
+    {
+      "requirement": "preserve numeric/scanner/resource contracts and negative historical evidence",
+      "evidence": "16 Python tests pass with one absent legacy fixture class skipped; 7 Node tests pass; fixed legacy hashes; no memory threshold or GC policy edits",
+      "result": "verified at offline scope; full historical raw replay absent"
+    },
+    {
+      "requirement": "independent honest actual numeric analysis",
+      "evidence": "actual-audit.json; supplied four runtime streams and twenty burst telemetry streams; independent OLS; stable process/cgroup identity/timing; sampled historical profile limitations",
+      "result": "verified diagnostic scope; no leak/plateau/RSS fix claim"
+    },
+    {
+      "requirement": "explicit reviewed future native source/binary acceptance with fixed base and patch list",
+      "evidence": "reviewed_source.py, validate_reviewed_manifest and their two behavioral tests",
+      "result": "offline contract verified; no future runtime receipt promoted"
+    },
+    {
+      "requirement": "full reproducible preparation/build/run/cleanup and independent analysis of reusable driver on root",
+      "evidence": "exact collector and reviewed stdlib/toolchain freeze absent; full root run/build/DONE/checkpoint/profile/cleanup receipts absent; root operations prohibited for worker",
+      "result": "blocked pending controller inputs and fresh root execution"
+    }
+  ],
+  "blocking_condition": "Controller-owned exact root collector and reviewed toolchain inputs plus fresh root verification are unavailable within permitted offline worker scope.",
+  "blocking_condition_seen_in_consecutive_goal_turns": 3,
+  "required_external_action": "Supply retained successful-run collector and original reviewed W1 stdlib freeze; execute RUNBOOK.md controller rerun and supply complete body-free receipts. No private configuration values or provider fixture needed.",
+  "unsafe_or_disallowed_actions_not_taken": [
+    "Go/Docker/root/network/key/auth operations",
+    "changes outside sub2api-memory-profile/",
+    "Git writes",
+    "subagents"
+  ]
+}

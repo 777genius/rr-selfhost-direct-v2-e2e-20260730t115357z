@@ -1,0 +1,34 @@
+✔ preserve all ten historical FAIL summaries responses (0.974258ms)
+✔ exact current raw receipt memory-responses-32-1 (7.177357ms)
+✔ exact current raw receipt memory-responses-32-20 (5.397293ms)
+✔ exact current raw receipt memory-responses-32-5 (5.957558ms)
+✔ exact current raw receipt memory-responses-64-1 (7.333648ms)
+✔ exact current raw receipt memory-responses-64-20 (8.223568ms)
+✔ exact current raw receipt memory-responses-64-5 (6.776751ms)
+✔ exact current raw receipt memory-responses-8-1 (1.811192ms)
+✔ exact current raw receipt memory-responses-8-20 (1.926819ms)
+✔ exact current raw receipt memory-responses-8-5 (1.889798ms)
+✔ real full-frame 8MiB discard parser responses (109.447228ms)
+✔ preserve all ten historical FAIL summaries messages (0.079065ms)
+✔ exact current raw receipt memory-messages-32-1 (6.74375ms)
+✔ exact current raw receipt memory-messages-32-20 (7.156036ms)
+✔ exact current raw receipt memory-messages-32-5 (4.508783ms)
+✔ exact current raw receipt memory-messages-64-1 (7.82054ms)
+✔ exact current raw receipt memory-messages-64-20 (9.492189ms)
+✔ exact current raw receipt memory-messages-64-5 (7.802865ms)
+✔ exact current raw receipt memory-messages-8-1 (1.690927ms)
+✔ exact current raw receipt memory-messages-8-20 (3.632606ms)
+✔ exact current raw receipt memory-messages-8-5 (2.005722ms)
+✔ real full-frame 8MiB discard parser messages (28.400926ms)
+✔ real local wallet reproduction object (50.694248ms)
+✔ real local wallet reproduction array (56.309968ms)
+✔ real local wallet reproduction jsonl (51.498108ms)
+✔ strict JSONL denies mixed lines, nonfinite/scalar coercion and assembled rows (0.729892ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 537.484722

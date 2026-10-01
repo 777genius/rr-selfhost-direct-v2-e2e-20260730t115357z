@@ -1,0 +1,83 @@
+{
+  "objective": "Merge reviewed stream buffer bounds and repaired trusted-native cancellation into thin reusable exact source patch and preserve all behavior contracts.",
+  "previous_goal_turn": "progress: repaired all three mandatory producer defects and executed RED-old/GREEN-new and original suites",
+  "current_goal_turn": "no further implementation progress: authoritative revalidation confirms missing real merged-binary/source-bound behavior evidence after three consecutive turns",
+  "requirements": [
+    {
+      "requirement": "Mandatory explicit manifest binding repair",
+      "status": "PROVEN OFFLINE",
+      "evidence": [
+        "test_w3_regressions.py real analyzer CLI",
+        "test_w3_security.py authorization before run read and reviewed binary binding",
+        "evidence/regressions-old-red-w3.txt",
+        "evidence/regressions-new-green-w3.txt"
+      ]
+    },
+    {
+      "requirement": "Identical sanitized version/effective-GOROOT/build/info environment; actual freeze pins",
+      "status": "SUBPROCESS CONSTRUCTION AND REJECTION PROVEN OFFLINE",
+      "evidence": "test_w3_regressions.py executes actual driver; four Go subprocess environments equal; effective default tree mismatching reviewed pins rejected; no real compiler invoked"
+    },
+    {
+      "requirement": "Exclusive 0600 creation before first write; private parent/symlink/no-overwrite/validate-first",
+      "status": "PROVEN OFFLINE",
+      "evidence": "actual os.open modes/flags, real CLI symlink rejection, race competing-output preservation, rollback and invalid-config tests"
+    },
+    {
+      "requirement": "Original 16 Python and seven Node tests retained; thresholds/budget/tails/effects/cleanup unchanged",
+      "status": "PROVEN AT BYTE AND OFFLINE TEST SCOPE",
+      "evidence": [
+        "evidence/python-tests-w3.txt (26 passed, one class skipped)",
+        "evidence/node-tests-w3.txt (7 passed)",
+        "evidence/preservation-w3.json"
+      ]
+    },
+    {
+      "requirement": "Exact external merged source patch, source map and ownership repair",
+      "status": "PROVEN AT OFFLINE SOURCE SCOPE",
+      "evidence": "evidence/reviewed-handoff-w3.json: actual four-file patch applied and overlays match, 21 baseline pins, seven preserved original files, exact ownership delta/order and current explicit manifest authorization"
+    },
+    {
+      "requirement": "Byte-exact default manifest/profiling/native baseline; no legacy receipt promotion",
+      "status": "PROVEN AT BYTE/AUTHORIZATION SCOPE",
+      "evidence": [
+        "evidence/preservation-w3.json",
+        "evidence/source-audit-w3.json",
+        "test_w3_security.py reviewed source rejected under legacy default"
+      ]
+    },
+    {
+      "requirement": "Actual raw numeric diagnosis and unchanged historical RSS negatives",
+      "status": "PROVEN AT SUPPLIED NUMERIC SCOPE",
+      "evidence": "evidence/actual-audit-w3.json: all four runtime NDJSON streams, finite OLS slopes, pprof lag/ineligible checkpoints and static 27.47MB attribution; 20 historical RSS FAILs unchanged; no leak/indefinite plateau claim"
+    },
+    {
+      "requirement": "Complete legacy raw analyzer fixture execution",
+      "status": "NOT RUN: raw W1 actual-execution/case/collector/profile fixture tree absent",
+      "evidence": "unchanged skipped test_analyzer.py class"
+    },
+    {
+      "requirement": "Actual merged-source binary pin and preserved native/HTTP/WS/cancellation/runtime behavior",
+      "status": "UNVERIFIED; controller integration and fresh source-bound execution evidence required",
+      "evidence": "current handoff uses explicitly synthetic e*64 prepin; archived 35/292/63 summaries are indirect; no Go/Docker/race/fresh runtime evidence supplied"
+    },
+    {
+      "requirement": "Prior W2 private config/prepare versus current W3 runtime",
+      "status": "DISTINGUISHED",
+      "evidence": "controller reports W2 private migration/preparation succeeded before review with retained collector a51656 prefix; not Docker or current W3 proof"
+    },
+    {
+      "requirement": "Ownership and prohibited-action constraints",
+      "status": "PRESERVED",
+      "evidence": "writes restricted to sub2api-memory-profile; no engine/native fixes, slot lab, Git writes, Go, Docker, privileged commands, network, provider/key/authentication or subagents"
+    }
+  ],
+  "goal_complete": false,
+  "goal_status": "blocked",
+  "blocked_audit_threshold_satisfied": true,
+  "remaining_work": "Project Integration applies owned package handoff; controller supplies real reviewed merged-binary pin and source-bound behavior/runtime evidence. Existing diagnostics and summaries cannot certify these gates.",
+  "scope_complete": "three producer repairs, unchanged prescribed reproductions, meaningful regression tests, exact patch handoff, docs/schema/hash bindings and current offline merged-source binding audit",
+  "runtime": "NOT RUN",
+  "historical_20_actual_rss": "FAIL (unchanged)",
+  "blocked_audit": "evidence/blocked-audit-w3.json"
+}

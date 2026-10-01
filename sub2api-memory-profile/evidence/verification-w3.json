@@ -1,0 +1,30 @@
+{
+  "python-tests-w3": {
+    "returncode": 0
+  },
+  "node-tests-w3": {
+    "returncode": 0
+  },
+  "source-audit-w3": {
+    "returncode": 0
+  },
+  "actual-audit-w3": {
+    "returncode": 0
+  },
+  "prescribed-original": {
+    "returncode": 0,
+    "meaning": "vulnerability assertions"
+  },
+  "prescribed-fixed": {
+    "returncode": 1,
+    "meaning": "vulnerability assertions"
+  },
+  "regressions-old-red": {
+    "returncode": 1
+  },
+  "regressions-new-green": {
+    "returncode": 0
+  },
+  "legacy_full_analyzer_fixture": "NOT RUN: complete W1 actual-execution/case/collector/profile fixture tree absent; original skipped class retained",
+  "runtime": "NOT RUN: no Go/Docker/root/network/key/auth/Git-write/subagent operations"
+}

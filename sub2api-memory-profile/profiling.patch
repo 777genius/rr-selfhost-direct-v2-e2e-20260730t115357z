@@ -1,0 +1,268 @@
+--- /dev/null
++++ b/backend/cmd/server/rr_sub2_profile.go
+@@ -0,0 +1,192 @@
++//go:build rrsub2profile && linux
++
++package main
++
++// Disposable sandbox instrumentation. No HTTP handler, GC request, memory
++// tuning, request values, stack arguments, or environment output.
++import (
++	"encoding/json"
++	"fmt"
++	"io"
++	"os"
++	"path/filepath"
++	"runtime"
++	"runtime/pprof"
++	"strconv"
++	"strings"
++	"sync"
++	"syscall"
++	"time"
++	"unsafe"
++)
++
++type rrSample struct {
++	Schema         uint64  `json:"schema"`
++	Sequence       uint64  `json:"sequence"`
++	PID            int     `json:"pid"`
++	StartMS        float64 `json:"start_ms"`
++	EndMS          float64 `json:"end_ms"`
++	DurationMS     float64 `json:"duration_ms"`
++	HeapAlloc      uint64  `json:"heap_alloc"`
++	HeapObjects    uint64  `json:"heap_objects"`
++	HeapInuse      uint64  `json:"heap_inuse"`
++	HeapIdle       uint64  `json:"heap_idle"`
++	HeapReleased   uint64  `json:"heap_released"`
++	HeapSys        uint64  `json:"heap_sys"`
++	TotalAlloc     uint64  `json:"total_alloc"`
++	Mallocs        uint64  `json:"mallocs"`
++	Frees          uint64  `json:"frees"`
++	Sys            uint64  `json:"sys"`
++	StackInuse     uint64  `json:"stack_inuse"`
++	StackSys       uint64  `json:"stack_sys"`
++	NextGC         uint64  `json:"next_gc"`
++	NumGC          uint32  `json:"num_gc"`
++	NumForcedGC    uint32  `json:"num_forced_gc"`
++	LastGC         uint64  `json:"last_gc_unix_ns"`
++	PauseTotal     uint64  `json:"pause_total_ns"`
++	Goroutines     int     `json:"goroutines"`
++	MemProfileRate int     `json:"mem_profile_rate"`
++}
++
++type rrProfiler struct {
++	dir      string
++	mu       sync.Mutex
++	enc      *json.Encoder
++	sequence uint64
++}
++
++func rrAbort() { os.Exit(97) } // No error text or environment values.
++func rrMono() float64 {
++	var t syscall.Timespec
++	_, _, e := syscall.Syscall(syscall.SYS_CLOCK_GETTIME, 1, uintptr(unsafe.Pointer(&t)), 0)
++	if e != 0 {
++		rrAbort()
++	}
++	return float64(t.Sec)*1000 + float64(t.Nsec)/1e6
++}
++func rrNew(name string) *os.File {
++	f, e := os.OpenFile(name, os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0600)
++	if e != nil {
++		rrAbort()
++	}
++	return f
++}
++func (p *rrProfiler) sample() rrSample {
++	p.mu.Lock()
++	defer p.mu.Unlock()
++	start := rrMono()
++	var m runtime.MemStats
++	runtime.ReadMemStats(&m) // Current allocator counters, NOT current reachability.
++	n := runtime.NumGoroutine()
++	end := rrMono()
++	p.sequence++
++	s := rrSample{1, p.sequence, os.Getpid(), start, end, end - start,
++		m.HeapAlloc, m.HeapObjects, m.HeapInuse, m.HeapIdle, m.HeapReleased, m.HeapSys,
++		m.TotalAlloc, m.Mallocs, m.Frees, m.Sys, m.StackInuse, m.StackSys,
++		m.NextGC, m.NumGC, m.NumForcedGC, m.LastGC, m.PauseTotalNs, n, runtime.MemProfileRate}
++	if p.enc.Encode(s) != nil {
++		rrAbort()
++	}
++	return s
++}
++
++// WriteTo(debug=0) is a sampled binary protobuf profile. The matching runtime
++// flushes delayed profiler buckets; it does NOT request a fresh GC. The heap
++// data may lag by up to two GC cycles. Each kind gets its own bracketing samples.
++type rrLimited struct {
++	w    io.Writer
++	left int64
++}
++
++func (w *rrLimited) Write(b []byte) (int, error) {
++	if int64(len(b)) > w.left {
++		return 0, io.ErrShortWrite
++	}
++	n, e := w.w.Write(b)
++	w.left -= int64(n)
++	return n, e
++}
++func (p *rrProfiler) checkpoint(id uint64) {
++	rows := make([]map[string]any, 0, 3)
++	for kind, name := range []string{"heap", "allocs", "goroutine"} {
++		before := p.sample()
++		f := rrNew(filepath.Join(p.dir, fmt.Sprintf("checkpoint-%03d-%s.pb.gz", id, name)))
++		e := pprof.Lookup(name).WriteTo(&rrLimited{f, 8 << 20}, 0)
++		closeErr := f.Close()
++		if e != nil || closeErr != nil {
++			rrAbort()
++		}
++		after := p.sample()
++		rows = append(rows, map[string]any{"schema": 1, "checkpoint": id, "kind": kind + 1,
++			"before_sequence": before.Sequence, "after_sequence": after.Sequence,
++			"before_num_gc": before.NumGC, "after_num_gc": after.NumGC,
++			"start_ms": before.EndMS, "end_ms": after.StartMS, "pid": os.Getpid()})
++	}
++	// Acknowledgement is atomic and appears only after all files are closed.
++	temp := filepath.Join(p.dir, fmt.Sprintf("checkpoint-%03d.tmp", id))
++	f := rrNew(temp)
++	if json.NewEncoder(f).Encode(rows) != nil || f.Close() != nil {
++		rrAbort()
++	}
++	if os.Rename(temp, filepath.Join(p.dir, fmt.Sprintf("checkpoint-%03d.json", id))) != nil {
++		rrAbort()
++	}
++}
++func init() {
++	dir := os.Getenv("RR_SUB2_PROFILE_DIR")
++	if dir == "" {
++		rrAbort()
++	} // Tagged binary cannot silently omit instrumentation.
++	if runtime.Version() != "go1.27.1" || !filepath.IsAbs(dir) {
++		rrAbort()
++	}
++	st, e := os.Lstat(dir)
++	if e != nil || !st.IsDir() || st.Mode()&os.ModeSymlink != 0 || st.Mode().Perm() != 0700 {
++		rrAbort()
++	}
++	f := rrNew(filepath.Join(dir, "runtime.ndjson"))
++	p := &rrProfiler{dir: dir, enc: json.NewEncoder(f)}
++	p.sample()
++	go func() {
++		tick := time.NewTicker(100 * time.Millisecond)
++		defer tick.Stop()
++		// Hard instrumentation bound, independent of the root 600s supervisor.
++		limit := time.NewTimer(650 * time.Second)
++		defer limit.Stop()
++		for {
++			select {
++			case <-tick.C:
++				p.sample()
++			case <-limit.C:
++				rrAbort()
++			}
++		}
++	}()
++	go func() {
++		var next uint64
++		tick := time.NewTicker(100 * time.Millisecond)
++		defer tick.Stop()
++		for range tick.C {
++			b, e := os.ReadFile(filepath.Join(dir, "request"))
++			if os.IsNotExist(e) {
++				continue
++			}
++			if e != nil || len(b) > 16 {
++				rrAbort()
++			}
++			value := strings.TrimSpace(string(b))
++			id, e := strconv.ParseUint(value, 10, 64)
++			if e != nil || value != strconv.FormatUint(id, 10) || id > 100 {
++				rrAbort()
++			}
++			if next > 0 && id == next-1 {
++				continue
++			}
++			if id != next {
++				rrAbort()
++			}
++			p.checkpoint(id)
++			next++
++		}
++	}()
++}
+--- a/sub2api-transport-r4/collector.py
++++ b/sub2api-transport-r4/collector.py
+@@ -162,7 +162,7 @@
+         not isinstance(spec.get('instance'), str) or not spec['instance'] or
+         spec.get('fresh_container_inspected') is not True or
+         not re.fullmatch('[a-f0-9]{64}', spec['container_id']) or
+-        not re.fullmatch(r'(memory-(responses|messages)-(8|32|64)-(1|5|20)|soak-(responses|messages))', spec['batch_id']) or
++        not re.fullmatch(r'(memory-(responses|messages)-(8|32|64)-(1|5|20)(-b[0-9]{2})?|soak-(responses|messages))', spec['batch_id']) or
+         '..' in Path(spec['cgroup_path']).parts or spec['cgroup_path'] == '/' or
+         not spec['cgroup_path'].startswith('/')):
+         raise ValueError('FRESH_OWNED_SPEC_REQUIRED')
+--- a/sub2api-regression-lab/run.mjs
++++ b/sub2api-regression-lab/run.mjs
+@@ -14,13 +14,13 @@
+   while (mono() < end) {
+     const state = await control(c, 'state');
+     must(!state.exceeded && state.total < 2000, 'GLOBAL_UPSTREAM_BUDGET');
+-    const rs = state.records.filter(r => r.id === id);
++    const rs = state.records.filter(r => r.id === id || r.id.startsWith(id + '.r'));
+     if (predicate(rs)) return rs;
+     await sleep(50);
+   }
+   throw Object.assign(Error('OBSERVATION_DEADLINE'), { labCode: 'OBSERVATION_DEADLINE' });
+ }
+-async function setup(c, spec, row, owned) {
++export async function setup(c, spec, row, owned) {
+   const name = `rr-transport-${c.run_id}-${spec.id}`;
+   const create = async (kind, body) => {
+     // Persist ambiguity BEFORE calling actual admin; never retry a create.
+@@ -43,9 +43,10 @@
+   const auth = await admin(c, '/auth/login', 'POST', { email, password });
+   must(typeof auth.access_token === 'string', 'USER_LOGIN_FAILED');
+   owned.user_token = auth.access_token;
++  owned.intent = { kind: 'keys', name }; await save(owned.path, owned);
+   const key = await admin(c, '/keys', 'POST', { name, group_id: group.id, expires_in_days: 1 }, auth.access_token);
+   must(typeof key.key === 'string' && Number.isSafeInteger(key.id), 'PRIVATE_KEY_CREATE_FAILED');
+-  owned.resources.push({ kind: 'keys', id: key.id }); await save(owned.path, owned);
++  owned.resources.push({ kind: 'keys', id: key.id }); owned.intent = null; await save(owned.path, owned);
+   const [g, a] = await Promise.all([admin(c, `/admin/groups/${group.id}`), admin(c, `/admin/accounts/${account.id}`)]);
+   must(g.is_exclusive && !g.fallback_group_id && !g.fallback_group_id_on_invalid_request && a.status === 'active' &&
+     (a.group_ids ?? a.groups?.map(x => x.id))?.length === 1 && (a.group_ids ?? a.groups?.map(x => x.id))[0] === group.id, 'DEDICATED_BINDING_NOT_READY');
+@@ -160,7 +161,7 @@
+     return text.slice(0, text.lastIndexOf('\n') + 1).trim().split('\n').filter(Boolean).map(JSON.parse);
+   } catch { return []; }
+ }
+-async function load(c, spec, tenant, row, clients) {
++export async function load(c, spec, tenant, row, clients) {
+   row.functional_status = 'NOT RUN';
+   const ready = JSON.parse(await readFile(`/telemetry/${spec.id}.ready.json`, 'utf8'));
+   must(ready.schema === 'raw-observation-v2' && ready.fresh_container_inspected === true &&
+@@ -182,11 +183,12 @@
+   }, 100);
+   const results = [];
+   try {
+-    await control(c, 'rule', { id: spec.id, mode: spec.stage === 'memory' ? 'memory' : 'healthy', mib: spec.mib });
++    row.admitted_request_ids = spec.request_ids ?? [spec.id];
++    for (const id of row.admitted_request_ids) await control(c, 'rule', { id, mode: spec.stage === 'memory' ? 'memory' : 'healthy', mib: spec.mib });
+     const count = spec.count ?? spec.streams;
+     while (results.length < count && !stopping && mono() < c.deadline - 8500) {
+       const n = Math.min(spec.streams, count - results.length);
+-      const batch = Array.from({ length: n }, () => request(c.engine_url, tenant.key, spec.protocol, spec.id,
++      const batch = Array.from({ length: n }, (_, j) => request(c.engine_url, tenant.key, spec.protocol, spec.request_ids?.[results.length+j] ?? spec.id,
+         { slow: spec.stage === 'memory', timeout: Math.max(1, Math.min(60000, c.deadline - mono() - 8500)) }));
+       clients.push(...batch); results.push(...await Promise.all(batch.map(p => p.promise)));
+       if (results.some(r => !success(r))) break;
+@@ -202,6 +204,7 @@
+     const totalBytes = downstreamNumeric ? results.reduce((n, r) =>
+       n !== null && n <= Number.MAX_SAFE_INTEGER - r.bytes ? n + r.bytes : null, 0) : null;
+     const latencies = downstreamNumeric ? results.map(r => r.duration_ms).sort((a, b) => a - b) : [];
++    row.request_results = results.map((r,j) => ({id: spec.request_ids?.[j] ?? spec.id, ...r}));
+     row.downstream = { requests: results.length, successful: results.filter(success).length,
+       bytes: totalBytes,
+       p50_ms: latencies[Math.floor((latencies.length - 1) * .5)] ?? null,
