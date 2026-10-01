@@ -1,0 +1,858 @@
+--- a/backend/internal/service/gateway_anthropic_passthrough.go
++++ b/backend/internal/service/gateway_anthropic_passthrough.go
+@@ -95,7 +95,10 @@
+ 	var resp *http.Response
+ 	retryStart := time.Now()
+ 	for attempt := 1; attempt <= maxRetryAttempts; attempt++ {
+-		upstreamCtx, releaseUpstreamCtx := detachStreamUpstreamContext(ctx, input.RequestStream)
++		if account.CancelsNativeAPIKeyOnDisconnect() && ctx.Err() != nil {
++			return nil, ctx.Err()
++		}
++		upstreamCtx, releaseUpstreamCtx := nativeAPIKeyUpstreamContext(ctx, account, input.RequestStream)
+ 		upstreamReq, wireBody, err := s.buildUpstreamRequestAnthropicAPIKeyPassthrough(upstreamCtx, c, account, input.Body, token)
+ 		releaseUpstreamCtx()
+ 		if err != nil {
+@@ -114,12 +117,26 @@
+ 			if resp != nil && resp.Body != nil {
+ 				_ = resp.Body.Close()
+ 			}
+-			return nil, s.handleUpstreamTransportError(ctx, c, account, err, OpsUpstreamErrorEvent{
++			return nil, nativeAPIKeyNoRetryError(account, s.handleUpstreamTransportError(ctx, c, account, err, OpsUpstreamErrorEvent{
+ 				UpstreamURL: safeUpstreamURL(upstreamReq.URL.String()),
+ 				Passthrough: true,
+-			})
+-		}
+-
++			}))
++		}
++
++		if account.CancelsNativeAPIKeyOnDisconnect() && ctx.Err() != nil {
++			_ = resp.Body.Close()
++			return nil, ctx.Err()
++		}
++		// Establish body-read certainty before ANY status retry/failover branch.
++		if resp.StatusCode >= 400 {
++			limit := gatewayUpstreamErrorBodyReadLimit
++			if s.cfg != nil && s.cfg.Gateway.LogUpstreamErrorBody && s.cfg.Gateway.LogUpstreamErrorBodyMaxBytes > int(limit) {
++				limit = int64(s.cfg.Gateway.LogUpstreamErrorBodyMaxBytes)
++			}
++			if err := bufferNativeAPIKeyHTTPError(ctx, account, resp, limit); err != nil {
++				return nil, err
++			}
++		}
+ 		// 透传分支禁止 400 请求体降级重试（该重试会改写请求体）
+ 		if resp.StatusCode >= 400 && resp.StatusCode != 400 && s.shouldRetryUpstreamError(account, resp.StatusCode) {
+ 			if attempt < maxRetryAttempts {
+@@ -255,6 +272,7 @@
+ 	var clientDisconnect bool
+ 	if input.RequestStream {
+ 		streamResult, err := s.handleStreamingResponseAnthropicAPIKeyPassthrough(ctx, resp, c, account, input.StartTime, input.RequestModel)
++		err = nativeAPIKeyNoRetryError(account, err)
+ 		if err != nil {
+ 			// 流中断时保留已观测到的 usage 与错误一起返回，避免上游已计量的请求
+ 			// 完全漏记漏计费（issue #5148）。
+@@ -377,7 +395,7 @@
+ 	account *Account,
+ 	startTime time.Time,
+ 	model string,
+-) (*streamingResult, error) {
++) (result *streamingResult, resultErr error) {
+ 	observer := upstreamResponseModelObserverFromContext(c)
+ 	if observer == nil {
+ 		observer = beginUpstreamResponseModelObservation(c)
+@@ -413,6 +431,11 @@
+ 	usage := &ClaudeUsage{}
+ 	var firstTokenMs *int
+ 	clientDisconnected := false
++	defer watchNativeAPIKeyDisconnect(ctx, account, resp.Body)()
++	var cancelCh <-chan struct{}
++	if account.CancelsNativeAPIKeyOnDisconnect() {
++		cancelCh = ctx.Done()
++	}
+ 	sawTerminalEvent := false
+ 
+ 	scanner := bufio.NewScanner(resp.Body)
+@@ -427,19 +450,26 @@
+ 		line string
+ 		err  error
+ 	}
+-	events := make(chan scanEvent, 16)
++	// One queued line plus the producer's current line; no frame-size reduction.
++	events := make(chan scanEvent, 1)
++	var deliveryPending atomic.Bool
++	var lastReadAt int64
+ 	done := make(chan struct{})
++	readerExited := make(chan struct{})
+ 	sendEvent := func(ev scanEvent) bool {
++		deliveryPending.Store(true)
++		defer deliveryPending.Store(false)
+ 		select {
+ 		case events <- ev:
++			atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 			return true
+ 		case <-done:
+ 			return false
+ 		}
+ 	}
+-	var lastReadAt int64
+ 	atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 	go func(scanBuf *sseScannerBuf64K) {
++		defer close(readerExited)
+ 		defer putSSEScannerBuf64K(scanBuf)
+ 		defer close(events)
+ 		for scanner.Scan() {
+@@ -452,7 +482,11 @@
+ 			_ = sendEvent(scanEvent{err: err})
+ 		}
+ 	}(scanBuf)
+-	defer close(done)
++	defer func() {
++		if exitErr := finishNativeAPIKeyReader(account, resp.Body, done, readerExited); exitErr != nil {
++			resultErr = errors.Join(resultErr, exitErr)
++		}
++	}()
+ 
+ 	streamInterval := time.Duration(0)
+ 	if s.cfg != nil && s.cfg.Gateway.StreamDataIntervalTimeout > 0 {
+@@ -497,7 +531,12 @@
+ 	inPartialEvent := false
+ 
+ 	for {
++		if account.CancelsNativeAPIKeyOnDisconnect() && ctx.Err() != nil {
++			return &streamingResult{usage: usage, firstTokenMs: firstTokenMs, clientDisconnect: true}, fmt.Errorf("stream usage incomplete: %w", ctx.Err())
++		}
+ 		select {
++		case <-cancelCh:
++			return &streamingResult{usage: usage, firstTokenMs: firstTokenMs, clientDisconnect: true}, fmt.Errorf("stream usage incomplete: %w", ctx.Err())
+ 		case ev, ok := <-events:
+ 			if !ok {
+ 				if !clientDisconnected {
+@@ -555,10 +594,10 @@
+ 				restored := string(reverseToolNamesIfPresent(c, []byte(line)))
+ 				if _, err := io.WriteString(w, restored); err != nil {
+ 					clientDisconnected = true
+-					logger.LegacyPrintf("service.gateway", "[Anthropic passthrough] Client disconnected during streaming, continue draining upstream for usage: account=%d", account.ID)
++					logger.LegacyPrintf("service.gateway", "[Anthropic passthrough] Client disconnected during streaming; upstream lifetime follows account policy: account=%d", account.ID)
+ 				} else if _, err := io.WriteString(w, "\n"); err != nil {
+ 					clientDisconnected = true
+-					logger.LegacyPrintf("service.gateway", "[Anthropic passthrough] Client disconnected during streaming, continue draining upstream for usage: account=%d", account.ID)
++					logger.LegacyPrintf("service.gateway", "[Anthropic passthrough] Client disconnected during streaming; upstream lifetime follows account policy: account=%d", account.ID)
+ 				} else if line == "" {
+ 					// 按 SSE 事件边界刷出，减少每行 flush 带来的 syscall 开销。
+ 					flusher.Flush()
+@@ -570,7 +609,15 @@
+ 				}
+ 			}
+ 
++			if account.CancelsNativeAPIKeyOnDisconnect() && clientDisconnected {
++				return &streamingResult{usage: usage, firstTokenMs: firstTokenMs, clientDisconnect: true}, errors.New("stream usage incomplete after disconnect")
++			}
++
+ 		case <-intervalCh:
++			// Producer backpressure and queued work are downstream delay, not upstream idle.
++			if deliveryPending.Load() || len(events) > 0 {
++				continue
++			}
+ 			lastRead := time.Unix(0, atomic.LoadInt64(&lastReadAt))
+ 			if time.Since(lastRead) < streamInterval {
+ 				continue
+@@ -598,7 +645,10 @@
+ 			}
+ 			if _, err := fmt.Fprint(w, "event: ping\ndata: {\"type\": \"ping\"}\n\n"); err != nil {
+ 				clientDisconnected = true
+-				logger.LegacyPrintf("service.gateway", "[Anthropic passthrough] Client disconnected during keepalive ping, continue draining upstream for usage: account=%d", account.ID)
++				logger.LegacyPrintf("service.gateway", "[Anthropic passthrough] Client disconnected during keepalive ping; upstream lifetime follows account policy: account=%d", account.ID)
++				if account.CancelsNativeAPIKeyOnDisconnect() {
++					return &streamingResult{usage: usage, firstTokenMs: firstTokenMs, clientDisconnect: true}, errors.New("stream usage incomplete after disconnect")
++				}
+ 				continue
+ 			}
+ 			flusher.Flush()
+--- /dev/null
++++ b/backend/internal/service/native_api_key_cancellation.go
+@@ -0,0 +1,118 @@
++package service
++
++import (
++	"bytes"
++	"context"
++	"errors"
++	"fmt"
++	"io"
++	"net/http"
++	"time"
++)
++
++// NativeAPIKeyCancelOnDisconnectExtraKey is trusted account configuration.
++// Only the three native HTTP passthrough call sites consume this policy.
++const NativeAPIKeyCancelOnDisconnectExtraKey = "native_api_key_cancel_on_disconnect"
++
++func (a *Account) CancelsNativeAPIKeyOnDisconnect() bool {
++	if a == nil || a.Type != AccountTypeAPIKey {
++		return false
++	}
++	enabled, ok := a.Extra[NativeAPIKeyCancelOnDisconnectExtraKey].(bool)
++	return ok && enabled
++}
++
++func nativeAPIKeyUpstreamContext(ctx context.Context, account *Account, stream bool) (context.Context, context.CancelFunc) {
++	if account.CancelsNativeAPIKeyOnDisconnect() && ctx != nil {
++		return ctx, func() {}
++	}
++	return detachStreamUpstreamContext(ctx, stream)
++}
++
++// Closing a net/http transport body interrupts a blocked Read. This also covers
++// direct response-handler callers whose body was opened with a detached context.
++func watchNativeAPIKeyDisconnect(ctx context.Context, account *Account, body io.ReadCloser) func() {
++	if !account.CancelsNativeAPIKeyOnDisconnect() || ctx == nil || body == nil {
++		return func() {}
++	}
++	stop := context.AfterFunc(ctx, func() { _ = body.Close() })
++	return func() { stop() }
++}
++
++// The caller owns done; the scanner owns exited and its pooled buffer. Never
++// return the scanner buffer to the pool before the real reader has exited.
++func finishNativeAPIKeyReader(account *Account, body io.ReadCloser, done chan struct{}, exited <-chan struct{}) error {
++	close(done)
++	if !account.CancelsNativeAPIKeyOnDisconnect() {
++		return nil
++	}
++	_ = body.Close()
++	timer := time.NewTimer(500 * time.Millisecond)
++	defer timer.Stop()
++	select {
++	case <-exited:
++		return nil
++	case <-timer.C:
++		return errors.New("native API-key reader did not exit within 500ms")
++	}
++}
++
++// A transport/stream failure after dispatch cannot prove absence of effects.
++// Keep existing error side effects, but prevent handler account-switch retries.
++func nativeAPIKeyNoRetryError(account *Account, err error) error {
++	if !account.CancelsNativeAPIKeyOnDisconnect() || err == nil {
++		return err
++	}
++	var failover *UpstreamFailoverError
++	if errors.As(err, &failover) {
++		return fmt.Errorf("native API-key attempt uncertain; retry suppressed: %v", err)
++	}
++	return err
++}
++
++// Retain the actual read cause for errors.Is without publishing arbitrary body,
++// URL, credential, or transport error text. This error never wraps a failover.
++type nativeAPIKeyHTTPBodyReadError struct{ cause error }
++
++func (e *nativeAPIKeyHTTPBodyReadError) Error() string {
++	return "native API-key HTTP error body incomplete; attempt uncertain; retry suppressed"
++}
++
++// Match the actual cause without exposing arbitrary transport types or retry
++// sentinels through errors.As. The retained cause is private.
++func (e *nativeAPIKeyHTTPBodyReadError) Is(target error) bool { return errors.Is(e.cause, target) }
++
++// Shared error readers deliberately retain their original signatures/defaults.
++// Only the three native opt-in routes establish certainty here, BEFORE handing
++// complete bytes to any existing status rejection, compact, or retry handler.
++// Retain only the existing bounded prefix. Drain the remainder without retaining
++// it so LimitReader EOF cannot hide a later actual read error. Complete large
++// rejections still enter the existing handlers with the same bounded bytes.
++func bufferNativeAPIKeyHTTPError(ctx context.Context, account *Account, resp *http.Response, limit int64) error {
++	if !account.CancelsNativeAPIKeyOnDisconnect() {
++		return nil
++	}
++	if resp == nil || resp.Body == nil {
++		return &nativeAPIKeyHTTPBodyReadError{cause: io.ErrUnexpectedEOF}
++	}
++	body := resp.Body
++	stop := watchNativeAPIKeyDisconnect(ctx, account, body)
++	data, readErr := io.ReadAll(io.LimitReader(body, limit))
++	if readErr == nil && int64(len(data)) == limit {
++		_, readErr = io.Copy(io.Discard, body)
++	}
++	stop()
++	_ = body.Close()
++	if ctx != nil && ctx.Err() != nil {
++		if readErr == nil {
++			readErr = ctx.Err()
++		} else {
++			readErr = errors.Join(readErr, ctx.Err())
++		}
++	}
++	if readErr != nil {
++		return &nativeAPIKeyHTTPBodyReadError{cause: readErr}
++	}
++	resp.Body = io.NopCloser(bytes.NewReader(data))
++	return nil
++}
+--- a/backend/internal/service/openai_compact_sse_keepalive.go
++++ b/backend/internal/service/openai_compact_sse_keepalive.go
+@@ -34,6 +34,8 @@
+ 	// 这部分字节，见 OpenAICompactKeepaliveAdjustedWrittenSize。
+ 	bytes int
+ 	stop  chan struct{}
++	// Immutable before the heartbeat goroutine starts; nil preserves shared defaults.
++	onWriteFailure func()
+ }
+ 
+ // StartOpenAICompactSSEKeepalive 为已标记 body-signal 客户端流式的 compact
+@@ -56,13 +58,18 @@
+ // 心跳字节由 OpenAICompactKeepaliveAdjustedWrittenSize 统一排除，因此不会污染
+ // "是否已向客户端写出语义响应"的 failover 判定（见 #3887）。
+ func startOpenAISSEKeepalive(c *gin.Context, interval time.Duration) func() {
++	return startOpenAISSEKeepaliveWithFailure(c, interval, nil)
++}
++
++func startOpenAISSEKeepaliveWithFailure(c *gin.Context, interval time.Duration, onWriteFailure func()) func() {
+ 	if c == nil || c.Writer == nil || interval <= 0 {
+ 		return func() {}
+ 	}
+ 	originalWriter := c.Writer
+ 	k := &openAICompactSSEKeepalive{
+-		writer: originalWriter,
+-		stop:   make(chan struct{}),
++		writer:         originalWriter,
++		stop:           make(chan struct{}),
++		onWriteFailure: onWriteFailure,
+ 	}
+ 	c.Set(openAICompactSSEKeepaliveKey, k)
+ 	wrappedWriter := &openAICompactKeepaliveWriter{ResponseWriter: originalWriter, k: k}
+@@ -120,6 +127,9 @@
+ 	k.bytes += n
+ 	if err != nil {
+ 		k.stopped = true
++		if k.onWriteFailure != nil {
++			k.onWriteFailure()
++		}
+ 		return false
+ 	}
+ 	k.writer.Flush()
+--- a/backend/internal/service/openai_first_output_timeout.go
++++ b/backend/internal/service/openai_first_output_timeout.go
+@@ -33,16 +33,17 @@
+ )
+ 
+ type openAIFirstOutputStage struct {
+-	limit      int64
+-	size       int64
+-	memory     bytes.Buffer
+-	tempFile   *os.File
+-	tempPath   string
+-	createTemp func() (*os.File, error)
+-	removeFile func(string) error
+-	memoryOnly bool
+-	cleanupErr error
+-	closed     bool
++	limit       int64
++	size        int64
++	memory      bytes.Buffer
++	tempFile    *os.File
++	tempPath    string
++	createTemp  func() (*os.File, error)
++	removeFile  func(string) error
++	strictSpool bool
++	memoryOnly  bool
++	cleanupErr  error
++	closed      bool
+ }
+ 
+ func newOpenAIFirstOutputStage(limit int64) *openAIFirstOutputStage {
+@@ -59,6 +60,14 @@
+ 
+ func newDefaultOpenAIFirstOutputStage() *openAIFirstOutputStage {
+ 	return newOpenAIFirstOutputStage(openAIFirstOutputStageMaxBytes)
++}
++
++// Native passthrough must keep at most 64KiB in memory even when spooling fails.
++// Other callers retain their existing memory-only fallback policy.
++func newOpenAINativePrefixStage() *openAIFirstOutputStage {
++	s := newDefaultOpenAIFirstOutputStage()
++	s.strictSpool = true
++	return s
+ }
+ 
+ func openAIFirstOutputEventQueueSize(guardFirstOutput bool) int {
+@@ -139,6 +148,15 @@
+ 	}
+ 	if int64(incoming) > s.limit-s.size {
+ 		return fmt.Errorf("%w: buffered=%d incoming=%d limit=%d", errOpenAIFirstOutputStageLimit, s.size, incoming, s.limit)
++	}
++	if s.strictSpool {
++		if s.memoryOnly && s.size+int64(incoming) > openAIFirstOutputStageMemoryLimit {
++			return errors.New("native prefix requires a spool beyond 64KiB")
++		}
++		// Reserve once so Buffer growth cannot retain capacity beyond this budget.
++		if s.tempFile == nil && s.memory.Cap() == 0 && s.size+int64(incoming) <= openAIFirstOutputStageMemoryLimit {
++			s.memory = *bytes.NewBuffer(make([]byte, 0, openAIFirstOutputStageMemoryLimit))
++		}
+ 	}
+ 	if s.tempFile != nil || s.memoryOnly || s.size+int64(incoming) <= openAIFirstOutputStageMemoryLimit {
+ 		return nil
+@@ -166,6 +184,9 @@
+ 			closeErr,
+ 			removeErr,
+ 		)
++		if s.strictSpool {
++			return fmt.Errorf("native prefix spool unavailable: %w", s.cleanupErr)
++		}
+ 		return nil
+ 	}
+ 	if _, err := file.Write(s.memory.Bytes()); err != nil {
+@@ -174,7 +195,11 @@
+ 	}
+ 	s.tempFile = file
+ 	s.tempPath = path
+-	s.memory.Reset()
++	if s.strictSpool {
++		s.memory = bytes.Buffer{}
++	} else {
++		s.memory.Reset()
++	}
+ 	return nil
+ }
+ 
+@@ -211,7 +236,11 @@
+ 	}
+ 	s.closed = true
+ 	s.size = 0
+-	s.memory.Reset()
++	if s.strictSpool {
++		s.memory = bytes.Buffer{}
++	} else {
++		s.memory.Reset()
++	}
+ 	closeErr := s.cleanupErr
+ 	s.cleanupErr = nil
+ 	if s.tempFile != nil {
+--- a/backend/internal/service/openai_gateway_messages_anthropic_native.go
++++ b/backend/internal/service/openai_gateway_messages_anthropic_native.go
+@@ -93,7 +93,7 @@
+ 		proxyURL = account.Proxy.URL()
+ 	}
+ 
+-	upstreamCtx, releaseUpstreamCtx := detachStreamUpstreamContext(ctx, clientStream)
++	upstreamCtx, releaseUpstreamCtx := nativeAPIKeyUpstreamContext(ctx, account, clientStream)
+ 	upstreamReq, _, err := s.buildNativeAnthropicUpstreamRequest(upstreamCtx, c, account, body, apiKey, targetURL)
+ 	releaseUpstreamCtx()
+ 	if err != nil {
+@@ -102,11 +102,17 @@
+ 
+ 	resp, err := s.doOpenAIUpstream(upstreamReq, proxyURL, account)
+ 	if err != nil {
+-		return nil, s.handleOpenAIUpstreamTransportError(ctx, c, account, err, true)
++		return nil, nativeAPIKeyNoRetryError(account, s.handleOpenAIUpstreamTransportError(ctx, c, account, err, true))
+ 	}
+ 	defer func() { _ = resp.Body.Close() }()
+ 
++	if account.CancelsNativeAPIKeyOnDisconnect() && ctx.Err() != nil {
++		return nil, ctx.Err()
++	}
+ 	if resp.StatusCode >= 400 {
++		if err := bufferNativeAPIKeyHTTPError(ctx, account, resp, openAIUpstreamErrorBodyReadLimitForConfig(s.cfg)); err != nil {
++			return nil, err
++		}
+ 		respBody, upstreamMsg := s.readOpenAIUpstreamError(resp)
+ 		if foErr := s.failoverOpenAIUpstreamHTTPError(ctx, c, account, resp, respBody, upstreamMsg, upstreamModel); foErr != nil {
+ 			return nil, foErr
+@@ -117,7 +123,11 @@
+ 	}
+ 
+ 	if clientStream {
+-		return s.handleNativeAnthropicStreamingResponse(ctx, resp, c, account, originalModel, billingModel, upstreamModel, reasoningEffort, startTime)
++		result, streamErr := s.handleNativeAnthropicStreamingResponse(ctx, resp, c, account, originalModel, billingModel, upstreamModel, reasoningEffort, startTime)
++		if account.CancelsNativeAPIKeyOnDisconnect() && streamErr != nil && result != nil && !openAIUsageHasTokens(&result.Usage) {
++			result = nil
++		}
++		return result, nativeAPIKeyNoRetryError(account, streamErr)
+ 	}
+ 	return s.handleNativeAnthropicBufferedResponse(ctx, resp, c, account, originalModel, billingModel, upstreamModel, reasoningEffort, startTime)
+ }
+@@ -296,7 +306,7 @@
+ 	upstreamModel string,
+ 	reasoningEffort *string,
+ 	startTime time.Time,
+-) (*OpenAIForwardResult, error) {
++) (result *OpenAIForwardResult, resultErr error) {
+ 	observer := upstreamResponseModelObserverFromContext(c)
+ 	if observer == nil {
+ 		observer = beginUpstreamResponseModelObservation(c)
+@@ -332,6 +342,11 @@
+ 	usage := &ClaudeUsage{}
+ 	var firstTokenMs *int
+ 	clientDisconnected := false
++	defer watchNativeAPIKeyDisconnect(ctx, account, resp.Body)()
++	var cancelCh <-chan struct{}
++	if account.CancelsNativeAPIKeyOnDisconnect() {
++		cancelCh = ctx.Done()
++	}
+ 	sawTerminalEvent := false
+ 
+ 	scanner := bufio.NewScanner(resp.Body)
+@@ -346,19 +361,26 @@
+ 		line string
+ 		err  error
+ 	}
+-	events := make(chan scanEvent, 16)
++	// One queued line plus the producer's current line; no frame-size reduction.
++	events := make(chan scanEvent, 1)
++	var deliveryPending atomic.Bool
++	var lastReadAt int64
+ 	done := make(chan struct{})
++	readerExited := make(chan struct{})
+ 	sendEvent := func(ev scanEvent) bool {
++		deliveryPending.Store(true)
++		defer deliveryPending.Store(false)
+ 		select {
+ 		case events <- ev:
++			atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 			return true
+ 		case <-done:
+ 			return false
+ 		}
+ 	}
+-	var lastReadAt int64
+ 	atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 	go func(scanBuf *sseScannerBuf64K) {
++		defer close(readerExited)
+ 		defer putSSEScannerBuf64K(scanBuf)
+ 		defer close(events)
+ 		for scanner.Scan() {
+@@ -371,7 +393,11 @@
+ 			_ = sendEvent(scanEvent{err: err})
+ 		}
+ 	}(scanBuf)
+-	defer close(done)
++	defer func() {
++		if exitErr := finishNativeAPIKeyReader(account, resp.Body, done, readerExited); exitErr != nil {
++			resultErr = errors.Join(resultErr, exitErr)
++		}
++	}()
+ 
+ 	streamInterval := time.Duration(0)
+ 	if s.cfg != nil && s.cfg.Gateway.StreamDataIntervalTimeout > 0 {
+@@ -416,7 +442,12 @@
+ 	inPartialEvent := false
+ 
+ 	for {
++		if account.CancelsNativeAPIKeyOnDisconnect() && ctx.Err() != nil {
++			return s.nativeAnthropicStreamResult(c, resp, usage, firstTokenMs, true, originalModel, billingModel, upstreamModel, reasoningEffort, startTime), fmt.Errorf("stream usage incomplete: %w", ctx.Err())
++		}
+ 		select {
++		case <-cancelCh:
++			return s.nativeAnthropicStreamResult(c, resp, usage, firstTokenMs, true, originalModel, billingModel, upstreamModel, reasoningEffort, startTime), fmt.Errorf("stream usage incomplete: %w", ctx.Err())
+ 		case ev, ok := <-events:
+ 			if !ok {
+ 				if !clientDisconnected {
+@@ -471,10 +502,10 @@
+ 				restored := string(reverseToolNamesIfPresent(c, []byte(line)))
+ 				if _, err := io.WriteString(w, restored); err != nil {
+ 					clientDisconnected = true
+-					logger.LegacyPrintf("service.gateway", "[CN Anthropic 直通] Client disconnected during streaming, continue draining upstream for usage: account=%d", account.ID)
++					logger.LegacyPrintf("service.gateway", "[CN Anthropic 直通] Client disconnected during streaming; upstream lifetime follows account policy: account=%d", account.ID)
+ 				} else if _, err := io.WriteString(w, "\n"); err != nil {
+ 					clientDisconnected = true
+-					logger.LegacyPrintf("service.gateway", "[CN Anthropic 直通] Client disconnected during streaming, continue draining upstream for usage: account=%d", account.ID)
++					logger.LegacyPrintf("service.gateway", "[CN Anthropic 直通] Client disconnected during streaming; upstream lifetime follows account policy: account=%d", account.ID)
+ 				} else if line == "" {
+ 					// 按 SSE 事件边界刷出，减少每行 flush 带来的 syscall 开销。
+ 					flusher.Flush()
+@@ -486,7 +517,15 @@
+ 				}
+ 			}
+ 
++			if account.CancelsNativeAPIKeyOnDisconnect() && clientDisconnected {
++				return s.nativeAnthropicStreamResult(c, resp, usage, firstTokenMs, true, originalModel, billingModel, upstreamModel, reasoningEffort, startTime), errors.New("stream usage incomplete after disconnect")
++			}
++
+ 		case <-intervalCh:
++			// Producer backpressure and queued work are downstream delay, not upstream idle.
++			if deliveryPending.Load() || len(events) > 0 {
++				continue
++			}
+ 			lastRead := time.Unix(0, atomic.LoadInt64(&lastReadAt))
+ 			if time.Since(lastRead) < streamInterval {
+ 				continue
+@@ -516,7 +555,10 @@
+ 			}
+ 			if _, err := fmt.Fprint(w, "event: ping\ndata: {\"type\": \"ping\"}\n\n"); err != nil {
+ 				clientDisconnected = true
+-				logger.LegacyPrintf("service.gateway", "[CN Anthropic 直通] Client disconnected during keepalive ping, continue draining upstream for usage: account=%d", account.ID)
++				logger.LegacyPrintf("service.gateway", "[CN Anthropic 直通] Client disconnected during keepalive ping; upstream lifetime follows account policy: account=%d", account.ID)
++				if account.CancelsNativeAPIKeyOnDisconnect() {
++					return s.nativeAnthropicStreamResult(c, resp, usage, firstTokenMs, true, originalModel, billingModel, upstreamModel, reasoningEffort, startTime), errors.New("stream usage incomplete after disconnect")
++				}
+ 				continue
+ 			}
+ 			flusher.Flush()
+--- a/backend/internal/service/openai_gateway_passthrough.go
++++ b/backend/internal/service/openai_gateway_passthrough.go
+@@ -356,6 +356,8 @@
+ 	rejectedFieldRetryState := openAIResponsesRejectedFieldRetryStateForRequest(c, body)
+ 	var resp *http.Response
+ 	var usage *OpenAIUsage
++	var partialStreamErr error
++	partialClientDisconnect := false
+ 	var firstTokenMs *int
+ 	responseID := ""
+ 	imageCount := 0
+@@ -366,7 +368,7 @@
+ 			actualModel = reqModel
+ 		}
+ 		SetOpsUpstreamModel(c, actualModel)
+-		upstreamCtx, releaseUpstreamCtx := detachUpstreamContext(ctx)
++		upstreamCtx, releaseUpstreamCtx := nativeAPIKeyUpstreamContext(ctx, account, true)
+ 		upstreamReq, buildErr := s.buildUpstreamRequestOpenAIPassthrough(upstreamCtx, c, account, body, token)
+ 		releaseUpstreamCtx()
+ 		if buildErr != nil {
+@@ -379,11 +381,18 @@
+ 		if err != nil {
+ 			// Transport-level failure (proxy/DNS/TCP/TLS — no HTTP response). Convert to
+ 			// a failover so the handler switches to a healthy account.
+-			return nil, s.handleOpenAIUpstreamTransportError(ctx, c, account, err, true)
++			return nil, nativeAPIKeyNoRetryError(account, s.handleOpenAIUpstreamTransportError(ctx, c, account, err, true))
++		}
++		if account.CancelsNativeAPIKeyOnDisconnect() && ctx.Err() != nil {
++			_ = resp.Body.Close()
++			return nil, ctx.Err()
+ 		}
+ 		if resp.StatusCode >= 400 {
+ 			// Peek only to identify an invalid task. Restore the body so the existing
+ 			// passthrough error handling sees the same response after recovery fails.
++			if err := bufferNativeAPIKeyHTTPError(ctx, account, resp, openAIUpstreamErrorBodyReadLimitForConfig(s.cfg)); err != nil {
++				return nil, err
++			}
+ 			probeBody := s.readUpstreamErrorBody(resp)
+ 			_ = resp.Body.Close()
+ 			resp.Body = io.NopCloser(bytes.NewReader(probeBody))
+@@ -452,8 +461,20 @@
+ 		}
+ 
+ 		if reqStream {
+-			result, handleErr := s.handleStreamingResponsePassthrough(ctx, resp, c, account, startTime, reqModel, upstreamPassthroughModel)
++			result, handleErr := s.handleStreamingResponsePassthrough(upstreamCtx, resp, c, account, startTime, reqModel, upstreamPassthroughModel)
+ 			if handleErr != nil {
++				if account.CancelsNativeAPIKeyOnDisconnect() {
++					_ = resp.Body.Close()
++					partialStreamErr = nativeAPIKeyNoRetryError(account, handleErr)
++					if result == nil || !openAIUsageHasTokens(result.usage) {
++						return nil, partialStreamErr
++					}
++					usage, firstTokenMs = result.usage, result.firstTokenMs
++					partialClientDisconnect = result.clientDisconnect
++					responseID = result.responseID
++					imageCount, imageOutputSizes = result.imageCount, result.imageOutputSizes
++					break
++				}
+ 				if retryBody, fallbackModel, retry := s.applyOpenAIPassthroughCompactFallbackFromSignal(
+ 					c, account, requestedModel, body, handleErr, compactModelFallbackRetried, resp,
+ 				); retry {
+@@ -537,6 +558,7 @@
+ 		ServiceTier:                   resolvedOpenAIUpstreamServiceTier(c, serviceTier),
+ 		ReasoningEffort:               reasoningEffort,
+ 		Stream:                        reqStream,
++		ClientDisconnect:              partialClientDisconnect,
+ 		OpenAIWSMode:                  false,
+ 		Duration:                      time.Since(startTime),
+ 		FirstTokenMs:                  firstTokenMs,
+@@ -548,7 +570,7 @@
+ 		forwardResult.ImageOutputSizes = imageOutputSizes
+ 		forwardResult.BillingModel = imageBillingModel
+ 	}
+-	return forwardResult, nil
++	return forwardResult, partialStreamErr
+ }
+ 
+ func logOpenAIPassthroughInstructionsRejected(
+@@ -1046,6 +1068,7 @@
+ }
+ 
+ type openaiStreamingResultPassthrough struct {
++	clientDisconnect bool
+ 	usage            *OpenAIUsage
+ 	firstTokenMs     *int
+ 	responseID       string
+@@ -1861,6 +1884,13 @@
+ 	originalModel string,
+ 	mappedModel string,
+ ) (*openaiStreamingResultPassthrough, error) {
++	// Only trusted native opt-in connects heartbeat failure to the existing body watcher.
++	var keepaliveFailure context.CancelFunc
++	if account.CancelsNativeAPIKeyOnDisconnect() {
++		ctx, keepaliveFailure = context.WithCancel(ctx)
++		defer keepaliveFailure()
++	}
++	defer watchNativeAPIKeyDisconnect(ctx, account, resp.Body)()
+ 	observer := upstreamResponseModelObserverFromContext(c)
+ 	if observer == nil {
+ 		observer = beginUpstreamResponseModelObservation(c)
+@@ -1905,8 +1935,20 @@
+ 	var bareErrorPayload []byte
+ 	bareErrorAccountSideEffectsPending := false
+ 	upstreamRequestID := strings.TrimSpace(resp.Header.Get("x-request-id"))
+-	// pendingLines 在首个可见输出前保留前导事件，确保无输出失败仍可安全 failover。
+-	pendingLines := make([]string, 0, 8)
++	// Preserve pre-output lines under the existing 64KiB/8MiB stage budgets.
++	prefix := newOpenAINativePrefixStage()
++	defer func() {
++		if err := prefix.Close(); err != nil {
++			logger.LegacyPrintf("service.openai_gateway", "[OpenAI passthrough] Prefix cleanup: %v", err)
++		}
++	}()
++	// The caller's deadline/cancellation bounds prefix reads until replay handoff.
++	// Ownership is separate from successful semantic output: a failed prefix or
++	// first semantic write must retain the existing upstream usage-drain policy.
++	// Closing Body interrupts Scanner.Read.
++	prefixOwnsCancellation := true
++	stopPrefixCancel := context.AfterFunc(ctx, func() { _ = resp.Body.Close() })
++	defer stopPrefixCancel()
+ 
+ 	// ── 首个可见输出之前的下游 keepalive ──────────────────────────────────
+ 	//
+@@ -1917,7 +1959,7 @@
+ 	//    failover can buffer response.created / response.in_progress, so
+ 	//    keepalive must be based on downstream idle time."
+ 	//
+-	// 上面的 pendingLines 正是同一种缓冲：首个可见输出到来之前，下游【一个字节
++	// 上面的 prefix stage 正是同一种缓冲：首个可见输出到来之前，下游【一个字节
+ 	// 都收不到】—— 连 HTTP 响应头都不会提交（gin 的 ResponseWriter 直到首次写入
+ 	// 才发送 header）。Forward 路径为此加了心跳，透传路径漏了。
+ 	//
+@@ -1930,7 +1972,7 @@
+ 	//   1. 提交 HTTP 响应头，让下游知道连接活着；
+ 	//   2. 刷新中间层的空闲超时（proxy_read_timeout 衡量的是两次读之间的间隔，
+ 	//      不是请求总时长），长推理因此不再被误杀；
+-	//   3. 不写出任何 pendingLines、不泄露账号相关的头，
++	//   3. 不写出任何 prefix stage、不泄露账号相关的头，
+ 	//      且心跳字节已由 OpenAICompactKeepaliveAdjustedWrittenSize 排除，
+ 	//      所以 pre-output failover 的能力完全不受影响（#3887 的记账在此复用）。
+ 	//
+@@ -1939,8 +1981,8 @@
+ 	// text/event-stream、SSE 响应头也已设好，处于流式上下文是确定的。
+ 	stopKeepalive := func() {}
+ 	if s.cfg != nil && s.cfg.Gateway.StreamKeepaliveInterval > 0 {
+-		stopKeepalive = startOpenAISSEKeepalive(c,
+-			time.Duration(s.cfg.Gateway.StreamKeepaliveInterval)*time.Second)
++		stopKeepalive = startOpenAISSEKeepaliveWithFailure(c,
++			time.Duration(s.cfg.Gateway.StreamKeepaliveInterval)*time.Second, keepaliveFailure)
+ 	}
+ 	// 任何返回路径都要停拍。Stop 与心跳 goroutine 之间有互斥锁，
+ 	// 返回后不会再有字节写出。
+@@ -1957,14 +1999,22 @@
+ 	}
+ 	defer flushPendingOutput()
+ 	writePendingLines := func() bool {
+-		for _, pending := range pendingLines {
+-			if _, err := fmt.Fprintln(w, pending); err != nil {
+-				clientDisconnected = true
+-				logger.LegacyPrintf("service.openai_gateway", "[OpenAI passthrough] Client disconnected during streaming, continue draining upstream for usage: account=%d", account.ID)
+-				return false
+-			}
+-		}
+-		pendingLines = pendingLines[:0]
++		if prefix.closed {
++			return true
++		}
++		stopPrefixCancel()
++		prefixOwnsCancellation = false
++		stopKeepalive()
++		// CommitTo closes the spool and releases strict-stage backing storage.
++		if err := prefix.CommitTo(w); err != nil {
++			_ = prefix.Close()
++			clientDisconnected = true
++			if account.CancelsNativeAPIKeyOnDisconnect() {
++				_ = resp.Body.Close()
++			}
++			logger.LegacyPrintf("service.openai_gateway", "[OpenAI passthrough] Client disconnected during prefix replay: account=%d", account.ID)
++			return false
++		}
+ 		return true
+ 	}
+ 	ensureResponseFailedTerminal := func() {
+@@ -2001,6 +2051,7 @@
+ 	needModelReplace := strings.TrimSpace(originalModel) != "" && strings.TrimSpace(mappedModel) != "" && strings.TrimSpace(originalModel) != strings.TrimSpace(mappedModel)
+ 	resultWithUsage := func() *openaiStreamingResultPassthrough {
+ 		return &openaiStreamingResultPassthrough{
++			clientDisconnect: clientDisconnected,
+ 			usage:            usage,
+ 			firstTokenMs:     firstTokenMs,
+ 			responseID:       responseID,
+@@ -2010,6 +2061,13 @@
+ 	}
+ 
+ 	for documentScanner.Scan() {
++		if account.CancelsNativeAPIKeyOnDisconnect() && ctx.Err() != nil {
++			clientDisconnected = true
++			return resultWithUsage(), fmt.Errorf("stream usage incomplete: %w", ctx.Err())
++		}
++		if prefixOwnsCancellation && ctx.Err() != nil {
++			return resultWithUsage(), fmt.Errorf("stream usage incomplete before output: %w", ctx.Err())
++		}
+ 		line := documentScanner.Text()
+ 		if eventType, ok := extractOpenAISSEEventLine(line); ok {
+ 			pendingSSEEventType = eventType
+@@ -2199,7 +2257,13 @@
+ 
+ 		if !clientDisconnected && !failureDelivered && !suppressCurrentEvent {
+ 			if !clientOutputStarted && !lineStartsClientOutput {
+-				pendingLines = append(pendingLines, line)
++				if _, err := prefix.WriteString(line + "\n"); err != nil {
++					// HTTP acceptance does not prove zero upstream effects or zero billing.
++					// A plain error cannot enter the handler's UpstreamFailoverError replay path.
++					s.recordOpenAIStreamUpstreamError(c, account, true, upstreamRequestID, "stream_prefix_rejected", nil, "Native pre-output retention rejected; upstream billing unknown")
++					_ = resp.Body.Close()
++					return resultWithUsage(), fmt.Errorf("stream usage incomplete: native pre-output prefix rejected (upstream billing unknown): %w", err)
++				}
+ 				continue
+ 			}
+ 			// 真实输出开始，心跳的使命结束。停拍是幂等的，且会与心跳 goroutine
+@@ -2207,14 +2271,20 @@
+ 			if !clientOutputStarted {
+ 				stopKeepalive()
+ 			}
+-			if !clientOutputStarted && len(pendingLines) > 0 {
++			if !clientOutputStarted {
+ 				if !writePendingLines() {
++					if account.CancelsNativeAPIKeyOnDisconnect() {
++						return resultWithUsage(), errors.New("stream usage incomplete after disconnect")
++					}
+ 					continue
+ 				}
+ 			}
+ 			if _, err := fmt.Fprintln(w, line); err != nil {
+ 				clientDisconnected = true
+-				logger.LegacyPrintf("service.openai_gateway", "[OpenAI passthrough] Client disconnected during streaming, continue draining upstream for usage: account=%d", account.ID)
++				if account.CancelsNativeAPIKeyOnDisconnect() {
++					_ = resp.Body.Close()
++				}
++				logger.LegacyPrintf("service.openai_gateway", "[OpenAI passthrough] Client disconnected during streaming; upstream lifetime follows account policy: account=%d", account.ID)
+ 			} else {
+ 				clientOutputStarted = true
+ 				flushPending = true
+@@ -2222,6 +2292,9 @@
+ 					flushPendingOutput()
+ 				}
+ 			}
++		}
++		if account.CancelsNativeAPIKeyOnDisconnect() && clientDisconnected {
++			return resultWithUsage(), errors.New("stream usage incomplete after disconnect")
+ 		}
+ 		if line == "" && responseFailedPending {
+ 			responseFailedPending = false
+@@ -2235,6 +2308,13 @@
+ 		if (sawDone || sawTerminalEvent) && line == "" && (!codexFailureTerminal || !sawBareError) {
+ 			break
+ 		}
++	}
++	if account.CancelsNativeAPIKeyOnDisconnect() && ctx.Err() != nil {
++		clientDisconnected = true
++		return resultWithUsage(), fmt.Errorf("stream usage incomplete: %w", ctx.Err())
++	}
++	if prefixOwnsCancellation && ctx.Err() != nil {
++		return resultWithUsage(), fmt.Errorf("stream usage incomplete before output: %w", ctx.Err())
+ 	}
+ 	ensureResponseFailedTerminal()
+ 	if err := documentScanner.Err(); err != nil {

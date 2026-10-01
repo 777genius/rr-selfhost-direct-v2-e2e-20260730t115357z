@@ -1,0 +1,25 @@
+{
+  "W2_ledger_difference": [
+    "backend/internal/service/native_stream_merged_interaction_test.go",
+    "backend/internal/service/openai_gateway_passthrough.go"
+  ],
+  "W3_newgap_receipt": "Reviewer-supplied root corrected standalone W3 527 PASS / 0 SKIP; NOT merged",
+  "actual_Go_typecheck_behavior_race": "NOT RUN",
+  "approved_adapted_component_test_files": 1,
+  "approved_gap_test_sha256": "c43c8569d205da65679cacf975607dfbf20741a82d43929acbc9efc912caf9e5",
+  "base_backend_files": 3322,
+  "byte_exact_component_test_files": 6,
+  "canonical_public_route": "exact inverse/forward content round-trip; no network authentication",
+  "changed_existing_files": 5,
+  "historical_native_control": "byte exact, syntax checked; original unformatted bytes retained",
+  "interaction_RED_fault": "exact forward/inverse; identical test bytes; runtime RED NOT RUN",
+  "negative_and_output_tests": 13,
+  "production_files": 6,
+  "production_only_routes": "same exact backend result",
+  "production_patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+  "regression_patch_sha256": "f6909228e016be8817057f2f3c5bd5f460550d9139dff19810c8df59d22d466d",
+  "scope": "offline package/source/application only",
+  "source_never_written": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/native-merge-fix-w3/.spike-inputs/original-inputs/original-inputs/actual-source",
+  "status": "PASS",
+  "unchanged_backend_files": 3317
+}

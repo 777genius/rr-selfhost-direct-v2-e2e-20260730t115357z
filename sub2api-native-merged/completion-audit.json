@@ -1,0 +1,40 @@
+{
+  "objective": "Repair actual merged-source default billing-drain regression and non-discriminating replay cancellation test; deliver exact thin reusable source patch.",
+  "status": "BLOCKED; runtime update_goal returned blocked. Full objective unchanged; final source patch delivered, behavioral completion unproven.",
+  "previous_goal_turn": "NO PROGRESS: current supplied receipt paths and sealed final manifest checked; only W2 runtime receipts remain available, with final Go/race NOT RUN. No authorized independent action can establish the missing runtime/review gates.",
+  "verified_source_requirements": [
+    "actual W2 full ledger equality",
+    "exact one-argument production repair",
+    "Replay-only single failure with actual spool witness; scanner next token held upstream and actual held Read required for expected RED",
+    "unchanged original cancellation/memory/native/probe/W3 assertions",
+    "original898 to correctedc43 adaptation pinned",
+    "both exact RED source controls",
+    "canonical and original patch routes, manifests, component ledger, thin scannerON"
+  ],
+  "remaining": [
+    "Final revised same-fixture real behavior RED/GREEN and race (previous fixture revision insufficient by source audit)",
+    "merged normal/native/probe/netHTTP gates",
+    "controller image/load/billing/Redis gates",
+    "independent critical combined review"
+  ],
+  "worker_stop": "Bounded producer patch; no prohibited execution; STOP",
+  "current_progress": "Withhold SSE blank separator until release; timeout oracle now requires actual held real Read, live caller, held server/body and single dispatch/effect. Regenerate exact package.",
+  "superseded_W3_fixture_prediction": {
+    "regression_sha256": "793176d0dd7ac29e4d74966bcd9365d7d8191c63fb27aac584bc8bc0502ca079",
+    "merged_tree_sha256": "52ffeb81e8e3af17e9b6c67c52e2f8326bb72fc36c1a82a5f12227ceaf46729c",
+    "status": "Source audit disproves its replay-RED prediction; no runtime GREEN/RED claimed; use final manifest only"
+  },
+  "current_goal_turn": "NO PROGRESS: third consecutive audit confirms only old061a475/d506 receipts, with normal behavioral failures and ineffective replay RED PASS. Final package seal remains exact; no authorized worker action can prove controller gates.",
+  "pending_controller_audit": {
+    "consecutive_goal_turns": 3,
+    "condition": "Final revised fixture paired behavioral RED/GREEN/race and exact merged critical review unavailable; worker Go/Docker/root/network/auth/Git writes/subagents prohibited.",
+    "current_evidence": [
+      "Current 37-file seal matches",
+      "External backend ledger and final preparation manifest binding match 82662b8666b05b6a0a95c76c79bde630ba73a27e2ae89e72363908a1f2117c42",
+      "Only actual-gates normal and ineffective interaction-red historical W2 receipts supplied",
+      "manifest runtime final merged Go/race NOT RUN"
+    ],
+    "goal_status": "BLOCKED; runtime update confirmed",
+    "resume_condition": "Supply paired behavioral RED/GREEN/race and independent exact-source review bound to final82662b86 backend, production16bc1644 and regressionf6909228, plus remaining controller gates; or authorize a feasible verification path. No claim that controller processes have stopped."
+  }
+}

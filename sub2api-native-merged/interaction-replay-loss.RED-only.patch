@@ -1,0 +1,22 @@
+--- a/backend/internal/service/openai_gateway_passthrough.go
++++ b/backend/internal/service/openai_gateway_passthrough.go
+@@ -2009,9 +2009,6 @@
+ 		if err := prefix.CommitTo(w); err != nil {
+ 			_ = prefix.Close()
+ 			clientDisconnected = true
+-			if account.CancelsNativeAPIKeyOnDisconnect() {
+-				_ = resp.Body.Close()
+-			}
+ 			logger.LegacyPrintf("service.openai_gateway", "[OpenAI passthrough] Client disconnected during prefix replay: account=%d", account.ID)
+ 			return false
+ 		}
+@@ -2273,9 +2270,6 @@
+ 			}
+ 			if !clientOutputStarted {
+ 				if !writePendingLines() {
+-					if account.CancelsNativeAPIKeyOnDisconnect() {
+-						return resultWithUsage(), errors.New("stream usage incomplete after disconnect")
+-					}
+ 					continue
+ 				}
+ 			}

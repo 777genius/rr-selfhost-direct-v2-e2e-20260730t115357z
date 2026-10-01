@@ -1,0 +1,125 @@
+--- a/backend/internal/service/native_stream_merged_interaction_test.go
++++ b/backend/internal/service/native_stream_merged_interaction_test.go
+@@ -20,12 +20,40 @@
+ 	"github.com/gin-gonic/gin"
+ )
+ 
+-// A real transport holds terminal bytes after a prefix large enough to spill.
+-// The caller stays live: ONLY a failed replay write can end this opt-in attempt.
+-// Losing BOTH trusted replay-close and replay-return during the hunk merge
+-// makes this hang in held Read until the test cleanup cancels the caller.
+-// These are source-predicted REDs; no execution is claimed by the producer.
++// Fail only the first actual spilled-prefix replay write. Later writes succeed:
++// a mutant that continues after losing BOTH trusted replay actions must remain
++// blocked on the real held upstream. Withhold the SSE blank separator too:
++// otherwise a buffered blank line reaches the intact disconnect guard.
++type rrNativeMergedReplayFailure struct {
++	at      time.Time
++	spilled bool
++	prefix  bool
++}
++
++type rrNativeMergedReplayWriter struct {
++	gin.ResponseWriter
++	t      *testing.T
++	dir    string
++	failed chan rrNativeMergedReplayFailure
++	once   atomic.Bool
++}
++
++func (w *rrNativeMergedReplayWriter) Write(p []byte) (int, error) {
++	if w.once.CompareAndSwap(false, true) {
++		isPrefix := len(p) > 1 && p[0] == ':' && bytes.Equal(p[1:], bytes.Repeat([]byte("p"), len(p)-1))
++		w.failed <- rrNativeMergedReplayFailure{time.Now(), memorySpoolFDCount(w.t, w.dir) == 1, isPrefix}
++		return 0, io.ErrClosedPipe
++	}
++	return w.ResponseWriter.Write(p)
++}
++
++func (w *rrNativeMergedReplayWriter) WriteString(s string) (int, error) {
++	return w.Write([]byte(s))
++}
++
+ func TestNativeMergedSpilledPrefixWriterFailure(t *testing.T) {
++	dir := t.TempDir()
++	t.Setenv("TMPDIR", dir)
+ 	request := rrNativeRequest("responses")
+ 	release, returned, canceled := make(chan struct{}), make(chan struct{}), make(chan struct{})
+ 	var once sync.Once
+@@ -40,14 +68,15 @@
+ 		effects.Add(1)
+ 		w.Header().Set("Content-Type", "text/event-stream")
+ 		_, _ = io.WriteString(w, ":"+strings.Repeat("p", 80000)+"\n")
+-		_, _ = io.WriteString(w, "data: {\"type\":\"response.output_text.delta\",\"delta\":\"ready\"}\n\n")
++		// A complete JSON line triggers replay; hold the next scanner token.
++		_, _ = io.WriteString(w, "data: {\"type\":\"response.output_text.delta\",\"delta\":\"ready\"}\n")
+ 		w.(http.Flusher).Flush()
+ 		select {
+ 		case <-r.Context().Done():
+ 			close(canceled)
+ 		case <-release:
+ 			_, terminal := rrNativeFrames("responses")
+-			_, _ = io.WriteString(w, terminal)
++			_, _ = io.WriteString(w, "\n"+terminal)
+ 		}
+ 	}))
+ 	t.Cleanup(server.Close)
+@@ -58,7 +87,7 @@
+ 	t.Cleanup(cancel)
+ 	c, _ := gin.CreateTestContext(httptest.NewRecorder())
+ 	c.Request = httptest.NewRequest(http.MethodPost, "/v1/responses", bytes.NewReader(request)).WithContext(ctx)
+-	writer := &rrNativeHeartbeatFailureWriter{ResponseWriter: c.Writer, failed: make(chan time.Time, 1)}
++	writer := &rrNativeMergedReplayWriter{ResponseWriter: c.Writer, t: t, dir: dir, failed: make(chan rrNativeMergedReplayFailure, 1)}
+ 	c.Writer = writer
+ 	s := &OpenAIGatewayService{cfg: &config.Config{}, httpUpstream: u}
+ 	result := make(chan rrNativeResult, 1)
+@@ -77,14 +106,34 @@
+ 	case <-time.After(3 * time.Second):
+ 		t.Fatal("real upstream response missing")
+ 	}
+-	var failedAt time.Time
++	var failure rrNativeMergedReplayFailure
+ 	select {
+-	case failedAt = <-writer.failed:
++	case failure = <-writer.failed:
+ 	case <-time.After(3 * time.Second):
+ 		t.Fatal("spilled prefix replay never reached writer")
+ 	}
+-	deadline := failedAt.Add(rrNativeCancelOracle)
+-	got := rrNativeGapResult(t, result, deadline)
++	if !failure.spilled || !failure.prefix {
++		t.Fatalf("failure did not occur during actual anonymous spool replay: %+v", failure)
++	}
++	deadline := failure.at.Add(rrNativeCancelOracle)
++	var got rrNativeResult
++	select {
++	case got = <-result:
++	case <-time.After(time.Until(deadline)):
++		// A held-forward timeout is behavioral RED only with an actual live
++		// body Read, live caller, held server and exactly one accepted effect.
++		if ctx.Err() != nil || body.active.Load() == 0 || effects.Load() != 1 || u.attempts.Load() != 1 {
++			t.Fatal("replay fault did not leave the real accepted attempt in held Read")
++		}
++		select {
++		case <-body.closed:
++			t.Fatal("replay fault timed out after real body was already closed")
++		case <-returned:
++			t.Fatal("replay fault timed out after held upstream already returned")
++		default:
++		}
++		t.Fatal("native forward did not finish within the failure/cancellation oracle: actual held Read after replay loss")
++	}
+ 	if ctx.Err() != nil {
+ 		t.Fatal("independent caller context was canceled")
+ 	}
+--- a/backend/internal/service/openai_gateway_passthrough.go
++++ b/backend/internal/service/openai_gateway_passthrough.go
+@@ -461,7 +461,7 @@
+ 		}
+ 
+ 		if reqStream {
+-			result, handleErr := s.handleStreamingResponsePassthrough(ctx, resp, c, account, startTime, reqModel, upstreamPassthroughModel)
++			result, handleErr := s.handleStreamingResponsePassthrough(upstreamCtx, resp, c, account, startTime, reqModel, upstreamPassthroughModel)
+ 			if handleErr != nil {
+ 				if account.CancelsNativeAPIKeyOnDisconnect() {
+ 					_ = resp.Body.Close()

@@ -1,0 +1,22 @@
+{
+  "actual_Go_RED": "Supplied old W2 normal raw JSONL has these exact two behavioral leaf failures; W3 paired run pending",
+  "files": [
+    {
+      "added": 1,
+      "after_LOC": 2587,
+      "after_sha256": "f60a05cb9d0261227049a7d7eb33a31a1bce91f6f1a9a4e5ca80f91df88fdca4",
+      "before_LOC": 2587,
+      "before_sha256": "23a326cb8213bc5b2c61c477f3863ed5c1a5b792a30965e7ef407661735ec6ff",
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "removed": 1
+    }
+  ],
+  "identical_test_sha256": "a0de3ca78328cdff0a3d0a4ce8d10322e673ba1f67c8420462faeb95780e1d90",
+  "kind": "RED-only actual old merged production regression, NEVER production",
+  "patch": "default-drain-loss.RED-only.patch",
+  "required_failed_leaves": [
+    "TestNativeAPIKeyCancellationRealTransport/responses/before-headers/opt-in-false",
+    "TestNativeAPIKeyCancellationRealTransport/responses/before-ack/opt-in-false"
+  ],
+  "sha256": "19c6671cd32cc41f15133c5fe80d34f300a988809d39233174c0e4c5b0a798ba"
+}
