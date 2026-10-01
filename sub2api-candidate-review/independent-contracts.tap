@@ -1,0 +1,28 @@
+TAP version 13
+# Subtest: grant identity rejects independent mismatches and remains immutable after source mutation
+ok 1 - grant identity rejects independent mismatches and remains immutable after source mutation
+  ---
+  duration_ms: 0.81419
+  type: 'test'
+  ...
+# Subtest: server installation strictly validates and snapshots capability policy
+ok 2 - server installation strictly validates and snapshots capability policy
+  ---
+  duration_ms: 0.270787
+  type: 'test'
+  ...
+# Subtest: generated psql script starts with the ON_ERROR_STOP meta-command
+ok 3 - generated psql script starts with the ON_ERROR_STOP meta-command
+  ---
+  duration_ms: 0.325054
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 79.254721

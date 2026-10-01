@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "status": "BOUNDED_INDEPENDENT_FINAL_REVIEW_COMPLETE",
+  "review_date_utc": "2026-10-01T10:10:57.651533+00:00",
+  "ownership": "sub2api-candidate-review/ only; frozen inputs read-only; no Git mutation, Go, Docker, root operations, network, live providers or credential/home access",
+  "previous_goal_turn_classification": "No prior goal-turn evidence available in this worktree; this turn made progress through independent source/hash audit, contracts and final artifacts.",
+  "native": {
+    "revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+    "patch_sha256": "432cffdf3b2a2659da76403242942b45177d69f60fda17efd14605d7798e7135",
+    "added_lines": 1153,
+    "removed_lines": 55,
+    "changed_lines": 1208,
+    "files": 16,
+    "verified_original_hashes": 12,
+    "verified_patched_hashes": 16,
+    "decision": "REQUEST_CHANGES_R3",
+    "R1": "Account-aware exact semantic item comparison and terminal sentinel handling at all four repair callers close the reported repair defect. Ordinary/default repair remains. Initial reference namespace omission is a separate R3.",
+    "R2": "Strict UseNumber decoder and reasoning/reference traversal exemption close empty-image precision/cleanup defect in both HTTP routes.",
+    "root_gate_evidence": {
+      "prefmt_patch_sha256": "e115263fcf343e5abf2676cda339bfc3d6ea94df6170e91f5c4ff5a568bb4c3d",
+      "prefmt_pass_records": 287,
+      "baseline_pass_records": 212,
+      "baseline_failed_records": 75,
+      "compile_failed": false,
+      "formatted_patch_gate": "NOT_PROVEN_IN_FROZEN_INPUTS; native-gofmt.json explicitly says formatted_behavior_not_run=true",
+      "production_bytes": "Coordinator format-only receipt and supplied instruction say unchanged; 16 exact candidate file hashes independently match SOURCE.json"
+    },
+    "extra_header_runtime_review": "No additional concrete new header/redaction/fallback issue identified for strict API-key policy; existing filtered header helper retained. This is bounded source review, not comprehensive runtime certification."
+  },
+  "consumer": {
+    "decision": "APPROVE_FOR_DISPOSABLE_SANDBOX_SOURCE_INTEGRATION",
+    "source_hash_manifest_sha256": "4e54724ed9a2164f402c1a3481be4b865dc82e0a2ff484e21fb0b6ece48a0966",
+    "customer_sha256": "b8bd9c31fe4de4a4fd8ba04b6c9d25161f07476a928f65228b2b716b22be7508",
+    "binder_sha256": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+    "caller_sha256": "484d454a3aacf25c3ea2e21e9400bbaa1fbd5b1615b485c24e6088bc881d2599",
+    "workflow_sha256": "ae30109a82ac8f75c8c68967235293f755338a7416102198e19d15449525e566",
+    "live_setup_sha256": "1aee77ea68df897fe01e5f9c661ff9543ddbba87cb1cd7ad0a6d999d53c3794e",
+    "admin_roundtrip_sha256": "3535ce99223d632c7e0ccce719ac9201f6fb883b4a436d0973f472b08a2380c8",
+    "BR02": "Strict installation capability snapshot plus flag enforcement on preparation, duplicate, promotion and owned reads; JSON capability is operator input, not image authentication.",
+    "BR04": "Actual caller binds grant before agent effects; immutable claimed identity and six workflow receipt checks preserved. Launcher checksum and installed manifest custody remain external requirements.",
+    "BR05": "Atomic inactive unschedulable ungrouped template seed, exact-ID owner/scope guarded cleanup, observer drain and unknown-null telemetry are correctly scoped. Generated SQL first meta-command independently verified; PostgreSQL execution not performed.",
+    "reviewed_risks": [
+      "SQL seeding and cleanup ownership",
+      "replacement compensation on final deletion failure",
+      "async workspace/group/template/credential authority mutation",
+      "caller import/binder order and UID/output boundaries"
+    ],
+    "new_findings": 0,
+    "root_gate_evidence": {
+      "consumer_http_json_exit": 0,
+      "suite_count": "93/93 per supplied root statement; frozen JSON omits test counts and raw log",
+      "stock_admin_pass_results": 8,
+      "synthetic_provider_requests": 0,
+      "capability_field_audit_observed_updates": 0,
+      "capability_field_audit_false_writes": 0,
+      "probe_only_limitation": "Approved capability suppression component; reasoning432 not yet deployed; not integrated native end-to-end proof"
+    }
+  },
+  "findings": [
+    {
+      "id": "R3",
+      "priority": "P2",
+      "scope": "native",
+      "title": "Initial HTTP namespace cleanup still alters opted-in opaque item references",
+      "path": "backend/internal/service/openai_responses_namespace.go",
+      "line": 223,
+      "end_line": 225,
+      "reviewed_file": "sub2api-candidate-review/native-patched/backend/internal/service/openai_responses_namespace.go",
+      "patched_file_sha256": "164dd1169328da0abe98ed6b5b2b59fc8b0810a757a49a03e695f6d008d3c7cf",
+      "trigger": {
+        "account": {
+          "platform": "openai",
+          "type": "apikey",
+          "extra": {
+            "openai_preserve_compatible_reasoning": true
+          }
+        },
+        "request": {
+          "model": "mimo-v2.6-pro",
+          "stream": false,
+          "store": true,
+          "input": [
+            {
+              "type": "item_reference",
+              "id": "rs_provider",
+              "namespace": {
+                "provider": "opaque"
+              },
+              "extension": 9007199254740993
+            }
+          ]
+        },
+        "modes": [
+          "HTTP normal",
+          "HTTP passthrough"
+        ]
+      },
+      "actual_by_source": "Forward invokes namespace stripping before the normal/passthrough branch. Only type reasoning is exempt. item_reference is not a tool-call type, so its namespace is unconditionally deleted even with preserveReasoning=true.",
+      "expected": "The complete opted-in reasoning/reference item must survive initial normalization as well as rejected-field repair.",
+      "impact": "Provider-owned reference resolution metadata is lost on the first upstream request. The new repair comparison cannot detect it because its before snapshot is taken after initial sanitation.",
+      "minimal_fix": "Extend the preserveReasoning exemption in stripOpenAIResponsesInputNamespacesWithReasoningPolicy to item_reference, using the same type normalization as the opaque-item guard. Retain ordinary/default namespace cleanup.",
+      "reproduction": "Copy independent_reference_namespace_test.go into backend/internal/service of the exact patched disposable source; run go test -tags unit ./internal/service -run ^TestIndependentCompatibleReferenceNamespaceHTTP$ -count=1 under the coordinator pinned toolchain. Two opted-in HTTP cases should fail before repair; both default controls should pass.",
+      "reproduction_artifact": "sub2api-candidate-review/independent_reference_namespace_test.go",
+      "runtime_reproduction_status": "NOT_RUN: reviewer explicitly forbidden Go and sockets; finding is established by the reachable branch and deletion operation, not reported as a measured Go failure.",
+      "confidence": "high"
+    }
+  ],
+  "independent_checks": {
+    "input_manifest_hashes": {
+      "checks": 117,
+      "mismatches": 0,
+      "artifact": "input-hash-verification.json"
+    },
+    "native_hashes": {
+      "checks": 28,
+      "mismatches": 0,
+      "artifact": "native-hash-verification.json"
+    },
+    "node_contracts": {
+      "node": "v24.21.0",
+      "command": "/opt/nodejs/node-v24.21.0-linux-x64/bin/node --test --test-reporter=tap sub2api-candidate-review/independent-contracts.test.mjs",
+      "pass": 3,
+      "fail": 0,
+      "network_or_effects": false,
+      "artifact": "independent-contracts.tap",
+      "limits": "Binder, immutable installation and generated SQL contract only; no agent, PG, socket, provider, E2E or installed-seal claims."
+    }
+  },
+  "mandatory_external_gates": [
+    "Fix R3 and execute independent reference namespace regression plus retained native R1/R2 prescription and exact final pinned native gate.",
+    "Deploy and identify the approved native reasoning and capability suppression components together in the exclusive disposable engine.",
+    "Wire trusted installation/quarantineTemplates through serve.mjs; install independent observer snapshot/drain endpoints and perform stopped-engine template seed/guarded cleanup against pinned PostgreSQL.",
+    "Run actual STOCK-consumer integration with corrected normal-template/Copy ownership oracles, transport counters, capability DB audit and real delayed-work drain.",
+    "Verify fixed installed harness manifest including binder and transitive imports, image custody, UID/FD/descendant containment; run genuine native financial canary with preserved high reasoning and tool/terminal/numeric evidence."
+  ],
+  "unrelated_oauth_adoption": "Separate lane; unimplemented product OAuth adoption is not an API-key source blocker.",
+  "completion": "Review deliverables complete. External operator gates are documented limitations; no waits required. Candidate deployment and native end-to-end approval are not asserted.",
+  "artifacts": [
+    "review.json",
+    "REPORT.md",
+    "reviewed-source-hashes.json",
+    "input-hash-verification.json",
+    "native-hash-verification.json",
+    "independent-contracts.test.mjs",
+    "independent-contracts.tap",
+    "independent_reference_namespace_test.go",
+    "native-patched/"
+  ]
+}
