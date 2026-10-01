@@ -1,0 +1,14 @@
+{
+  "sub2api-spike/run-client.mjs": {
+    "added": 2,
+    "removed": 7
+  },
+  "sub2api-spike/evidence.mjs": {
+    "added": 16,
+    "removed": 0
+  },
+  "sub2api-spike/evidence.test.mjs": {
+    "added": 50,
+    "removed": 1
+  }
+}

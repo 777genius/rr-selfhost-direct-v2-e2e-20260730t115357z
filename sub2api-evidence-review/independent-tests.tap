@@ -1,0 +1,14 @@
+✔ independent real Node output matches either immediate member and preserves single object (37.878413ms)
+✔ independent exact fields cannot be assembled across members or coerced (0.288679ms)
+✔ independent no recursive or prose extraction (0.190467ms)
+✔ independent failed command and agent/reasoning items cannot prove numbers (0.115195ms)
+✔ independent wallet/rules bytes equal sealed constants and canonical fixtures (1.872697ms)
+✔ independent financial contract still requires separate successful reads and genuine terminal (1.262273ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 116.510933
