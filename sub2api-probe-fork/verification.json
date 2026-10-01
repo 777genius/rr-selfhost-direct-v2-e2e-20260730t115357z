@@ -1,0 +1,62 @@
+{
+  "standalone_dry_run": {
+    "status": "PASS",
+    "exit_code": 0,
+    "output": "checking file backend/internal/handler/admin/account_capability_probe_test.go\nchecking file backend/internal/handler/admin/account_handler.go\nchecking file backend/internal/service/openai_apikey_responses_probe.go\nchecking file backend/internal/service/openai_capability_probe_duplicate_test.go\n"
+  },
+  "standalone_apply": {
+    "status": "PASS",
+    "exit_code": 0,
+    "output": "patching file backend/internal/handler/admin/account_capability_probe_test.go\npatching file backend/internal/handler/admin/account_handler.go\npatching file backend/internal/service/openai_apikey_responses_probe.go\npatching file backend/internal/service/openai_capability_probe_duplicate_test.go\n"
+  },
+  "applied_file_hashes": {
+    "status": "PASS",
+    "files": [
+      "backend/internal/handler/admin/account_capability_probe_test.go",
+      "backend/internal/handler/admin/account_handler.go",
+      "backend/internal/service/openai_apikey_responses_probe.go",
+      "backend/internal/service/openai_capability_probe_duplicate_test.go"
+    ]
+  },
+  "original_unchanged_and_applied_tree_hashes": {
+    "status": "PASS"
+  },
+  "unit_tests": {
+    "status": "NOT_RUN",
+    "reason": "No go executable on PATH; /opt contains nodejs only and /usr/local has no Go toolchain. Coordinator-supplied pinned Go 1.27.1/module cache unavailable in this worker. No toolchain download attempted."
+  },
+  "gofmt": {
+    "status": "NOT_RUN",
+    "reason": "No gofmt executable available."
+  },
+  "counting_transport_boundary_review": {
+    "status": "INSPECTED_NOT_RUN",
+    "detail": "The counting HTTP fixture explicitly implements Do and DoWithTLS; both dispatch the real generated request to the same synthetic handler. No embedded nil transport fallback remains. Runtime behavior still requires pinned Go execution."
+  },
+  "toolchain_revalidation": {
+    "status": "UNAVAILABLE",
+    "go_on_path": null,
+    "gofmt_on_path": null
+  },
+  "completion_and_blocked_audit": {
+    "previous_turn_classification": "PROGRESS: counting transport hardened and complete patch/manifests rebuilt",
+    "current_source_and_patch_hashes": "PASS",
+    "original_source_unchanged": "PASS",
+    "all_required_deliverables_present": "PASS",
+    "only_requested_two_production_and_two_test_files_differ": "PASS",
+    "changed_loc": 266,
+    "patch_sha256": "31ee1ff60fa957566513cbd124cfde6ec97bdf77c1012e7ba583c098d96fdd72",
+    "go_on_path": null,
+    "gofmt_on_path": null,
+    "standard_go_paths_present": {
+      "/usr/bin/go": false,
+      "/usr/local/go/bin/go": false,
+      "/opt/go/bin/go": false
+    },
+    "completion": "NOT_PROVEN: compilation and behavioral zero-effect/original-red executions have no current results",
+    "blocker_recurrence": "Same unavailable pinned Go toolchain/module cache reported in original task turn and each of two subsequent goal turns",
+    "safe_next_action": "Coordinator supplies pinned Go 1.27.1 and cached dependencies or provides hash-bound test results. Network/toolchain download and external E2E are outside this worker authorization.",
+    "local_work_remaining": "No justified source edits identified; further behavioral verification requires external state change",
+    "test_status": "NOT_RUN; authoring fallback fulfilled without runtime PASS claims"
+  }
+}

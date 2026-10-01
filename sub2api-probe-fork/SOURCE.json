@@ -1,0 +1,59 @@
+{
+  "schema": 1,
+  "upstream_repository": "https://github.com/Wei-Shaw/sub2api",
+  "upstream_commit": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "upstream_tag": "v0.2.11",
+  "upstream_input": ".spike-inputs/upstream",
+  "upstream_commit_authentication": "NOT_VERIFIED: staged source has no Git metadata; no network or Git operations performed",
+  "editable_source": ".spike-inputs/probe-source",
+  "patch": "patches/disable-capability-probe.patch",
+  "patch_sha256": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45",
+  "changed_loc": 266,
+  "files": {
+    "backend/internal/handler/admin/account_capability_probe_test.go": {
+      "original_sha256": null,
+      "patched_sha256": "02713e466cf95581cfe2b3d3c7df98cd76cb4aad0dde2070b3bc8bfa762bd7a4"
+    },
+    "backend/internal/handler/admin/account_handler.go": {
+      "original_sha256": "88f14887c0c3d5bf6aaa953dadfc53d5043c81fe5036c33a30ebb8ea1c14edde",
+      "patched_sha256": "400339bed0a0d6f5c6ec3e9a781555b2c89e459ab0e0ce2a3a21860a5bf85044"
+    },
+    "backend/internal/service/openai_apikey_responses_probe.go": {
+      "original_sha256": "90a8b12cd496d7e34c6ecc865f353399d3c7e8c70806607010ef0167bb958ee6",
+      "patched_sha256": "56a41272e23a13c8dcb3c0fde6ea0b1948ad5e1641367be0c2f9587ddd3b7bba"
+    },
+    "backend/internal/service/openai_capability_probe_duplicate_test.go": {
+      "original_sha256": null,
+      "patched_sha256": "dc5b7cf0a37c9fffe4af8c1d8f649b86bd8439e547c777130587ffc55b0e6cdf"
+    }
+  },
+  "tree_hash_algorithm": "sha256 of sorted UTF-8 relative_path + NUL + lowercase_file_sha256 + LF entries",
+  "original_tree_sha256": "4e711add67e4bdcebf7511af6ab5cc69489ea1f1ac5c884d022a1823f35a3b70",
+  "patched_tree_sha256": "5bfbf452eb7928619305f52595dac4b903b56e3781d4e5eaee4a266e32af53a7",
+  "original_file_count": 4168,
+  "patched_file_count": 4170,
+  "baseline_hash_check": {
+    "status": "PASS",
+    "manifest": "sub2api-review/source-hashes.before.json",
+    "files": [
+      "backend/internal/handler/admin/account_handler.go",
+      "backend/internal/service/openai_apikey_responses_probe.go",
+      "backend/internal/service/admin_account.go",
+      "backend/internal/service/account.go",
+      "backend/go.mod",
+      "backend/go.sum"
+    ]
+  },
+  "unchanged_duplicate_implementation": {
+    "path": "backend/internal/service/admin_account.go",
+    "sha256": "dbe1b688310bb7a93213dba61a825aeaa400cd8457282819629659c526a12c48",
+    "inspected": "DuplicateAccount -> duplicateAccountExtra -> cloneAccountJSONMap; disable flag is absent from discarded runtime keys; JSON boolean preserved"
+  },
+  "coordinator_formatting": {
+    "only_file": "backend/internal/handler/admin/account_capability_probe_test.go",
+    "original_test_sha256": "90dbdf1dfc131cbf42ad85239fac413f371c0ded502ef915733a7c2bcd7be999",
+    "toolchain_image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+    "production_bytes_unchanged": true,
+    "original_artifacts_retained": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/sub2-transfer/probe-fork-w1-original-retention.tar"
+  }
+}
