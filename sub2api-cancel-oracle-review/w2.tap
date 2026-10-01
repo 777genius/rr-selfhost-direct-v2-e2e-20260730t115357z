@@ -1,0 +1,680 @@
+TAP version 13
+# (node:171) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: responses: revoke observation precedes first actual abort and physical close
+ok 1 - responses: revoke observation precedes first actual abort and physical close
+  ---
+  duration_ms: 3.374349
+  type: 'test'
+  ...
+# Subtest: responses: expiry observation precedes first actual abort and physical close
+ok 2 - responses: expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 1.895608
+  type: 'test'
+  ...
+# Subtest: responses: request-expiry observation precedes first actual abort and physical close
+ok 3 - responses: request-expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 2.365492
+  type: 'test'
+  ...
+# Subtest: messages: revoke observation precedes first actual abort and physical close
+ok 4 - messages: revoke observation precedes first actual abort and physical close
+  ---
+  duration_ms: 1.802515
+  type: 'test'
+  ...
+# Subtest: messages: expiry observation precedes first actual abort and physical close
+ok 5 - messages: expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 1.749249
+  type: 'test'
+  ...
+# Subtest: messages: request-expiry observation precedes first actual abort and physical close
+ok 6 - messages: request-expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 1.718186
+  type: 'test'
+  ...
+# Subtest: observer exception cannot prevent real cancellation
+ok 7 - observer exception cannot prevent real cancellation
+  ---
+  duration_ms: 1.701319
+  type: 'test'
+  ...
+# Subtest: request timeout remains distinct from expiry
+ok 8 - request timeout remains distinct from expiry
+  ---
+  duration_ms: 3.005956
+  type: 'test'
+  ...
+# Subtest: downstream close remains distinct from capability cancellation
+ok 9 - downstream close remains distinct from capability cancellation
+  ---
+  duration_ms: 2.730371
+  type: 'test'
+  ...
+# Subtest: responses before client: rapid physical close is valid
+ok 10 - responses before client: rapid physical close is valid
+  ---
+  duration_ms: 1.418167
+  type: 'test'
+  ...
+# Subtest: responses before revoke: rapid physical close is valid
+ok 11 - responses before revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.140196
+  type: 'test'
+  ...
+# Subtest: responses before expiry: rapid physical close is valid
+ok 12 - responses before expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.105155
+  type: 'test'
+  ...
+# Subtest: responses after client: rapid physical close is valid
+ok 13 - responses after client: rapid physical close is valid
+  ---
+  duration_ms: 0.094527
+  type: 'test'
+  ...
+# Subtest: responses after revoke: rapid physical close is valid
+ok 14 - responses after revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.106531
+  type: 'test'
+  ...
+# Subtest: responses after expiry: rapid physical close is valid
+ok 15 - responses after expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.092311
+  type: 'test'
+  ...
+# Subtest: responses: expiry callback anchors expiry, not setup
+ok 16 - responses: expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.140152
+  type: 'test'
+  ...
+# Subtest: responses: request-expiry callback anchors expiry, not setup
+ok 17 - responses: request-expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.111023
+  type: 'test'
+  ...
+# Subtest: messages before client: rapid physical close is valid
+ok 18 - messages before client: rapid physical close is valid
+  ---
+  duration_ms: 0.104481
+  type: 'test'
+  ...
+# Subtest: messages before revoke: rapid physical close is valid
+ok 19 - messages before revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.140072
+  type: 'test'
+  ...
+# Subtest: messages before expiry: rapid physical close is valid
+ok 20 - messages before expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.673775
+  type: 'test'
+  ...
+# Subtest: messages after client: rapid physical close is valid
+ok 21 - messages after client: rapid physical close is valid
+  ---
+  duration_ms: 0.074761
+  type: 'test'
+  ...
+# Subtest: messages after revoke: rapid physical close is valid
+ok 22 - messages after revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.045206
+  type: 'test'
+  ...
+# Subtest: messages after expiry: rapid physical close is valid
+ok 23 - messages after expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.032474
+  type: 'test'
+  ...
+# Subtest: messages: expiry callback anchors expiry, not setup
+ok 24 - messages: expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.033536
+  type: 'test'
+  ...
+# Subtest: messages: request-expiry callback anchors expiry, not setup
+ok 25 - messages: request-expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.032611
+  type: 'test'
+  ...
+# Subtest: physical close at 1201ms exceeds original 1200ms acceptance
+ok 26 - physical close at 1201ms exceeds original 1200ms acceptance
+  ---
+  duration_ms: 0.082637
+  type: 'test'
+  ...
+# Subtest: physical close at 1249.9ms exceeds original 1200ms acceptance
+ok 27 - physical close at 1249.9ms exceeds original 1200ms acceptance
+  ---
+  duration_ms: 0.037673
+  type: 'test'
+  ...
+# Subtest: physical close at 1250ms exceeds original 1200ms acceptance
+ok 28 - physical close at 1250ms exceeds original 1200ms acceptance
+  ---
+  duration_ms: 0.028633
+  type: 'test'
+  ...
+# Subtest: reject close before abort despite being after request
+ok 29 - reject close before abort despite being after request
+  ---
+  duration_ms: 0.076828
+  type: 'test'
+  ...
+# Subtest: reject close before action request
+ok 30 - reject close before action request
+  ---
+  duration_ms: 0.04561
+  type: 'test'
+  ...
+# Subtest: reject close before upstream request
+ok 31 - reject close before upstream request
+  ---
+  duration_ms: 0.05945
+  type: 'test'
+  ...
+# Subtest: reject close after 1250ms deadline
+ok 32 - reject close after 1250ms deadline
+  ---
+  duration_ms: 0.042866
+  type: 'test'
+  ...
+# Subtest: reject late broker response cannot extend deadline
+ok 33 - reject late broker response cannot extend deadline
+  ---
+  duration_ms: 0.047351
+  type: 'test'
+  ...
+# Subtest: reject upstream semantic terminal
+ok 34 - reject upstream semantic terminal
+  ---
+  duration_ms: 0.04067
+  type: 'test'
+  ...
+# Subtest: reject downstream terminal even with transport error
+ok 35 - reject downstream terminal even with transport error
+  ---
+  duration_ms: 0.050021
+  type: 'test'
+  ...
+# Subtest: reject normal complete upstream close
+ok 36 - reject normal complete upstream close
+  ---
+  duration_ms: 0.039832
+  type: 'test'
+  ...
+# Subtest: reject manual upstream release
+ok 37 - reject manual upstream release
+  ---
+  duration_ms: 0.041191
+  type: 'test'
+  ...
+# Subtest: reject manual upstream reset
+ok 38 - reject manual upstream reset
+  ---
+  duration_ms: 0.049953
+  type: 'test'
+  ...
+# Subtest: reject upstream safety reset
+ok 39 - reject upstream safety reset
+  ---
+  duration_ms: 0.048647
+  type: 'test'
+  ...
+# Subtest: reject missing physical close
+ok 40 - reject missing physical close
+  ---
+  duration_ms: 0.039782
+  type: 'test'
+  ...
+# Subtest: reject missing pre-abort event
+ok 41 - reject missing pre-abort event
+  ---
+  duration_ms: 0.04197
+  type: 'test'
+  ...
+# Subtest: reject foreign pre-abort protocol
+ok 42 - reject foreign pre-abort protocol
+  ---
+  duration_ms: 0.036023
+  type: 'test'
+  ...
+# Subtest: reject foreign pre-abort request
+ok 43 - reject foreign pre-abort request
+  ---
+  duration_ms: 0.034415
+  type: 'test'
+  ...
+# Subtest: reject foreign source clock
+ok 44 - reject foreign source clock
+  ---
+  duration_ms: 0.051701
+  type: 'test'
+  ...
+# Subtest: reject missing clock custody
+ok 45 - reject missing clock custody
+  ---
+  duration_ms: 0.041361
+  type: 'test'
+  ...
+# Subtest: reject foreign physical protocol
+ok 46 - reject foreign physical protocol
+  ---
+  duration_ms: 0.038486
+  type: 'test'
+  ...
+# Subtest: reject foreign physical identity
+ok 47 - reject foreign physical identity
+  ---
+  duration_ms: 0.043189
+  type: 'test'
+  ...
+# Subtest: reject foreign physical request
+ok 48 - reject foreign physical request
+  ---
+  duration_ms: 0.043171
+  type: 'test'
+  ...
+# Subtest: reject double upstream dispatch
+ok 49 - reject double upstream dispatch
+  ---
+  duration_ms: 0.039274
+  type: 'test'
+  ...
+# Subtest: reject double broker dispatch
+ok 50 - reject double broker dispatch
+  ---
+  duration_ms: 0.039104
+  type: 'test'
+  ...
+# Subtest: reject second broker dispatch substituted
+ok 51 - reject second broker dispatch substituted
+  ---
+  duration_ms: 0.032252
+  type: 'test'
+  ...
+# Subtest: reject multiple effects
+ok 52 - reject multiple effects
+  ---
+  duration_ms: 0.030847
+  type: 'test'
+  ...
+# Subtest: reject missing immediate snapshot
+ok 53 - reject missing immediate snapshot
+  ---
+  duration_ms: 0.039691
+  type: 'test'
+  ...
+# Subtest: reject late close only in final snapshot
+ok 54 - reject late close only in final snapshot
+  ---
+  duration_ms: 0.034577
+  type: 'test'
+  ...
+# Subtest: reject foreign immediate sequence
+ok 55 - reject foreign immediate sequence
+  ---
+  duration_ms: 0.032919
+  type: 'test'
+  ...
+# Subtest: reject immediate terminal later erased
+ok 56 - reject immediate terminal later erased
+  ---
+  duration_ms: 0.036523
+  type: 'test'
+  ...
+# Subtest: reject shortened hold
+ok 57 - reject shortened hold
+  ---
+  duration_ms: 0.035862
+  type: 'test'
+  ...
+# Subtest: reject oracle observation too early
+ok 58 - reject oracle observation too early
+  ---
+  duration_ms: 0.039941
+  type: 'test'
+  ...
+# Subtest: reject oracle observation after hold
+ok 59 - reject oracle observation after hold
+  ---
+  duration_ms: 0.034938
+  type: 'test'
+  ...
+# Subtest: reject healthy boolean without physical control
+ok 60 - reject healthy boolean without physical control
+  ---
+  duration_ms: 0.035077
+  type: 'test'
+  ...
+# Subtest: reject missing healthy downstream
+ok 61 - reject missing healthy downstream
+  ---
+  duration_ms: 0.033154
+  type: 'test'
+  ...
+# Subtest: reject missing healthy ack size
+ok 62 - reject missing healthy ack size
+  ---
+  duration_ms: 0.035824
+  type: 'test'
+  ...
+# Subtest: reject null upstream record
+ok 63 - reject null upstream record
+  ---
+  duration_ms: 0.032854
+  type: 'test'
+  ...
+# Subtest: reject null broker event
+ok 64 - reject null broker event
+  ---
+  duration_ms: 0.04124
+  type: 'test'
+  ...
+# Subtest: reject missing healthy acknowledgment
+ok 65 - reject missing healthy acknowledgment
+  ---
+  duration_ms: 0.051079
+  type: 'test'
+  ...
+# Subtest: reject foreign healthy request
+ok 66 - reject foreign healthy request
+  ---
+  duration_ms: 0.052981
+  type: 'test'
+  ...
+# Subtest: reject missing healthy physical close
+ok 67 - reject missing healthy physical close
+  ---
+  duration_ms: 0.046434
+  type: 'test'
+  ...
+# Subtest: reject tiny acknowledged healthy frame
+ok 68 - reject tiny acknowledged healthy frame
+  ---
+  duration_ms: 0.049701
+  type: 'test'
+  ...
+# Subtest: reject tiny acknowledged early frame
+ok 69 - reject tiny acknowledged early frame
+  ---
+  duration_ms: 0.074221
+  type: 'test'
+  ...
+# Subtest: reject ack before upstream flush
+ok 70 - reject ack before upstream flush
+  ---
+  duration_ms: 0.069314
+  type: 'test'
+  ...
+# Subtest: reject ack at cancellation
+ok 71 - reject ack at cancellation
+  ---
+  duration_ms: 0.063499
+  type: 'test'
+  ...
+# Subtest: reject before placement already wrote output
+ok 72 - reject before placement already wrote output
+  ---
+  duration_ms: 0.058042
+  type: 'test'
+  ...
+# Subtest: reject request timeout pretending expiry
+ok 73 - reject request timeout pretending expiry
+  ---
+  duration_ms: 0.058602
+  type: 'test'
+  ...
+# Subtest: reject finally abort pretending revoke
+ok 74 - reject finally abort pretending revoke
+  ---
+  duration_ms: 0.05923
+  type: 'test'
+  ...
+# Subtest: reject client completion pretending cancellation
+ok 75 - reject client completion pretending cancellation
+  ---
+  duration_ms: 0.047424
+  type: 'test'
+  ...
+# Subtest: historical cancel-messages-after-expiry: absent pre-abort evidence cannot become green
+ok 76 - historical cancel-messages-after-expiry: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.11829
+  type: 'test'
+  ...
+# Subtest: historical cancel-messages-after-revoke: absent pre-abort evidence cannot become green
+ok 77 - historical cancel-messages-after-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.029983
+  type: 'test'
+  ...
+# Subtest: historical cancel-messages-before-revoke: absent pre-abort evidence cannot become green
+ok 78 - historical cancel-messages-before-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.026485
+  type: 'test'
+  ...
+# Subtest: historical cancel-responses-after-expiry: absent pre-abort evidence cannot become green
+ok 79 - historical cancel-responses-after-expiry: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.020229
+  type: 'test'
+  ...
+# Subtest: historical cancel-responses-after-revoke: absent pre-abort evidence cannot become green
+ok 80 - historical cancel-responses-after-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.022422
+  type: 'test'
+  ...
+# Subtest: historical cancel-responses-before-revoke: absent pre-abort evidence cannot become green
+ok 81 - historical cancel-responses-before-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.018597
+  type: 'test'
+  ...
+# Subtest: missing upstream exercise stays NOT RUN
+ok 82 - missing upstream exercise stays NOT RUN
+  ---
+  duration_ms: 0.057738
+  type: 'test'
+  ...
+# Subtest: responses client: physical close +1200ms is PASS
+ok 83 - responses client: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.065113
+  type: 'test'
+  ...
+# Subtest: responses client: physical close +1200.001ms is FAIL
+ok 84 - responses client: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.075885
+  type: 'test'
+  ...
+# Subtest: responses client: physical close +1249ms is FAIL
+ok 85 - responses client: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.039294
+  type: 'test'
+  ...
+# Subtest: responses revoke: physical close +1200ms is PASS
+ok 86 - responses revoke: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.032326
+  type: 'test'
+  ...
+# Subtest: responses revoke: physical close +1200.001ms is FAIL
+ok 87 - responses revoke: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.026321
+  type: 'test'
+  ...
+# Subtest: responses revoke: physical close +1249ms is FAIL
+ok 88 - responses revoke: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.024303
+  type: 'test'
+  ...
+# Subtest: responses expiry: physical close +1200ms is PASS
+ok 89 - responses expiry: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.0244
+  type: 'test'
+  ...
+# Subtest: responses expiry: physical close +1200.001ms is FAIL
+ok 90 - responses expiry: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.024078
+  type: 'test'
+  ...
+# Subtest: responses expiry: physical close +1249ms is FAIL
+ok 91 - responses expiry: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.026827
+  type: 'test'
+  ...
+# Subtest: messages client: physical close +1200ms is PASS
+ok 92 - messages client: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.028939
+  type: 'test'
+  ...
+# Subtest: messages client: physical close +1200.001ms is FAIL
+ok 93 - messages client: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.024777
+  type: 'test'
+  ...
+# Subtest: messages client: physical close +1249ms is FAIL
+ok 94 - messages client: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.024064
+  type: 'test'
+  ...
+# Subtest: messages revoke: physical close +1200ms is PASS
+ok 95 - messages revoke: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.026491
+  type: 'test'
+  ...
+# Subtest: messages revoke: physical close +1200.001ms is FAIL
+ok 96 - messages revoke: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.023697
+  type: 'test'
+  ...
+# Subtest: messages revoke: physical close +1249ms is FAIL
+ok 97 - messages revoke: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.022755
+  type: 'test'
+  ...
+# Subtest: messages expiry: physical close +1200ms is PASS
+ok 98 - messages expiry: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.023277
+  type: 'test'
+  ...
+# Subtest: messages expiry: physical close +1200.001ms is FAIL
+ok 99 - messages expiry: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.023002
+  type: 'test'
+  ...
+# Subtest: messages expiry: physical close +1249ms is FAIL
+ok 100 - messages expiry: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.022947
+  type: 'test'
+  ...
+# Subtest: revoke transit consumes acceptance time; abort cannot grant grace
+ok 101 - revoke transit consumes acceptance time; abort cannot grant grace
+  ---
+  duration_ms: 0.080157
+  type: 'test'
+  ...
+# Subtest: expiry: acceptance starts at actual expiry callback
+ok 102 - expiry: acceptance starts at actual expiry callback
+  ---
+  duration_ms: 0.078779
+  type: 'test'
+  ...
+# Subtest: request-expiry: acceptance starts at actual expiry callback
+ok 103 - request-expiry: acceptance starts at actual expiry callback
+  ---
+  duration_ms: 0.034813
+  type: 'test'
+  ...
+# (node:173) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: runner before client: binds real cancellation, physical proof, unchanged hold
+ok 104 - runner before client: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 3.121789
+  type: 'test'
+  ...
+# Subtest: runner before revoke: binds real cancellation, physical proof, unchanged hold
+ok 105 - runner before revoke: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 1.955767
+  type: 'test'
+  ...
+# Subtest: runner before expiry: binds real cancellation, physical proof, unchanged hold
+ok 106 - runner before expiry: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 2.91493
+  type: 'test'
+  ...
+# Subtest: runner after client: binds real cancellation, physical proof, unchanged hold
+ok 107 - runner after client: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 1.345341
+  type: 'test'
+  ...
+# Subtest: runner after revoke: binds real cancellation, physical proof, unchanged hold
+ok 108 - runner after revoke: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 1.527434
+  type: 'test'
+  ...
+# Subtest: runner after expiry: binds real cancellation, physical proof, unchanged hold
+ok 109 - runner after expiry: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 1.786283
+  type: 'test'
+  ...
+# Subtest: runner accepts the request expiry timer as the actual expiry trigger
+ok 110 - runner accepts the request expiry timer as the actual expiry trigger
+  ---
+  duration_ms: 1.764694
+  type: 'test'
+  ...
+# Subtest: runner waits until the source clock reaches 1250ms when a timer returns early
+ok 111 - runner waits until the source clock reaches 1250ms when a timer returns early
+  ---
+  duration_ms: 1.552124
+  type: 'test'
+  ...
+1..111
+# tests 111
+# suites 0
+# pass 111
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 85.095827

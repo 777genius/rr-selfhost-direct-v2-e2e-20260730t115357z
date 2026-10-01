@@ -1,0 +1,25 @@
+{
+  "decision": "APPROVE",
+  "candidate": ".spike-inputs/candidate/sub2api-cancel-oracle-repair/cancel-oracle.patch",
+  "candidate_sha256": "30a6f989b6454230e405775bc2602549ed07080fe67a4e06bfb922590ea3f4b3",
+  "acceptance_deadline_ms": 1200,
+  "observation_horizon_ms": 1250,
+  "independent_results": {
+    "canonical_fail": 53,
+    "w1_fail": 18,
+    "w2_pass": 111,
+    "additional_pass": 22
+  },
+  "historical_recorded": {
+    "FAIL": 5,
+    "PASS": 1,
+    "promoted": 0
+  },
+  "blockers": [],
+  "limitations": [
+    "offline virtual IO/clock, not actual E2E",
+    "Go Body.Close invocation unproven",
+    "root real 12-scenario execution pending"
+  ],
+  "report": "sub2api-cancel-oracle-review/REPORT.md"
+}

@@ -1,0 +1,144 @@
+TAP version 13
+# (node:12) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: responses: absent optional observer preserves cancellation
+ok 1 - responses: absent optional observer preserves cancellation
+  ---
+  duration_ms: 3.50861
+  type: 'test'
+  ...
+# Subtest: responses: membership cancels with diagnostic-only metadata
+ok 2 - responses: membership cancels with diagnostic-only metadata
+  ---
+  duration_ms: 2.70393
+  type: 'test'
+  ...
+# Subtest: responses: workspace-revoke cancels with diagnostic-only metadata
+ok 3 - responses: workspace-revoke cancels with diagnostic-only metadata
+  ---
+  duration_ms: 2.784062
+  type: 'test'
+  ...
+# Subtest: responses: server-close cancels with diagnostic-only metadata
+ok 4 - responses: server-close cancels with diagnostic-only metadata
+  ---
+  duration_ms: 1.849621
+  type: 'test'
+  ...
+# Subtest: messages: absent optional observer preserves cancellation
+ok 5 - messages: absent optional observer preserves cancellation
+  ---
+  duration_ms: 1.882892
+  type: 'test'
+  ...
+# Subtest: messages: membership cancels with diagnostic-only metadata
+ok 6 - messages: membership cancels with diagnostic-only metadata
+  ---
+  duration_ms: 1.872888
+  type: 'test'
+  ...
+# Subtest: messages: workspace-revoke cancels with diagnostic-only metadata
+ok 7 - messages: workspace-revoke cancels with diagnostic-only metadata
+  ---
+  duration_ms: 2.006026
+  type: 'test'
+  ...
+# Subtest: messages: server-close cancels with diagnostic-only metadata
+ok 8 - messages: server-close cancels with diagnostic-only metadata
+  ---
+  duration_ms: 2.648075
+  type: 'test'
+  ...
+# Subtest: responses: membership cannot substitute revoke causality
+ok 9 - responses: membership cannot substitute revoke causality
+  ---
+  duration_ms: 1.099777
+  type: 'test'
+  ...
+# Subtest: responses: workspace-revoke cannot substitute revoke causality
+ok 10 - responses: workspace-revoke cannot substitute revoke causality
+  ---
+  duration_ms: 0.16243
+  type: 'test'
+  ...
+# Subtest: responses: server-close cannot substitute revoke causality
+ok 11 - responses: server-close cannot substitute revoke causality
+  ---
+  duration_ms: 0.104316
+  type: 'test'
+  ...
+# Subtest: responses: timeout cannot substitute revoke causality
+ok 12 - responses: timeout cannot substitute revoke causality
+  ---
+  duration_ms: 0.083401
+  type: 'test'
+  ...
+# Subtest: responses: downstream-close cannot substitute revoke causality
+ok 13 - responses: downstream-close cannot substitute revoke causality
+  ---
+  duration_ms: 0.092257
+  type: 'test'
+  ...
+# Subtest: responses: request-finally cannot substitute revoke causality
+ok 14 - responses: request-finally cannot substitute revoke causality
+  ---
+  duration_ms: 0.082901
+  type: 'test'
+  ...
+# Subtest: messages: membership cannot substitute revoke causality
+ok 15 - messages: membership cannot substitute revoke causality
+  ---
+  duration_ms: 0.124855
+  type: 'test'
+  ...
+# Subtest: messages: workspace-revoke cannot substitute revoke causality
+ok 16 - messages: workspace-revoke cannot substitute revoke causality
+  ---
+  duration_ms: 0.115784
+  type: 'test'
+  ...
+# Subtest: messages: server-close cannot substitute revoke causality
+ok 17 - messages: server-close cannot substitute revoke causality
+  ---
+  duration_ms: 0.126423
+  type: 'test'
+  ...
+# Subtest: messages: timeout cannot substitute revoke causality
+ok 18 - messages: timeout cannot substitute revoke causality
+  ---
+  duration_ms: 0.157748
+  type: 'test'
+  ...
+# Subtest: messages: downstream-close cannot substitute revoke causality
+ok 19 - messages: downstream-close cannot substitute revoke causality
+  ---
+  duration_ms: 0.092396
+  type: 'test'
+  ...
+# Subtest: messages: request-finally cannot substitute revoke causality
+ok 20 - messages: request-finally cannot substitute revoke causality
+  ---
+  duration_ms: 0.10395
+  type: 'test'
+  ...
+# Subtest: responses: immediate duplicate effect cannot be erased in final receipt
+ok 21 - responses: immediate duplicate effect cannot be erased in final receipt
+  ---
+  duration_ms: 0.175685
+  type: 'test'
+  ...
+# Subtest: messages: immediate duplicate effect cannot be erased in final receipt
+ok 22 - messages: immediate duplicate effect cannot be erased in final receipt
+  ---
+  duration_ms: 0.068854
+  type: 'test'
+  ...
+1..22
+# tests 22
+# suites 0
+# pass 22
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 78.81181
