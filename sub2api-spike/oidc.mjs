@@ -25,6 +25,6 @@ export function sub2OIDCVerifier({ ownerID, workflowSHA, clock = Date.now, jwks 
     const expected = { iss: issuer, aud: audience, repository, repository_id: '1317214237', repository_owner_id: String(ownerID), workflow_sha: workflowSHA, workflow_ref: workflowRef, ref: 'refs/heads/main', event_name: 'workflow_dispatch' };
     for (const [k, v] of Object.entries(expected)) if (c[k] !== v) throw Error('Invalid scope');
     if (typeof c.run_id !== 'string' || !/^[1-9]\d*$/.test(c.run_id) || !(typeof c.run_attempt === 'string' && /^[1-9]\d*$/.test(c.run_attempt) || Number.isSafeInteger(c.run_attempt) && c.run_attempt > 0)) throw Error('Invalid run');
-    return { runID: c.run_id, attempt: String(c.run_attempt), expires: c.exp * 1000 };
+    return { runID: c.run_id, attempt: String(c.run_attempt), workflowSHA: c.workflow_sha, expires: c.exp * 1000 };
   };
 }

@@ -33,10 +33,16 @@ export async function createBroker({ ledgerPath, verifyOIDC, scopes, resolveWork
       // Claude's native SDK uses this exact feature query. It grants no routing authority.
       if (url.search && !(url.pathname === '/anthropic/v1/messages' && url.search === '?beta=true')) throw fault(404, 'route_denied');
       if (url.pathname === '/grant' && req.method === 'POST') {
-        let claims; try { claims = await verifyOIDC(bearer(req)); } catch { throw fault(401, 'oidc_denied'); }
+        let claims; try { claims = await verifyOIDC(bearer(req));
+          if (!claims || typeof claims.runID !== 'string' || !/^[1-9]\d*$/.test(claims.runID) || typeof claims.attempt !== 'string' || !/^[1-9]\d*$/.test(claims.attempt) || typeof claims.workflowSHA !== 'string' || !/^[a-f0-9]{40}$/.test(claims.workflowSHA) || !Number.isFinite(claims.expires)) throw Error('Invalid verified identity');
+          claims = Object.freeze({ ...claims }); // Snapshot the verifier result before resolver awaits.
+        } catch { throw fault(401, 'oidc_denied'); }
         const input = await readJSON(req, 4096);
         if (Object.keys(input).some(k => !['provider', 'protocol'].includes(k))) throw fault(400, 'grant_scope_denied');
-        const scope = scopes[`${input.provider}:${input.protocol}`]; if (!scope) throw fault(400, 'unsupported_scope');
+        const selected = Object.entries(scopes).find(([name, scope]) => name === `${input.provider}:${input.protocol}` && name === `${input.provider}:${scope.protocol}`);
+        if (!selected) throw fault(400, 'unsupported_scope');
+        const [scopeName, scope] = selected;
+        const identity = Object.freeze({ runID: claims.runID, attempt: claims.attempt, workflowSHA: claims.workflowSHA, provider: scopeName.split(':')[0], protocol: scope.protocol });
         const workspace = await resolveWorkspace(claims); if (!workspace || !await isWorkspaceActive(workspace)) throw fault(403, 'membership_denied');
         const binding = scope.workspaces[workspace]; if (!binding?.key || !binding.groupID) throw fault(403, 'workspace_denied');
         const g = await lock(async () => {
@@ -45,11 +51,11 @@ export async function createBroker({ ledgerPath, verifyOIDC, scopes, resolveWork
           if (disk.runs[claims.runID]) throw fault(409, 'run_replay_denied');
           const expires = Math.min(Date.now() + ttlMs, claims.expires); if (expires <= Date.now()) throw fault(401, 'expired');
           disk.runs[claims.runID] = { attempt: claims.attempt, workspace, state: 'issued' }; await persist();
-          const grant = { capability: randomBytes(32).toString('base64url'), session: randomUUID(), scope, binding, workspace, attempt: claims.attempt, expires, requests: 0, active: 0, closed: false, controllers: new Set() };
+          const grant = { capability: randomBytes(32).toString('base64url'), session: randomUUID(), identity, scope, binding, workspace, attempt: claims.attempt, expires, requests: 0, active: 0, closed: false, controllers: new Set() };
           grant.timer = setTimeout(() => close(grant), expires - Date.now()); grant.timer.unref();
           grants.set(grant.capability, grant); byRun.set(claims.runID, grant); return grant;
         });
-        send(res, 200, { capability: g.capability, model: scope.model, expires: g.expires }); return;
+        send(res, 200, { capability: g.capability, model: g.scope.model, expires: g.expires, ...g.identity }); return;
       }
       if (req.method !== 'POST' && req.method !== 'DELETE') throw fault(404, 'route_denied');
       const g = grants.get(bearer(req));
