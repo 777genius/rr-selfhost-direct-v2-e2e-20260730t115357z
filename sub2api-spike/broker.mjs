@@ -16,14 +16,22 @@ export async function createBroker({ ledgerPath, verifyOIDC, scopes, resolveWork
   // coordinator proves the old broker terminal and removes only this lock.
   await mkdir(dirname(ledgerPath), { recursive: true, mode: 0o700 });
   const ledgerLock = await open(`${ledgerPath}.lock`, 'wx', 0o600);
-  await ledgerLock.writeFile(String(process.pid)); await ledgerLock.sync();
   const releaseLock = () => { try { unlinkSync(`${ledgerPath}.lock`); } catch {} };
-  const disk = await loadJSON(ledgerPath, { schema: 1, runs: {} });
-  if (disk.schema !== 1 || !disk.runs || Array.isArray(disk.runs)) throw Error('Invalid ledger');
+  let disk;
   const grants = new Map(), byRun = new Map(), lock = serial(); let active = 0, poisoned = false;
   async function persist() { try { await atomicJSON(ledgerPath, disk); } catch { poisoned = true; throw fault(503, 'ledger_unavailable'); } }
-  try { await persist(); } catch (e) { await ledgerLock.close(); releaseLock(); throw e; } // Before admission.
-  await ledgerLock.close();
+  // Only successful exclusive acquisition owns cleanup. A rejected constructor
+  // must not strand its lock, even when writing, reading or closing fails.
+  try {
+    await ledgerLock.writeFile(String(process.pid)); await ledgerLock.sync();
+    disk = await loadJSON(ledgerPath, { schema: 1, runs: {} });
+    if (disk.schema !== 1 || !disk.runs || Array.isArray(disk.runs)) throw Error('Invalid ledger');
+    await persist(); // Before admission.
+    await ledgerLock.close();
+  } catch (e) {
+    try { await ledgerLock.close(); } finally { releaseLock(); }
+    throw e;
+  }
   function close(g) { g.closed = true; for (const c of g.controllers) c.abort(); clearTimeout(g.timer); }
   const server = http.createServer({ maxHeaderSize: 16384 }, async (req, res) => {
     const started = Date.now(); let code = 'ok';

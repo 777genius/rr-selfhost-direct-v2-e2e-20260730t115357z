@@ -1,0 +1,118 @@
+TAP version 13
+# Subtest: offline boundary authentic omitted-group fixture completes stock roundtrip
+ok 1 - offline boundary authentic omitted-group fixture completes stock roundtrip
+  ---
+  duration_ms: 166.725976
+  type: 'test'
+  ...
+# Subtest: offline boundary authentic omitted-group fixture reconciles full stock list and get
+ok 2 - offline boundary authentic omitted-group fixture reconciles full stock list and get
+  ---
+  duration_ms: 262.09539
+  type: 'test'
+  ...
+# Subtest: offline boundary actual in-flight group remap compensates at every promotion await
+ok 3 - offline boundary actual in-flight group remap compensates at every promotion await
+  ---
+  duration_ms: 376.071229
+  type: 'test'
+  ...
+# Subtest: offline boundary replaced deleted credentials templates and membership authority stop promotion
+ok 4 - offline boundary replaced deleted credentials templates and membership authority stop promotion
+  ---
+  duration_ms: 837.624087
+  type: 'test'
+  ...
+# Subtest: offline boundary authority changes during template and credential awaits prevent duplicate
+ok 5 - offline boundary authority changes during template and credential awaits prevent duplicate
+  ---
+  duration_ms: 120.775968
+  type: 'test'
+  ...
+# Subtest: offline boundary remapped existing reads exports and mutations compensate before publication
+ok 6 - offline boundary remapped existing reads exports and mutations compensate before publication
+  ---
+  duration_ms: 420.267642
+  type: 'test'
+  ...
+# Subtest: offline boundary contradictory null malformed or lite group authority never publishes
+ok 7 - offline boundary contradictory null malformed or lite group authority never publishes
+  ---
+  duration_ms: 3358.583564
+  type: 'test'
+  ...
+# Subtest: offline boundary malformed lite recovery list and contradictory fetchOwned are refused
+ok 8 - offline boundary malformed lite recovery list and contradictory fetchOwned are refused
+  ---
+  duration_ms: 242.681132
+  type: 'test'
+  ...
+# Subtest: offline boundary uncertain compensation fences current replaced authority durably
+ok 9 - offline boundary uncertain compensation fences current replaced authority durably
+  ---
+  duration_ms: 128.080493
+  type: 'test'
+  ...
+# Subtest: offline boundary recovery rechecks remaps during list get and promotion
+ok 10 - offline boundary recovery rechecks remaps during list get and promotion
+  ---
+  duration_ms: 391.627026
+  type: 'test'
+  ...
+# Subtest: offline boundary replacement remap during old retirement compensates new account
+ok 11 - offline boundary replacement remap during old retirement compensates new account
+  ---
+  duration_ms: 232.32486
+  type: 'test'
+  ...
+# Subtest: offline boundary replaced authority during failed compensation revocation remains fenced
+ok 12 - offline boundary replaced authority during failed compensation revocation remains fenced
+  ---
+  duration_ms: 92.562926
+  type: 'test'
+  ...
+# Subtest: offline boundary matching group representations and null redacted credentials are valid full DTOs
+ok 13 - offline boundary matching group representations and null redacted credentials are valid full DTOs
+  ---
+  duration_ms: 95.660372
+  type: 'test'
+  ...
+# Subtest: offline boundary prepared template identity and scope mutation cannot duplicate
+ok 14 - offline boundary prepared template identity and scope mutation cannot duplicate
+  ---
+  duration_ms: 276.26496
+  type: 'test'
+  ...
+# Subtest: offline boundary acknowledged interrupted promotion retains explicit retire and complete recovery
+ok 15 - offline boundary acknowledged interrupted promotion retains explicit retire and complete recovery
+  ---
+  duration_ms: 268.158129
+  type: 'test'
+  ...
+# Subtest: offline consumer trusted probe policy survives preparation copy and update
+ok 16 - offline consumer trusted probe policy survives preparation copy and update
+  ---
+  duration_ms: 97.974099
+  type: 'test'
+  ...
+# Subtest: offline consumer unverified installation denies before admin effects
+ok 17 - offline consumer unverified installation denies before admin effects
+  ---
+  duration_ms: 73.82469
+  type: 'test'
+  ...
+# Subtest: offline consumer lost probe flags cannot reach scheduling or publication
+ok 18 - offline consumer lost probe flags cannot reach scheduling or publication
+  ---
+  duration_ms: 1111.38025
+  type: 'test'
+  ...
+1..18
+# tests 18
+# suites 0
+# pass 18
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 8627.997658
