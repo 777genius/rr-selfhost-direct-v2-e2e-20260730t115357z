@@ -1,0 +1,77 @@
+(node:12) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ native Retry-After60 plus 5s response fits setup and receives full 35s active (4.891567ms)
+✖ no retry also receives full active period from setup completion (1.91347ms)
+✖ supervisor cannot admit required phases: zero fixture creation and zero inference (1.825978ms)
+✖ successful readback at 70000 fails before inference (1.318972ms)
+✖ successful readback at 70001 fails before inference (1.880222ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 82.451968
+
+✖ failing tests:
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:42:1
+✖ native Retry-After60 plus 5s response fits setup and receives full 35s active (4.891567ms)
+  Error: ENOENT: no such file or directory, open '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/.spike-inputs/candidate/sub2api-regression-lab/common.mjs'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async load (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/phase-boundary.test.mjs:25:81) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/.spike-inputs/candidate/sub2api-regression-lab/common.mjs'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:43:1
+✖ no retry also receives full active period from setup completion (1.91347ms)
+  Error: ENOENT: no such file or directory, open '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/.spike-inputs/candidate/sub2api-regression-lab/common.mjs'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async load (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/phase-boundary.test.mjs:25:81) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/.spike-inputs/candidate/sub2api-regression-lab/common.mjs'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:44:1
+✖ supervisor cannot admit required phases: zero fixture creation and zero inference (1.825978ms)
+  Error: ENOENT: no such file or directory, open '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/.spike-inputs/candidate/sub2api-regression-lab/common.mjs'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async load (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/phase-boundary.test.mjs:25:81) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/.spike-inputs/candidate/sub2api-regression-lab/common.mjs'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:45:35
+✖ successful readback at 70000 fails before inference (1.318972ms)
+  Error: ENOENT: no such file or directory, open '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/.spike-inputs/candidate/sub2api-regression-lab/common.mjs'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async load (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/phase-boundary.test.mjs:25:81) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/.spike-inputs/candidate/sub2api-regression-lab/common.mjs'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:45:35
+✖ successful readback at 70001 fails before inference (1.880222ms)
+  Error: ENOENT: no such file or directory, open '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/.spike-inputs/candidate/sub2api-slot-lab/adapter.mjs'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async load (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/phase-boundary.test.mjs:25:81) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/.spike-inputs/candidate/sub2api-slot-lab/adapter.mjs'
+  }

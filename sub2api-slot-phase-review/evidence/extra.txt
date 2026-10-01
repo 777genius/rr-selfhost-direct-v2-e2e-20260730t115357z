@@ -1,0 +1,15 @@
+(node:72) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ exact 105s supervisor admission succeeds with full active budget (11.818189ms)
+✔ active deadline exactly reached during Redis and rule setup prevents first model (6.15423ms)
+✔ failure observation and teardown capped at supervisor at 104500 (5.144207ms)
+✔ failure observation and teardown capped at supervisor at 105000 (4.809349ms)
+✔ failure observation and teardown capped at supervisor at 105001 (10.55524ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 105.284743
