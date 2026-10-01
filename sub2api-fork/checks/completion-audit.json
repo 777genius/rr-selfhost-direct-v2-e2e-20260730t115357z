@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "patch_sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5",
+  "previous_goal_turn_classification": "Progress: supplied exact432 coordinator execution and independent R3 failure evidence identify the next bounded repair.",
+  "current_turn_classification": "Progress: production repair, independent regression, complete replacement and hash/apply audit delivered.",
+  "bounded_objective": "Minimal R3 code/report only in sub2api-fork; external gates are limitations",
+  "bounded_status": "DELIVERED",
+  "requirements": {
+    "captured_identity": "PASS exact432 patch and all16 captured hashes verified before edit",
+    "minimal_delta": "PASS one production exemption plus byte-identical independent R3 test",
+    "normalization_and_routes": "PASS source inspection in r3-source-audit.json",
+    "ordinary_defaults": "Unchanged sanitizer predicates; new controlled real-Forward tests prepared; runtime NOT RUN",
+    "prior_tests": "PASS all4 authored tests and independent R1/R2 bytes unchanged; selection retained; exact432 287 PASS receipt is prior evidence only",
+    "official96f4_replacement": "PASS all17 originals/patched hashes in SOURCE; zero-offset/fuzz apply/reverse and exact432 reconstruction",
+    "formatting": "NOT RUN gofmt unavailable; coordinator command documented",
+    "ownership": "Only sub2api-fork writes; probe/OAuth and other lanes preserved; no Git mutation"
+  },
+  "behavioral_closure": "UNVERIFIED; NOT RUN locally",
+  "git_preflight": "Performed once; linked gitdir inaccessible/missing in sandbox, no visible lock; no Git operation or bypass attempted",
+  "external_gates_are_waits": false,
+  "production_go": false
+}

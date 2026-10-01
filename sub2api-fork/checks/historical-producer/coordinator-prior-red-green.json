@@ -1,0 +1,37 @@
+{
+  "cases": [
+    {
+      "kind": "original-behavior-red",
+      "exit": 1,
+      "duration_s": 43.38,
+      "network": "none",
+      "source_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+      "patch_sha256": "4d19a886a346e3d0dbf80b515d12d640a07fc36994f26d3dbddb9245e78f3357",
+      "toolchain_image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+      "actual_test_failures": [
+        "--- FAIL: TestCompatibleReasoningPolicyHTTP (0.01s)",
+        "--- FAIL: TestCompatibleReasoningPolicyHTTP/passthrough_false/opt_in_store_false (0.00s)",
+        "--- FAIL: TestCompatibleReasoningPolicyHTTP/passthrough_false/opt_in_store_true (0.00s)",
+        "--- FAIL: TestCompatibleReasoningPolicyHTTP/passthrough_false/opt_in_store_missing (0.00s)",
+        "--- FAIL: TestCompatibleReasoningPolicyHTTP/passthrough_true/opt_in_store_false (0.00s)",
+        "--- FAIL: TestCompatibleReasoningPolicyHTTP/passthrough_true/opt_in_store_true (0.00s)",
+        "--- FAIL: TestCompatibleReasoningPolicyHTTP/passthrough_true/opt_in_store_missing (0.00s)",
+        "--- FAIL: TestCompatibleReasoningPolicyWebSocketPreparation (0.00s)",
+        "--- FAIL: TestCompatibleReasoningPolicyWebSocketPreparation/opt_in (0.00s)"
+      ],
+      "compile_failed": false
+    },
+    {
+      "kind": "patched-behavior-green",
+      "exit": 0,
+      "duration_s": 31.03,
+      "network": "none",
+      "source_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+      "patch_sha256": "4d19a886a346e3d0dbf80b515d12d640a07fc36994f26d3dbddb9245e78f3357",
+      "toolchain_image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+      "actual_test_failures": [],
+      "compile_failed": false
+    }
+  ],
+  "source_pin_hashes_match": true
+}

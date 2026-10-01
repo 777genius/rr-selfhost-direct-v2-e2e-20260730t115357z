@@ -1,0 +1,6 @@
+{
+  "status": "NOT VERIFIED",
+  "revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "check": "Read four original touched files from pinned public raw GitHub URLs and compare SHA-256",
+  "reason": "Sandbox rejected raw.githubusercontent.com: domain is not on the allowlist. No retry or policy bypass. Staged original checksums remain authoritative for patch application; coordinator must validate pin."
+}

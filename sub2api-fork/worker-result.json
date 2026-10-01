@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "status": "BOUNDED_R3_CODE_REPORT_DELIVERED",
+  "patch": {
+    "path": "patches/native-reasoning.patch",
+    "sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5",
+    "strip": 1,
+    "added_lines": 1196,
+    "removed_lines": 55,
+    "changed_lines": 1251
+  },
+  "source_revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "remediation": {
+    "delta_path": "checks/r3-repair.patch",
+    "delta_sha256": "a638e61dfff17f140104b5ba14bb08fd9907dc8fc26191b0a172a85831dd648e",
+    "added_lines": 44,
+    "removed_lines": 1,
+    "rejected_manifest": "checks/r3-rejected-source.json",
+    "local_go_compilation_behavior": "NOT RUN: coordinator-owned offline gate",
+    "authored_go_formatting": "NOT RUN: gofmt unavailable locally"
+  },
+  "delta_files": [
+    "backend/internal/service/independent_reference_namespace_test.go",
+    "backend/internal/service/openai_responses_namespace.go"
+  ],
+  "local_artifact_checks": "PASS",
+  "Go_behavior": "NOT RUN availability guard exit77",
+  "gofmt": "NOT RUN availability guard exit77",
+  "before_fix_evidence": {
+    "reasoning-w4-final-red-green.json": {
+      "path": ".spike-inputs/coordinator/reasoning-w4-final-red-green.json",
+      "sha256": "4ca7c741940a30de159c727b5e50639b87b5ad05f86a5250ff8fa3f521a6f0c4",
+      "receipt": {
+        "kind": "exact-reasoning-w4-red-green",
+        "source_pin_hashes_match": true,
+        "patch_sha256": "432cffdf3b2a2659da76403242942b45177d69f60fda17efd14605d7798e7135",
+        "cases": [
+          {
+            "mode": "patched",
+            "exit": 0,
+            "duration_s": 40.07,
+            "actual_failed_tests": [],
+            "passed_test_count": 287,
+            "compile_failed": false
+          }
+        ],
+        "toolchain_image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+        "worker_patch_unchanged": true
+      },
+      "worker_executed": false,
+      "replacement_validation": false
+    },
+    "reasoning-w4-reference-independent-execution.json": {
+      "path": ".spike-inputs/coordinator/reasoning-w4-reference-independent-execution.json",
+      "sha256": "041bd0095adac2dc86ca3fe28fe6b9c097cc3fba59130b556f8f8b88e2e63c2e",
+      "receipt": {
+        "kind": "actual-independent-reference-namespace-Forward-test",
+        "exit": 1,
+        "patch_sha256": "432cffdf3b2a2659da76403242942b45177d69f60fda17efd14605d7798e7135",
+        "test_sha256": "5863f7d72bf5d31865f4a162c614895358fefdc042de9b6128f4d75021e9fa47",
+        "duration_s": 42.77,
+        "failed_tests": [
+          "TestIndependentCompatibleReferenceNamespaceHTTP/pass_false/opt_true",
+          "TestIndependentCompatibleReferenceNamespaceHTTP/pass_true/opt_true",
+          "TestIndependentCompatibleReferenceNamespaceHTTP"
+        ],
+        "passed_records": 2
+      },
+      "worker_executed": false,
+      "replacement_validation": false
+    }
+  },
+  "prior287_tests_preserved": "PASS byte identity and focused selection; new behavior NOT RUN",
+  "R1_R2_independent_sha256": "3ca97c2d50f0c3c498c51d1fb0af9b7fa5352089953f84d1224e6ea5e03887ce",
+  "R3_independent_sha256": "5863f7d72bf5d31865f4a162c614895358fefdc042de9b6128f4d75021e9fa47",
+  "blockers": [],
+  "limitations": [
+    "Coordinator exact replacement Go/gofmt, Docker/image and live gates NOT RUN",
+    "Current Go compilation, behavioral closure and formatting unverified"
+  ],
+  "external_gates_are_waits": false,
+  "ownership": "sub2api-fork/ only; no probe/OAuth or other-lane edits, no Git mutation/root/Docker/network/live/production/auth-home/credential operations",
+  "coordinator_commands": [
+    "python3 sub2api-fork/checks/run-backend-tests.py --format",
+    "python3 sub2api-fork/checks/run-backend-tests.py --r3-rejected",
+    "python3 sub2api-fork/checks/run-backend-tests.py"
+  ],
+  "deliverables": [
+    "SOURCE.json",
+    "patches/native-reasoning.patch",
+    "REPORT.md",
+    "README.md",
+    "PLAN.md",
+    "checks/r3-repair.patch",
+    "checks/r3-rejected-source.json",
+    "checks/rejected432.patch",
+    "checks/r3-source-audit.json",
+    "checks/r1-r2-preserved-patterns.json",
+    "checks/freeze-artifact.py",
+    "checks/verify-artifact.py",
+    "checks/run-backend-tests.py",
+    "checks/artifact-verification.json",
+    "checks/r3-rejected-execution.json",
+    "checks/patched-execution.json",
+    "checks/format-execution.json",
+    "checks/completion-audit.json",
+    "checks/finding-closure.json",
+    "checks/regression-oracles.json",
+    "worker-result.json"
+  ],
+  "deliverable_hashes": [
+    {
+      "path": "SOURCE.json",
+      "sha256": "cdc4bb339ebbf8af66ec457214c08e28b6e231d2b813f299cee4392fc2fa2053"
+    },
+    {
+      "path": "patches/native-reasoning.patch",
+      "sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5"
+    },
+    {
+      "path": "REPORT.md",
+      "sha256": "af38f397cc6ffb81c725a6b0935de2007bbc9044e59572df4f192418069a8e9e"
+    },
+    {
+      "path": "README.md",
+      "sha256": "855c619897da0f72180c626b923ef4b4a5b8ad2c94df2b3f840fe2b287290789"
+    },
+    {
+      "path": "PLAN.md",
+      "sha256": "0b2ce18305ba8e33dd894a4ff6d5c3e548b38511c37cbaab87a44b867926069e"
+    },
+    {
+      "path": "checks/r3-repair.patch",
+      "sha256": "a638e61dfff17f140104b5ba14bb08fd9907dc8fc26191b0a172a85831dd648e"
+    },
+    {
+      "path": "checks/r3-rejected-source.json",
+      "sha256": "53310757aeba610421c453de78d6717707661d3e81d39b0f63576c669c1282e5"
+    },
+    {
+      "path": "checks/rejected432.patch",
+      "sha256": "432cffdf3b2a2659da76403242942b45177d69f60fda17efd14605d7798e7135"
+    },
+    {
+      "path": "checks/r3-source-audit.json",
+      "sha256": "7fa2f9097fa04c418c0e0af16aacc6c492b7eae4360862eaca09fdfda4e4bd67"
+    },
+    {
+      "path": "checks/r1-r2-preserved-patterns.json",
+      "sha256": "24894653fb5749b95c8dd0e40c6ca907e02f2fe3203f545592cb9a333d85261a"
+    },
+    {
+      "path": "checks/freeze-artifact.py",
+      "sha256": "b61502d40821ffae72d4d363ef8b799ae6db329d70225767e39618663862016e"
+    },
+    {
+      "path": "checks/verify-artifact.py",
+      "sha256": "72e673ad384d535f3805af919114a21e21f8dd686de95f79d6db5338de11941c"
+    },
+    {
+      "path": "checks/run-backend-tests.py",
+      "sha256": "eb82373f1d7eaa245401dfd037f4b138eaf23fc275efcdf21442b8712013e503"
+    },
+    {
+      "path": "checks/artifact-verification.json",
+      "sha256": "5097c57f92eb83a5232a6f25b35f827cbadbae823b78bc779dbcc60935a63f38"
+    },
+    {
+      "path": "checks/r3-rejected-execution.json",
+      "sha256": "1725c1e104deda6911bac74fd9df7e118d89a8df5046d066b657ee25f5ec3a9f"
+    },
+    {
+      "path": "checks/patched-execution.json",
+      "sha256": "655f4c641ea0c9b25fc456e08d34c7195237624d2f522b8418de415a1f0110a1"
+    },
+    {
+      "path": "checks/format-execution.json",
+      "sha256": "d91bddd9672ca16e37ec8a2041187325c07c46c7d7dbfacd7f46ec2eabc42849"
+    },
+    {
+      "path": "checks/completion-audit.json",
+      "sha256": "8c953be654c5c85cf4bbfd48cd7fcf4319780a43137294e65ccc1137f4328ffa"
+    },
+    {
+      "path": "checks/finding-closure.json",
+      "sha256": "7701e6dd8c59dab66d68daa0a994242eef6e3eb42d4a8de83c94f670c3ae9d54"
+    },
+    {
+      "path": "checks/regression-oracles.json",
+      "sha256": "ea5ef4fb082ff864f00231dee2885ca5b6c125a057be73eca9693a6ccea3db16"
+    }
+  ]
+}

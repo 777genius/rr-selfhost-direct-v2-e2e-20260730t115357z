@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repository": "https://github.com/Wei-Shaw/sub2api",
+    "release": "v0.2.11",
+    "revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+    "source_path": ".spike-inputs/upstream",
+    "revision_evidence": "Task-supplied pin; staged tree has no Git metadata. Original touched-file checksums recorded; coordinator must compare with the immutable pinned revision.",
+    "staged_server_version": "0.2.10"
+  },
+  "editable_source": {
+    "path": "build-source",
+    "ignored_by": "../.gitignore:sub2api-fork/build-source/",
+    "nested_git": false
+  },
+  "patch": {
+    "path": "patches/native-reasoning.patch",
+    "sha256": "4d19a886a346e3d0dbf80b515d12d640a07fc36994f26d3dbddb9245e78f3357",
+    "strip": 1,
+    "added_lines": 294,
+    "removed_lines": 31,
+    "changed_lines": 325
+  },
+  "files": [
+    {
+      "path": "backend/internal/service/account.go",
+      "original_sha256": "d2c9c04d4acbb76d1c04ebb5628ea22efe620aae75ca97b319bb85fd5a17d083",
+      "patched_sha256": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "original_sha256": "a3a20c891f67ae6268a2cd4af8363aeba1e2c1853305746aa1a40f27d3bd898e",
+      "patched_sha256": "833b21426726e938c66370292bc6de30a789b6c30ba7f9484448a14a31a20623"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_request_body.go",
+      "original_sha256": "b7cf920f1013a2cd0dbfdf9c0d306da7deeff94e2fb25f764b242f23fe4f6bcb",
+      "patched_sha256": "16dd34bdd7f041f9bfd78a01a7d9525a1ee77dcb3e3b1906d636781ef07b810e"
+    },
+    {
+      "path": "backend/internal/service/openai_responses_item_id.go",
+      "original_sha256": "1acf2e024ee351ec925c89b4259860ebfbb101872b0676770a0d57c2e3cbb065",
+      "patched_sha256": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2"
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_policy_test.go",
+      "original_sha256": null,
+      "patched_sha256": "ee23210693b910cb56422f8b0bff322fa39ea38d749a477c2a928d04552487bc"
+    }
+  ]
+}

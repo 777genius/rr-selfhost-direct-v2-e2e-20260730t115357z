@@ -1,0 +1,8 @@
+{
+  "patch_apply": "PASS: zero fuzz; exact patched hashes",
+  "patch_reverse": "PASS: exact original hashes; new test removed",
+  "source_nested_git": "PASS: none",
+  "source_ignore_rule": "PASS: explicit inherited rule; git check-ignore unavailable",
+  "changed_lines": 325,
+  "offline_check_runner_python_syntax": "PASS"
+}

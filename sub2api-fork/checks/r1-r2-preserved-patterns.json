@@ -1,0 +1,17 @@
+[
+  "TestCompatibleReasoningPolicy.*",
+  "TestCompatibleReasoningReview.*",
+  "TestDeriveOpenAIForwardAttemptBody.*",
+  "TestNormalizeOpenAIAPIKeyStoreFalseReasoningReplay.*",
+  "TestNormalizeOpenAIResponsesReasoningContentReplay.*",
+  "TestNormalizeOpenAIResponsesWebSocketCompatibilityBody.*",
+  "TestOpenAIGatewayService_APIKeyPassthrough_StripsInvalidInputItemIDs",
+  "TestOpenAIGatewayService_OAuthPassthrough_SanitizesNativeToolItemIDs",
+  "TestOpenAIGatewayService_Forward_HTTPIngressRetries.*InvalidEncryptedContentOnce",
+  "TestOpenAIGatewayService_Forward_WSv2InvalidEncryptedContent.*",
+  "TestOpenAIGatewayService_ProxyResponsesWebSocketFromClient_InvalidEncryptedContentLineageStripsNextTurn",
+  "TestOpenAIWSStateStoreInvalidEncryptedContentLineage",
+  "TestStripOpenAI.*EncryptedContent.*",
+  "TestStripOpenAIResponsesInputNamespaces.*",
+  "TestOpenAIGatewayService_OpenAIHTTPStripsInputNamespacesBeforeFirstForward"
+]

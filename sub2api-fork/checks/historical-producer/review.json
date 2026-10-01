@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "objective": "Independently review exact Sub2API compatible reasoning patch and red-green evidence for native thinking-enabled canary",
+  "status": "BOUNDED_AUDIT_COMPLETE",
+  "decision": "CANARY_NO_GO",
+  "production_go": false,
+  "reason": "Two reachable branches violate the advertised opaque reasoning contract; exact frozen proposal needs correction and targeted evidence before strict canary authorization.",
+  "upstream_revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "patch_sha256": "4d19a886a346e3d0dbf80b515d12d640a07fc36994f26d3dbddb9245e78f3357",
+  "source_manifest_sha256": "8b62f28c630f5942bd5615e28c64ea8299886006a20727a527f9c0bcd6fe9b2c",
+  "source_files": [
+    {
+      "path": "backend/internal/service/account.go",
+      "original_sha256": "d2c9c04d4acbb76d1c04ebb5628ea22efe620aae75ca97b319bb85fd5a17d083",
+      "original_matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "original_sha256": "a3a20c891f67ae6268a2cd4af8363aeba1e2c1853305746aa1a40f27d3bd898e",
+      "original_matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_request_body.go",
+      "original_sha256": "b7cf920f1013a2cd0dbfdf9c0d306da7deeff94e2fb25f764b242f23fe4f6bcb",
+      "original_matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_responses_item_id.go",
+      "original_sha256": "1acf2e024ee351ec925c89b4259860ebfbb101872b0676770a0d57c2e3cbb065",
+      "original_matches": true
+    }
+  ],
+  "patched_files": [
+    {
+      "path": "backend/internal/service/account.go",
+      "sha256": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587",
+      "matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "sha256": "833b21426726e938c66370292bc6de30a789b6c30ba7f9484448a14a31a20623",
+      "matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_request_body.go",
+      "sha256": "16dd34bdd7f041f9bfd78a01a7d9525a1ee77dcb3e3b1906d636781ef07b810e",
+      "matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_responses_item_id.go",
+      "sha256": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2",
+      "matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_policy_test.go",
+      "sha256": "ee23210693b910cb56422f8b0bff322fa39ea38d749a477c2a928d04552487bc",
+      "matches": true
+    }
+  ],
+  "verification": {
+    "local_patch_apply": "PASS_FUZZ_ZERO_ALL_FIVE_HASHES",
+    "local_patch_reverse": "PASS_ALL_FOUR_ORIGINAL_HASHES_TEST_REMOVED",
+    "official_archive_pin": "Accepted user-provided coordinator attestation; locally verified touched hashes; no network/archive re-fetch",
+    "red_green_receipt_path": ".spike-inputs/candidate/coordinator-red-green.json",
+    "red_green_receipt_sha256": "771e262d486a0b4eab400958798987f6c1fbe88238d2dd1d891e534d73e0db33",
+    "red_green": {
+      "status": "PASS_SUMMARY_CONSISTENCY",
+      "red_exit": 1,
+      "green_exit": 0,
+      "red_failure_records": 9,
+      "red_leaf_failure_records": 7,
+      "compile_failed": false,
+      "network": "none",
+      "locally_rerun": false,
+      "raw_logs_present": false,
+      "note": "Summary receipt accepted with task-supplied coordinator archive/toolchain attestation; not independent execution or live final-answer proof."
+    },
+    "toolchain_image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414"
+  },
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "P1",
+      "classification": "proven_by_control_flow; targeted_behavioral_test_needed",
+      "blocks_canary": true,
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "line": 1121,
+      "related_locations": [
+        {
+          "path": "backend/internal/service/openai_gateway_forward.go",
+          "line": 754
+        },
+        {
+          "path": "backend/internal/service/openai_gateway_forward.go",
+          "line": 850
+        },
+        {
+          "path": "backend/internal/service/openai_gateway_request_body.go",
+          "line": 428
+        },
+        {
+          "path": "backend/internal/service/openai_ws_forwarder_ingress.go",
+          "line": 605
+        },
+        {
+          "path": "backend/internal/service/openai_ws_forwarder_ingress.go",
+          "line": 1478
+        }
+      ],
+      "title": "Opt-in still permits OpenAI ciphertext recovery and later lineage stripping",
+      "trigger": "Trusted native API-key opt-in, passthrough=false, encrypted reasoning history, upstream HTTP 400 error.code=invalid_encrypted_content; or a matching stored session invalid-ciphertext digest. WS ingress also strips matching lineage independently of opt-in.",
+      "impact": "HTTP retries after deleting encrypted_content from provider-owned reasoning (all encrypted reasoning, not only a uniquely identified rejected item), records ciphertext digests, and later requests strip matching history. WS recovery/ingress has the same policy gap. Content and opaque metadata may survive, but encrypted_content does not. This contradicts the explicitly promised intact encrypted history.",
+      "evidence": "Patch guards initial normalizers and ID sanitizer only. Retry branch at 1121 has no preserveCompatibleReasoning guard; trim helper at request_body.go:428 deletes encrypted_content; pre-strip at 754 and WS ingress check lineage without account policy. These are inherited branches left reachable by this proposal, not newly introduced recovery code.",
+      "minimal_remedy": "For opted-in accounts, gate ciphertext mutation, lineage recording and lineage pre-stripping at every HTTP/WS boundary; surface the original upstream rejection instead. Keep default/OpenAI/OAuth recovery unchanged.",
+      "acceptance_test": "Use real Forward with existing transport recorder, opted-in encrypted history and a 400 invalid_encrypted_content response. Assert original error/no second upstream request and no lineage record; seed a matching digest and assert first outbound ciphertext unchanged. Exercise actual WS ingress/recovery preparation with the same state. Repeat with policy=false to retain existing recovery."
+    },
+    {
+      "id": "F2",
+      "severity": "P2",
+      "classification": "proven_by_control_flow_and_Go_JSON_semantics; targeted_behavioral_test_needed",
+      "blocks_canary": true,
+      "path": "backend/internal/service/openai_gateway_request_body.go",
+      "line": 1540,
+      "related_locations": [
+        {
+          "path": "backend/internal/service/openai_gateway_passthrough.go",
+          "line": 216
+        },
+        {
+          "path": "backend/internal/service/image_generation_intent.go",
+          "line": 283
+        },
+        {
+          "path": "backend/internal/service/openai_codex_transform.go",
+          "line": 899
+        }
+      ],
+      "title": "Later image-tool preparation rounds opaque reasoning numbers",
+      "trigger": "Opted-in compatibleReasoningHistory plus tools=[{\"type\":\"image_generation\",\"format\":\"png\"}] through actual WS compatibility preparation or HTTP passthrough.",
+      "impact": "The later map[string]any json.Unmarshal decodes opaque=9007199254740993 as float64; tool format migration forces json.Marshal and emits 9007199254740992. The policy sanitizer preserves raw history earlier, but this later branch corrupts it. Native WS and HTTP passthrough diverge from the ordinary HTTP UseNumber decode path.",
+      "evidence": "Predicate accepts the legacy format field; normalizeOpenAIResponsesImageGenerationTools migrates/deletes it and returns true; request_body.go:1540 then 1544 use ordinary Unmarshal/Marshal of the entire request. Existing added fixture already tests this integer but never includes a tool that activates this branch.",
+      "minimal_remedy": "Replace this whole-body json.Unmarshal with existing decodeOpenAIJSONUseNumber; prefer raw field edits if lexical replay fidelity is required. No dependency needed.",
+      "acceptance_test": "Call real normalizeOpenAIResponsesWebSocketCompatibilityBody and real Forward passthrough with the existing history plus legacy image format/compression; assert expected tool migration and exact opaque numeric Raw, reasoning/ciphertext/IDs/references and tool pairing. No mirrored normalization mock."
+    }
+  ],
+  "additional_test_needed": [
+    {
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "line": 130,
+      "issue": "Earlier HTTP namespace sanitizer removes top-level namespace even from opted-in reasoning; raw WS preparation retains it. Proven conditional rewrite, but whether this provider uses that extension is unproven; not an additional canary blocker. Add an opaque-extension fixture and preserve opted-in reasoning when stripping other item namespaces."
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_policy_test.go",
+      "line": 54,
+      "issue": "Tool items are compared in relative tool order and reasoning items in relative reasoning order; full interleaving is not asserted. Assert full input sequence (with expected message sanitation), including references, to protect association."
+    }
+  ],
+  "satisfied_checks": [
+    "Trusted Extra boolean only, platform=openai/type=apikey/native Responses gate; no caller body/header reads select policy. Query caller cannot configure Extra per task boundary.",
+    "Missing/false/nonboolean and OAuth/setup-token defaults remain; route predicate matches forced-CC/probe routing.",
+    "Raw sanitizer keeps opted-in reasoning; other item ID/call_id rules retain previous implementation; item_reference unconstrained IDs unchanged.",
+    "Initial HTTP and first/follow-up WS normalization calls use the same trusted account policy.",
+    "Opt-in sanitizer validates JSON, UTF-8 and object root even when input absent/nonarray; semantic provider shapes remain upstream validation.",
+    "No added dependency, model switch, protocol switch or response-side transformation."
+  ],
+  "limitations": [
+    "No local Go executable; no independent new Go run or gofmt. Coordinator red-green receipt is accepted evidence, not newly executed tests.",
+    "No raw coordinator test log, archive bytes or test command in summary receipt; nine FAIL records include two parent tests and seven named leaf failures, not proof of nine independent assertions.",
+    "Static code findings are not locally executed reproductions; concrete real-boundary experiments specified.",
+    "No real WS socket, immutable patched engine digest, thinking-enabled genuine final answer, financial contract or required live regressions established.",
+    "Administrative custody/tenant controls and production deployment are outside this narrow review; no production GO."
+  ],
+  "remaining_external_gates": [
+    "Correct findings and freeze replacement patch/hash; rerun same meaningful baseline/patched oracles plus finding-specific cases with pinned offline toolchain.",
+    "Build one immutable engine recording upstream revision, reviewed patch and image digest.",
+    "Coordinator-owned authorized disposable native thinking-enabled Codex+MiMo canary must return genuine nonempty final answer satisfying strict financial contract; response.completed alone is insufficient.",
+    "Required same-image Codex+OpenRouter and Claude+MiMo native regressions, custody/isolation gates and rollback/teardown evidence."
+  ],
+  "ownership": {
+    "writes_only": "sub2api-fork-review/",
+    "source_changes": false,
+    "git_writes": false,
+    "network_docker_root_live_inference_credentials_access": false,
+    "temporary_exact_patch_reconstruction_removed": true
+  },
+  "artifacts": [
+    "sub2api-fork-review/REPORT.md",
+    "sub2api-fork-review/review.json",
+    "sub2api-fork-review/verification.json"
+  ]
+}

@@ -1,0 +1,176 @@
+[
+  {
+    "Time": "2026-10-01T08:04:40.8894312Z",
+    "Action": "run",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889432581Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage",
+    "Output": "=== RUN   TestCompatibleReasoningReviewF1BridgeSSELineage\n",
+    "OutputType": "frame"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889434479Z",
+    "Action": "run",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889435888Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false",
+    "Output": "=== RUN   TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false\n",
+    "OutputType": "frame"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889672557Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false",
+    "Output": "2026/10/01 08:04:40 [OpenAI WS Mode][openai_ws_mode=true] ingress_ws_http_bridge_invalid_encrypted_lineage_mark account_id=5151 turn=1 digests=1\n"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889779478Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false",
+    "Output": "    openai_compatible_reasoning_review_test.go:352: \n",
+    "OutputType": "error"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889782029Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false",
+    "Output": "        \tError Trace:\t/src/internal/service/openai_compatible_reasoning_review_test.go:352\n",
+    "OutputType": "error-continue"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889783819Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false",
+    "Output": "        \tError:      \tReceived unexpected error:\n",
+    "OutputType": "error-continue"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889785477Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false",
+    "Output": "        \t            \tupstream error: 502 (failover)\n",
+    "OutputType": "error-continue"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889787665Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false",
+    "Output": "        \tTest:       \tTestCompatibleReasoningReviewF1BridgeSSELineage/opt_false\n",
+    "OutputType": "error-continue"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889790776Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false",
+    "Output": "--- FAIL: TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false (0.00s)\n",
+    "OutputType": "frame"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889792848Z",
+    "Action": "fail",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_false",
+    "Elapsed": 0
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889795074Z",
+    "Action": "run",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_true"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.889796953Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_true",
+    "Output": "=== RUN   TestCompatibleReasoningReviewF1BridgeSSELineage/opt_true\n",
+    "OutputType": "frame"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.890034208Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_true",
+    "Output": "    openai_compatible_reasoning_review_test.go:352: \n",
+    "OutputType": "error"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.890040166Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_true",
+    "Output": "        \tError Trace:\t/src/internal/service/openai_compatible_reasoning_review_test.go:352\n",
+    "OutputType": "error-continue"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.890042076Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_true",
+    "Output": "        \tError:      \tReceived unexpected error:\n",
+    "OutputType": "error-continue"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.89004375Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_true",
+    "Output": "        \t            \tupstream error: 502 (failover)\n",
+    "OutputType": "error-continue"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.890045322Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_true",
+    "Output": "        \tTest:       \tTestCompatibleReasoningReviewF1BridgeSSELineage/opt_true\n",
+    "OutputType": "error-continue"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.890047662Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_true",
+    "Output": "--- FAIL: TestCompatibleReasoningReviewF1BridgeSSELineage/opt_true (0.00s)\n",
+    "OutputType": "frame"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.890049498Z",
+    "Action": "fail",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage/opt_true",
+    "Elapsed": 0
+  },
+  {
+    "Time": "2026-10-01T08:04:40.890051388Z",
+    "Action": "output",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage",
+    "Output": "--- FAIL: TestCompatibleReasoningReviewF1BridgeSSELineage (0.00s)\n",
+    "OutputType": "frame"
+  },
+  {
+    "Time": "2026-10-01T08:04:40.890053699Z",
+    "Action": "fail",
+    "Package": "github.com/Wei-Shaw/sub2api/internal/service",
+    "Test": "TestCompatibleReasoningReviewF1BridgeSSELineage",
+    "Elapsed": 0
+  }
+]

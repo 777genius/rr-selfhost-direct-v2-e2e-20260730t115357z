@@ -1,0 +1,211 @@
+diff --git a/backend/internal/service/openai_ws_http_bridge.go b/backend/internal/service/openai_ws_http_bridge.go
+--- a/backend/internal/service/openai_ws_http_bridge.go
++++ b/backend/internal/service/openai_ws_http_bridge.go
+@@ -838,6 +838,14 @@
+ 					)
+ 				}
+ 			}
++			// Opaque compatible ciphertext rejection is a terminal request error,
++			// including when response.failed omits an invalid_request_error type.
++			preserveCipherRejection := account.PreservesCompatibleResponsesReasoning() &&
++				(gjson.GetBytes(upstreamMessage, "error.code").String() == "invalid_encrypted_content" ||
++					gjson.GetBytes(upstreamMessage, "response.error.code").String() == "invalid_encrypted_content")
++			if preserveCipherRejection {
++				shouldFailover = false
++			}
+ 			requestScopedCapacity := isOpenAIUpstreamCapacityShedEvent(upstreamMessage)
+ 			if account.Platform == PlatformGrok && eventType == "error" {
+ 				// SSE error events do not carry an HTTP status. The local status
+@@ -877,6 +885,10 @@
+ 				suppressClientMessage = true
+ 			} else {
+ 				bareErrorPending = false
++				if preserveCipherRejection {
++					upstreamTerminalEvent = "response.failed"
++					upstreamEventErr = fmt.Errorf("invalid_encrypted_content: %s", errMessage)
++				}
+ 			}
+ 		}
+ 
+diff --git a/backend/internal/service/openai_compatible_reasoning_review_test.go b/backend/internal/service/openai_compatible_reasoning_review_test.go
+--- a/backend/internal/service/openai_compatible_reasoning_review_test.go
++++ b/backend/internal/service/openai_compatible_reasoning_review_test.go
+@@ -4,6 +4,7 @@
+ 
+ import (
+ 	"context"
++	"errors"
+ 	"fmt"
+ 	"io"
+ 	"net/http"
+@@ -22,10 +23,16 @@
+ )
+ 
+ const compatibleCipherRejection = `{"error":{"code":"invalid_encrypted_content","type":"invalid_request_error","message":"Provider rejected opaque cipher"}}`
++const compatibleCipherFailed = `{"type":"response.failed","response":{"id":"resp_rejected","error":{"code":"invalid_encrypted_content","message":"Provider rejected opaque cipher"}}}`
+ const compatibleCompleted = `{"type":"response.completed","response":{"id":"resp_review","model":"mimo-v2.6-pro","output":[],"usage":{"input_tokens":1,"output_tokens":1}}}`
+ 
+ func compatibleReviewResponse(status int, body string) *http.Response {
+ 	return &http.Response{StatusCode: status, Header: http.Header{"Content-Type": []string{"application/json"}}, Body: io.NopCloser(strings.NewReader(body))}
++}
++
++func compatibleReviewCipherSSEResponse() *http.Response {
++	stream := "data: {\"type\":\"error\"," + compatibleCipherRejection[1:] + "\n\ndata: " + compatibleCipherFailed + "\n\ndata: [DONE]\n\n"
++	return &http.Response{StatusCode: http.StatusOK, Header: http.Header{"Content-Type": []string{"text/event-stream"}}, Body: io.NopCloser(strings.NewReader(stream))}
+ }
+ 
+ func TestCompatibleReasoningReviewF1HTTP(t *testing.T) {
+@@ -164,7 +171,7 @@
+ 			frames <- raw
+ 			if reject {
+ 				_ = conn.WriteMessage(websocket.TextMessage, []byte(`{"type":"error",`+compatibleCipherRejection[1:]))
+-				_ = conn.WriteMessage(websocket.TextMessage, []byte(`{"type":"response.failed","response":{"id":"resp_rejected","error":{"code":"invalid_encrypted_content","message":"Provider rejected opaque cipher"}}}`))
++				_ = conn.WriteMessage(websocket.TextMessage, []byte(compatibleCipherFailed))
+ 			} else {
+ 				_ = conn.WriteMessage(websocket.TextMessage, []byte(compatibleCompleted))
+ 			}
+@@ -211,17 +218,28 @@
+ }
+ 
+ func TestCompatibleReasoningReviewF1WSIngress(t *testing.T) {
+-	for _, bridge := range []bool{false, true} {
++	for _, mode := range []string{"native", "http", "sse"} {
++		bridge, sse := mode != "native", mode == "sse"
+ 		for _, optIn := range []bool{false, true} {
+ 			for _, seeded := range []bool{false, true} {
+-				t.Run(fmt.Sprintf("bridge_%t/opt_%t/seed_%t", bridge, optIn, seeded), func(t *testing.T) {
++				if sse && !optIn {
++					continue // Legacy SSE return is covered by the direct bridge control.
++				}
++				name := fmt.Sprintf("bridge_%t/opt_%t/seed_%t", bridge, optIn, seeded)
++				if sse {
++					name += "/sse"
++				}
++				t.Run(name, func(t *testing.T) {
+ 					cfg := compatibleReviewWSConfig()
+ 					cfg.Gateway.OpenAIWS.ModeRouterV2Enabled = bridge
+ 					cfg.Gateway.OpenAIWS.IngressModeDefault = OpenAIWSIngressModeCtxPool
+ 					wsServer, frames := compatibleReviewWSServer(t, !seeded)
+ 					upstream := &httpUpstreamSequenceRecorder{responses: []*http.Response{compatibleReviewResponse(http.StatusBadRequest, compatibleCipherRejection)}}
+-					if seeded {
++					if seeded && !sse {
+ 						upstream.responses = []*http.Response{{StatusCode: http.StatusOK, Header: http.Header{"Content-Type": []string{"text/event-stream"}}, Body: io.NopCloser(strings.NewReader("data: " + compatibleCompleted + "\n\ndata: [DONE]\n\n"))}}
++					}
++					if sse {
++						upstream.responses = []*http.Response{compatibleReviewCipherSSEResponse()}
+ 					}
+ 					svc := &OpenAIGatewayService{cfg: cfg, httpUpstream: upstream, cache: &stubGatewayCache{}, openaiWSResolver: NewOpenAIWSProtocolResolver(cfg), toolCorrector: NewCodexToolCorrector()}
+ 					t.Cleanup(func() { svc.getOpenAIWSConnPool().Close() })
+@@ -233,6 +251,13 @@
+ 					}
+ 					body := append([]byte(`{"type":"response.create",`), compatibleReasoningRequest(`"store":false,`)[1:]...)
+ 					store := svc.getOpenAIWSStateStore()
++					var callbackCount, callbackTurn int
++					var callbackResult *OpenAIForwardResult
++					var callbackErr error
++					hooks := &OpenAIWSIngressHooks{AfterTurn: func(turn int, result *OpenAIForwardResult, err error) {
++						callbackCount++
++						callbackTurn, callbackResult, callbackErr = turn, result, err
++					}}
+ 					done := make(chan error, 1)
+ 					server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+ 						conn, err := coderws.Accept(w, r, nil)
+@@ -254,7 +279,7 @@
+ 							if seeded {
+ 								store.MarkSessionInvalidEncryptedContent(0, hash, collectOpenAIEncryptedContentDigestsRaw(first), time.Minute)
+ 							}
+-							err = svc.ProxyResponsesWebSocketFromClient(ctx, c, conn, account, "sk-test", first, nil)
++							err = svc.ProxyResponsesWebSocketFromClient(ctx, c, conn, account, "sk-test", first, hooks)
+ 						}
+ 						done <- err
+ 					}))
+@@ -267,24 +292,43 @@
+ 					require.NoError(t, client.Write(ctx, coderws.MessageText, body))
+ 					_, event, err := client.Read(ctx)
+ 					require.NoError(t, err)
+-					if !seeded && optIn {
++					if !seeded && optIn && !sse {
+ 						require.Equal(t, "invalid_encrypted_content", gjson.GetBytes(event, "error.code").String())
+ 						require.Equal(t, "Provider rejected opaque cipher", gjson.GetBytes(event, "error.message").String())
++					}
++					if sse {
++						require.JSONEq(t, compatibleCipherFailed, string(event), "F1: original SSE client terminal")
+ 					}
+ 					if !bridge && !seeded {
+ 						_, _, err = client.Read(ctx) // Authoritative response.failed terminal.
+ 						require.NoError(t, err)
+ 					}
+-					_ = client.Close(coderws.StatusNormalClosure, "done")
++					if !sse {
++						_ = client.Close(coderws.StatusNormalClosure, "done")
++					}
+ 					select {
+ 					case err = <-done:
+-						if bridge && !seeded {
++						if bridge && (!seeded || sse) {
+ 							require.Error(t, err)
+ 						} else {
+ 							require.NoError(t, err)
+ 						}
+ 					case <-ctx.Done():
+ 						t.Fatal("ingress did not terminate")
++					}
++					if sse {
++						var failover *UpstreamFailoverError
++						require.False(t, errors.As(err, &failover), "F1: ingress must not offer account retry/fallback")
++						require.False(t, isOpenAIWSIngressTurnRetryable(err))
++						_, retry := OpenAIWSCurrentTurnRetryPayload(err)
++						require.False(t, retry)
++						require.EqualError(t, err, "invalid_encrypted_content: Provider rejected opaque cipher")
++						require.Equal(t, 1, callbackCount)
++						require.Equal(t, 1, callbackTurn)
++						require.Same(t, err, callbackErr)
++						require.NotNil(t, callbackResult)
++						require.Equal(t, "response.failed", callbackResult.UpstreamTerminalEvent)
++						require.Empty(t, frames, "F1: bridge rejection must not fall back to native WS")
+ 					}
+ 					var outbound []byte
+ 					if bridge {
+@@ -333,9 +377,7 @@
+ func TestCompatibleReasoningReviewF1BridgeSSELineage(t *testing.T) {
+ 	for _, optIn := range []bool{false, true} {
+ 		t.Run(fmt.Sprintf("opt_%t", optIn), func(t *testing.T) {
+-			failed := `{"type":"response.failed","response":{"id":"resp_rejected","error":{"code":"invalid_encrypted_content","message":"Provider rejected opaque cipher"}}}`
+-			stream := "data: {\"type\":\"error\"," + compatibleCipherRejection[1:] + "\n\ndata: " + failed + "\n\ndata: [DONE]\n\n"
+-			upstream := &httpUpstreamSequenceRecorder{responses: []*http.Response{{StatusCode: http.StatusOK, Header: http.Header{"Content-Type": []string{"text/event-stream"}}, Body: io.NopCloser(strings.NewReader(stream))}}}
++			upstream := &httpUpstreamSequenceRecorder{responses: []*http.Response{compatibleReviewCipherSSEResponse()}}
+ 			svc := newOpenAIImageGenerationControlTestService(nil)
+ 			svc.httpUpstream = upstream
+ 			account := newOpenAIImageGenerationControlTestAccount()
+@@ -345,14 +387,27 @@
+ 			body, _, err := normalizeOpenAIResponsesWebSocketCompatibilityBody(compatibleReasoningRequest(`"store":false,`), account, false)
+ 			require.NoError(t, err)
+ 			var events [][]byte
+-			_, err = svc.proxyOpenAIWSHTTPBridgeTurn(context.Background(), c, account, "sk-test", body, len(body), "mimo-v2.6-pro", "", "", "", "", 1, func(event []byte) error {
++			result, err := svc.proxyOpenAIWSHTTPBridgeTurn(context.Background(), c, account, "sk-test", body, len(body), "mimo-v2.6-pro", "", "", "", "", 1, func(event []byte) error {
+ 				events = append(events, append([]byte(nil), event...))
+ 				return nil
+ 			})
+-			require.NoError(t, err)
++			var failover *UpstreamFailoverError
++			if optIn {
++				require.False(t, errors.As(err, &failover), "F1: SSE ciphertext rejection must not fail over")
++				require.EqualError(t, err, "invalid_encrypted_content: Provider rejected opaque cipher")
++				require.NotNil(t, result)
++				require.Equal(t, "response.failed", result.UpstreamTerminalEvent)
++				require.Len(t, events, 1)
++				require.JSONEq(t, compatibleCipherFailed, string(events[0]))
++			} else {
++				require.ErrorAs(t, err, &failover, "Default bridge retains legacy failover")
++				require.Equal(t, http.StatusBadGateway, failover.StatusCode)
++				require.JSONEq(t, `{"error":{"type":"upstream_error","message":"Provider rejected opaque cipher"}}`, string(failover.ResponseBody))
++				require.True(t, failover.ShouldRetryNextAccount())
++				require.Nil(t, result)
++				require.Empty(t, events, "Legacy failover occurs before client output")
++			}
+ 			require.Equal(t, 1, upstream.callCount)
+-			require.NotEmpty(t, events)
+-			require.JSONEq(t, failed, string(events[len(events)-1]))
+ 			require.Equal(t, !optIn, svc.getOpenAIWSStateStore().HasAnySessionInvalidEncryptedContent(), "F1: bridge SSE lineage recording")
+ 			if optIn {
+ 				assertCompatibleReplay(t, upstream.bodies[0], true, true)
