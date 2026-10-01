@@ -1,0 +1,254 @@
+{
+  "schema": "oauth-lab-w1-results/v1",
+  "status": "NOT RUN",
+  "reason": "Go and gofmt executables unavailable; no disposable PostgreSQL/Redis configuration used",
+  "evidence_kind": "prepared-synthetic-integration-fixtures",
+  "runtime_passes": 0,
+  "runtime_failures": 0,
+  "runtime_not_run": 12,
+  "expected_upstream_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "commit_pin_verified_in_worker": false,
+  "request_limit": 128,
+  "configured_application_refresh_attempt_upper_bound": 56,
+  "go_compile_status": "NOT RUN",
+  "gofmt_status": "NOT RUN",
+  "live_oauth_status": "NOT RUN",
+  "production_changes": [],
+  "cases": [
+    {
+      "id": "normal_8_concurrent",
+      "go_subtest": "TestOAuthLabLifecycle/normal_8_concurrent",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "8 prepared requests across 2 processes all select A1; one issuer POST and one effective rotation; durable R1 and real parser metadata; subsequent A1",
+      "actual": null,
+      "red_regression": "Duplicate refresh, lost R1, malformed form or stale A0 bearer",
+      "required_barriers": [
+        "postgres_snapshots_prepared:left",
+        "postgres_snapshots_prepared:right",
+        "issuer_consumed_R0",
+        "other_process_actual_redis_contention"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    },
+    {
+      "id": "background_then_request",
+      "go_subtest": "TestOAuthLabLifecycle/background_then_request",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "Actual initial background cycle and request path respect same real Redis lock; one issuer refresh; actual selector uses A1",
+      "actual": null,
+      "red_regression": "Background/request double-refresh or stale bearer after rotation",
+      "required_barriers": [
+        "postgres_snapshots_prepared:request",
+        "background_issuer_inflight",
+        "request_actual_redis_contention",
+        "actual_background_cycle_completed:background"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    },
+    {
+      "id": "request_then_background",
+      "go_subtest": "TestOAuthLabLifecycle/request_then_background",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "Request-held Redis lease causes real background cycle to skip; one issuer refresh; later A1",
+      "actual": null,
+      "red_regression": "Background ignores real request lock or later selects stale bearer",
+      "required_barriers": [
+        "postgres_snapshots_prepared:request",
+        "request_issuer_inflight",
+        "background_actual_redis_contention",
+        "actual_background_cycle_completed:background"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    },
+    {
+      "id": "reconnect_while_refresh",
+      "go_subtest": "TestOAuthLabLifecycle/reconnect_while_refresh",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "Real management credential commit to REAUTH_REFRESH wins stale refresh in PostgreSQL, actual Redis scheduler account and subsequent selector",
+      "actual": null,
+      "red_regression": "Unconditional stale refresh overwrites committed reconnect",
+      "required_barriers": [
+        "issuer_consumed_R0",
+        "postgres_reconnect_committed",
+        "redis_reconnect_published",
+        "actual_background_cycle_completed:background"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    },
+    {
+      "id": "disable_while_refresh",
+      "go_subtest": "TestOAuthLabLifecycle/disable_while_refresh",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "Durable and Redis account eligibility remain disabled; real scheduling repository denies subsequent bearer work",
+      "actual": null,
+      "red_regression": "Background republishes stale active/schedulable account",
+      "required_barriers": [
+        "issuer_rotation_inflight",
+        "postgres_disable_committed",
+        "redis_disable_published",
+        "actual_background_cycle_completed:background"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    },
+    {
+      "id": "lock_ttl_expiry",
+      "go_subtest": "TestOAuthLabLifecycle/lock_ttl_expiry",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "Observe real lease expiry and live successor lease; forbid consumed-R0 retry and previous owner deleting live successor lock",
+      "actual": null,
+      "red_regression": "Old-owner unconditional DEL erases successor or consumed R0 is sent again",
+      "required_barriers": [
+        "postgres_snapshots_prepared:first",
+        "postgres_snapshots_prepared:successor",
+        "actual_first_redis_lease_expired",
+        "successor_issuer_attempt_held",
+        "successor_redis_lease_observed_live"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    },
+    {
+      "id": "redis_outage_process_local_8",
+      "go_subtest": "TestOAuthLabLifecycle/redis_outage_process_local_8",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "8 requests within one process serialize under actual Redis TCP failures; one issuer refresh; second process subsequently reads A1",
+      "actual": null,
+      "red_regression": "Redis degradation removes process-local serialization or selects stale bearer",
+      "required_barriers": [
+        "postgres_snapshots_prepared:batch",
+        "actual_redis_tcp_failure",
+        "issuer_rotation_inflight"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    },
+    {
+      "id": "redis_outage_two_process_race",
+      "go_subtest": "TestOAuthLabLifecycle/redis_outage_two_process_race",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "Across processes actual Redis failure must not send consumed R0 again or select stale bearer",
+      "actual": null,
+      "red_regression": "Instance-local fallback is mistaken for distributed protection",
+      "required_barriers": [
+        "postgres_snapshots_prepared:first",
+        "postgres_snapshots_prepared:other",
+        "both_processes_actual_redis_failure",
+        "both_processes_issuer_attempt_inflight"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    },
+    {
+      "id": "revocation_request_path",
+      "go_subtest": "TestOAuthLabLifecycle/revocation_request_path",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "Confirmed invalid_grant propagates before resource bearer work and excludes account from actual scheduling; new work denied",
+      "actual": null,
+      "red_regression": "Existing-token fallback admits confirmed revoked identity",
+      "required_barriers": [
+        "postgres_snapshots_prepared:request",
+        "issuer_confirmed_invalid_grant"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    },
+    {
+      "id": "revocation_background_path",
+      "go_subtest": "TestOAuthLabLifecycle/revocation_background_path",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "Actual background invalid_grant handling excludes account and new synthetic bearer work; one issuer attempt, no resources",
+      "actual": null,
+      "red_regression": "Background revocation fails to contain identity before new work",
+      "required_barriers": [
+        "issuer_confirmed_invalid_grant",
+        "actual_background_cycle_completed:background"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    },
+    {
+      "id": "issuer_rotation_lost_db_commit_ack",
+      "go_subtest": "TestOAuthLabLifecycle/issuer_rotation_lost_db_commit_ack",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "Real PostgreSQL commit succeeds, injected driver hides acknowledgement; independent DB reread finds R1; no R0 replay; subsequent A1",
+      "actual": null,
+      "red_regression": "Acknowledgement uncertainty causes consumed-R0 replay or false revocation",
+      "required_barriers": [
+        "issuer_consumed_R0",
+        "actual_postgresql_commit_ack_hidden",
+        "independent_postgresql_reread",
+        "actual_background_cycle_completed:background"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    },
+    {
+      "id": "issuer_rotation_db_write_rejected",
+      "go_subtest": "TestOAuthLabLifecycle/issuer_rotation_db_write_rejected",
+      "status": "NOT RUN",
+      "kind": "synthetic-http-real-postgresql-redis-independent-processes",
+      "expected": "After issuer consumes R0, real PostgreSQL trigger rejects persistence; no automatic R0 retry and no new bearer work",
+      "actual": null,
+      "red_regression": "Background retries a refresh token already consumed before failed DB persistence",
+      "required_barriers": [
+        "issuer_consumed_R0",
+        "real_postgresql_rejection_trigger_installed",
+        "actual_background_cycle_completed:background"
+      ],
+      "duration_ms": null,
+      "issuer_requests": null,
+      "effective_rotations": null,
+      "child_pids": null,
+      "limitation": "Auth selection + fixture resource HTTP; no full Forward/live OAuth proof; compiler/runtime unverified"
+    }
+  ]
+}
