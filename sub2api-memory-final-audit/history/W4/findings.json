@@ -1,0 +1,245 @@
+{
+  "empirical_criterion": {
+    "implication": "Failure proves observed reclaim envelope not met, regardless of reachability or allocator explanation. It does not prove an indefinite leak or absolute RSS between samples.",
+    "meaning": "Last qualifying completed quiescent RSS and smaps sample near 5sec must both be <= burst pre-load baseline +32MiB; separate sampled peak and lifetime cgroup guards also apply.",
+    "production_risk": "Elevated resident high-water memory can reduce container headroom during repeated bursts, increase OOM risk and concurrency cost; unreachable heap/static costs still consume resident capacity until reclaimed.",
+    "stability": "FINITE_SCOPE_ONLY; counts and postwarmup sampled slopes do not establish a plateau. No production GO."
+  },
+  "findings": [
+    {
+      "bound": "Count bounded by physical 100000-slot channel; byte budget not enforced in enqueue. Not an unbounded queue or proof of indefinite leak.",
+      "classification": "SOURCE_CONFIRMED_UNNECESSARY_BODY_REFERENCE",
+      "evidence": "Both enqueue functions copy input including Body; worker consumes extracted content/log plus metadata; all input.Body reads are before enqueue helpers. No clearing assignment. Pending tasks therefore keep original body backing storage alive.",
+      "id": "M2",
+      "independent_red_green": "With worker held and no GC, enqueue large-body tasks through both modes. Red: stored Body nonnil. Green: stored Body nil, same extracted moderation content/metadata/log/action and queue/drop behavior; release/drain reaches zero. Do not use RSS or forced GC as this oracle.",
+      "measured_run_cause": "UNPROVEN; moderation state/queue occupancy not supplied",
+      "proposed_minimal_fix": "Clear Body in the local metadata copy before both enqueue task constructions.",
+      "source": "content_moderation.go:318-332,1178-1293"
+    },
+    {
+      "classification": "SOURCE_CONFIRMED_CHURN_DEPENDENT_MAP_RETENTION",
+      "evidence": "Per hash health entries are inserted; configuration removal/replacement does not prune map; no map deletion in supplied service source. Distinct used configurations accumulate state.",
+      "id": "M3",
+      "independent_red_green": "Offline fixture uses synthetic hash identifiers to exercise repeated insert/retire cycles. Red: inactive historical map grows with cycles. Green: bounded historical state while active accounting/freeze behavior remains correct and concurrent completion cannot resurrect unlimited retired state.",
+      "measured_run_cause": "UNPROVEN; fixed workload has no demonstrated configuration churn",
+      "proposed_minimal_fix": "Bound inactive historical health state or prune removed inactive entries with concurrency-safe handling of in-flight calls.",
+      "source": "content_moderation.go:545,2338-2449;content_moderation_engines.go:99-159"
+    },
+    {
+      "classification": "NO_PROVABLE_STREAM_REPLAY_OR_SPOOL_DEFECT_IN_INSPECTED_PATHS",
+      "evidence": "Messages uses one queued event, scanner-owned 64KiB pooled seed returned on reader exit, trusted cancellation body close and bounded reader join. Responses strict native stage 64KiB RAM/8MiB aggregate, anonymous spool, strict fail closed, deferred Close and commit release; scalar scan runs on forwarding goroutine. Expanded scanner buffer is not returned to seed pool.",
+      "id": "M4",
+      "limits": "Configured frame limits still permit large transient Scanner/Text copies; noncooperative bodies/default drain and exact owners require runtime evidence. No universal leak-free verdict.",
+      "source": "gateway_anthropic_passthrough.go:442-495;openai_gateway_passthrough.go:1938-1951,2000-2018;openai_first_output_timeout.go:24-29,145-260;sse_scanner_buffer_pool.go;native_api_key_cancellation.go:34-59"
+    },
+    {
+      "classification": "USAGE_BATCH_SOURCE_INCOMPLETE",
+      "evidence": "Outer pond queue is bounded with TrySubmit and drop/sync/sample overflow. Supplied repository file defines batch handles only; ensureBestEffortBatcher implementation lives in missing usage_log_repo_insert.go. Top attributes sampled 3.01MiB to batcher allocation stack.",
+      "id": "M5",
+      "source": "usage_log_repository.go:142-164;usage_record_worker_pool.go:143-193;pprof-top/messages-010.txt:10",
+      "verdict": "Cannot prove retained batch backing pointers, queue capacity, flush clearing, or per-request live ownership from this top."
+    }
+  ],
+  "fixed_allocation": {
+    "allocation_time_relative_to_baseline": "UNPROVEN; sampled startup omission can reflect profile lag",
+    "cause_share_of_rss": "UNPROVEN",
+    "classification": "static_service_queue_capacity",
+    "derived_amd64_task_bytes": 288,
+    "derived_ring_bytes": 28800000,
+    "derived_ring_mib": 27.4658203125,
+    "id": "M1",
+    "queue_capacity": 100000,
+    "sampled_constructor_top_mib": 27.47,
+    "source": "content_moderation.go:586-614"
+  },
+  "goal_completion": "NOT_MARKED_COMPLETE: exact raw profile custody and usage batch insertion implementation missing; bounded audit handoff complete",
+  "goal_status": "blocked",
+  "identity_user_reported_only": {
+    "final_native_functional_pass": 20,
+    "final_native_strict_rss_fail": 20,
+    "native_binary_sha256": "5e28306e531eac0abea49811f116dbbddb233c4e52ce3f7d63f9c71d949632fd",
+    "native_image_id": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+    "profile_binary_sha256_prefix": "798",
+    "profile_full_binary_hash_available": false
+  },
+  "limitations": [
+    "Raw runtime NDJSON, binary pprof/acks, original burst/READY/DONE receipts, complete profile binary/build/stdlib pins and idle-control raw records are not supplied in .spike-inputs; independent audit checks public analysis arithmetic and source/hash custody, not replay of canonical analyzer.",
+    "All 20 diagnostic endpoints have zero natural cycles after each end; inuse samples cannot identify current live per-request roots.",
+    "Final native all20 RSSFAIL is user-reported and retained; diagnostic run has 4 FAIL/16 PASS and must not replace final native verdict.",
+    "Exact RSS causal decomposition between garbage, reachable roots, static data, runtime caches, fragmentation and resident idle pages remains unproven.",
+    "Root final slot84 and three genuine canaries remain pending per user; no live polling or provider activity authorized."
+  ],
+  "production_patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+  "production_recommendation": "NO_PRODUCTION_GO",
+  "protocols": {
+    "messages": {
+      "allocation_churn_bytes": 2472329504,
+      "allocator_heap_alloc_baseline_end_bytes": [
+        50270864,
+        97240456
+      ],
+      "allocator_heap_inuse_baseline_end_bytes": [
+        51789824,
+        99909632
+      ],
+      "analysis_sha256": "7dbe90544101a279b8a1298990341f9b0c144c6b86ce3a29a4621bf0504518bd",
+      "cycles_after_each_burst_end": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "diagnostic_empirical_fail_count": 1,
+      "diagnostic_empirical_pass_count": 9,
+      "end_heap_idle_bytes": 53542912,
+      "end_heap_released_bytes": 25518080,
+      "end_rss_bytes": 196571136,
+      "end_unreleased_idle_span_bytes": 28024832,
+      "end_workload_minus_idle_control_rss_bytes": 85655552,
+      "goroutines_baseline_end": [
+        167,
+        165
+      ],
+      "live_attribution": "INCONCLUSIVE",
+      "natural_gc_baseline_end": [
+        7,
+        60
+      ],
+      "physical_interval_rss": "NOTPROVEN",
+      "profile_inuse_baseline_end_bytes": [
+        14475385,
+        63154616
+      ],
+      "recomputed_slopes": {
+        "all_checkpoints": {
+          "goroutines": -0.007773100808802913,
+          "heap_alloc_allocator": 262159.4288899358,
+          "heap_inuse": 264095.0019104018,
+          "heap_objects_allocator": -175.5587311871786,
+          "heap_released": 286419.3459379688,
+          "mallocs": 4904.110378573165,
+          "sampled_heap_alloc_objects_per_second": 4194.798970814786,
+          "sampled_heap_alloc_space_per_second": 19229069.601013504,
+          "sampled_heap_inuse_objects_per_second": 21.77441869616973,
+          "sampled_heap_inuse_space_per_second": 88087.85160651215,
+          "total_alloc": 19318704.86501572
+        },
+        "postwarmup_after_two_bursts": {
+          "goroutines": 0.0010083027752125818,
+          "heap_alloc_allocator": 2933.793294180807,
+          "heap_inuse": 1155.0204122684008,
+          "heap_objects_allocator": 22.06432359088037,
+          "heap_released": 311557.8586875869,
+          "mallocs": 4871.631262521011,
+          "rss_bytes_per_second": -1612.8794179725587,
+          "sampled_heap_alloc_objects_per_second": 4418.770980079964,
+          "sampled_heap_alloc_space_per_second": 19536096.057473723,
+          "sampled_heap_inuse_objects_per_second": -32.80796745598176,
+          "sampled_heap_inuse_space_per_second": -53378.64526987192,
+          "total_alloc": 19133047.05547073
+        }
+      },
+      "run_sha256_reference": "fd8b5532345ae903b79a8046adff006726c4f7a2568c41242f13d13bda433907"
+    },
+    "responses": {
+      "allocation_churn_bytes": 4227987464,
+      "allocator_heap_alloc_baseline_end_bytes": [
+        51008776,
+        93446064
+      ],
+      "allocator_heap_inuse_baseline_end_bytes": [
+        52756480,
+        97042432
+      ],
+      "analysis_sha256": "db899c2a69bd16294caa880bd22af125832fcd38733cc050447c23adb897dcd2",
+      "cycles_after_each_burst_end": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "diagnostic_empirical_fail_count": 3,
+      "diagnostic_empirical_pass_count": 7,
+      "end_heap_idle_bytes": 115294208,
+      "end_heap_released_bytes": 37601280,
+      "end_rss_bytes": 215191552,
+      "end_unreleased_idle_span_bytes": 77692928,
+      "end_workload_minus_idle_control_rss_bytes": 102232064,
+      "goroutines_baseline_end": [
+        165,
+        165
+      ],
+      "live_attribution": "INCONCLUSIVE",
+      "natural_gc_baseline_end": [
+        7,
+        69
+      ],
+      "physical_interval_rss": "NOTPROVEN",
+      "profile_inuse_baseline_end_bytes": [
+        14321406,
+        69612209
+      ],
+      "recomputed_slopes": {
+        "all_checkpoints": {
+          "goroutines": 8.625707186122355e-06,
+          "heap_alloc_allocator": 325149.3296135318,
+          "heap_inuse": 328609.3508891831,
+          "heap_objects_allocator": -262.8142986776377,
+          "heap_released": 205820.81063691684,
+          "mallocs": 4171.537309326611,
+          "sampled_heap_alloc_objects_per_second": 4483.991172376412,
+          "sampled_heap_alloc_space_per_second": 40378842.79783543,
+          "sampled_heap_inuse_objects_per_second": 20.90370129282228,
+          "sampled_heap_inuse_space_per_second": 187781.09872303353,
+          "total_alloc": 40433977.68632782
+        },
+        "postwarmup_after_two_bursts": {
+          "goroutines": 0.003412412661529177,
+          "heap_alloc_allocator": 42937.247761471896,
+          "heap_inuse": 38887.36593928417,
+          "heap_objects_allocator": 0.7400885867187478,
+          "heap_released": 45650.347610979115,
+          "mallocs": 4218.50410298892,
+          "rss_bytes_per_second": 132875.15869918873,
+          "sampled_heap_alloc_objects_per_second": 4233.895345666549,
+          "sampled_heap_alloc_space_per_second": 40762895.71937935,
+          "sampled_heap_inuse_objects_per_second": -172.19480162283008,
+          "sampled_heap_inuse_space_per_second": -98146.61129204152,
+          "total_alloc": 40671655.96102991
+        }
+      },
+      "run_sha256_reference": "0ea2847e2cfb72e9d0e1e9d2bc46c330d4c02a99e9eb9f760a2f1df71882a270"
+    }
+  },
+  "schema": "sub2api-memory-final-audit-v1",
+  "scope_user_reported": {
+    "bursts_per_protocol": 10,
+    "known_requests_total": 100,
+    "matched_idle_controls": true,
+    "response_payload_bytes_per_request": 8388608,
+    "streams": 5
+  },
+  "status": "DIAGNOSTIC_ONLY",
+  "verification": {
+    "current_go_source_bytes_matching_merged_ledger": 1377,
+    "input_ledger": "input-hash-ledger.json",
+    "input_ledger_sha256": "7c70c7c4010b77294c37cc6c0b991e7ff68a65310e2018c013b9a0de2b938b4c",
+    "new_runtime_tests": "NOT RUN; no Go/Docker/root/network/auth/Git writes/subagents",
+    "ols_slopes": "independently recomputed",
+    "source_layout": "derived offline for amd64, not compiler-measured",
+    "source_ledger": "source-verification.json",
+    "supplied_hashes_verified": 1389
+  }
+}

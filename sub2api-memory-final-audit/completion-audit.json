@@ -1,0 +1,18 @@
+{
+  "status": "BOUNDED_AUDIT_COMPLETE",
+  "product": "NO-GO",
+  "native_functional_PASS": 20,
+  "native_strict_RSS_FAIL": 20,
+  "diagnostic_FAIL": 4,
+  "diagnostic_PASS": 16,
+  "historical_copy_verified": true,
+  "source_changes": false,
+  "verification": "offline Python passed",
+  "limits": [
+    "Executable bytes and complete stage tree excluded: receipt cross-binding only; no rebuild.",
+    "Burst telemetry/READY/DONE/account receipts excluded: post-burst zero-GC and diagnostic RSS outcomes remain accepted canonical evidence; independent raw checkpoint counts/aggregates agree.",
+    "Sampling delay and 512KiB sampling prevent current root ownership/causal RSS attribution.",
+    "No indefinite leak, plateau or continuous physical interval proof.",
+    "Controller root84 and three genuine canaries pending."
+  ]
+}

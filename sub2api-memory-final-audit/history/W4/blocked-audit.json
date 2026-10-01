@@ -1,0 +1,25 @@
+{
+  "blocking_condition": "Exact original diagnostic raw profiles/runtime/build custody and actual usage batch insertion source bytes remain unavailable in the authorized workspace.",
+  "current_revalidation": {
+    "changed_supplied_files": [],
+    "missing_supplied_files": [],
+    "new_supplied_files": [],
+    "raw_profile_runtime_run_or_batch_source_candidates_in_workspace": [],
+    "supplied_hash_entries_verified": 1389
+  },
+  "current_turn_classification": "no_progress",
+  "goal_complete": false,
+  "goal_status": "blocked",
+  "goal_update_confirmed": true,
+  "meaningful_next_action": "Inspect the original read-only artifacts identified in missing-evidence.json when available; do not rerun or replace production measurements.",
+  "missing_evidence_manifest": "missing-evidence.json",
+  "previous_turn_classification": "progress",
+  "required_external_state_change": "Make the pinned missing source and original public runtime/profile/build receipts available within authorized read scope.",
+  "same_blocking_condition_observed_goal_turns": 3,
+  "schema": "memory-final-blocked-audit-v1",
+  "unmet_requirements": [
+    "R2 exact natural-GC raw profiles/build identity",
+    "R4 actual usage batch insertion source",
+    "R5 independent verification of final native original rows"
+  ]
+}
