@@ -1,0 +1,11 @@
+--- a/backend/internal/service/openai_gateway_passthrough.go
++++ b/backend/internal/service/openai_gateway_passthrough.go
+@@ -1964,7 +1964,7 @@
+ 				return false
+ 			}
+ 		}
+-		pendingLines = pendingLines[:0]
++		pendingLines = nil
+ 		return true
+ 	}
+ 	ensureResponseFailedTerminal := func() {

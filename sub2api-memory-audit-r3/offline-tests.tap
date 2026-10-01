@@ -1,0 +1,33 @@
+✔ exact frozen receipt replay memory-responses-32-1 (2.254127ms)
+✔ exact frozen receipt replay memory-responses-32-20 (0.663553ms)
+✔ exact frozen receipt replay memory-responses-32-5 (0.500597ms)
+✔ exact frozen receipt replay memory-responses-64-1 (0.856912ms)
+✔ exact frozen receipt replay memory-responses-64-5 (0.826976ms)
+✔ exact frozen receipt replay memory-responses-8-1 (0.213261ms)
+✔ exact frozen receipt replay memory-responses-8-20 (0.20431ms)
+✔ exact frozen receipt replay memory-responses-8-5 (0.171254ms)
+✔ exact frozen receipt replay memory-messages-32-1 (1.351973ms)
+✔ exact frozen receipt replay memory-messages-32-20 (0.48873ms)
+✔ exact frozen receipt replay memory-messages-32-5 (0.300027ms)
+✔ exact frozen receipt replay memory-messages-64-1 (0.411627ms)
+✔ exact frozen receipt replay memory-messages-64-5 (0.413462ms)
+✔ exact frozen receipt replay memory-messages-8-1 (0.125614ms)
+✔ exact frozen receipt replay memory-messages-8-20 (0.243549ms)
+✔ exact frozen receipt replay memory-messages-8-5 (0.155946ms)
+✔ actual full-tail gate rejects omitted DONE, short tail, forged identity and hidden slow retry (1.413856ms)
+✔ real discard inspector responses exact 8MiB with near-limit semantic frames (92.357262ms)
+✔ real discard inspector responses exact 32MiB with near-limit semantic frames (87.377646ms)
+✔ real discard inspector responses exact 64MiB with near-limit semantic frames (90.699821ms)
+✔ real discard inspector messages exact 8MiB with near-limit semantic frames (22.010625ms)
+✔ real discard inspector messages exact 32MiB with near-limit semantic frames (32.289109ms)
+✔ real discard inspector messages exact 64MiB with near-limit semantic frames (37.393106ms)
+✔ actual discard inspector rejects oversized and malformed frames (0.861873ms)
+✔ independent numeric contract: exact object, array, strict JSONL, atomic rows and completed tools (2.030201ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 459.945706

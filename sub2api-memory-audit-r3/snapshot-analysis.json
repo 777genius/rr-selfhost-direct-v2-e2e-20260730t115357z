@@ -1,0 +1,515 @@
+{
+  "input_manifest_sha256": "90f6016f225e6861a8f01db19fb266a2fc707ee9a7d43854816a1f08ede0d0aa",
+  "manifest_entries_verified": 3587,
+  "manifest_mismatches": [],
+  "frozen_completed_cases": 16,
+  "missing": [
+    "memory-responses-64-20",
+    "memory-messages-64-20",
+    "soak-responses",
+    "soak-messages"
+  ],
+  "cases": [
+    {
+      "id": "memory-messages-32-1",
+      "streams": 1,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 212,
+      "baseline_rss_bytes": 80621568,
+      "final_rss_bytes": 126537728,
+      "residual_bytes": {
+        "rss_bytes": 45916160,
+        "smaps_rollup_rss_bytes": 45813760
+      },
+      "sampled_peak_bytes": 128634880,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4934.150817036629,
+      "full_tail_ms": 5028.364534974098,
+      "max_duration_ms": 15.149019002914429,
+      "max_gap_ms": 107.17352092266083,
+      "baseline_sockets": 23,
+      "final_sockets": 20,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 1,
+      "streamed_bytes": 33554432
+    },
+    {
+      "id": "memory-messages-32-20",
+      "streams": 20,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 350,
+      "baseline_rss_bytes": 77676544,
+      "final_rss_bytes": 196100096,
+      "residual_bytes": {
+        "rss_bytes": 118423552,
+        "smaps_rollup_rss_bytes": 118403072
+      },
+      "sampled_peak_bytes": 199757824,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4992.629557013512,
+      "full_tail_ms": 5088.519651055336,
+      "max_duration_ms": 15.476307034492493,
+      "max_gap_ms": 109.44328498840332,
+      "baseline_sockets": 23,
+      "final_sockets": 37,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 20,
+      "streamed_bytes": 671088640
+    },
+    {
+      "id": "memory-messages-32-5",
+      "streams": 5,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 236,
+      "baseline_rss_bytes": 75526144,
+      "final_rss_bytes": 138227712,
+      "residual_bytes": {
+        "rss_bytes": 62701568,
+        "smaps_rollup_rss_bytes": 62701568
+      },
+      "sampled_peak_bytes": 139378688,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4906.073408007622,
+      "full_tail_ms": 5003.590485930443,
+      "max_duration_ms": 9.716553926467896,
+      "max_gap_ms": 104.36301600933075,
+      "baseline_sockets": 21,
+      "final_sockets": 23,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 5,
+      "streamed_bytes": 167772160
+    },
+    {
+      "id": "memory-messages-64-1",
+      "streams": 1,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 373,
+      "baseline_rss_bytes": 76193792,
+      "final_rss_bytes": 129478656,
+      "residual_bytes": {
+        "rss_bytes": 53284864,
+        "smaps_rollup_rss_bytes": 53284864
+      },
+      "sampled_peak_bytes": 129478656,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4977.68134701252,
+      "full_tail_ms": 5074.372752904892,
+      "max_duration_ms": 10.558364987373352,
+      "max_gap_ms": 104.94605207443237,
+      "baseline_sockets": 20,
+      "final_sockets": 20,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 1,
+      "streamed_bytes": 67108864
+    },
+    {
+      "id": "memory-messages-64-5",
+      "streams": 5,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 407,
+      "baseline_rss_bytes": 79826944,
+      "final_rss_bytes": 146444288,
+      "residual_bytes": {
+        "rss_bytes": 66617344,
+        "smaps_rollup_rss_bytes": 66572288
+      },
+      "sampled_peak_bytes": 156872704,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4988.620460033417,
+      "full_tail_ms": 5083.200277924538,
+      "max_duration_ms": 26.121309995651245,
+      "max_gap_ms": 118.16336393356323,
+      "baseline_sockets": 23,
+      "final_sockets": 21,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 5,
+      "streamed_bytes": 335544320
+    },
+    {
+      "id": "memory-messages-8-1",
+      "streams": 1,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 92,
+      "baseline_rss_bytes": 78069760,
+      "final_rss_bytes": 113344512,
+      "residual_bytes": {
+        "rss_bytes": 35274752,
+        "smaps_rollup_rss_bytes": 34934784
+      },
+      "sampled_peak_bytes": 113344512,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4952.433702945709,
+      "full_tail_ms": 5049.703180909157,
+      "max_duration_ms": 10.819975972175598,
+      "max_gap_ms": 108.47356700897217,
+      "baseline_sockets": 24,
+      "final_sockets": 22,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 1,
+      "streamed_bytes": 8388608
+    },
+    {
+      "id": "memory-messages-8-20",
+      "streams": 20,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 207,
+      "baseline_rss_bytes": 76746752,
+      "final_rss_bytes": 167387136,
+      "residual_bytes": {
+        "rss_bytes": 90640384,
+        "smaps_rollup_rss_bytes": 90640384
+      },
+      "sampled_peak_bytes": 180678656,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4994.14075088501,
+      "full_tail_ms": 5088.391284942627,
+      "max_duration_ms": 11.422387957572937,
+      "max_gap_ms": 106.63597190380096,
+      "baseline_sockets": 22,
+      "final_sockets": 38,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 20,
+      "streamed_bytes": 167772160
+    },
+    {
+      "id": "memory-messages-8-5",
+      "streams": 5,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 117,
+      "baseline_rss_bytes": 105504768,
+      "final_rss_bytes": 177541120,
+      "residual_bytes": {
+        "rss_bytes": 72036352,
+        "smaps_rollup_rss_bytes": 72036352
+      },
+      "sampled_peak_bytes": 177541120,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4973.160766005516,
+      "full_tail_ms": 5069.757385969162,
+      "max_duration_ms": 10.584264993667603,
+      "max_gap_ms": 107.10066604614258,
+      "baseline_sockets": 21,
+      "final_sockets": 23,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 5,
+      "streamed_bytes": 41943040
+    },
+    {
+      "id": "memory-responses-32-1",
+      "streams": 1,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 213,
+      "baseline_rss_bytes": 77164544,
+      "final_rss_bytes": 156020736,
+      "residual_bytes": {
+        "rss_bytes": 78856192,
+        "smaps_rollup_rss_bytes": 78856192
+      },
+      "sampled_peak_bytes": 156020736,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4962.836323022842,
+      "full_tail_ms": 5051.745282053947,
+      "max_duration_ms": 11.394951939582825,
+      "max_gap_ms": 105.4402220249176,
+      "baseline_sockets": 24,
+      "final_sockets": 23,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 1,
+      "streamed_bytes": 33554432
+    },
+    {
+      "id": "memory-responses-32-20",
+      "streams": 20,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 223,
+      "baseline_rss_bytes": 76857344,
+      "final_rss_bytes": 267657216,
+      "residual_bytes": {
+        "rss_bytes": 190799872,
+        "smaps_rollup_rss_bytes": 190799872
+      },
+      "sampled_peak_bytes": 423460864,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4994.719653964043,
+      "full_tail_ms": 5089.371091008186,
+      "max_duration_ms": 12.281244039535522,
+      "max_gap_ms": 105.61090099811554,
+      "baseline_sockets": 21,
+      "final_sockets": 37,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 20,
+      "streamed_bytes": 671088640
+    },
+    {
+      "id": "memory-responses-32-5",
+      "streams": 5,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 214,
+      "baseline_rss_bytes": 79605760,
+      "final_rss_bytes": 182013952,
+      "residual_bytes": {
+        "rss_bytes": 102408192,
+        "smaps_rollup_rss_bytes": 102363136
+      },
+      "sampled_peak_bytes": 205852672,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4933.743824005127,
+      "full_tail_ms": 5026.694129943848,
+      "max_duration_ms": 10.41780698299408,
+      "max_gap_ms": 106.05278205871582,
+      "baseline_sockets": 24,
+      "final_sockets": 24,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 5,
+      "streamed_bytes": 167772160
+    },
+    {
+      "id": "memory-responses-64-1",
+      "streams": 1,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 372,
+      "baseline_rss_bytes": 109486080,
+      "final_rss_bytes": 180506624,
+      "residual_bytes": {
+        "rss_bytes": 71020544,
+        "smaps_rollup_rss_bytes": 70918144
+      },
+      "sampled_peak_bytes": 180506624,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4971.123723983765,
+      "full_tail_ms": 5067.518982052803,
+      "max_duration_ms": 20.534998059272766,
+      "max_gap_ms": 116.66000509262085,
+      "baseline_sockets": 24,
+      "final_sockets": 21,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 1,
+      "streamed_bytes": 67108864
+    },
+    {
+      "id": "memory-responses-64-5",
+      "streams": 5,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 375,
+      "baseline_rss_bytes": 79863808,
+      "final_rss_bytes": 204120064,
+      "residual_bytes": {
+        "rss_bytes": 124256256,
+        "smaps_rollup_rss_bytes": 124194816
+      },
+      "sampled_peak_bytes": 204820480,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4992.251464962959,
+      "full_tail_ms": 5086.426056981087,
+      "max_duration_ms": 15.852465987205505,
+      "max_gap_ms": 108.98871600627899,
+      "baseline_sockets": 24,
+      "final_sockets": 23,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 5,
+      "streamed_bytes": 335544320
+    },
+    {
+      "id": "memory-responses-8-1",
+      "streams": 1,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 93,
+      "baseline_rss_bytes": 76611584,
+      "final_rss_bytes": 133705728,
+      "residual_bytes": {
+        "rss_bytes": 57094144,
+        "smaps_rollup_rss_bytes": 57094144
+      },
+      "sampled_peak_bytes": 133705728,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4947.823313951492,
+      "full_tail_ms": 5044.498522043228,
+      "max_duration_ms": 7.359279036521912,
+      "max_gap_ms": 103.96175301074982,
+      "baseline_sockets": 22,
+      "final_sockets": 21,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 1,
+      "streamed_bytes": 8388608
+    },
+    {
+      "id": "memory-responses-8-20",
+      "streams": 20,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 101,
+      "baseline_rss_bytes": 79003648,
+      "final_rss_bytes": 390004736,
+      "residual_bytes": {
+        "rss_bytes": 311001088,
+        "smaps_rollup_rss_bytes": 310947840
+      },
+      "sampled_peak_bytes": 424022016,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4987.98293197155,
+      "full_tail_ms": 5080.996608972549,
+      "max_duration_ms": 14.368372917175293,
+      "max_gap_ms": 107.23793995380402,
+      "baseline_sockets": 24,
+      "final_sockets": 38,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 20,
+      "streamed_bytes": 167772160
+    },
+    {
+      "id": "memory-responses-8-5",
+      "streams": 5,
+      "functional": "PASS",
+      "empirical": "FAIL",
+      "physical": "NOTPROVEN",
+      "reason": "OBSERVED_ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+      "samples": 95,
+      "baseline_rss_bytes": 77156352,
+      "final_rss_bytes": 211783680,
+      "residual_bytes": {
+        "rss_bytes": 134627328,
+        "smaps_rollup_rss_bytes": 134627328
+      },
+      "sampled_peak_bytes": 224780288,
+      "observed_envelope_exceeded": false,
+      "endpoint_after_end_ms": 4999.612948060036,
+      "full_tail_ms": 5092.238214015961,
+      "max_duration_ms": 10.206183075904846,
+      "max_gap_ms": 104.82678699493408,
+      "baseline_sockets": 21,
+      "final_sockets": 23,
+      "active_at_boundary": 0,
+      "cleanup": {
+        "failures": 0,
+        "ambiguous_intent": false,
+        "remaining_resources": []
+      },
+      "completed_requests": 5,
+      "streamed_bytes": 41943040
+    }
+  ],
+  "totals": {
+    "completed_requests": 116,
+    "streamed_bytes": 2986344448
+  },
+  "limits": "Offline public receipt replay; no actual engine/runtime, repeated bursts, pprof, live heap, slots or pending cancellation evidence"
+}

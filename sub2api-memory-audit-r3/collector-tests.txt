@@ -1,0 +1,11 @@
+test_actual_fd_race_does_not_retry_away_new_shared_cgroup (collector_test.ActualRetryContracts.test_actual_fd_race_does_not_retry_away_new_shared_cgroup) ... ok
+test_actual_fd_race_restarts_status_and_complete_snapshot (collector_test.ActualRetryContracts.test_actual_fd_race_restarts_status_and_complete_snapshot) ... ok
+test_complete_retry_accounts_all_failed_read_time (collector_test.ActualRetryContracts.test_complete_retry_accounts_all_failed_read_time) ... ok
+test_identity_limit_or_permission_failures_are_not_retried (collector_test.ActualRetryContracts.test_identity_limit_or_permission_failures_are_not_retried) ... ok
+test_retry_cannot_hide_sampling_duration_overrun (collector_test.ActualRetryContracts.test_retry_cannot_hide_sampling_duration_overrun) ... ok
+test_three_failures_never_emit_partial_or_zero_snapshot (collector_test.ActualRetryContracts.test_three_failures_never_emit_partial_or_zero_snapshot) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.004s
+
+OK

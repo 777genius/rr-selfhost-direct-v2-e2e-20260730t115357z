@@ -1,0 +1,38 @@
+✔ caller accepts object with real independent reproduction (53.537337ms)
+✔ caller accepts canary-shaped array with real independent reproduction (47.092835ms)
+✔ caller accepts actual local Node wallet execution emitting both numeric examples (92.469968ms)
+✔ caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction (97.441691ms)
+✔ caller denies invalid JSONL lines and exact numeric mismatches (353.724007ms)
+✔ caller retains reads, terminal, genuine final and successful tool requirements with JSONL (392.85926ms)
+✔ caller denies bad own proof and independent reproduction mismatch (223.277015ms)
+✔ caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals (484.738663ms)
+✔ caller denies reasoning-only final, malformed final, agent failure and unsealed import (7.545502ms)
+✔ caller diagnoses parse failures with fixed stderr and no private output (6.076437ms)
+✔ caller diagnoses absent or nonfinite numeric examples before local execution (33.645875ms)
+✔ caller diagnoses independent wallet rejection and private subprocess failures (46.572997ms)
+✔ caller diagnoses exact own numeric matching and completed zero-exit admission (436.514546ms)
+✔ caller diagnoses final finding, separate exact reads and genuine terminal contract (393.480822ms)
+✔ caller diagnoses evidence write without leaking private write error (43.584913ms)
+✔ caller delivers green receipt with minimal standalone Node output contract and HIGH model (87.512914ms)
+✔ RUN_CLIENT_SOURCE binds evidence and its transitive imports to selected source (53.928229ms)
+✔ numeric proof accepts actual run36869316283 strict JSONL matching either exact example (1.015831ms)
+✔ strict JSONL consumes every nonblank line as a complete finite numeric object (1.475939ms)
+✔ strict JSONL compares all three finite fields in one exact example (0.731996ms)
+✔ strict JSONL retains completed command admission and successful exit gates (0.126824ms)
+✔ numeric proof accepts the existing complete JSON object (0.094979ms)
+✔ numeric proof accepts canary two-object JSON array matching either reported example (0.110107ms)
+✔ numeric proof preserves existing direct and shell-wrapped Node command matching (0.12534ms)
+✔ numeric proof requires exact finite numbers in all three actual fields (0.200518ms)
+✔ numeric proof parses the complete output and never scans fragments or nested objects (0.207112ms)
+✔ numeric proof rejects failed or incomplete tools, reasoning, and wrong commands (0.198728ms)
+✔ A06 successful separate shell-wrapped rules read validates actual source and finding (0.687968ms)
+✔ A06 malformed and fabricated financial success fail inherited validator (0.171689ms)
+✔ A10 E04 streamed UTF8 and missing native terminal rejected (3.879416ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2926.105489

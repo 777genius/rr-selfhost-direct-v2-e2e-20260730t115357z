@@ -1,0 +1,11 @@
+--- a/backend/internal/service/gateway_anthropic_passthrough.go
++++ b/backend/internal/service/gateway_anthropic_passthrough.go
+@@ -427,7 +427,7 @@
+ 		line string
+ 		err  error
+ 	}
+-	events := make(chan scanEvent, 16)
++	events := make(chan scanEvent, 1)
+ 	done := make(chan struct{})
+ 	sendEvent := func(ev scanEvent) bool {
+ 		select {
