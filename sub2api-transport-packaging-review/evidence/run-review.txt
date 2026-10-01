@@ -1,0 +1,136 @@
+{
+  "outer_files_verified": 295,
+  "inputs_manifest_sha256": "b37f241a449c7a795cc79214a4e2ef0b512e937da88dab933bf11caeba4473dc",
+  "prior_files": 102,
+  "runtime_files": 103,
+  "delta_paths": [
+    "sub2api-spike/broker.mjs",
+    "sub2api-spike/customer.mjs",
+    "sub2api-spike/customer.test.mjs",
+    "sub2api-spike/oidc.mjs",
+    "sub2api-spike/oidc.test.mjs",
+    "sub2api-spike/operator/admin-roundtrip.mjs",
+    "sub2api-spike/run-client.mjs",
+    "sub2api-spike/serve.mjs"
+  ],
+  "unchanged_approved_overlays_adapter": true,
+  "audit": {
+    "exit": 0,
+    "command": [
+      "python3",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/audit.py",
+      "--base-root",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+    ]
+  },
+  "verify-provenance": {
+    "exit": 0,
+    "command": [
+      "python3",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/verify-provenance.py",
+      "--base-root",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+    ]
+  },
+  "prepare": {
+    "exit": 0,
+    "command": [
+      "python3",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/prepare-standalone.py",
+      "--base-root",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base",
+      "--output",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/disposable-is7yziam/runtime",
+      "--plan"
+    ]
+  },
+  "python": {
+    "pass": 11,
+    "fail": 0,
+    "errors": 0
+  },
+  "node_packaging": {
+    "exit": 0,
+    "command": [
+      "node",
+      "--test",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/disposable-is7yziam/packaging.test.mjs"
+    ]
+  },
+  "goal_independent": {
+    "exit": 0,
+    "command": [
+      "node",
+      "--test",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/disposable-is7yziam/goal.test.mjs"
+    ]
+  },
+  "goal_canonical": {
+    "exit": 0,
+    "command": [
+      "node",
+      "--test",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-spike/evidence.test.mjs",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/gateway-spike/evidence.test.mjs",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-evidence-r2/client-contract.test.mjs"
+    ]
+  },
+  "no_overwrite": {
+    "exit": 1,
+    "command": [
+      "python3",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/prepare-standalone.py",
+      "--base-root",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base",
+      "--output",
+      "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/disposable-is7yziam/runtime"
+    ]
+  },
+  "supplied_root_gates": {
+    "kind": "actual-fixed-public-Git-object-reconstruction-W2",
+    "status": "PASS",
+    "public_base_sha": "3004a4b16e03588ee62c0ed7fe2751e0e53300e0",
+    "commands": [
+      {
+        "command": [
+          "python3",
+          "sub2api-transport-packaging/prepare-standalone.py",
+          "--package-root",
+          "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/sub2-transfer/transport-package-w2-final-gate/sub2api-transport-r4",
+          "--repo",
+          "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/source",
+          "--output",
+          "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/sub2-transfer/transport-package-w2-final-gate/generated",
+          "--plan"
+        ],
+        "exit": 0
+      },
+      {
+        "command": [
+          "python3",
+          "sub2api-transport-packaging/verify-provenance.py",
+          "--package-root",
+          "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/sub2-transfer/transport-package-w2-final-gate/sub2api-transport-r4",
+          "--repo",
+          "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/source"
+        ],
+        "exit": 0
+      },
+      {
+        "command": [
+          "python3",
+          "sub2api-transport-packaging/audit.py",
+          "--package-root",
+          "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/sub2-transfer/transport-package-w2-final-gate/sub2api-transport-r4",
+          "--repo",
+          "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/source"
+        ],
+        "exit": 0
+      }
+    ],
+    "original_snapshot_files": 102,
+    "runtime_files": 103,
+    "scanner": "pending actual broker capture"
+  },
+  "test_adaptations": "Only path constants changed in disposable Node copies; Python BASE/PACKAGE rebound to exact reconstructed pre-integration fixture. Production helper/wrappers unchanged. All generated fixture trees removed."
+}

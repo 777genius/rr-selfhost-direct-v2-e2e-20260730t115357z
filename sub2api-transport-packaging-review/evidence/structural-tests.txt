@@ -1,0 +1,10 @@
+test_actual_overlay_inventory (__main__.Structural.test_actual_overlay_inventory) ... ok
+test_archive_traversal_and_hardlink_rejected (__main__.Structural.test_archive_traversal_and_hardlink_rejected) ... ok
+test_base_root_parent_symlink_rejected (__main__.Structural.test_base_root_parent_symlink_rejected) ... ok
+test_no_symlinks_in_supplied_package_and_base (__main__.Structural.test_no_symlinks_in_supplied_package_and_base) ... ok
+test_unknown_revision_argument_rejected (__main__.Structural.test_unknown_revision_argument_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.034s
+
+OK

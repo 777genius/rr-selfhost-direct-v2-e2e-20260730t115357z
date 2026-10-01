@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/prepare-standalone.py", line 8, in <module>
+    runpy.run_path(str(helper), run_name='__main__')
+  File "<frozen runpy>", line 286, in run_path
+  File "<frozen runpy>", line 98, in _run_module_code
+  File "<frozen runpy>", line 88, in _run_code
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/prepare-standalone.py", line 148, in <module>
+    main()
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/prepare-standalone.py", line 139, in main
+    write_new(args.output, data)
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/prepare-standalone.py", line 113, in write_new
+    raise ValueError('output already exists')
+ValueError: output already exists

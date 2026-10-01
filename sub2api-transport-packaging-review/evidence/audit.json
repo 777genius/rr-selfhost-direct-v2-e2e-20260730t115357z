@@ -1,0 +1,20 @@
+{
+  "integrity": "PASS",
+  "original_output_hashes_verified": 294,
+  "runtime_files_verified": 103,
+  "historical": {
+    "integrity": "PASS",
+    "provided_files": 150,
+    "prior_files": 102,
+    "historical": {
+      "FAIL": 11,
+      "NOT RUN": 9
+    },
+    "effects": 686,
+    "history_reexecuted": false,
+    "original_verdict": "REQUESTCHANGES"
+  },
+  "new_engine_gates": "NOT RUN",
+  "physical_absolute_intersample_bound": "NOTPROVEN",
+  "normal_handoff_scanner": "controller MUST PASS; not executed by worker"
+}
