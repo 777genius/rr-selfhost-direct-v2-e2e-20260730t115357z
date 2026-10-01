@@ -1,0 +1,8 @@
+test_comm_parentheses_do_not_corrupt_pid_creation_identity (collector_test.CollectorContracts.test_comm_parentheses_do_not_corrupt_pid_creation_identity) ... ok
+test_pid_reuse_or_shared_cgroup_or_missing_engine_cannot_be_zero_sample (collector_test.CollectorContracts.test_pid_reuse_or_shared_cgroup_or_missing_engine_cannot_be_zero_sample) ... ok
+test_read_only_peak_and_native_hwm_without_zero_or_reset (collector_test.CollectorContracts.test_read_only_peak_and_native_hwm_without_zero_or_reset) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.002s
+
+OK

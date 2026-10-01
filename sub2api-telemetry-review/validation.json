@@ -1,0 +1,64 @@
+{
+  "kind": "independent-telemetry-review-unit-validation-not-execution-receipt",
+  "old_contracts": {
+    "node_passed": 6,
+    "python_passed": 3,
+    "limitation": "synthetic HWM oracle missed actual Linux6.8 semantics"
+  },
+  "review_contracts": {
+    "node_passed": 7,
+    "python_passed": 7,
+    "failed": 0
+  },
+  "primary_source": "provided official Linux v6.8 mm.h/proc.rst excerpts; no network fetch",
+  "supplied_hash_entries_verified": 130,
+  "snapshot_memory_cases": 15,
+  "snapshot_soak_cases": 0,
+  "kernel_hwm_regression_events": 8,
+  "syntax_and_in_memory_overlay": "PASS",
+  "external_execution": "NOT RUN",
+  "physical_interval_rss_proof": "NOT RUN",
+  "actual_5sec_rerun": "NOT RUN",
+  "unchanged_thresholds": {
+    "rss_absolute_mib": 512,
+    "rss_delta_base_mib": 128,
+    "rss_delta_per_stream_mib": 16,
+    "cgroup_peak_strict_less_than_mib": 768,
+    "return_delta_mib": 32,
+    "return_deadline_ms": 5000,
+    "max_gap_ms": 250
+  },
+  "completion_audit": {
+    "independent_actual_kernel_diagnosis": "provided source and 8 actual raw regressions inspected",
+    "private_counter_failure_attribution": "NOT PROVEN; ambiguous public exits preserved",
+    "strict_identity_freshness_limit_gap": "executable collector/adapter and unit checks",
+    "honest_raw_and_derived_kinds": "physical peak/delta null; no fabricated resets/goroutines/zeros",
+    "old_two_second_failure": "original FAIL preserved; no retrospective five-second PASS",
+    "concrete_remedy": "owned collector, adapter, un-applied overlay delta and reproducible verifiers",
+    "protocol_effect_cleanup": "full-count/protocol/effect/cleanup gate expressions unchanged",
+    "finite_delivery": "code/report complete; no external launch or waiting"
+  },
+  "risks": [
+    "Page-table walks may exceed the 250ms gap budget; evidence then rejected.",
+    "Sampled mapping inventory cannot prove an interval physical RSS bound.",
+    "No actual five-second rerun or soak plateau evidence supplied.",
+    "Integration delta targets the provided overlay; coordinator must review lifecycle attestations."
+  ],
+  "verification_note": "An initial textual audit matched PASS subgate names; corrected to check the standalone overall status key. Behavioral tests passed throughout.",
+  "artifacts": {
+    "REPORT.md": "2978e36dfdcaf4da77fa4fcc09c3db45d1400610e80c850eb8e35438351e32f7",
+    "adapter-proposal.mjs": "48640c7641446f910fda2828ade651029f61a43fe36ce54e1ed1bb2543efc96c",
+    "adapter.test.mjs": "77f4b41c2335b3c8c865f84cf96ac565aed27e832af028b31099226409273ac0",
+    "analyze-snapshot.py": "b03aceecdf7aab4bd310420cdb896cff997e0e871b36d59cfe8146c29cee92bb",
+    "collector-proposal.py": "a841628da3882b203e7600e6b47292e6eb8e889df6d1aaf603b4aa5894a0f9cd",
+    "collector_test.py": "48c57e9ef636b0c5dc0a0d9101f47e3a2e78f604c1668850fa7d90e2c9f0c912",
+    "integration-check.json": "729d1906b16bb857b365e8e3fa7e4fd4ca47325acc3389ca73e9a03f13144bf6",
+    "integration-proposal.patch": "394900dabc97a41945d1a3289022901da1a1f5fc0c87ef30add6227f0ab95f71",
+    "node-tests.txt": "3ab1063b880772f4dfd52de919fdebb084d4f1311ba2b2e51392a68dad7e39bb",
+    "old-node-tests.txt": "bc3f52ae0adfd8d6ca77a6bc3d36f1f8843654b59798a94def68f202a617c5b2",
+    "old-python-tests.txt": "b2fc5890f04a784759b2013e43c228d71ff99047b443e17d1ba578da4151073d",
+    "python-tests.txt": "1fb4ed4c7d9b803fb22d30699268755a01718027f88d8221fe1b6a64732125e0",
+    "snapshot-analysis.json": "d426f10049f7b4ecd6b7e28b799760b6cc0f238ea09229039e0912e9b2428d32",
+    "verify-integration.py": "ae466902cac37cb0fabbf04f5c352512a22ca45e79bc97b6c0dea0e006b1e45c"
+  }
+}

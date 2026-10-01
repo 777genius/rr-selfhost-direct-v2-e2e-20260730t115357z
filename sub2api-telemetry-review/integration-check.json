@@ -1,0 +1,7 @@
+{
+  "kind": "in-memory-overlay-and-syntax-check-not-engine-execution",
+  "exact_overlay_hunks": "PASS",
+  "exact_review_delta": "PASS",
+  "proposed_run_syntax": "PASS",
+  "external_execution": "NOT RUN"
+}

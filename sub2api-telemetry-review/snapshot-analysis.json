@@ -1,0 +1,461 @@
+{
+  "kind": "derived-public-snapshot-review",
+  "external_execution": "NOT RUN",
+  "snapshot_scope": "provided files only, not current private batch progress",
+  "supplied_manifest_entries_verified": 130,
+  "cases": [
+    {
+      "case": "memory-messages-32-1",
+      "sample_count": 622,
+      "receipt_status": "FAIL",
+      "acceptance_status": "FAIL",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "collector_error": "",
+      "raw_hwm_regressions": [
+        {
+          "line_before": 580,
+          "line_after": 581,
+          "before_ms": 935010071.136305,
+          "after_ms": 935010170.412592,
+          "before_bytes": 157622272,
+          "after_bytes": 155918336,
+          "gap_ms": 99.27628707885742
+        }
+      ],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 157622272,
+      "max_raw_hwm_bytes": 157622272,
+      "max_cgroup_peak_bytes": 104984576,
+      "baseline_rss_bytes": 109756416,
+      "last_rss_bytes": 156024832,
+      "observed_post_end_ms": 2059.039013981819,
+      "ndjson_sha256": "3cb4a374bb380beac93cdd7d177b35179de6bd42bf5ba5e23abdff808258d131"
+    },
+    {
+      "case": "memory-messages-32-20",
+      "sample_count": 36,
+      "receipt_status": "FAIL",
+      "acceptance_status": "FAIL",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "collector_error": "COLLECTOR_FAILED_NO_VALID_COMPLETION",
+      "raw_hwm_regressions": [
+        {
+          "line_before": 20,
+          "line_after": 21,
+          "before_ms": 935083996.750826,
+          "after_ms": 935084097.03622,
+          "before_bytes": 166285312,
+          "after_bytes": 164319232,
+          "gap_ms": 100.28539395332336
+        },
+        {
+          "line_before": 30,
+          "line_after": 31,
+          "before_ms": 935084997.720574,
+          "after_ms": 935085096.838478,
+          "before_bytes": 164319232,
+          "after_bytes": 164143104,
+          "gap_ms": 99.1179039478302
+        }
+      ],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 166285312,
+      "max_raw_hwm_bytes": 166285312,
+      "max_cgroup_peak_bytes": 196157440,
+      "baseline_rss_bytes": 81666048,
+      "last_rss_bytes": 151171072,
+      "observed_post_end_ms": -56588.93766903877,
+      "ndjson_sha256": "0af11697c7c3e7c9a79ebe1c7e77182b3d27159eff61d9611912b3f0a3282876"
+    },
+    {
+      "case": "memory-messages-32-5",
+      "sample_count": 337,
+      "receipt_status": "FAIL",
+      "acceptance_status": "FAIL",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "collector_error": "COLLECTOR_FAILED_NO_VALID_COMPLETION",
+      "raw_hwm_regressions": [
+        {
+          "line_before": 70,
+          "line_after": 71,
+          "before_ms": 935024020.259214,
+          "after_ms": 935024123.921985,
+          "before_bytes": 150331392,
+          "after_bytes": 147619840,
+          "gap_ms": 103.662770986557
+        }
+      ],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 150331392,
+      "max_raw_hwm_bytes": 150331392,
+      "max_cgroup_peak_bytes": 112799744,
+      "baseline_rss_bytes": 80515072,
+      "last_rss_bytes": 130048000,
+      "observed_post_end_ms": -26507.3951690197,
+      "ndjson_sha256": "116f30b9e98073adc2d7ce7cac31bc3be2d373798cd43351d1ca95cad39fb249"
+    },
+    {
+      "case": "memory-messages-8-1",
+      "sample_count": 37,
+      "receipt_status": "PASS",
+      "acceptance_status": "NOT RUN",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "collector_error": "COLLECTOR_FAILED_NO_VALID_COMPLETION",
+      "raw_hwm_regressions": [],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 108195840,
+      "max_raw_hwm_bytes": 108195840,
+      "max_cgroup_peak_bytes": 50413568,
+      "baseline_rss_bytes": 80359424,
+      "last_rss_bytes": 108195840,
+      "observed_post_end_ms": -18965.49919307232,
+      "ndjson_sha256": "307fbe222e7a1b1afcf8294525fd337be5324a7321d44bd19753f74d6bdf7bcd"
+    },
+    {
+      "case": "memory-messages-8-20",
+      "sample_count": 259,
+      "receipt_status": "PASS",
+      "acceptance_status": "NOT RUN",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "collector_error": "",
+      "raw_hwm_regressions": [
+        {
+          "line_before": 5,
+          "line_after": 6,
+          "before_ms": 934924610.372035,
+          "after_ms": 934924710.520421,
+          "before_bytes": 178876416,
+          "after_bytes": 175689728,
+          "gap_ms": 100.14838600158691
+        }
+      ],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 178876416,
+      "max_raw_hwm_bytes": 178876416,
+      "max_cgroup_peak_bytes": 203980800,
+      "baseline_rss_bytes": 80695296,
+      "last_rss_bytes": 154333184,
+      "observed_post_end_ms": 2077.0597590208054,
+      "ndjson_sha256": "ce242cfb22f9900f6d8aee4dd1e05a7e7f09629f26acd2f577e9bbc01441c6af"
+    },
+    {
+      "case": "memory-messages-8-5",
+      "sample_count": 245,
+      "receipt_status": "PASS",
+      "acceptance_status": "NOT RUN",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "collector_error": "",
+      "raw_hwm_regressions": [
+        {
+          "line_before": 5,
+          "line_after": 6,
+          "before_ms": 934897004.09093,
+          "after_ms": 934897104.539633,
+          "before_bytes": 141856768,
+          "after_bytes": 139366400,
+          "gap_ms": 100.4487030506134
+        },
+        {
+          "line_before": 16,
+          "line_after": 17,
+          "before_ms": 934898101.748983,
+          "after_ms": 934898201.833007,
+          "before_bytes": 139448320,
+          "after_bytes": 138280960,
+          "gap_ms": 100.08402395248413
+        }
+      ],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 141856768,
+      "max_raw_hwm_bytes": 141856768,
+      "max_cgroup_peak_bytes": 102223872,
+      "baseline_rss_bytes": 80838656,
+      "last_rss_bytes": 128454656,
+      "observed_post_end_ms": 2004.748815894127,
+      "ndjson_sha256": "5ab01a41264dc1c9ed52cf868c3d3a8cc518e3abd63bd2b5555015c958c76c90"
+    },
+    {
+      "case": "memory-responses-32-1",
+      "sample_count": 36,
+      "receipt_status": "PASS",
+      "acceptance_status": "NOT RUN",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "collector_error": "COLLECTOR_FAILED_NO_VALID_COMPLETION",
+      "raw_hwm_regressions": [],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 98189312,
+      "max_raw_hwm_bytes": 98189312,
+      "max_cgroup_peak_bytes": 38248448,
+      "baseline_rss_bytes": 84271104,
+      "last_rss_bytes": 98189312,
+      "observed_post_end_ms": -18373.27460002899,
+      "ndjson_sha256": "ae227654b3251dd89312393d435d4774a0afbfcdc1aeb91d750add5cee213504"
+    },
+    {
+      "case": "memory-responses-32-20",
+      "sample_count": 37,
+      "receipt_status": "PASS",
+      "acceptance_status": "NOT RUN",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "collector_error": "COLLECTOR_FAILED_NO_VALID_COMPLETION",
+      "raw_hwm_regressions": [],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 138878976,
+      "max_raw_hwm_bytes": 138878976,
+      "max_cgroup_peak_bytes": 206422016,
+      "baseline_rss_bytes": 81526784,
+      "last_rss_bytes": 138878976,
+      "observed_post_end_ms": -19813.604271054268,
+      "ndjson_sha256": "8ac1a287632849783035d65cb8cfd0e97139126a80b166e8a7706ad8db8187f6"
+    },
+    {
+      "case": "memory-responses-32-5",
+      "sample_count": 240,
+      "receipt_status": "FAIL",
+      "acceptance_status": "FAIL",
+      "memory_envelope": {
+        "status": "FAIL",
+        "reason": "ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+        "baseline_rss_bytes": 82169856,
+        "interval_max_rss_bytes": 174686208,
+        "lifetime_peak_rss_bytes": 177438720,
+        "batch_peak_rss_upper_bound_bytes": 177438720,
+        "batch_delta_upper_bound_bytes": 95268864,
+        "cgroup_lifetime_peak_bytes": 136347648,
+        "peak_scope": "fresh-lifetime-including-startup-and-preparation",
+        "samples": 239,
+        "max_sockets": 34,
+        "instantaneous_goroutines": null
+      },
+      "collector_error": "",
+      "raw_hwm_regressions": [],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 174686208,
+      "max_raw_hwm_bytes": 177438720,
+      "max_cgroup_peak_bytes": 136347648,
+      "baseline_rss_bytes": 82169856,
+      "last_rss_bytes": 164618240,
+      "observed_post_end_ms": 2070.3097989559174,
+      "ndjson_sha256": "e37dcf0a4ca838c66b291f7a889f2b3b427c3c51c32932ca4f71b303ab1cf4be"
+    },
+    {
+      "case": "memory-responses-64-1",
+      "sample_count": 336,
+      "receipt_status": "PASS",
+      "acceptance_status": "NOT RUN",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "collector_error": "COLLECTOR_FAILED_NO_VALID_COMPLETION",
+      "raw_hwm_regressions": [],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 119431168,
+      "max_raw_hwm_bytes": 119431168,
+      "max_cgroup_peak_bytes": 59478016,
+      "baseline_rss_bytes": 82558976,
+      "last_rss_bytes": 119431168,
+      "observed_post_end_ms": -12343.225677013397,
+      "ndjson_sha256": "e391509424008e7f6148f52a996064c81b7292ee649ba67e69900ae9e6bcaf79"
+    },
+    {
+      "case": "memory-responses-64-20",
+      "sample_count": 492,
+      "receipt_status": "FAIL",
+      "acceptance_status": "FAIL",
+      "memory_envelope": {
+        "status": "FAIL",
+        "reason": "ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+        "baseline_rss_bytes": 80908288,
+        "interval_max_rss_bytes": 259133440,
+        "lifetime_peak_rss_bytes": 271060992,
+        "batch_peak_rss_upper_bound_bytes": 271060992,
+        "batch_delta_upper_bound_bytes": 190152704,
+        "cgroup_lifetime_peak_bytes": 303902720,
+        "peak_scope": "fresh-lifetime-including-startup-and-preparation",
+        "samples": 491,
+        "max_sockets": 77,
+        "instantaneous_goroutines": null
+      },
+      "collector_error": "",
+      "raw_hwm_regressions": [],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 259133440,
+      "max_raw_hwm_bytes": 271060992,
+      "max_cgroup_peak_bytes": 303902720,
+      "baseline_rss_bytes": 80908288,
+      "last_rss_bytes": 191709184,
+      "observed_post_end_ms": 2031.3484559059143,
+      "ndjson_sha256": "23f03f8c980826c77ca22388e39501ac0bc74d3f5300599ad816c988f237b2ab"
+    },
+    {
+      "case": "memory-responses-64-5",
+      "sample_count": 38,
+      "receipt_status": "PASS",
+      "acceptance_status": "NOT RUN",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "collector_error": "COLLECTOR_FAILED_NO_VALID_COMPLETION",
+      "raw_hwm_regressions": [],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 123387904,
+      "max_raw_hwm_bytes": 123387904,
+      "max_cgroup_peak_bytes": 92475392,
+      "baseline_rss_bytes": 82509824,
+      "last_rss_bytes": 123387904,
+      "observed_post_end_ms": -42416.87159597874,
+      "ndjson_sha256": "c2bf5cd2692b21f5d857c8cabf9972ab74353e2b2f7e784177ff38042aad7e4b"
+    },
+    {
+      "case": "memory-responses-8-1",
+      "sample_count": 59,
+      "receipt_status": "FAIL",
+      "acceptance_status": "FAIL",
+      "memory_envelope": {
+        "status": "FAIL",
+        "reason": "ENGINE_DID_NOT_RETURN_TO_QUIESCENCE",
+        "baseline_rss_bytes": 85196800,
+        "interval_max_rss_bytes": 121823232,
+        "lifetime_peak_rss_bytes": 121823232,
+        "batch_peak_rss_upper_bound_bytes": 121823232,
+        "batch_delta_upper_bound_bytes": 36626432,
+        "cgroup_lifetime_peak_bytes": 68083712,
+        "peak_scope": "fresh-lifetime-including-startup-and-preparation",
+        "samples": 58,
+        "max_sockets": 25,
+        "instantaneous_goroutines": null
+      },
+      "collector_error": "",
+      "raw_hwm_regressions": [],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 122978304,
+      "max_raw_hwm_bytes": 122978304,
+      "max_cgroup_peak_bytes": 68083712,
+      "baseline_rss_bytes": 85196800,
+      "last_rss_bytes": 122978304,
+      "observed_post_end_ms": 2032.5578889846802,
+      "ndjson_sha256": "a0b11634ce182e7fa72f51d65af88eccec660d2f8ebd401af212ec3cc0a83955"
+    },
+    {
+      "case": "memory-responses-8-20",
+      "sample_count": 65,
+      "receipt_status": "PASS",
+      "acceptance_status": "NOT RUN",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "SAMPLING_GAP_OR_LIFETIME_COUNTER_REGRESSION"
+      },
+      "collector_error": "",
+      "raw_hwm_regressions": [
+        {
+          "line_before": 16,
+          "line_after": 17,
+          "before_ms": 934627115.492005,
+          "after_ms": 934627216.550253,
+          "before_bytes": 295055360,
+          "after_bytes": 292126720,
+          "gap_ms": 101.0582480430603
+        }
+      ],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 295055360,
+      "max_raw_hwm_bytes": 295055360,
+      "max_cgroup_peak_bytes": 319811584,
+      "baseline_rss_bytes": 82120704,
+      "last_rss_bytes": 213880832,
+      "observed_post_end_ms": 2085.4224030971527,
+      "ndjson_sha256": "7bd734c5ec6507c805ef06821c5d9d9f81e3696ac09e55cdb05776f058e172ce"
+    },
+    {
+      "case": "memory-responses-8-5",
+      "sample_count": 37,
+      "receipt_status": "PASS",
+      "acceptance_status": "NOT RUN",
+      "memory_envelope": {
+        "status": "NOT RUN",
+        "reason": "QUIESCENT_TELEMETRY_MISSING"
+      },
+      "collector_error": "COLLECTOR_FAILED_NO_VALID_COMPLETION",
+      "raw_hwm_regressions": [],
+      "hwm_below_rss_lines": [],
+      "cgroup_peak_regression_lines": [],
+      "limit_invalid_lines": [],
+      "gap_over_250ms_lines": [],
+      "max_sample_rss_bytes": 207794176,
+      "max_raw_hwm_bytes": 214466560,
+      "max_cgroup_peak_bytes": 176840704,
+      "baseline_rss_bytes": 111755264,
+      "last_rss_bytes": 199430144,
+      "observed_post_end_ms": -316.9469130039215,
+      "ndjson_sha256": "c6a714a676b04e257e9a85c6249585daa48110924cd219d99021cba1729140de"
+    }
+  ]
+}

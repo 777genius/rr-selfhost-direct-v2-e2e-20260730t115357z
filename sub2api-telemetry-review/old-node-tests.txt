@@ -1,0 +1,14 @@
+✔ before fix: truthful kernel6.8 lifetime evidence is NOT RUN; proposed schema accepts without fake reset/count (0.921198ms)
+✔ before fix: interval-only oracle misses intersample RSS peak; retained lifetime VmHWM defeats false green (0.227606ms)
+✔ retained startup HWM never subtracted away; per-stream delta bound unchanged (0.146227ms)
+✔ PID reuse, cgroup reuse, other container and uninspected freshness cannot establish evidence (0.166958ms)
+✔ baseline within1sec, no >250ms gaps, monotone lifetime counters and real quiescence required (0.199475ms)
+✔ 768MiB cgroup reach and >32MiB quiescent RSS return fail unchanged (0.110933ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 62.274101

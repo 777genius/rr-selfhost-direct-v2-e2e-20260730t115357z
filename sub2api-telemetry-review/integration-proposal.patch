@@ -1,0 +1,46 @@
+--- a/sub2api-regression-lab/run.mjs
++++ b/sub2api-regression-lab/run.mjs
+@@ -7,7 +7,7 @@
+ import { models, CALL, TOOL } from './wire.mjs';
+ import { cancellationVerdict, uncertaintyVerdict } from './receipts.mjs';
+ import { cases, budget } from './plan.mjs';
+-import { telemetryVerdict } from '../sub2api-telemetry-analysis/adapter-proposal.mjs';
++import { telemetryVerdict } from '../sub2api-telemetry-review/adapter-proposal.mjs';
+ const out = '/evidence';
+ async function waitFor(c, id, predicate, ms = 6000) {
+   const end = Math.min(mono() + ms, c.deadline);
+@@ -163,10 +163,10 @@
+ async function load(c, spec, tenant, row, clients) {
+   // Coordinator must refresh deployment/config and inspect a new container per case.
+   const ready = JSON.parse(await readFile(`/telemetry/${spec.id}.ready.json`, 'utf8'));
+-  must(ready.schema === 'fresh-lifetime-v1' && ready.fresh_container_inspected === true &&
++  must(ready.schema === 'raw-observation-v2' && ready.fresh_container_inspected === true &&
+     ready.engine_pid === c.observed.engine_pid && ready.instance === c.observed.instance &&
+     ready.container_id === c.observed.container_id, 'FRESH_ENGINE_HANDSHAKE_REQUIRED');
+-  const identity = Object.fromEntries(['pid_start_ticks', 'cgroup_path', 'cgroup_device', 'cgroup_inode', 'container_id'].map(k => [k, ready[k]]));
++  const identity = Object.fromEntries(['pid_start_ticks', 'cgroup_path', 'cgroup_device', 'cgroup_inode', 'container_id', 'exe_device', 'exe_inode'].map(k => [k, ready[k]]));
+   const meta = { id: spec.id, ...c.observed, ...identity, streams: spec.streams,
+     telemetry_ready: ready, started_ms: mono(), ended_ms: null };
+   await save(`${out}/${spec.id}.start.json`, { ...meta, run_id: c.run_id });
+@@ -184,10 +184,10 @@
+   try {
+     await control(c, 'rule', { id: spec.id, mode: spec.stage === 'memory' ? 'memory' : 'healthy', mib: spec.mib });
+     const count = spec.count ?? spec.streams;
+-    while (results.length < count && !stopping && mono() < c.deadline - 3000) {
++    while (results.length < count && !stopping && mono() < c.deadline - 8000) {
+       const n = Math.min(spec.streams, count - results.length);
+       const batch = Array.from({ length: n }, () => request(c.engine_url, tenant.key, spec.protocol, spec.id,
+-        { slow: spec.stage === 'memory', timeout: Math.max(1, Math.min(60000, c.deadline - mono() - 3000)) }));
++        { slow: spec.stage === 'memory', timeout: Math.max(1, Math.min(60000, c.deadline - mono() - 8000)) }));
+       clients.push(...batch); results.push(...await Promise.all(batch.map(p => p.promise)));
+       if (results.some(r => !success(r))) break;
+     }
+@@ -201,7 +201,7 @@
+       (spec.stage !== 'memory' || results.every(r => r.bytes >= spec.mib * MiB && r.text_delta_bytes > 4096 && r.tool_id !== null && r.comments > 0));
+     row.status = valid && !row.safety_stop ? 'PASS' : 'FAIL'; row.reason = valid ? 'FINITE_STREAM_PROTOCOL_AND_EFFECT_GATE' : 'LOAD_LOSS_DUPLICATE_OR_STUCK';
+     meta.ended_ms = mono(); await save(`${out}/${spec.id}.end.json`, meta);
+-    await sleep(2000);
++    await sleep(5000); // collector independently observes >=4.8sec; adapter checks <=5sec
+     row.memory_envelope = telemetryVerdict(await telemetry(spec.id), meta, ready);
+     if (row.memory_envelope.status === 'FAIL') row.status = 'FAIL';
+     row.acceptance_status = row.status === 'PASS' && row.memory_envelope.status === 'NOT RUN' ? 'NOT RUN' : row.status;

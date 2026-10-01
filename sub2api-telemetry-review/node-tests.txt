@@ -1,0 +1,15 @@
+✔ actual Linux6.8 regression remains raw and highest observed stays derived, never physical PASS (1.607867ms)
+✔ HWM below VmRSS allowed only with raw kinds, missing counters never fabricated (1.197888ms)
+✔ identity, executable, freshness, creation order, baseline and clock stay strict (1.381069ms)
+✔ cgroup regression, limit, gaps, slow page walks, reset and fake goroutines stay rejected (0.597874ms)
+✔ 512 absolute, 128+16 per stream delta and strict 768 cgroup bounds unchanged (0.621229ms)
+✔ two-second failure preserved as old receipt; 4.8sec tail necessary, >32MiB still fails (0.56876ms)
+✔ cgroup charge smaller than RSS is valid but never a physical RSS bound (0.225736ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 71.077016
