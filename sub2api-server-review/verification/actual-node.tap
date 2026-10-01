@@ -1,0 +1,3 @@
+✔ BR05 unavailable telemetry stays unknown in actual roundtrip failure receipt (8.179063ms)
+✔ BR05 counters require observed cumulative effects and real drain acknowledgement (0.964351ms)
+✔ BR05 independent full DTO gate rejects active grouped foreign or lite templates (4.955465ms)
