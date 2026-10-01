@@ -4,6 +4,22 @@ export function parseFindingDocument(review) {
   const parsed = JSON.parse(review.trim().replace(/^```(?:json)?\s*\n([\s\S]*)\n```$/, '$1'));
   return Array.isArray(parsed) ? { findings: parsed } : parsed;
 }
+// Only completed Node wallet/withdraw commands can prove the reported example.
+export function codexNumericEvidence(event, example) {
+  const item = event?.item;
+  if (event?.type !== 'item.completed' || item?.type !== 'command_execution' || item.exit_code !== 0 || item.status !== 'completed') return false;
+  if (typeof item.command !== 'string' || typeof item.aggregated_output !== 'string') return false;
+  let command = item.command.trim();
+  const wrapped = /^\/bin\/(?:bash|sh|zsh) -(?:lc|c) (['"])([\s\S]*)\1$/.exec(command);
+  if (wrapped) command = wrapped[2];
+  if (!/^node\s/.test(command) || !/withdraw/.test(command) || !/wallet\.mjs/.test(command)) return false;
+  try {
+    const value = JSON.parse(item.aggregated_output.trim());
+    const matches = candidate => candidate !== null && typeof candidate === 'object' && !Array.isArray(candidate)
+      && ['initial_balance', 'amount', 'final_balance'].every(key => Number.isFinite(candidate[key]) && candidate[key] === example?.[key]);
+    return Array.isArray(value) ? value.some(matches) : matches(value);
+  } catch { return false; }
+}
 // Transport evidence remains separate from genuine client tool/financial proof.
 export async function nativeEvents(response, protocol, { maxBytes = 2 * 1024 * 1024 } = {}) {
   if (!response.ok || !response.headers.get('content-type')?.includes('text/event-stream')) throw Error('Native HTTP failure');

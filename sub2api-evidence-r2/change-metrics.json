@@ -1,0 +1,33 @@
+{
+  "node": "v24.21.0",
+  "files": [
+    {
+      "file": "sub2api-spike/run-client.mjs",
+      "added": 2,
+      "removed": 7,
+      "sha256": "0cafcb8b3adf01f607b62786f7d95021deefddaba7b71a0c62b86ba0419f2565"
+    },
+    {
+      "file": "sub2api-spike/evidence.mjs",
+      "added": 16,
+      "removed": 0,
+      "sha256": "4a13f43b05ed54d9e6d267525b89179bc9e6eff246213d6eb63abd8258e1af1f"
+    },
+    {
+      "file": "sub2api-spike/evidence.test.mjs",
+      "added": 50,
+      "removed": 1,
+      "sha256": "3cd0e9fe1b99e0cbd3ef7ed6aae03cbe517d3ebf1395ec9eb4eb97c79788d087"
+    },
+    {
+      "file": "sub2api-evidence-r2/client-contract.test.mjs",
+      "added": 90,
+      "removed": 0,
+      "sha256": "7b1cebb0eeef65363b8d5b90a9153cde4930079d70a8bb3d4276769884359d07"
+    }
+  ],
+  "production": {
+    "added": 18,
+    "removed": 7
+  }
+}

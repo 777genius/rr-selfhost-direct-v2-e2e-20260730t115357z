@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { bindGrantedRun } from './granted-run.mjs';
 import { requireControl, readControlInput, privateControlHome, agentHome, cleanAgentEnv, spawnAgent, safeAgentFile, verifyFixture, verifyTools, agentIdentity, sealedPath } from './runner-isolation.mjs';
-import { financialEvidence, parseFindingDocument } from './evidence.mjs';
+import { financialEvidence, parseFindingDocument, codexNumericEvidence } from './evidence.mjs';
 if (Number(process.versions.node.split('.')[0]) !== 24) throw Error('Node 24 required');
 requireControl();
 const runtime = await readControlInput();
@@ -67,12 +67,7 @@ try {
   const expression = `import { withdraw } from './wallet.mjs'; const x = ${JSON.stringify(numeric)}; const a = {balance:x.initial_balance}; const out=withdraw(a,x.amount); if(out.balance!==x.final_balance || a.balance!==x.final_balance) process.exit(1); console.log(JSON.stringify({reproduced:true}));`;
   const reproduction = await execute('node', ['--input-type=module', '-e', expression]);
   if (JSON.parse(reproduction).reproduced !== true) throw Error('Independent reproduction failed');
-  if (agent === 'codex' && !events.some(e => {
-    const i = e.item; if (e.type !== 'item.completed' || i?.type !== 'command_execution' || i.exit_code !== 0 || i.status !== 'completed') return false;
-    let cmd = i.command?.trim() ?? ''; const wrapped = /^\/bin\/(?:bash|sh|zsh) -(?:lc|c) (['"])([\s\S]*)\1$/.exec(cmd); if (wrapped) cmd = wrapped[2];
-    if (!/^node\s/.test(cmd) || !/withdraw/.test(cmd) || !/wallet\.mjs/.test(cmd)) return false;
-    try { const n = JSON.parse(i.aggregated_output.trim()); return ['initial_balance', 'amount', 'final_balance'].every(k => Number.isFinite(n[k]) && n[k] === numeric[k]); } catch { return false; }
-  })) throw Error('Codex did not prove own numeric local reproduction');
+  if (agent === 'codex' && !events.some(e => codexNumericEvidence(e, numeric))) throw Error('Codex did not prove own numeric local reproduction');
   const evidence = { ...financialEvidence(agent, events, review, provider), id: agent === 'claude' ? 'A03' : provider === 'mimo' ? 'A01' : 'A02', evidence_kind: 'real-Actions', independent_numeric_reproduction: true, workflow_sha: identity.workflowSHA, run_id: identity.runID, run_attempt: identity.attempt, provider: identity.provider, agent, node: process.version, client_version: expected, transport: identity.protocol };
   // Only positive-projected evidence crosses back to the uid1001 workflow.
   process.stdout.write(JSON.stringify(evidence) + '\n');

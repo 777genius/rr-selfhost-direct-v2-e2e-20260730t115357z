@@ -1,7 +1,56 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { financialEvidence, nativeEvents } from './evidence.mjs';
+import { codexNumericEvidence, financialEvidence, nativeEvents } from './evidence.mjs';
 import { withdraw } from '../gateway-spike/fixture/wallet.mjs';
+const negative = { initial_balance: 100, amount: -10, final_balance: 110 };
+const fractional = { initial_balance: 100, amount: 0.5, final_balance: 99.5 };
+const nodeCommand = 'node --input-type=module -e "import { withdraw } from \'./wallet.mjs\'; /* reproduction */"';
+const numericEvent = (output, command = nodeCommand) => ({ type: 'item.completed', item: { type: 'command_execution', command, exit_code: 0, status: 'completed', aggregated_output: output } });
+test('numeric proof accepts the existing complete JSON object', () => {
+  assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative)), negative), true);
+});
+test('numeric proof accepts canary two-object JSON array matching either reported example', () => {
+  const event = numericEvent(JSON.stringify([negative, fractional]));
+  assert.equal(codexNumericEvidence(event, negative), true);
+  assert.equal(codexNumericEvidence(event, fractional), true);
+  assert.equal(codexNumericEvidence(numericEvent(JSON.stringify([fractional, negative])), negative), true);
+});
+test('numeric proof preserves existing direct and shell-wrapped Node command matching', () => {
+  for (const shell of ['bash', 'sh', 'zsh']) for (const flag of ['c', 'lc']) for (const quote of ["'", '"']) {
+    assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), `/bin/${shell} -${flag} ${quote}${nodeCommand}${quote}`), negative), true);
+  }
+});
+test('numeric proof requires exact finite numbers in all three actual fields', () => {
+  for (const key of Object.keys(negative)) for (const value of [negative[key] + 1, String(negative[key]), null, true]) {
+    const wrong = { ...negative, [key]: value };
+    for (const output of [wrong, [fractional, wrong]]) assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(output)), negative), false);
+  }
+  for (const key of Object.keys(negative)) {
+    const missing = { ...negative }; delete missing[key];
+    assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(missing)), negative), false);
+    const overflow = JSON.stringify(negative).replace(`"${key}":${negative[key]}`, `"${key}":1e999`);
+    assert.equal(codexNumericEvidence(numericEvent(overflow), { ...negative, [key]: Infinity }), false);
+  }
+  assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative)), { ...negative, amount: '-10' }), false);
+});
+test('numeric proof parses the complete output and never scans fragments or nested objects', () => {
+  const json = JSON.stringify(negative);
+  for (const output of ['', '{bad', 'PASS', `log\n${json}`, `${json}\nlog`, `${json}\n${json}`, `\u0060\u0060\u0060json\n${json}\n\u0060\u0060\u0060`, 'null', 'true', '100', JSON.stringify(json), '[]', '{}', JSON.stringify({ example: negative }), JSON.stringify([[negative]]), JSON.stringify([{ example: negative }])]) {
+    assert.equal(codexNumericEvidence(numericEvent(output), negative), false, output);
+  }
+  assert.equal(codexNumericEvidence(numericEvent(` \n${json}\n `), negative), true);
+});
+test('numeric proof rejects failed or incomplete tools, reasoning, and wrong commands', () => {
+  const event = numericEvent(JSON.stringify(negative));
+  for (const type of ['item.started', 'turn.completed', 'reasoning', 'error']) assert.equal(codexNumericEvidence({ ...event, type }, negative), false);
+  for (const mutation of [{ type: 'reasoning' }, { type: 'agent_message' }, { status: 'failed' }, { status: 'in_progress' }, { status: undefined }, { exit_code: 1 }, { exit_code: '0' }, { exit_code: undefined }, { command: null }, { aggregated_output: negative }]) {
+    assert.equal(codexNumericEvidence({ ...event, item: { ...event.item, ...mutation } }, negative), false);
+  }
+  for (const command of ['cat wallet.mjs', 'echo withdraw wallet.mjs', 'node -e "console.log(1)"', 'node -e "withdraw()"', 'cd /tmp && ' + nodeCommand, '/usr/bin/' + nodeCommand, 'bash -lc ' + nodeCommand]) {
+    assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), command), negative), false);
+  }
+  assert.equal(codexNumericEvidence(null, negative), false);
+});
 test('A06 successful separate shell-wrapped rules read validates actual source and finding', () => {
   const command = (cmd, text) => ({ type: 'item.completed', item: { type: 'command_execution', command: cmd, exit_code: 0, status: 'completed', aggregated_output: text } });
   const review = JSON.stringify({ findings: [{ file: 'wallet.mjs', function: 'withdraw', summary: 'negative withdrawal increases balance', example: { initial_balance: 100, amount: -10, final_balance: 110 } }] });
