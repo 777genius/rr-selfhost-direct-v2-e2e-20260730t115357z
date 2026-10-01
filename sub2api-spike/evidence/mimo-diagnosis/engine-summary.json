@@ -1,0 +1,11 @@
+{
+  "mode": "engine",
+  "client": "Codex0.159.2",
+  "exit_code": 0,
+  "agent_message_count": 1,
+  "successful_commands": 5,
+  "turn_completed": true,
+  "review_bytes": 98,
+  "error_events": 1,
+  "raw_secrets_exported": false
+}

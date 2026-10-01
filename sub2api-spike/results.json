@@ -7,7 +7,7 @@
       "id": "A01",
       "status": "FAIL",
       "kind": "Real Actions",
-      "detail": "36775047872: валидный массив findings отклонён старым адаптером. После строгого исправления, 36778603368: reads + numeric tools, но финальный ответ пуст. Причина gateway/provider не изолирована; нет успешного итогового canary."
+      "detail": "Исходные Actions 36775047872 и 36778603368 остаются FAIL. Диагностика 2026-10-01: Sub2 удаляет unencrypted reasoning; одинаковый replay без него -> no message, с ним -> message. reasoning.effort=none прошёл strict financial contract в hosted container, не новом Actions. См. MIMO-DIAGNOSIS.md."
     },
     {
       "id": "A02",

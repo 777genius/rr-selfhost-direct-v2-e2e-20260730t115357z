@@ -1,0 +1,29 @@
+[
+  {
+    "mode": "engine",
+    "valid_finding": false,
+    "financial_contract": false,
+    "numeric_tool_reproduction": false,
+    "independent_numeric_reproduction": false,
+    "raw_exported": false,
+    "result": "FAIL"
+  },
+  {
+    "mode": "direct",
+    "valid_finding": true,
+    "financial_contract": true,
+    "numeric_tool_reproduction": false,
+    "independent_numeric_reproduction": true,
+    "raw_exported": false,
+    "result": "FAIL"
+  },
+  {
+    "mode": "engine-none",
+    "valid_finding": true,
+    "financial_contract": true,
+    "numeric_tool_reproduction": true,
+    "independent_numeric_reproduction": true,
+    "raw_exported": false,
+    "result": "PASS"
+  }
+]

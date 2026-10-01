@@ -1,0 +1,65 @@
+{
+  "same_request_except_reasoning_history": true,
+  "planned_provider_requests": 2,
+  "automatic_retries": 0,
+  "receipts": [
+    {
+      "name": "stripped",
+      "http_status": 200,
+      "terminal": "response.completed",
+      "status": "completed",
+      "input_count": 14,
+      "reasoning_items": 0,
+      "output": [
+        {
+          "type": "reasoning",
+          "role": null,
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_length": 782
+            }
+          ]
+        }
+      ],
+      "output_tokens": 176,
+      "reasoning_tokens": 175,
+      "error_present": false,
+      "raw_exported": false
+    },
+    {
+      "name": "retained",
+      "http_status": 200,
+      "terminal": "response.completed",
+      "status": "completed",
+      "input_count": 19,
+      "reasoning_items": 5,
+      "output": [
+        {
+          "type": "reasoning",
+          "role": null,
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_length": 372
+            }
+          ]
+        },
+        {
+          "type": "message",
+          "role": "assistant",
+          "content": [
+            {
+              "type": "output_text",
+              "text_length": 658
+            }
+          ]
+        }
+      ],
+      "output_tokens": 240,
+      "reasoning_tokens": 81,
+      "error_present": false,
+      "raw_exported": false
+    }
+  ]
+}

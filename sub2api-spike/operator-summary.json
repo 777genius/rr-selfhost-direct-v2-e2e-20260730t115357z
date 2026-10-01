@@ -4,5 +4,6 @@
   "live": 2,
   "contract_passed": 45,
   "verdict": "NO-GO для универсального production/pool cutover. CONDITIONAL GO только для ограниченного native BYOK исследования с нашим UI/broker/error fence.",
-  "teardown": "9 containers /4 networks /23 private paths удалены; original keys сохранены; canary disabled."
+  "teardown": "9 containers /4 networks /23 private paths удалены; original keys сохранены; canary disabled.",
+  "diagnosis": "2026-10-01: потеря MiMo reasoning history воспроизведена, provider/client ответы равны байтами; reasoning.effort=none hosted financial PASS. Original Actions FAIL сохранён."
 }
