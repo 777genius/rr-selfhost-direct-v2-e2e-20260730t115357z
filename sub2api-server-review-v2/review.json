@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "task_id": "rr-gateway-spike-20260930-server-review-w2",
+  "status": "BOUNDED_INDEPENDENT_REVIEW_COMPLETE",
+  "decision": "APPROVE_EXACT_FROZEN_W2_FINAL_FOR_COORDINATOR_INTEGRATION",
+  "scope": {
+    "ownership": "sub2api-server-review-v2/ only",
+    "candidate": ".spike-inputs/consumer/ server-wiring-w2 final",
+    "production_approval": false,
+    "native_fork_reassessment": false
+  },
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "SR1",
+      "prior_priority": "P2",
+      "status": "CLOSED",
+      "evidence": "broker.mjs:18-33 acquisition outside cleanup; all fallible ledger/lock initialization covered; exact frozen five-test module independently passes",
+      "remaining_fault_injection_limits": [
+        "PID write",
+        "sync",
+        "handle close"
+      ]
+    }
+  ],
+  "source_sha256": {
+    ".spike-inputs/consumer/sub2api-spike/serve.mjs": "fb2ec7e3aa5eadb60cde72d25f2004d77e8ece52de318d5c53abca14a190275c",
+    ".spike-inputs/consumer/sub2api-spike/serve.test.mjs": "a5f1908d5bab1579deb7ed80273868d87ec3c14bf1c818a0cd0e966eb765047c",
+    ".spike-inputs/consumer/sub2api-spike/broker.mjs": "742b1d166670a18eae27475c5cd5ab5fb3e770bbbb92706e885ee11d33aa900a",
+    ".spike-inputs/consumer/sub2api-spike/broker.test.mjs": "d9320ab9e2e08c5381328723dfc03f79a73c34da0d64c84b0e84cb6512a75051",
+    ".spike-inputs/consumer/sub2api-server/broker-initialization.test.mjs": "3038e500b4a8c6d72d74459a5cd0f049bbc9da6cb131100ab8c7b490a24dd0ee",
+    ".spike-inputs/consumer/sub2api-server/workflow-final.yml": "a88e53308513288af722ea08520285752fc189fad18e1d99d7e0c30a3f0280a9"
+  },
+  "receipt_sha256": {
+    ".spike-inputs/actual/contracts.log": "bcefc3e9ea4d412cf148a5b800a320a730b3d02d7a6f4e8ff37c2d79ece01515",
+    ".spike-inputs/actual/execution.json": "a16a5f50e628ac50432cfd115953afa02a21363eb71b8dbb01f068750abd1379",
+    ".spike-inputs/actual/fixture-repair.json": "45dd6bcf6203628e9d97cf9a236430ad24d4315f9ac40cba7d85e9fb03947505",
+    ".spike-inputs/actual/test-isolation.json": "253b134abf9eaef071a4560c14fcd94b63d95e988278620dba1a7d9f604ea148",
+    ".spike-inputs/consumer/sub2api-server/W2-REPORT.md": "7eb0c2b283f1e3fab137c45a462e4ce1dc9e890b605dc0ba4db9cd1782d15f54",
+    ".spike-inputs/consumer/sub2api-server/w2-preservation.json": "ec142c70c6719f70aad5f72928162ed9604c7ed4032ec7f363ba9a5b38781ec3",
+    ".spike-inputs/consumer/sub2api-server/w2.patch": "4dc7286865adf118d0b24b05eafea3eccc99287a8a8634a2f1998902e4510be6",
+    ".spike-inputs/consumer/sub2api-server/COORDINATOR-FINAL.md": "b9c79210ee5e47994fc010c312b638d5a3cd042c21d43e510ef21da328a0ba1a"
+  },
+  "input_manifest_verification": {
+    "checked": 137,
+    "mismatches": []
+  },
+  "requirements": {
+    "own_wx_exception_cleanup": "PASS_SOURCE_AND_FILESYSTEM_TESTS",
+    "foreign_crash_lock_preserved": "PASS_EEXIST_CONTENT_INODE_LEDGER_ASSERTIONS",
+    "repaired_ledger_retains_issued_run": "PASS_FOUR_RECOVERY_CASES",
+    "durable_replay_deny": "PASS_UNCHANGED_SOURCE_AND_ROOT_B10_G03",
+    "startup_shutdown_recovery_wiring": "PASS_UNCHANGED_HASHES_SOURCE_REVIEW_AND_ROOT_GATE",
+    "old_broker_tests_preserved": "PASS_DIRECT_BYTE_COMPARISON",
+    "separate_os_tmpdir_fixtures": "PASS_SOURCE_AND_LOCAL_EXECUTION",
+    "workflow_exact_one_line": "PASS_EXACT_BYTE_TRANSFORMATION",
+    "scanner_enabled": "COORDINATOR_RECEIPT_AND_USER_INSTRUCTION; NOT_INDEPENDENT_SCANNER_EXECUTION",
+    "history_distinguished_from_final": "PASS_FINAL_BYTES_AND_HISTORICAL_RECEIPT_REVIEW"
+  },
+  "verification": {
+    "local": {
+      "node": "v24.21.0",
+      "command": "TMPDIR=\"$PWD/sub2api-server-review-v2/tmp\" /opt/nodejs/node-v24.21.0-linux-x64/bin/node --test --test-reporter=tap .spike-inputs/consumer/sub2api-server/broker-initialization.test.mjs",
+      "exit": 0,
+      "pass": 5,
+      "fail": 0,
+      "skip": 0,
+      "listeners_opened": 0,
+      "artifact": "verification/initialization.tap"
+    },
+    "root_full_gate": {
+      "receipt": ".spike-inputs/actual/execution.json",
+      "log": ".spike-inputs/actual/contracts.log",
+      "source_hashes_verified": 6,
+      "node_image": "node:24.21.0-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1",
+      "exit": 0,
+      "pass": 102,
+      "fail": 0,
+      "skip": 0,
+      "provider_calls": 0,
+      "independent_rerun": false,
+      "frozen_log_independently_checked": true
+    },
+    "prior_review_sources_preserved": 12
+  },
+  "limitations": [
+    "Lock ownership assumes existing coordinator recovery only after owner termination.",
+    "Write/sync/close failures source-reviewed, not injected.",
+    "External handoff scanner enforcement accepted from frozen receipt; not independently executed.",
+    "No production SSO/membership, live OAuth/provider, image custody, genuine Actions or native deployment proof. External gates are limitations, not waiting work."
+  ],
+  "integration_handoff": {
+    "apply_workflow_exact_bytes_separately": true,
+    "workflow_sha256": "a88e53308513288af722ea08520285752fc189fad18e1d99d7e0c30a3f0280a9",
+    "source_edits": [],
+    "git_operations": [],
+    "blockers": []
+  },
+  "previous_attempt": "Account unavailable; no existing v2 report found. Current authoritative frozen state inspected before review.",
+  "artifacts": {
+    "REPORT.md": "7ef3b8add05a50104730f3849dfe609c42937e857c90ad537ea6101be700d75e",
+    "verification/initialization.tap": "a44f2aa07f55ffd50c0bb6ceb0e967939a36ca39ed9e7b5aadf2d441a0ec9473",
+    "verification/source-check.json": "0259f6f1cf6131435b48a6e545a3b87fc2f520535e2c6a4cd0984e809434ccd8",
+    "verification/workflow.diff": "10f669e3ab1b277b12ae9d2306b90b9a4f511d02d821351e3b3b8edc254d5297"
+  }
+}

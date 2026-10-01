@@ -1,0 +1,40 @@
+TAP version 13
+# Subtest: SR1 constructor recovers after malformed JSON
+ok 1 - SR1 constructor recovers after malformed JSON
+  ---
+  duration_ms: 8.291158
+  type: 'test'
+  ...
+# Subtest: SR1 constructor recovers after invalid schema
+ok 2 - SR1 constructor recovers after invalid schema
+  ---
+  duration_ms: 2.625661
+  type: 'test'
+  ...
+# Subtest: SR1 constructor recovers after read EISDIR
+ok 3 - SR1 constructor recovers after read EISDIR
+  ---
+  duration_ms: 4.079598
+  type: 'test'
+  ...
+# Subtest: SR1 constructor recovers after persist failure
+ok 4 - SR1 constructor recovers after persist failure
+  ---
+  duration_ms: 2.296987
+  type: 'test'
+  ...
+# Subtest: SR1 constructor preserves an existing foreign or crash lock
+ok 5 - SR1 constructor preserves an existing foreign or crash lock
+  ---
+  duration_ms: 1.025391
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 72.213046

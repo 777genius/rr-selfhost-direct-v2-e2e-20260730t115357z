@@ -1,0 +1,126 @@
+{
+  "manifest": {
+    "checked": 137,
+    "mismatches": []
+  },
+  "gate_sources": {
+    "sub2api-spike/serve.mjs": {
+      "expected": "fb2ec7e3aa5eadb60cde72d25f2004d77e8ece52de318d5c53abca14a190275c",
+      "actual": "fb2ec7e3aa5eadb60cde72d25f2004d77e8ece52de318d5c53abca14a190275c"
+    },
+    "sub2api-spike/serve.test.mjs": {
+      "expected": "a5f1908d5bab1579deb7ed80273868d87ec3c14bf1c818a0cd0e966eb765047c",
+      "actual": "a5f1908d5bab1579deb7ed80273868d87ec3c14bf1c818a0cd0e966eb765047c"
+    },
+    "sub2api-spike/broker.mjs": {
+      "expected": "742b1d166670a18eae27475c5cd5ab5fb3e770bbbb92706e885ee11d33aa900a",
+      "actual": "742b1d166670a18eae27475c5cd5ab5fb3e770bbbb92706e885ee11d33aa900a"
+    },
+    "sub2api-spike/broker.test.mjs": {
+      "expected": "d9320ab9e2e08c5381328723dfc03f79a73c34da0d64c84b0e84cb6512a75051",
+      "actual": "d9320ab9e2e08c5381328723dfc03f79a73c34da0d64c84b0e84cb6512a75051"
+    },
+    "sub2api-server/broker-initialization.test.mjs": {
+      "expected": "3038e500b4a8c6d72d74459a5cd0f049bbc9da6cb131100ab8c7b490a24dd0ee",
+      "actual": "3038e500b4a8c6d72d74459a5cd0f049bbc9da6cb131100ab8c7b490a24dd0ee"
+    },
+    "sub2api-server/workflow-final.yml": {
+      "expected": "a88e53308513288af722ea08520285752fc189fad18e1d99d7e0c30a3f0280a9",
+      "actual": "a88e53308513288af722ea08520285752fc189fad18e1d99d7e0c30a3f0280a9"
+    }
+  },
+  "prior_review_preservation": {
+    ".spike-inputs/consumer/sub2api-spike/serve.mjs": {
+      "prior": "fb2ec7e3aa5eadb60cde72d25f2004d77e8ece52de318d5c53abca14a190275c",
+      "current": "fb2ec7e3aa5eadb60cde72d25f2004d77e8ece52de318d5c53abca14a190275c",
+      "identical": true
+    },
+    ".spike-inputs/consumer/sub2api-spike/serve.test.mjs": {
+      "prior": "a5f1908d5bab1579deb7ed80273868d87ec3c14bf1c818a0cd0e966eb765047c",
+      "current": "a5f1908d5bab1579deb7ed80273868d87ec3c14bf1c818a0cd0e966eb765047c",
+      "identical": true
+    },
+    ".spike-inputs/consumer/sub2api-spike/customer.mjs": {
+      "prior": "b8bd9c31fe4de4a4fd8ba04b6c9d25161f07476a928f65228b2b716b22be7508",
+      "current": "b8bd9c31fe4de4a4fd8ba04b6c9d25161f07476a928f65228b2b716b22be7508",
+      "identical": true
+    },
+    ".spike-inputs/consumer/sub2api-spike/oidc.mjs": {
+      "prior": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647",
+      "current": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647",
+      "identical": true
+    },
+    ".spike-inputs/consumer/sub2api-spike/util.mjs": {
+      "prior": "1dc20fa471b4e2784ff45748bd0a517ff6fd5517aa5b325c8467430cbb22bed4",
+      "current": "1dc20fa471b4e2784ff45748bd0a517ff6fd5517aa5b325c8467430cbb22bed4",
+      "identical": true
+    },
+    ".spike-inputs/consumer/sub2api-spike/native-errors.mjs": {
+      "prior": "6367e40dc016e95acef8a39632bec28cea81a090d2cf59ce318ae62c165a5a4e",
+      "current": "6367e40dc016e95acef8a39632bec28cea81a090d2cf59ce318ae62c165a5a4e",
+      "identical": true
+    },
+    ".spike-inputs/consumer/sub2api-spike/granted-run.mjs": {
+      "prior": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+      "current": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+      "identical": true
+    },
+    ".spike-inputs/consumer/sub2api-spike/run-client.mjs": {
+      "prior": "484d454a3aacf25c3ea2e21e9400bbaa1fbd5b1615b485c24e6088bc881d2599",
+      "current": "484d454a3aacf25c3ea2e21e9400bbaa1fbd5b1615b485c24e6088bc881d2599",
+      "identical": true
+    },
+    ".spike-inputs/consumer/sub2api-spike/runner-isolation.mjs": {
+      "prior": "3eb6a0844007d088609dccf959962d319cac93ea77c1cf9233a90993c4293d03",
+      "current": "3eb6a0844007d088609dccf959962d319cac93ea77c1cf9233a90993c4293d03",
+      "identical": true
+    },
+    ".spike-inputs/consumer/sub2api-spike/evidence.mjs": {
+      "prior": "2f8b6d1d2adda68a97a28d3672617508da09bf3845d9d60e6df608505eb28856",
+      "current": "2f8b6d1d2adda68a97a28d3672617508da09bf3845d9d60e6df608505eb28856",
+      "identical": true
+    },
+    ".spike-inputs/consumer/sub2api-spike/operator/live-setup.mjs": {
+      "prior": "1aee77ea68df897fe01e5f9c661ff9543ddbba87cb1cd7ad0a6d999d53c3794e",
+      "current": "1aee77ea68df897fe01e5f9c661ff9543ddbba87cb1cd7ad0a6d999d53c3794e",
+      "identical": true
+    },
+    ".spike-inputs/consumer/sub2api-spike/operator/admin-roundtrip.mjs": {
+      "prior": "3535ce99223d632c7e0ccce719ac9201f6fb883b4a436d0973f472b08a2380c8",
+      "current": "3535ce99223d632c7e0ccce719ac9201f6fb883b4a436d0973f472b08a2380c8",
+      "identical": true
+    }
+  },
+  "original_broker_tests": {
+    "canonical": "d9320ab9e2e08c5381328723dfc03f79a73c34da0d64c84b0e84cb6512a75051",
+    "frozen": "d9320ab9e2e08c5381328723dfc03f79a73c34da0d64c84b0e84cb6512a75051",
+    "byte_identical": true
+  },
+  "workflow": {
+    "exact_single_line_addition": true,
+    "baseline_sha256": "ae30109a82ac8f75c8c68967235293f755338a7416102198e19d15449525e566",
+    "proposal_sha256": "a88e53308513288af722ea08520285752fc189fad18e1d99d7e0c30a3f0280a9"
+  },
+  "full_log": {
+    "ok_count": 102,
+    "not_ok_count": 0,
+    "summary": [
+      "# tests 102",
+      "# pass 102",
+      "# fail 0",
+      "# cancelled 0",
+      "# skipped 0",
+      "# todo 0"
+    ]
+  },
+  "source_sha256": {
+    ".spike-inputs/actual/contracts.log": "bcefc3e9ea4d412cf148a5b800a320a730b3d02d7a6f4e8ff37c2d79ece01515",
+    ".spike-inputs/actual/execution.json": "a16a5f50e628ac50432cfd115953afa02a21363eb71b8dbb01f068750abd1379",
+    ".spike-inputs/actual/fixture-repair.json": "45dd6bcf6203628e9d97cf9a236430ad24d4315f9ac40cba7d85e9fb03947505",
+    ".spike-inputs/actual/test-isolation.json": "253b134abf9eaef071a4560c14fcd94b63d95e988278620dba1a7d9f604ea148",
+    ".spike-inputs/consumer/sub2api-server/W2-REPORT.md": "7eb0c2b283f1e3fab137c45a462e4ce1dc9e890b605dc0ba4db9cd1782d15f54",
+    ".spike-inputs/consumer/sub2api-server/w2-preservation.json": "ec142c70c6719f70aad5f72928162ed9604c7ed4032ec7f363ba9a5b38781ec3",
+    ".spike-inputs/consumer/sub2api-server/w2.patch": "4dc7286865adf118d0b24b05eafea3eccc99287a8a8634a2f1998902e4510be6",
+    ".spike-inputs/consumer/sub2api-server/COORDINATOR-FINAL.md": "b9c79210ee5e47994fc010c312b638d5a3cd042c21d43e510ef21da328a0ba1a"
+  }
+}

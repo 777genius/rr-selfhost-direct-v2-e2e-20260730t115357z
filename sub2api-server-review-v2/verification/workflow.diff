@@ -1,0 +1,11 @@
+--- .github/workflows/sub2api-gateway-spike.yml
++++ workflow-final.yml
+@@ -25,7 +25,7 @@
+         with:
+           persist-credentials: false
+       - name: Verify key independent contracts
+-        run: node --test sub2api-spike/*.test.mjs
++        run: node --test sub2api-spike/*.test.mjs sub2api-server/*.test.mjs
+       - name: One sealed fixture native review
+         working-directory: sub2api-spike
+         env:
