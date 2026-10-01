@@ -1,0 +1,200 @@
+{
+  "schema": 1,
+  "task_id": "rr-gateway-spike-20260930-boundary-review-w1",
+  "attempt": 2,
+  "date": "2026-10-01",
+  "review_complete": true,
+  "decision": "CANARY_NO_GO",
+  "scope": "Independent bounded review of exact frozen patch; operator gates and production readiness are not approved.",
+  "patch": {
+    "path": ".spike-inputs/candidate.patch",
+    "sha256": "a292e147a7630c44d6592f2239a86120ca1d782ce5c8b611d944e095a8866805",
+    "producer_source_workflow_hashes_verified": 8
+  },
+  "findings": [
+    {
+      "id": "BR01",
+      "severity": "P1",
+      "requirement": "R11",
+      "path": "sub2api-spike/customer.mjs",
+      "line": 24,
+      "related_lines": [
+        27,
+        29,
+        30,
+        87,
+        88,
+        138,
+        206
+      ],
+      "title": "Stock empty-group DTO breaks connect and trusted orphan reconciliation",
+      "proof": "SOURCE_AND_OFFLINE_CONTROL_FLOW",
+      "blocking": true,
+      "impact": "Stock standard-mode empty groups omit both group_ids and groups. GET fails quarantine_template_denied; independently isolated PUT fails quarantine_template_drift; a duplicate acknowledgement with this shape fails quarantine_invalid before upstreamID is recorded; omitted groups on a recovery list item fail recovery_quarantine_denied.",
+      "minimal_correction": "Normalize group fields only at a validated pinned standard-mode stock AdminAPI DTO boundary. Omission of both is empty under the inspected full-detail and compact-list contracts. Reject present null/non-array/malformed/conflicting fields; retain other ownership/platform/status/scheduling checks. Require standard mode or independently verify unfiltered group membership. Apply consistently to template GET/PUT, duplicate, and recovery list/detail. Add actual DTO serialization and real-admin regressions."
+    },
+    {
+      "id": "BR02",
+      "severity": "P1",
+      "requirement": "R11",
+      "path": "sub2api-spike/customer.mjs",
+      "line": 28,
+      "related_paths": [
+        "backend/internal/handler/admin/account_handler.go:1213",
+        "backend/internal/handler/admin/account_handler.go:1226",
+        "backend/internal/service/openai_apikey_responses_probe.go:124",
+        "backend/internal/service/openai_apikey_responses_probe.go:178",
+        "backend/internal/service/openai_apikey_responses_probe.go:197"
+      ],
+      "title": "Preparing inactive template triggers an upstream model probe outside routing quarantine",
+      "proof": "SOURCE_REACHABILITY_AFTER_BR01_CORRECTION",
+      "blocking": true,
+      "impact": "Once BR01 is corrected, PUT with real OpenAI API-key credentials schedules the stock Responses capability probe. That path bypasses status/schedulable/group checks and posts a tool-choice-required model request using the key and configured model, before duplicate acknowledgement or canary dispatch. force_responses and billing-probe-disabled flags do not skip this handler probe.",
+      "minimal_correction": "Use an independently verified no-probe credential preparation path or explicitly contain and suppress capability probes for quarantined templates in the trusted engine/control lane. No adapter-only status/group change disables this stock probe. Prove zero provider effects using a counting synthetic upstream through actual handler execution, including delayed goroutine execution; do not install real credentials until that gate passes."
+    },
+    {
+      "id": "BR03",
+      "severity": "P2",
+      "requirement": "R11",
+      "path": "sub2api-spike/customer.mjs",
+      "line": 98,
+      "related_lines": [
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109
+      ],
+      "title": "Promotion can publish an obsolete workspace group across awaits",
+      "proof": "OFFLINE_CONTROL_FLOW",
+      "blocking": true,
+      "impact": "Remapping trusted workspace group from 11 to 22 during group-attachment acknowledgement still returns active and enables account scheduling in group 11. Subsequent read reports group_drift. Membership checks do not revalidate routing mapping. Cross-tenant inference is conditional on old-group reassignment; it was not demonstrated.",
+      "minimal_correction": "Fence routing configuration changes with a revision/lock coordinated with workspace keys and broker grants, and revalidate expected group/authority after every promotion await and before scheduling/publication. On drift compensate and revoke/fence. Verify a real-engine remap/reassignment race before claiming tenant isolation."
+    },
+    {
+      "id": "BR04",
+      "severity": "P2",
+      "requirement": "R07",
+      "path": "sub2api-spike/run-client.mjs",
+      "line": 67,
+      "related_lines": [
+        7,
+        8,
+        31,
+        33
+      ],
+      "related_paths": [
+        "sub2api-spike/runner-isolation.mjs:89",
+        "sub2api-spike/broker.mjs:57"
+      ],
+      "title": "Normalized Actions run metadata is not bound to the signed OIDC run",
+      "proof": "SOURCE_DATA_FLOW",
+      "blocking": true,
+      "impact": "Broker authorizes signed run_id/run_attempt, but grant returns only capability/model/expires. Trusted harness prints run_id/run_attempt from UID1001-supplied stdin without comparing them to signed claims. A permitted launcher caller can label evidence with a different syntactically valid run/attempt. Workflow checks only workflow_sha. This does not prove unauthorized grant issuance or root execution.",
+      "minimal_correction": "Return broker-verified runID/attempt/workflow identity in the grant and compare against stdin before agent execution; construct receipt from verified values. Extend workflow receipt validation to run/attempt and provider/agent. Add mismatch denial tests at the grant-to-receipt boundary."
+    },
+    {
+      "id": "BR05",
+      "severity": "P2",
+      "requirement": "R11",
+      "path": "sub2api-spike/operator/admin-roundtrip.mjs",
+      "line": 36,
+      "related_lines": [
+        25,
+        37,
+        38
+      ],
+      "title": "Bundled stock-admin gate omits required trusted quarantine templates",
+      "proof": "SOURCE_AND_OFFLINE_CONTROL_FLOW",
+      "blocking": true,
+      "impact": "This unchanged operator constructs fresh workspace records with no quarantineTemplates, supplies no adapter option, then connects. Current AdminAPI fails quarantine_template_required with zero account requests. The bundled gate cannot validate the new path; coordinator custom setup is separate evidence.",
+      "minimal_correction": "Provision per-workspace scoped inactive/unschedulable/group-free templates using inert synthetic credentials, persist trusted IDs, and pass them to this gate. Exercise exact adapter GET/PUT/duplicate/recovery against the pinned stock engine, including omitted DTO group fields. Preserve intentional fail-closed behavior; do not restore ordinary-create fallback."
+    }
+  ],
+  "verification": [
+    {
+      "command": "node sub2api-boundary-review/offline-oracles.mjs",
+      "status": "PASS",
+      "scope": "Assertions reproduce adapter defects using offline transport/control-flow overrides; output offline-oracles.json."
+    },
+    {
+      "command": "node --test .spike-inputs/candidate/sub2api-spike/runner-isolation.test.mjs .spike-inputs/candidate/sub2api-spike/evidence.test.mjs",
+      "status": "PASS",
+      "tests": 7
+    },
+    {
+      "command": "node --test --test-name-pattern='stock admin|legacy orphan' .spike-inputs/candidate/sub2api-spike/customer.test.mjs",
+      "status": "PASS",
+      "tests": 2
+    },
+    {
+      "command": "sh -n .spike-inputs/candidate/sub2api-spike/operator/runner-launcher.sh",
+      "status": "PASS"
+    },
+    {
+      "command": "SHA-256 check of exact patch and all 8 source/workflow files against producer manifest",
+      "status": "PASS"
+    }
+  ],
+  "coordinator_evidence": [
+    {
+      "source": ".spike-inputs/coordinator-contracts.json and original task",
+      "status": "REPORTED_PASS",
+      "details": "Pinned Node24 none-loopback-only contract execution exit=0; original task reports 61/61. Stored contract summary is empty; reviewer did not independently rerun HTTP/socket tests."
+    },
+    {
+      "source": "operator guidance ee6493a4-fbbe-4801-a3d0-f3c4bea3c69d",
+      "status": "REPORTED_PASS",
+      "details": "Derived-image kernel UID1002/proc/sentinel/normal-tool-IO/hostile-symlink and same-UID negative control pass. Raw normalized receipt and image digest not available in this worktree."
+    },
+    {
+      "source": "same operator guidance",
+      "status": "REPORTED_FAIL",
+      "details": "Real ungrouped stock GET omits both group fields; template-real-get-quarantined fails. Initial sudo probes fail; broad base sudoers lacks includedir, sudo binary mode700; coordinator repair was in progress. No finished launcher-install gate is supplied."
+    }
+  ],
+  "external_gates": [
+    "Authenticate inspected stock source bytes against pinned release and exact deployed engine/DB images; producer source-pin-check says NOT VERIFIED.",
+    "Fix and review blockers on a new frozen patch; rerun contract tests including real stock DTO shapes.",
+    "Actual stock admin duplicate transaction/outbox/scheduler, commit-before-503, restart, unique exact-owner reconciliation, durable write failures, membership and routing changes, cross-tenant attribution, and compensation/revocation gates.",
+    "Count synthetic upstream effects for template preparation, including asynchronous capability probes; establish zero paid/provider requests before authorized canary.",
+    "Final immutable image digest, sealed imports/client package trees/fixture hashes, exact reviewed workflow SHA and harness manifest, full minimal validated sudoers, sudo setuid4755 and removal of UID1001 extra groups/broad privilege.",
+    "Installed UID1001 no-argument delegation and hostile arg/environment/workflow/manifest mismatch denial; UID1002 no delegation; custody and FD checks.",
+    "Correlate normalized Actions receipt with broker-verified run/attempt/workflow; validate selectors and no token/raw output leakage.",
+    "Prove teardown kills escaped descendants across sessions, or destroy a dedicated disposable runner after each run before allowing another run.",
+    "Genuine isolated Actions A01/A02/A03 only after all blockers and gates pass; no production approval."
+  ],
+  "limits": [
+    "No Docker, root/UID-change execution, network/socket tests, credentials, live inference, or Git operations were performed by this review.",
+    "Only sub2api-boundary-review/ was edited; producer/upstream remain read-only.",
+    "Offline doubles reproduce adapter decisions and do not establish DB atomicity, scheduler effects, signed Actions provenance, or kernel containment.",
+    "Runtime guidance is attributed operator evidence, not firsthand review execution. No operator wait is required to finish this review.",
+    "Filename variance is reasonable bounded implementation choice, not a security defect; coordinator still owns explicit integration path approval."
+  ],
+  "source_sha256": {
+    ".spike-inputs/candidate/sub2api-spike/customer.mjs": "f9d76bab2f08677f5d8f58c0285e138622cf23d407c549f571ce005002a15b6b",
+    ".spike-inputs/candidate/sub2api-spike/customer.test.mjs": "36d2fa99bee0e813591adf40995bd6c65fed0261a2c866f1ca71988cd13ed8d2",
+    ".spike-inputs/candidate/sub2api-spike/run-client.mjs": "21637ea635aec5e9533c21c93c118c08ca028706ce7517038519f5f127e6bfcb",
+    ".spike-inputs/candidate/sub2api-spike/runner-isolation.mjs": "3eb6a0844007d088609dccf959962d319cac93ea77c1cf9233a90993c4293d03",
+    ".spike-inputs/candidate/sub2api-spike/runner-isolation.test.mjs": "fc6b661a869f848fdbe2197aa53f82d8e381bf87a0e7665afe9d0211f226dd7b",
+    ".spike-inputs/candidate/sub2api-spike/operator/runner-launcher.sh": "07f9d0eaee9136e86082a9d324dc5b7670a1db18151bd83649764fd105c1a477",
+    ".spike-inputs/candidate/sub2api-spike/operator/runner-containment.mjs": "d7206a76f2d33efba38c630cf0bb87697f0cfe8479f9eea7a8727c52080439d1",
+    ".spike-inputs/candidate/.github/workflows/sub2api-gateway-spike.yml": "7b8b939bf734b9e31a878330c74a9ae33ba14eb4861e71bd4578497b35c269ab",
+    ".spike-inputs/upstream/backend/internal/handler/dto/types.go": "269915cd2c6047c7d03e39ffcf137456b80f124d0780e995e15135b767f49800",
+    ".spike-inputs/upstream/backend/internal/handler/dto/mappers.go": "ed70f616bb1bb79aac2edfc6b2b407fd7fff6c78ee2a39d3728f3997c58d489a",
+    ".spike-inputs/upstream/backend/internal/handler/admin/account_handler.go": "88f14887c0c3d5bf6aaa953dadfc53d5043c81fe5036c33a30ebb8ea1c14edde",
+    ".spike-inputs/upstream/backend/internal/service/admin_account.go": "dbe1b688310bb7a93213dba61a825aeaa400cd8457282819629659c526a12c48",
+    ".spike-inputs/upstream/backend/internal/repository/account_repo.go": "8548ce0689ce564e828e4e508e914892b302e649d5656e54b109e973c8730e2c",
+    ".spike-inputs/upstream/backend/internal/service/openai_apikey_responses_probe.go": "90a8b12cd496d7e34c6ecc865f353399d3c7e8c70806607010ef0167bb958ee6"
+  },
+  "artifacts": [
+    "sub2api-boundary-review/REPORT.md",
+    "sub2api-boundary-review/review.json",
+    "sub2api-boundary-review/offline-oracles.mjs",
+    "sub2api-boundary-review/offline-oracles.json"
+  ]
+}
