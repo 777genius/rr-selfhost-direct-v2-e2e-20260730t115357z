@@ -1,0 +1,51 @@
+{
+  "verdict": "APPROVE",
+  "scope": "W3 profiling producer offline fixes and unchanged contract",
+  "findings": [],
+  "closed_findings": [
+    {
+      "id": "R1",
+      "priority": "P1",
+      "status": "CLOSED",
+      "evidence": "prescribed-old.txt; prescribed-new.txt; fixed-contract-old.txt; fixed-contract-new.txt; python-tests.txt; additional-probes.txt"
+    },
+    {
+      "id": "R2",
+      "priority": "P1",
+      "status": "CLOSED",
+      "evidence": "same fixed-contract/mandatory reproductions; additional-probes.txt"
+    },
+    {
+      "id": "R3",
+      "priority": "P2",
+      "status": "CLOSED",
+      "evidence": "same fixed-contract/mandatory reproductions; python-tests.txt; additional-probes.txt"
+    }
+  ],
+  "checks": {
+    "python_passed": 26,
+    "original_python_retained_passed": 16,
+    "new_python_passed": 10,
+    "legacy_analyzer_fixture_classes_skipped": 1,
+    "node_passed": 7,
+    "additional_reviewer_boundary_probes_passed": 4,
+    "mandatory_W2_vulnerabilities_reproduced": 3,
+    "mandatory_W3_vulnerabilities_reproduced": 0,
+    "same_contract_W2_red": 3,
+    "same_contract_W3_green": 3,
+    "source_prepare": "SOURCE_ONLY",
+    "numeric_audit": "DIAGNOSTIC_ONLY",
+    "future_patch_source_binding": "PASS; synthetic binary pin only"
+  },
+  "pending": [
+    "fresh controller W3 private config/preparation",
+    "fresh merged binary/native/runtime gates; controller reports native default regression failure under repair"
+  ],
+  "historical_actual_rss_failures": 20,
+  "runtime_approval": false,
+  "report": "sub2api-memory-profile-review/REPORT.md",
+  "changed_paths": [
+    "sub2api-memory-profile-review/"
+  ],
+  "worker_stop": true
+}

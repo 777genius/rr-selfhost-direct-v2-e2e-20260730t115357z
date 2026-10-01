@@ -1,0 +1,9 @@
+test_compiler_pin_mutation_rejected_immediately_before_compile (__main__.Boundary.test_compiler_pin_mutation_rejected_immediately_before_compile) ... ok
+test_expected_snapshot_single_read_despite_file_replacement (__main__.Boundary.test_expected_snapshot_single_read_despite_file_replacement) ... ok
+test_rollback_preserves_replacement_inode (__main__.Boundary.test_rollback_preserves_replacement_inode) ... ok
+test_stdlib_pin_mutation_rejected_immediately_before_compile (__main__.Boundary.test_stdlib_pin_mutation_rejected_immediately_before_compile) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.032s
+
+OK

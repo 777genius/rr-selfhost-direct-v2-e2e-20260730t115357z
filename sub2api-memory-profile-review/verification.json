@@ -1,0 +1,60 @@
+{
+  "custody": {
+    "entries": 10821,
+    "mismatches": []
+  },
+  "top_level_changed": [
+    "SEMANTICS.md",
+    "REPORT.md",
+    "artifact-hashes.json",
+    "RUNBOOK.md",
+    "operator_config.py",
+    "root-driver.py",
+    "analyze.py"
+  ],
+  "top_level_unchanged": [
+    "profile-runner.mjs",
+    "launch_contracts.py",
+    "test_producer.py",
+    "pprof_decode.py",
+    "audit_actual.py",
+    "test_actual.py",
+    "test_analyzer.py",
+    "reviewed_source.py",
+    "contracts.py",
+    "offline.test.mjs",
+    "test_contracts.py",
+    "profiling.patch",
+    "verify-rss.mjs",
+    "prepare.py",
+    "source-manifest.json",
+    "test_reviewed_source.py",
+    "root-config.example.json"
+  ],
+  "legacy_manifest_sha256": "8a8103f73486912aa86f972fd2914bbff295d91126483447930da15ca227f704",
+  "overlay_unchanged": true,
+  "python": {
+    "returncode": 0
+  },
+  "node": {
+    "returncode": 0
+  },
+  "source_prepare": {
+    "returncode": 0
+  },
+  "actual_audit": {
+    "returncode": 0
+  },
+  "prescribed_old": {
+    "returncode": 0
+  },
+  "fixed_contract_old": {
+    "returncode": 1
+  },
+  "prescribed_new": {
+    "returncode": 1
+  },
+  "fixed_contract_new": {
+    "returncode": 0
+  }
+}

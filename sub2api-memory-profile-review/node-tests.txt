@@ -1,0 +1,15 @@
+✔ older 20-case inventory keeps FAIL and NOT RUN evidence (1.376295ms)
+✔ real full-frame 8MiB discard parser responses (207.457954ms)
+✔ real full-frame 8MiB discard parser messages (69.773106ms)
+✔ real local wallet reproduction object (68.848252ms)
+✔ real local wallet reproduction array (113.720737ms)
+✔ real local wallet reproduction jsonl (97.246338ms)
+✔ strict JSONL denies mixed lines, nonfinite/scalar coercion and assembled rows (1.802836ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 710.750073
