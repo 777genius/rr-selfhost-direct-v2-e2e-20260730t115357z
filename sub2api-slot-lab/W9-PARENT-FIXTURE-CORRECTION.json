@@ -1,0 +1,26 @@
+{
+  "kind": "parent-mechanical-synthetic-fixture-correction",
+  "reason": "Remaining two original synthetic literals rejected by normal scanner. Arbitrary fake identity changed consistently; no production or runtime source change.",
+  "changes": {
+    "offline.test.mjs": {
+      "before_sha256": "69033129032c352ac010f0604dd254d49044518134e9b6636315ecda53d94137",
+      "after_sha256": "7c58533157fd697dac4c3fc85aadc9e20f8540161c2a8f9e971563986eeea29d",
+      "assertions_preserved_by_inverse_substitution": true
+    },
+    "setup-rate-limit.test.mjs": {
+      "before_sha256": "d31ff2bb8364d3254b42bb362bb4b1235ac29cbf302baa016c431322a63159c0",
+      "after_sha256": "c4b7444fbf9c6af63e31a741498f37a4747750b0d7f42aee4c6c1248958ea329",
+      "assertions_preserved_by_inverse_substitution": true
+    }
+  },
+  "normal_scanner_not_modified": true,
+  "critical_runtime_10_unchanged": true,
+  "full_node_gate": {
+    "pass": 68,
+    "fail": 0,
+    "skip": 0,
+    "receipt": "w9-evidence/parent-fixture-full68.tap"
+  },
+  "original_worker_ledgers_preserved": true,
+  "original_fake_tests_retained_host_path": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/sub2-transfer/slot-w9-original-fake-tests"
+}
