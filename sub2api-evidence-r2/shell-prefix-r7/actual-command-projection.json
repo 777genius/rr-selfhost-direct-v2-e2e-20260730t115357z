@@ -1,0 +1,89 @@
+[
+  {
+    "command_type": "list",
+    "command": [
+      "/usr/bin/bash",
+      "-lc",
+      "cat wallet.mjs"
+    ],
+    "exit_code": 0,
+    "status": "completed",
+    "output_bytes": 273,
+    "output_is_single_json": false
+  },
+  {
+    "command_type": "list",
+    "command": [
+      "/usr/bin/bash",
+      "-lc",
+      "cat BUSINESS_RULES.md"
+    ],
+    "exit_code": 0,
+    "status": "completed",
+    "output_bytes": 414,
+    "output_is_single_json": false
+  },
+  {
+    "command_type": "list",
+    "command": [
+      "/usr/bin/bash",
+      "-lc",
+      "node --input-type=module -e \"import { withdraw } from './wallet.mjs'; const account = { balance: 1000 }; withdraw(account, -250); console.log(JSON.stringify({ initial_balance: 1000, amount: -250, final_balance: account.balance }));\""
+    ],
+    "exit_code": 0,
+    "status": "completed",
+    "output_bytes": 60,
+    "output_is_single_json": true,
+    "numeric": {
+      "initial_balance": 1000,
+      "amount": -250,
+      "final_balance": 1250
+    }
+  },
+  {
+    "command_type": "list",
+    "command": [
+      "/usr/bin/bash",
+      "-lc",
+      "test \"$(node --input-type=module -e \"import { withdraw } from './wallet.mjs'; const account = { balance: 1000 }; withdraw(account, -250); console.log(JSON.stringify({ initial_balance: 1000, amount: -250, final_balance: account.balance }));\")\" = '{\"initial_balance\":1000,\"amount\":-250,\"final_balance\":1250}'"
+    ],
+    "exit_code": 0,
+    "status": "completed",
+    "output_bytes": 0,
+    "output_is_single_json": false
+  },
+  {
+    "command_type": "list",
+    "command": [
+      "/usr/bin/bash",
+      "-lc",
+      "node --input-type=module -e \"import { withdraw } from './wallet.mjs'; const account = { balance: 1000 }; withdraw(account, 0); console.log(JSON.stringify({ initial_balance: 1000, amount: 0, final_balance: account.balance }));\""
+    ],
+    "exit_code": 0,
+    "status": "completed",
+    "output_bytes": 57,
+    "output_is_single_json": true,
+    "numeric": {
+      "initial_balance": 1000,
+      "amount": 0,
+      "final_balance": 1000
+    }
+  },
+  {
+    "command_type": "list",
+    "command": [
+      "/usr/bin/bash",
+      "-lc",
+      "node --input-type=module -e \"import { withdraw } from './wallet.mjs'; const account = { balance: 1000 }; withdraw(account, 25.5); console.log(JSON.stringify({ initial_balance: 1000, amount: 25.5, final_balance: account.balance }));\""
+    ],
+    "exit_code": 0,
+    "status": "completed",
+    "output_bytes": 61,
+    "output_is_single_json": true,
+    "numeric": {
+      "initial_balance": 1000,
+      "amount": 25.5,
+      "final_balance": 974.5
+    }
+  }
+]

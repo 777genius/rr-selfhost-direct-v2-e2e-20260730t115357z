@@ -142,30 +142,6 @@ const safeFailure = (result, phase) => {
   assert.deepEqual(result.receipts, []);
   assert.deepEqual(result.errors, [`Spike failed at ${phase}; inspect effects privately before retry.`]);
 };
-test('observed run36879127384 usr-bin-bash argv regression with locally reproduced stdout', async () => {
-  const projection = JSON.parse(await readFile(new URL('./shell-prefix-r7/actual-command-projection.json', import.meta.url), 'utf8'));
-  const diagnosis = JSON.parse(await readFile(new URL('./shell-prefix-r7/actual-agent-projection.json', import.meta.url), 'utf8'));
-  assert.equal(diagnosis.run_id, '36879127384'); assert.equal(diagnosis.failure_phase, 'evidence_tool_numeric');
-  const observed = projection[2], example = diagnosis.finding_examples[0];
-  assert.deepEqual(observed.command.slice(0, 2), ['/usr/bin/bash', '-lc']);
-  assert.deepEqual(observed.numeric, example); assert.equal(observed.output_is_single_json, true);
-  // The supplied projection is argv/metadata, not captured CLI stdout. Execute
-  // only its Node expression locally; derive a CLI-style command string for tests.
-  const expression = /^node --input-type=module -e "([\s\S]*)"$/.exec(observed.command[2])[1];
-  const { stdout } = await execute(process.execPath, ['--input-type=module', '-e', expression], { cwd: fixture, timeout: 5000 });
-  assert.equal(stdout, JSON.stringify(example) + '\n'); assert.equal(Buffer.byteLength(stdout), observed.output_bytes);
-  const render = row => `${row.command[0]} ${row.command[1]} '${row.command[2].replaceAll("'", "'\\''")}'`;
-  const events = [command(render(projection[0]), await readFile(new URL('../sub2api-spike/fixture/wallet.mjs', import.meta.url), 'utf8')), command(render(projection[1]), await readFile(new URL('../sub2api-spike/fixture/BUSINESS_RULES.md', import.meta.url), 'utf8')), command(render(observed), stdout), { type: 'turn.completed' }];
-  const review = JSON.stringify({ findings: [{ file: 'wallet.mjs', function: 'withdraw', summary: 'negative withdrawal increases balance', example }] });
-  const result = await run({ events, review });
-  assert.equal(result.exitCode, undefined, JSON.stringify(result.errors)); assert.deepEqual(result.independentExits, [0]); assert.equal(result.receipts.length, 1);
-  for (const gate of ['tool_read_verified', 'rules_read_verified', 'terminal_verified', 'independent_numeric_reproduction']) assert.equal(result.receipts[0][gate], true);
-  for (const [index, mutation, phase] of [[2, { exit_code: 1 }, 'evidence_tool_numeric'], [2, { status: 'in_progress' }, 'evidence_tool_numeric'], [2, { aggregated_output: `stdout: ${stdout}` }, 'evidence_tool_numeric'], [2, { aggregated_output: JSON.stringify({ ...example, final_balance: 1249 }) }, 'evidence_tool_numeric'], [0, { command: "/usr/bin/bash -lc 'cat wallet.mjs BUSINESS_RULES.md'" }, 'evidence_agent_contract'], [1, { command: "/usr/bin/bash -lc 'cat BUSINESS_RULES.md; true'" }, 'evidence_agent_contract']]) {
-    safeFailure(await run({ events: events.map((e, i) => i === index ? { ...e, item: { ...e.item, ...mutation } } : e), review }), phase);
-  }
-  safeFailure(await run({ events: events.slice(0, 3), review }), 'evidence_agent_contract');
-  safeFailure(await run({ events, review: JSON.stringify({ findings: [{ file: 'wallet.mjs', function: 'withdraw', summary: 'wrong', example: { ...example, final_balance: 1249 } }] }) }), 'evidence_independent_reproduction');
-});
 // Behavioral phase regressions: the unmodified caller reports only "evidence".
 test('caller diagnoses parse failures with fixed stderr and no private output', async () => {
   for (const review of ['private-agent-output private-key private-reasoning', '{bad', 'null']) {

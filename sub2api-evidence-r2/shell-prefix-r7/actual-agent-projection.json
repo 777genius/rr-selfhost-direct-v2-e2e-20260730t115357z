@@ -1,0 +1,131 @@
+{
+  "run_id": "36879127384",
+  "failure_phase": "evidence_tool_numeric",
+  "finding_examples": [
+    {
+      "initial_balance": 1000,
+      "amount": -250,
+      "final_balance": 1250
+    },
+    {
+      "initial_balance": 1000,
+      "amount": 0,
+      "final_balance": 1000
+    },
+    {
+      "initial_balance": 1000,
+      "amount": 25.5,
+      "final_balance": 974.5
+    }
+  ],
+  "tools": [
+    {
+      "kind": "call",
+      "id": "call_2b764574f2524c0badbf1b67",
+      "is_node": false,
+      "imports_wallet": true,
+      "has_json_stringify": false
+    },
+    {
+      "kind": "output",
+      "id": "call_2b764574f2524c0badbf1b67",
+      "numeric_objects": [],
+      "output_bytes": 376,
+      "exit0": true,
+      "has_wrapped_tool_output": true
+    },
+    {
+      "kind": "call",
+      "id": "call_d4ff938c0eae4c4a83f1605d",
+      "is_node": false,
+      "imports_wallet": false,
+      "has_json_stringify": false
+    },
+    {
+      "kind": "output",
+      "id": "call_d4ff938c0eae4c4a83f1605d",
+      "numeric_objects": [],
+      "output_bytes": 518,
+      "exit0": true,
+      "has_wrapped_tool_output": true
+    },
+    {
+      "kind": "call",
+      "id": "call_f44f1366896149af8976fee2",
+      "is_node": true,
+      "imports_wallet": true,
+      "has_json_stringify": true
+    },
+    {
+      "kind": "output",
+      "id": "call_f44f1366896149af8976fee2",
+      "numeric_objects": [
+        {
+          "initial_balance": 1000,
+          "amount": -250,
+          "final_balance": 1250
+        }
+      ],
+      "output_bytes": 163,
+      "exit0": true,
+      "has_wrapped_tool_output": true
+    },
+    {
+      "kind": "call",
+      "id": "call_7e487a82f16240a08fb3fe24",
+      "is_node": true,
+      "imports_wallet": true,
+      "has_json_stringify": true
+    },
+    {
+      "kind": "output",
+      "id": "call_7e487a82f16240a08fb3fe24",
+      "numeric_objects": [],
+      "output_bytes": 102,
+      "exit0": true,
+      "has_wrapped_tool_output": true
+    },
+    {
+      "kind": "call",
+      "id": "call_99f154e5f8154fd0bad8748f",
+      "is_node": true,
+      "imports_wallet": true,
+      "has_json_stringify": true
+    },
+    {
+      "kind": "output",
+      "id": "call_99f154e5f8154fd0bad8748f",
+      "numeric_objects": [
+        {
+          "initial_balance": 1000,
+          "amount": 0,
+          "final_balance": 1000
+        }
+      ],
+      "output_bytes": 160,
+      "exit0": true,
+      "has_wrapped_tool_output": true
+    },
+    {
+      "kind": "call",
+      "id": "call_91dcd2269695456795aad19e",
+      "is_node": true,
+      "imports_wallet": true,
+      "has_json_stringify": true
+    },
+    {
+      "kind": "output",
+      "id": "call_91dcd2269695456795aad19e",
+      "numeric_objects": [
+        {
+          "initial_balance": 1000,
+          "amount": 25.5,
+          "final_balance": 974.5
+        }
+      ],
+      "output_bytes": 164,
+      "exit0": true,
+      "has_wrapped_tool_output": true
+    }
+  ]
+}

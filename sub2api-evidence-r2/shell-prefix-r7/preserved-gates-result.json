@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "sub2api-spike/oidc.test.mjs",
+    "sub2api-spike/granted-run.test.mjs",
+    "sub2api-spike/runner-isolation.test.mjs",
+    "sub2api-spike/receipts.test.mjs"
+  ],
+  "exit_code": 0
+}

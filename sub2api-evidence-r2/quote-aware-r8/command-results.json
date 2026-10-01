@@ -1,0 +1,85 @@
+{
+  "node_version": "v24.21.0",
+  "commands": [
+    {
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "sub2api-spike/evidence.test.mjs",
+        "gateway-spike/evidence.test.mjs",
+        "sub2api-spike/run-client.test.mjs",
+        "sub2api-evidence-r2/client-contract.test.mjs",
+        "sub2api-evidence-r2/quote-aware-r8/quote-breakout.test.mjs"
+      ],
+      "cwd": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8",
+      "resolved_files": [
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/evidence.test.mjs",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/gateway-spike/evidence.test.mjs",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/run-client.test.mjs",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/client-contract.test.mjs",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/quote-aware-r8/quote-breakout.test.mjs"
+      ],
+      "artifact": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/quote-aware-r8/green.tap",
+      "exit_code": 0,
+      "pass": 54,
+      "fail": 0
+    },
+    {
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "sub2api-spike/oidc.test.mjs",
+        "sub2api-spike/granted-run.test.mjs",
+        "sub2api-spike/runner-isolation.test.mjs",
+        "sub2api-spike/receipts.test.mjs"
+      ],
+      "cwd": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8",
+      "resolved_files": [
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/oidc.test.mjs",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/granted-run.test.mjs",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/runner-isolation.test.mjs",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/receipts.test.mjs"
+      ],
+      "artifact": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/quote-aware-r8/preserved-gates.tap",
+      "exit_code": 0,
+      "pass": 10,
+      "fail": 0
+    },
+    {
+      "revision": "frozen-R7",
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "sub2api-evidence-r2/quote-aware-r8/quote-breakout.test.mjs"
+      ],
+      "cwd": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8",
+      "resolved_files": [
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/quote-aware-r8/quote-breakout.test.mjs"
+      ],
+      "artifact": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/quote-aware-r8/r7-red.tap",
+      "exit_code": 1,
+      "pass": 0,
+      "fail": 2
+    },
+    {
+      "revision": "R8",
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "sub2api-evidence-r2/quote-aware-r8/quote-breakout.test.mjs"
+      ],
+      "cwd": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8",
+      "resolved_files": [
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/quote-aware-r8/quote-breakout.test.mjs"
+      ],
+      "artifact": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/quote-aware-r8/r8-green.tap",
+      "exit_code": 0,
+      "pass": 2,
+      "fail": 0
+    }
+  ]
+}

@@ -1,0 +1,370 @@
+TAP version 13
+# Subtest: finding alone, failed/incomplete tool execution and terminal error cannot be evidence
+ok 1 - finding alone, failed/incomplete tool execution and terminal error cannot be evidence
+  ---
+  duration_ms: 0.965085
+  type: 'test'
+  ...
+# Subtest: Codex evidence emits fixed normalized fields without transcript or review contents
+ok 2 - Codex evidence emits fixed normalized fields without transcript or review contents
+  ---
+  duration_ms: 0.552412
+  type: 'test'
+  ...
+# Subtest: wallet read accepts exact cat and both supported prefixes for bash sh zsh
+not ok 3 - wallet read accepts exact cat and both supported prefixes for bash sh zsh
+  ---
+  duration_ms: 0.29711
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/gateway-spike/evidence.test.mjs:16:1'
+  failureType: 'testCodeFailure'
+  error: 'Review did not prove successful file read and required finding'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    normalizeEvidence (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/gateway-spike/evidence.mjs:27:42)
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/gateway-spike/evidence.test.mjs:18:18)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: wallet read rejects malicious paths flags compounds and mismatched quotes
+not ok 4 - wallet read rejects malicious paths flags compounds and mismatched quotes
+  ---
+  duration_ms: 0.546885
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/gateway-spike/evidence.test.mjs:21:1'
+  failureType: 'testCodeFailure'
+  error: `Missing expected exception: /bin/bash -lc 'cat wallet.mjs"`
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  operator: 'throws'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/gateway-spike/evidence.test.mjs:23:12)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: echo-only output and denials cannot prove a discovered financial bug
+ok 5 - echo-only output and denials cannot prove a discovered financial bug
+  ---
+  duration_ms: 0.185014
+  type: 'test'
+  ...
+# Subtest: Messages agent evidence requires matching successful Read tool result
+ok 6 - Messages agent evidence requires matching successful Read tool result
+  ---
+  duration_ms: 0.22211
+  type: 'test'
+  ...
+# Subtest: caller accepts object with real independent reproduction
+ok 7 - caller accepts object with real independent reproduction
+  ---
+  duration_ms: 55.017327
+  type: 'test'
+  ...
+# Subtest: caller accepts canary-shaped array with real independent reproduction
+ok 8 - caller accepts canary-shaped array with real independent reproduction
+  ---
+  duration_ms: 43.82975
+  type: 'test'
+  ...
+# Subtest: caller accepts actual local Node wallet execution emitting both numeric examples
+ok 9 - caller accepts actual local Node wallet execution emitting both numeric examples
+  ---
+  duration_ms: 107.014519
+  type: 'test'
+  ...
+# Subtest: caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+ok 10 - caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+  ---
+  duration_ms: 97.092263
+  type: 'test'
+  ...
+# Subtest: caller denies invalid JSONL lines and exact numeric mismatches
+ok 11 - caller denies invalid JSONL lines and exact numeric mismatches
+  ---
+  duration_ms: 423.20047
+  type: 'test'
+  ...
+# Subtest: caller retains reads, terminal, genuine final and successful tool requirements with JSONL
+ok 12 - caller retains reads, terminal, genuine final and successful tool requirements with JSONL
+  ---
+  duration_ms: 422.63103
+  type: 'test'
+  ...
+# Subtest: caller denies bad own proof and independent reproduction mismatch
+ok 13 - caller denies bad own proof and independent reproduction mismatch
+  ---
+  duration_ms: 245.401033
+  type: 'test'
+  ...
+# Subtest: caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals
+ok 14 - caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals
+  ---
+  duration_ms: 604.041088
+  type: 'test'
+  ...
+# Subtest: caller denies reasoning-only final, malformed final, agent failure and unsealed import
+ok 15 - caller denies reasoning-only final, malformed final, agent failure and unsealed import
+  ---
+  duration_ms: 14.580422
+  type: 'test'
+  ...
+# Subtest: observed run36879127384 usr-bin-bash argv regression with locally reproduced stdout
+not ok 16 - observed run36879127384 usr-bin-bash argv regression with locally reproduced stdout
+  ---
+  duration_ms: 142.060844
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/sub2api-evidence-r2/client-contract.test.mjs:145:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    ["Spike failed at evidence_tool_numeric; inspect effects privately before retry."]
+    
+    1 !== undefined
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/sub2api-evidence-r2/client-contract.test.mjs:161:10)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: caller diagnoses parse failures with fixed stderr and no private output
+ok 17 - caller diagnoses parse failures with fixed stderr and no private output
+  ---
+  duration_ms: 9.546052
+  type: 'test'
+  ...
+# Subtest: caller diagnoses absent or nonfinite numeric examples before local execution
+ok 18 - caller diagnoses absent or nonfinite numeric examples before local execution
+  ---
+  duration_ms: 29.091864
+  type: 'test'
+  ...
+# Subtest: caller diagnoses independent wallet rejection and private subprocess failures
+ok 19 - caller diagnoses independent wallet rejection and private subprocess failures
+  ---
+  duration_ms: 53.871047
+  type: 'test'
+  ...
+# Subtest: caller diagnoses exact own numeric matching and completed zero-exit admission
+ok 20 - caller diagnoses exact own numeric matching and completed zero-exit admission
+  ---
+  duration_ms: 458.343265
+  type: 'test'
+  ...
+# Subtest: caller diagnoses final finding, separate exact reads and genuine terminal contract
+ok 21 - caller diagnoses final finding, separate exact reads and genuine terminal contract
+  ---
+  duration_ms: 366.649326
+  type: 'test'
+  ...
+# Subtest: caller diagnoses evidence write without leaking private write error
+ok 22 - caller diagnoses evidence write without leaking private write error
+  ---
+  duration_ms: 39.263757
+  type: 'test'
+  ...
+# Subtest: caller delivers green receipt with minimal standalone Node output contract and HIGH model
+ok 23 - caller delivers green receipt with minimal standalone Node output contract and HIGH model
+  ---
+  duration_ms: 78.570301
+  type: 'test'
+  ...
+# Subtest: RUN_CLIENT_SOURCE binds evidence and its transitive imports to selected source
+ok 24 - RUN_CLIENT_SOURCE binds evidence and its transitive imports to selected source
+  ---
+  duration_ms: 46.500501
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts actual run36869316283 strict JSONL matching either exact example
+ok 25 - numeric proof accepts actual run36869316283 strict JSONL matching either exact example
+  ---
+  duration_ms: 1.188637
+  type: 'test'
+  ...
+# Subtest: strict JSONL consumes every nonblank line as a complete finite numeric object
+ok 26 - strict JSONL consumes every nonblank line as a complete finite numeric object
+  ---
+  duration_ms: 1.456269
+  type: 'test'
+  ...
+# Subtest: strict JSONL compares all three finite fields in one exact example
+ok 27 - strict JSONL compares all three finite fields in one exact example
+  ---
+  duration_ms: 1.10564
+  type: 'test'
+  ...
+# Subtest: strict JSONL retains completed command admission and successful exit gates
+ok 28 - strict JSONL retains completed command admission and successful exit gates
+  ---
+  duration_ms: 0.196208
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts the existing complete JSON object
+ok 29 - numeric proof accepts the existing complete JSON object
+  ---
+  duration_ms: 0.126277
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts canary two-object JSON array matching either reported example
+ok 30 - numeric proof accepts canary two-object JSON array matching either reported example
+  ---
+  duration_ms: 0.12663
+  type: 'test'
+  ...
+# Subtest: numeric proof preserves existing direct and shell-wrapped Node command matching
+ok 31 - numeric proof preserves existing direct and shell-wrapped Node command matching
+  ---
+  duration_ms: 0.160323
+  type: 'test'
+  ...
+# Subtest: numeric proof admits only supported shell prefixes, flags and one Node eval command
+not ok 32 - numeric proof admits only supported shell prefixes, flags and one Node eval command
+  ---
+  duration_ms: 0.922106
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/sub2api-spike/evidence.test.mjs:69:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/sub2api-spike/evidence.test.mjs:72:12)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: supported shell numeric proof still rejects incomplete, nonzero, mismatch and stdout prefixes
+ok 33 - supported shell numeric proof still rejects incomplete, nonzero, mismatch and stdout prefixes
+  ---
+  duration_ms: 0.16364
+  type: 'test'
+  ...
+# Subtest: separate rules and wallet reads admit both prefixes and all three supported shells only
+not ok 34 - separate rules and wallet reads admit both prefixes and all three supported shells only
+  ---
+  duration_ms: 1.122972
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/sub2api-spike/evidence.test.mjs:89:1'
+  failureType: 'testCodeFailure'
+  error: 'Review did not prove successful file read and required finding'
+  code: 'ERR_TEST_FAILURE'
+  stack: |-
+    normalizeEvidence (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/gateway-spike/evidence.mjs:27:42)
+    financialEvidence (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/sub2api-spike/evidence.mjs:58:22)
+    validate (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/sub2api-spike/evidence.test.mjs:93:30)
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r7/sub2api-spike/evidence.test.mjs:98:18)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: numeric proof requires exact finite numbers in all three actual fields
+ok 35 - numeric proof requires exact finite numbers in all three actual fields
+  ---
+  duration_ms: 0.280013
+  type: 'test'
+  ...
+# Subtest: numeric proof parses the complete output and never scans fragments or nested objects
+ok 36 - numeric proof parses the complete output and never scans fragments or nested objects
+  ---
+  duration_ms: 0.252436
+  type: 'test'
+  ...
+# Subtest: numeric proof rejects failed or incomplete tools, reasoning, and wrong commands
+ok 37 - numeric proof rejects failed or incomplete tools, reasoning, and wrong commands
+  ---
+  duration_ms: 0.140603
+  type: 'test'
+  ...
+# Subtest: A06 successful separate shell-wrapped rules read validates actual source and finding
+ok 38 - A06 successful separate shell-wrapped rules read validates actual source and finding
+  ---
+  duration_ms: 0.247641
+  type: 'test'
+  ...
+# Subtest: A06 malformed and fabricated financial success fail inherited validator
+ok 39 - A06 malformed and fabricated financial success fail inherited validator
+  ---
+  duration_ms: 0.213205
+  type: 'test'
+  ...
+# Subtest: A10 E04 streamed UTF8 and missing native terminal rejected
+ok 40 - A10 E04 streamed UTF8 and missing native terminal rejected
+  ---
+  duration_ms: 4.22299
+  type: 'test'
+  ...
+# Subtest: BR04 integrated mismatches deny before any agent effects and receipt
+ok 41 - BR04 integrated mismatches deny before any agent effects and receipt
+  ---
+  duration_ms: 37.522413
+  type: 'test'
+  ...
+# Subtest: BR04 integrated valid binding projects exact identity and preserves high reasoning
+ok 42 - BR04 integrated valid binding projects exact identity and preserves high reasoning
+  ---
+  duration_ms: 4.707683
+  type: 'test'
+  ...
+# Subtest: BR04 model metadata cannot authorize mismatched run
+ok 43 - BR04 model metadata cannot authorize mismatched run
+  ---
+  duration_ms: 2.911859
+  type: 'test'
+  ...
+# Subtest: BR04 receipt still requires successful terminal and numeric financial finding
+ok 44 - BR04 receipt still requires successful terminal and numeric financial finding
+  ---
+  duration_ms: 5.620881
+  type: 'test'
+  ...
+# Subtest: BR04 workflow rejects every mismatched receipt before publication
+ok 45 - BR04 workflow rejects every mismatched receipt before publication
+  ---
+  duration_ms: 5.322168
+  type: 'test'
+  ...
+# Subtest: BR04 caller projects both other supported native mappings
+ok 46 - BR04 caller projects both other supported native mappings
+  ---
+  duration_ms: 4.301864
+  type: 'test'
+  ...
+# Subtest: BR04 unsealed import path aborts before agent effects and receipt
+ok 47 - BR04 unsealed import path aborts before agent effects and receipt
+  ---
+  duration_ms: 2.227284
+  type: 'test'
+  ...
+1..47
+# tests 47
+# suites 0
+# pass 42
+# fail 5
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3311.489564

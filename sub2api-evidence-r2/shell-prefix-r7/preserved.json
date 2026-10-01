@@ -1,0 +1,9 @@
+{
+  "sub2api-spike/run-client.mjs": "3308b5cbaaf2b5be10d616ace4a1e47a24e013fa944514ae61054fd37d7fb490",
+  "sub2api-spike/granted-run.mjs": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+  "sub2api-spike/runner-isolation.mjs": "3eb6a0844007d088609dccf959962d319cac93ea77c1cf9233a90993c4293d03",
+  ".github/workflows/sub2api-gateway-spike.yml": "b32954d364424d91734d5d080abebd68d57c7ba7b5e9a08a3352aa2cff578c40",
+  "sub2api-spike/fixture/wallet.mjs": "c47fcdfb32c95bf1ede68c01a3705084a658ecbd2882ab21ca4e8cc5fc658f71",
+  "sub2api-spike/fixture/BUSINESS_RULES.md": "1a9837e5e95ee86f22eb171c7bc9ee1226c55ff859973ad573417feb6aae43a5",
+  "sub2api-spike/oidc.mjs": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647"
+}
