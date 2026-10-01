@@ -1,0 +1,220 @@
+{
+  "method": "Strict unified-hunk application to frozen upstream bytes entirely in memory; context/count assertions; no persisted native source copies",
+  "upstream_revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "patches": [
+    {
+      "path": ".spike-inputs/native/patches/native-reasoning.patch",
+      "sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5",
+      "counts": {
+        "added_lines": 1196,
+        "removed_lines": 55,
+        "changed_lines": 1251
+      }
+    },
+    {
+      "path": ".spike-inputs/native/checks/rejected432.patch",
+      "sha256": "432cffdf3b2a2659da76403242942b45177d69f60fda17efd14605d7798e7135",
+      "counts": {
+        "added_lines": 1153,
+        "removed_lines": 55,
+        "changed_lines": 1208
+      }
+    },
+    {
+      "path": ".spike-inputs/native/checks/r3-repair.patch",
+      "sha256": "a638e61dfff17f140104b5ba14bb08fd9907dc8fc26191b0a172a85831dd648e",
+      "counts": {
+        "added_lines": 44,
+        "removed_lines": 1,
+        "changed_lines": 45
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "backend/internal/handler/openai_compatible_reasoning_review_test.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/handler/openai_compatible_reasoning_review_test.go",
+      "original_sha256": null,
+      "patched_sha256": "1139abc487ff687fe42b2f8f10609c4395d776505b69ebf37976c89368a58b68",
+      "reviewed432_sha256": "1139abc487ff687fe42b2f8f10609c4395d776505b69ebf37976c89368a58b68",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/handler/openai_gateway_reasoning_failover.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/handler/openai_gateway_reasoning_failover.go",
+      "original_sha256": "196e70d42432ff07f671f96b986be6a27b796fa24578b12e8afd73973c26550d",
+      "patched_sha256": "91b754a8824db9438af6db2b9fd9199c9652ec602e059852014d9a46d0dfa10e",
+      "reviewed432_sha256": "91b754a8824db9438af6db2b9fd9199c9652ec602e059852014d9a46d0dfa10e",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/account.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/account.go",
+      "original_sha256": "d2c9c04d4acbb76d1c04ebb5628ea22efe620aae75ca97b319bb85fd5a17d083",
+      "patched_sha256": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587",
+      "reviewed432_sha256": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/independent_reference_namespace_test.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/independent_reference_namespace_test.go",
+      "original_sha256": null,
+      "patched_sha256": "5863f7d72bf5d31865f4a162c614895358fefdc042de9b6128f4d75021e9fa47",
+      "reviewed432_sha256": null,
+      "byte_identical_to_reviewed432": false
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_policy_test.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_compatible_reasoning_policy_test.go",
+      "original_sha256": null,
+      "patched_sha256": "30e59f3de298e9f1a82a0afe570f5207e82aafc3ab0aaf2f0cfefe191d35536d",
+      "reviewed432_sha256": "30e59f3de298e9f1a82a0afe570f5207e82aafc3ab0aaf2f0cfefe191d35536d",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_repair_test.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_compatible_reasoning_repair_test.go",
+      "original_sha256": null,
+      "patched_sha256": "6a9013541f2d9b893ee2193429ca2d88228c36b6f2121a3a3f5d4510675febff",
+      "reviewed432_sha256": "6a9013541f2d9b893ee2193429ca2d88228c36b6f2121a3a3f5d4510675febff",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_review_test.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_compatible_reasoning_review_test.go",
+      "original_sha256": null,
+      "patched_sha256": "f9d388154edc0313c9265bcde71ee72ff7583e3ec3895e80ea4380fa0a16d976",
+      "reviewed432_sha256": "f9d388154edc0313c9265bcde71ee72ff7583e3ec3895e80ea4380fa0a16d976",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_gateway_forward.go",
+      "original_sha256": "a3a20c891f67ae6268a2cd4af8363aeba1e2c1853305746aa1a40f27d3bd898e",
+      "patched_sha256": "ae1542077e98c581d9f5ee0e4e6afc4fbeffce76cefef992f38d6aa1f9f4688f",
+      "reviewed432_sha256": "ae1542077e98c581d9f5ee0e4e6afc4fbeffce76cefef992f38d6aa1f9f4688f",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_gateway_passthrough.go",
+      "original_sha256": "89a29fb3957287342833e457be0e78a82ed015cb92f45e00e54dcf34aa99ce32",
+      "patched_sha256": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3",
+      "reviewed432_sha256": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_request_body.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_gateway_request_body.go",
+      "original_sha256": "b7cf920f1013a2cd0dbfdf9c0d306da7deeff94e2fb25f764b242f23fe4f6bcb",
+      "patched_sha256": "799e9e31bfc445ad482096fb515c80198cb9f9f6aff9f41de89c7231b5b8b746",
+      "reviewed432_sha256": "799e9e31bfc445ad482096fb515c80198cb9f9f6aff9f41de89c7231b5b8b746",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_upstream_errors.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_gateway_upstream_errors.go",
+      "original_sha256": "4e3884e76971b55e6738716eeee2221fe007a1436dbd7af946ded2540d93516d",
+      "patched_sha256": "d38f5ff1f3ebf09bdd782cebf817cf3c25df5a70e10613a616d89f7b25d63355",
+      "reviewed432_sha256": "d38f5ff1f3ebf09bdd782cebf817cf3c25df5a70e10613a616d89f7b25d63355",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/openai_responses_item_id.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_responses_item_id.go",
+      "original_sha256": "1acf2e024ee351ec925c89b4259860ebfbb101872b0676770a0d57c2e3cbb065",
+      "patched_sha256": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2",
+      "reviewed432_sha256": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/openai_responses_namespace.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_responses_namespace.go",
+      "original_sha256": "70debcbecf35e7414ed72195125849b079749fbb2b3323746dd079b2ea61f120",
+      "patched_sha256": "1b94667ececbd2c3721aafdd7c0f9ca90216f293090a9e0f69e4d31a564d2467",
+      "reviewed432_sha256": "164dd1169328da0abe98ed6b5b2b59fc8b0810a757a49a03e695f6d008d3c7cf",
+      "byte_identical_to_reviewed432": false
+    },
+    {
+      "path": "backend/internal/service/openai_responses_rejected_field_retry.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_responses_rejected_field_retry.go",
+      "original_sha256": "bbbef34d428cdc6a6ad5f2cdc197f97d227c4be6c3a738fa9a96a3371e998011",
+      "patched_sha256": "f600f1df274c10ebc3200d6e1e2fbe72b59b2721f8814af015e531483900537f",
+      "reviewed432_sha256": "f600f1df274c10ebc3200d6e1e2fbe72b59b2721f8814af015e531483900537f",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/openai_ws_forwarder_ingress.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_ws_forwarder_ingress.go",
+      "original_sha256": "e60da641645da0358b8874e44c31827be14634bf1423ab56e7a06edf87ab5e12",
+      "patched_sha256": "b10e7e25e643f436ed871e7803a6c929a2677bc10b49f4c0e450f150c1fb315a",
+      "reviewed432_sha256": "b10e7e25e643f436ed871e7803a6c929a2677bc10b49f4c0e450f150c1fb315a",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/openai_ws_forwarder_v2.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_ws_forwarder_v2.go",
+      "original_sha256": "70680001a190509febb484b2dbea5fbae4edef32400bce2f9c06fa68de50517c",
+      "patched_sha256": "bdf33814241c22951c9ea9a4faa50b1c6d4b701f62584bf267cd5e0df9f0d43c",
+      "reviewed432_sha256": "bdf33814241c22951c9ea9a4faa50b1c6d4b701f62584bf267cd5e0df9f0d43c",
+      "byte_identical_to_reviewed432": true
+    },
+    {
+      "path": "backend/internal/service/openai_ws_http_bridge.go",
+      "frozen_original_path": ".spike-inputs/upstream/backend/internal/service/openai_ws_http_bridge.go",
+      "original_sha256": "c59cd58fb8f4bfc1a138338ec7b37e5bfcc0049f1649fb5720a69cb668e58ba5",
+      "patched_sha256": "1dd995c6a362947ee5b0aef18f1fccd3ced6eb2fcb0a81914ffe012559c19a8f",
+      "reviewed432_sha256": "1dd995c6a362947ee5b0aef18f1fccd3ced6eb2fcb0a81914ffe012559c19a8f",
+      "byte_identical_to_reviewed432": true
+    }
+  ],
+  "verified_original_hashes": 12,
+  "verified_patched_hashes": 17,
+  "all_15_other_files_byte_identical": true,
+  "all_16_reviewed432_files_match_canonical_materialization": true,
+  "delta_application_equals_full_replacement": true,
+  "independent_reference_test": {
+    "path": "sub2api-candidate-review/independent_reference_namespace_test.go",
+    "sha256": "5863f7d72bf5d31865f4a162c614895358fefdc042de9b6128f4d75021e9fa47",
+    "lines": 42,
+    "byte_identical": true
+  },
+  "input_identity": [
+    {
+      "path": "sub2api-candidate-review/REPORT.md",
+      "sha256": "5b4365dc77d076d7c316b251191e3dd8ac43bcf3bf7c6be25660d512f8d90ef3"
+    },
+    {
+      "path": "sub2api-candidate-review/review.json",
+      "sha256": "653d3bb5ad8b202009281381543e7ae48d35a810cb02da56ee2043ff2decbdec"
+    },
+    {
+      "path": ".spike-inputs/native/SOURCE.json",
+      "sha256": "cdc4bb339ebbf8af66ec457214c08e28b6e231d2b813f299cee4392fc2fa2053"
+    },
+    {
+      "path": ".spike-inputs/native/checks/r3-rejected-source.json",
+      "sha256": "53310757aeba610421c453de78d6717707661d3e81d39b0f63576c669c1282e5"
+    },
+    {
+      "path": ".spike-inputs/native/checks/r3-source-audit.json",
+      "sha256": "7fa2f9097fa04c418c0e0af16aacc6c492b7eae4360862eaca09fdfda4e4bd67"
+    },
+    {
+      "path": "sub2api-fork-review-v2/independent_boundary_test.go.txt",
+      "sha256": "3ca97c2d50f0c3c498c51d1fb0af9b7fa5352089953f84d1224e6ea5e03887ce"
+    },
+    {
+      "path": ".spike-inputs/native/checks/r1-r2-preserved-patterns.json",
+      "sha256": "24894653fb5749b95c8dd0e40c6ca907e02f2fe3203f545592cb9a333d85261a"
+    },
+    {
+      "path": ".spike-inputs/native/checks/regression-oracles.json",
+      "sha256": "ea5ef4fb082ff864f00231dee2885ca5b6c125a057be73eca9693a6ccea3db16"
+    },
+    {
+      "path": ".spike-inputs/native/checks/patched-execution.json",
+      "sha256": "655f4c641ea0c9b25fc456e08d34c7195237624d2f522b8418de415a1f0110a1"
+    }
+  ]
+}

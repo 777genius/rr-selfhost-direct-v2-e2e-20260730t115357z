@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "status": "BOUNDED_INDEPENDENT_FINAL_REVIEW_COMPLETE",
+  "date_utc": "2026-10-01T10:42:33.760097+00:00",
+  "ownership": "sub2api-candidate-review-v4/ only",
+  "previous_turn_classification": "No preceding goal-turn execution available; this turn produces independent verification evidence and final review artifacts.",
+  "source_decision": "APPROVE_FOR_DISPOSABLE_SANDBOX_SOURCE_INTEGRATION",
+  "runtime_decision": "NOT_PROVEN",
+  "findings": [],
+  "R3": "CLOSED_IN_SOURCE",
+  "scope": "Minimal R3 delta only; canonical w3 consumer and R1/R2 conclusions carried forward, not reevaluated",
+  "canonical_review_paths": [
+    "sub2api-candidate-review/REPORT.md",
+    "sub2api-candidate-review/review.json"
+  ],
+  "native": {
+    "upstream_revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+    "patch_sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5",
+    "reviewed432_sha256": "432cffdf3b2a2659da76403242942b45177d69f60fda17efd14605d7798e7135",
+    "files": 17,
+    "added_lines": 1196,
+    "removed_lines": 55,
+    "changed_lines": 1251,
+    "verified_original_hashes": 12,
+    "verified_patched_hashes": 17,
+    "other_15_files_byte_identical": true,
+    "delta_application_equals_full_replacement": true,
+    "independent_test_lines": 42,
+    "independent_test_byte_identical": true
+  },
+  "checks": {
+    "command": "python3 sub2api-candidate-review-v4/verify_sources.py",
+    "artifact_verification": "PASS",
+    "runtime_tests": "NOT RUN",
+    "case_whitespace_negative_controls": "Source branch inspection only; no concrete reachable defect found; no new mirrored tests"
+  },
+  "frozen_prior_evidence": {
+    "path": ".spike-inputs/native/checks/r3-source-audit.json",
+    "kind": "Frozen embedded coordinator receipt excerpts; referenced raw receipts absent in snapshot",
+    "patch_sha256": "432cffdf3b2a2659da76403242942b45177d69f60fda17efd14605d7798e7135",
+    "pass_records": 287,
+    "reference_opt_in_failures": 2,
+    "reference_default_passes": 2,
+    "replacement_validation": false
+  },
+  "runtime_gates": [
+    {
+      "name": "Exact30 Go compilation and full pinned native gate with prior suite and independent R1/R2",
+      "status": "NOT RUN",
+      "scope": "by this reviewer"
+    },
+    {
+      "name": "Exact30 four-case TestIndependentCompatibleReferenceNamespaceHTTP",
+      "status": "NOT RUN",
+      "scope": "by this reviewer"
+    },
+    {
+      "name": "Replacement gofmt verification and rehash/retest if changed",
+      "status": "NOT RUN",
+      "scope": "by this reviewer"
+    },
+    {
+      "name": "Joint native reasoning and capability suppression deployment/image custody",
+      "status": "NOT RUN",
+      "scope": "by this reviewer"
+    },
+    {
+      "name": "Server installation/quarantine and observer snapshot/drain wiring; pinned PG seed/cleanup",
+      "status": "NOT RUN",
+      "scope": "by this reviewer"
+    },
+    {
+      "name": "Actual STOCK-consumer integration, ownership/transport/capability/drain evidence",
+      "status": "NOT RUN",
+      "scope": "by this reviewer"
+    },
+    {
+      "name": "Installed harness manifest and UID/FD/descendant containment; genuine high-reasoning native financial canary",
+      "status": "NOT RUN",
+      "scope": "by this reviewer"
+    }
+  ],
+  "root_current_gate": "Separately owned; no result observed or asserted; not awaited",
+  "risks": [
+    "Replacement compilation, formatting and runtime behavior unverified",
+    "Source approval does not establish deployed integrated native canary success"
+  ],
+  "artifacts": [
+    "REPORT.md",
+    "review.json",
+    "source-hashes.json",
+    "verify_sources.py"
+  ],
+  "completion": "Bounded final independent review delivered; external operator gates remain explicit limitations, with no waits."
+}
