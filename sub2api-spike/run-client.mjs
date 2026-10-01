@@ -14,7 +14,7 @@ let controlHome, home;
 const fixture = '/opt/rr-gateway-spike-fixture';
 let env;
 let phase = 'fixture', completed = false;
-const prompt = 'Review the implementation and business rules in this directory. Actually read wallet.mjs and BUSINESS_RULES.md with tools. For Codex read the implementation in a separate tool call running exactly cat wallet.mjs, then read rules with cat BUSINESS_RULES.md; do not combine the commands. For Claude use Read. Identify material financial correctness issues. Do not modify files. Return only JSON with a findings array. Each finding has file, function, summary, and example containing numeric initial_balance, amount, and final_balance. Use an empty findings array if there are no issues. Choose your own concrete example for each issue and report the actual final_balance produced by the current implementation. For Codex run a local reproduction with tools using node to import withdraw from ./wallet.mjs, and emit JSON with numeric initial_balance, amount, final_balance; verify your example before reporting it.';
+const prompt = 'Review the implementation and business rules in this directory. Actually read wallet.mjs and BUSINESS_RULES.md with tools. For Codex read the implementation in a separate tool call running exactly cat wallet.mjs, then read rules with cat BUSINESS_RULES.md; do not combine the commands. For Claude use Read. Identify material financial correctness issues. Do not modify files. Return only JSON with a findings array. Each finding has file, function, summary, and example containing numeric initial_balance, amount, and final_balance. Use an empty findings array if there are no issues. Choose your own concrete example for each issue and report the actual final_balance produced by the current implementation. For Codex run a local reproduction with tools using node to import withdraw from ./wallet.mjs. For the negative withdrawal finding, have that local Node execution emit ONE standalone complete JSON object with numeric initial_balance, amount, final_balance, no prose or extra output, matching the final numeric example; verify it before reporting.';
 const execute = (binary, args, onLine = () => {}) => spawnAgent(binary, args, { cwd: fixture, env, onLine });
 async function configDirectory(path) { await mkdir(path, { mode: 0o700 }); await chown(path, agentIdentity.uid, agentIdentity.gid); }
 try {
@@ -61,16 +61,20 @@ try {
 
   }
   // Transcripts stay in memory; no capability-bearing raw artifact is persisted.
-  phase = 'evidence'; let parsed; try { parsed = parseFindingDocument(review); } catch { throw Error('Malformed final JSON'); }
-  const numeric = parsed.findings?.find(f => f.file === 'wallet.mjs' && f.function === 'withdraw' && f.example?.amount < 0)?.example;
-  if (!numeric) throw Error('Missing numeric example');
+  phase = 'evidence_parse'; let parsed; try { parsed = parseFindingDocument(review); if (!parsed || typeof parsed !== 'object') throw Error('Invalid document'); } catch { throw Error('Malformed final JSON'); }
+  phase = 'evidence_numeric_example';
+  const numeric = Array.isArray(parsed.findings) ? parsed.findings.find(f => f?.file === 'wallet.mjs' && f.function === 'withdraw' && f.example?.amount < 0)?.example : undefined;
+  if (!numeric || ![numeric.initial_balance, numeric.amount, numeric.final_balance].every(Number.isFinite)) throw Error('Missing finite numeric example');
+  phase = 'evidence_independent_reproduction';
   const expression = `import { withdraw } from './wallet.mjs'; const x = ${JSON.stringify(numeric)}; const a = {balance:x.initial_balance}; const out=withdraw(a,x.amount); if(out.balance!==x.final_balance || a.balance!==x.final_balance) process.exit(1); console.log(JSON.stringify({reproduced:true}));`;
   const reproduction = await execute('node', ['--input-type=module', '-e', expression]);
   if (JSON.parse(reproduction).reproduced !== true) throw Error('Independent reproduction failed');
+  phase = 'evidence_tool_numeric';
   if (agent === 'codex' && !events.some(e => codexNumericEvidence(e, numeric))) throw Error('Codex did not prove own numeric local reproduction');
+  phase = 'evidence_agent_contract';
   const evidence = { ...financialEvidence(agent, events, review, provider), id: agent === 'claude' ? 'A03' : provider === 'mimo' ? 'A01' : 'A02', evidence_kind: 'real-Actions', independent_numeric_reproduction: true, workflow_sha: identity.workflowSHA, run_id: identity.runID, run_attempt: identity.attempt, provider: identity.provider, agent, node: process.version, client_version: expected, transport: identity.protocol };
   // Only positive-projected evidence crosses back to the uid1001 workflow.
-  process.stdout.write(JSON.stringify(evidence) + '\n');
+  phase = 'evidence_write'; process.stdout.write(JSON.stringify(evidence) + '\n');
   completed = true;
 } catch {
   console.error(`Spike failed at ${phase}; inspect effects privately before retry.`); process.exitCode = 1;

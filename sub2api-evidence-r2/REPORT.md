@@ -1,3 +1,47 @@
+Implemented fixed safe diagnostics in the actual caller and clarified its local Node numeric output contract. This revision does not establish a successful live canary. Actual third run **36876496665**, exact workflow **625946b532534acd0329d41bb096d54f6f16b351**, remains **FAILED at the generic evidence phase**. The coordinator removed the raw runner transcript before diagnosis. The actual output format and rejection cause for that run are unknown; no recovery, successful final answer, or new historical narrative is asserted.
+
+Current `.spike-inputs/trusted-setup.json` identifies that run/workflow. Usage rows increased from 9 before the runner to 13 afterward: **4 provider requests**. The user reports a known terminal; current terminal filesystem custody and own-run teardown projections both say PASS. Custody covers the terminal filesystem snapshot and scanned configuration/log surfaces, with zero raw/encoded provider key hits and zero host binds; it does not prove continuous process-memory custody. No raw transcript or provider keys were accessed or saved.
+
+The actual caller now assigns these fixed phases before each operation: `evidence_parse`, `evidence_numeric_example`, `evidence_independent_reproduction`, `evidence_tool_numeric`, `evidence_agent_contract`, `evidence_write`. Its catch still emits only `Spike failed at <fixed phase>; inspect effects privately before retry.` No agent output, error object/message, reasoning, or keys enter stderr. Parsed null/non-object documents fail at parse; the selected negative example must have three finite numeric fields before Node execution. No alternative example or invented semantic fallback is substituted.
+
+The prompt instructs Codex to have its local Node wallet reproduction emit **ONE standalone complete JSON object** with numeric initial_balance, amount, final_balance for the negative withdrawal finding, no prose or extra output, matching the final numeric example. The final answer still follows the findings contract. Complete object/array/strict JSONL acceptance is unchanged in `sub2api-spike/evidence.mjs` (SHA-256 **44f17424b5057ab94693809d05bc33db6305f065ead928f95aa0b066137f2160**). The successful completed command/status, numeric-zero exit, own exact numeric match, real independent wallet execution, separate exact wallet/rules reads, genuine terminal/final-file and finding contract, sealing/import paths, OIDC/grant binding, custody, MiMo HIGH reasoning and granted model are preserved. Controller integration must rebuild/reseal the changed caller bytes.
+
+All eight new tests execute the actual top-level caller with substituted agent/network/privilege/seal I/O and real local Node wallet execution; they are not source-only assertions or live provider evidence. They check exact safe stderr for parse, missing/nonfinite numeric example, independent failure, own numeric mismatch/tool admission, final/reads/terminal contract and write failure, plus a green standalone-object path and selected-source imports. Failures publish no receipt. The independent mismatch observes real Node process exit 1; green paths observe independent process exit 0. The prompt/HIGH/model test inspects arguments and configuration actually handed to the agent launcher.
+
+The nonblocking independent-review observation is fixed minimally in the existing caller harness: `RUN_CLIENT_SOURCE` is resolved to a file URL, and relative imports plus `import.meta.url` are bound to that selected source. Normal ESM resolution then binds the selected evidence module's transitive gateway validator. A behavioral test copies the selected caller/evidence/binder into a temporary owned directory and supplies a distinct transitive validator that rejects; the default imports would incorrectly pass. That temporary tree is removed in finally. This is a harness integrity change, not a production admission change.
+
+Exact offline validation on **Node v24.21.0**:
+
+```sh
+node --test --test-reporter=tap sub2api-spike/evidence.test.mjs sub2api-spike/run-client.test.mjs sub2api-evidence-r2/client-contract.test.mjs
+```
+
+- Entry baseline before adding tests: **29 passed / 0 failed**, exit **0**, `phase-baseline-29.tap`.
+- Final tests against the entry caller, with the selector fix already in the harness: **29 passed / 8 failed**, exit **1**, `phase-red.tap`.
+- Fixed caller, identical tests: **37 passed / 0 failed**, exit **0**, `phase-green.tap`.
+
+```sh
+node --test --test-reporter=tap --test-name-pattern='RUN_CLIENT_SOURCE binds' sub2api-evidence-r2/client-contract.test.mjs
+```
+
+Selector-only RED restores the two original default-base import/meta URL expressions in the harness temporarily and restores fixed bytes in finally: **0 passed / 1 failed**, exit **1**, `selector-red.tap`. Fixed harness with the identical test: **1 passed / 0 failed**, exit **0**, `selector-green.tap`. This independently demonstrates transitive selection, rather than relying on source inspection.
+
+Syntax checks for run-client.mjs, evidence.test.mjs and client-contract.test.mjs all exited **0**. Existing **29** tests remain in place and pass. The existing **full 121** tests are retained; the full suite was **NOT RUN in this turn** because its broker/customer/server tests open loopback sockets and network is prohibited. There are no new dependencies. **Paid new run: NOT RUN.** No real agent/provider, network, credentials/auth, Docker, root workflow, Git write or sub-agent operation occurred. The attempted initial read-only Git status failed to resolve the linked gitdir; source diffs were computed directly from saved entry bytes. No commit or push was attempted.
+
+Exact incremental LOC and final SHA-256 relative to this evidence-r5 entry (artifact/report LOC excluded):
+
+| File | Added / removed | Final SHA-256 |
+| --- | --- | --- |
+| sub2api-spike/run-client.mjs | +9 / -5 | 3308b5cbaaf2b5be10d616ace4a1e47a24e013fa944514ae61054fd37d7fb490 |
+| sub2api-spike/evidence.test.mjs | +0 / -0 | 0b2a8eae3f3000598ddc868b0ee449c4c3ca12791343e6fb163fc6d74570bbb0 |
+| sub2api-evidence-r2/client-contract.test.mjs | +97 / -9 | 49bf6f90369b551e598fd79535dee389bc789b69d7f624b7b0f29ec04b802efa |
+
+Production: **+9 / -5**. Behavioral tests/harness: **+97 / -9**. `evidence.test.mjs` is byte-identical to entry. `phase-implementation.patch` contains the two actual source/harness diffs; `phase-change-metrics.json` records baseline/final hashes and artifact hashes. No other production source was changed. Historical report bytes are copied unchanged below; historical red/green logs, patches, metrics and numeric fixture remain intact. Their descriptions and hashes refer to their own earlier revisions, not this revision. The two earlier failed canaries and this third failed canary all remain failures.
+
+Remaining limits: the third run's specific rejection cannot be diagnosed without its removed transcript; new paid E2E is explicitly NOT RUN. Local behavioral checks prove the requested diagnostics, contract and preserved acceptance/proof gates, not live success. Controller integration/rebuild/reseal and any future paid run are outside this edit/test handoff. Delivered and stopped within the requested ten-minute bound.
+
+Historical report follows verbatim:
+
 Fixed the actual strict JSONL numeric evidence rejection from MiMo + Codex HIGH run **36869316283**, whose reviewed workflow was **e3358801023d81211440c13af09ce205700ebe25**. Whole-output JSON object/array parsing remains first. Only a JSON syntax failure enables JSONL: at least two nonblank lines, every line a complete object containing all three finite numeric fields, with one row matching the reported initial_balance, amount, and final_balance exactly. No line is skipped except blank whitespace. Prose, malformed or partial JSON, arrays, nested candidates, missing fields, string numbers, overflow/nonfinite values, and mismatched examples fail. Existing object/array behavior, including pretty-printed complete documents, remains green.
 
 The root-supplied actual-numeric-jsonl-projection.json was read with actual-agent-projection.json and trusted-setup.json. Its two rows are 1000 / -50 / 1050 and 1000 / 25.5 / 974.5; the later 10.5 / 1 / 9.5 single-object observation still uses the whole-object path. The two-row output is reproduced with real local Node importing the actual sub2api-spike fixture wallet, printing one complete object per line, and comparing the entire stdout against the supplied rows. The top-level caller then performs its separate real Node reproduction of the selected negative example. A wrong reported final balance produces an observed independent process exit 1 and no receipt. The sanitized numeric-only projection is retained as numeric-jsonl-fixture.json (byte-identical to the supplied projection) so tests work without the temporary root inputs. No raw transcript is saved.

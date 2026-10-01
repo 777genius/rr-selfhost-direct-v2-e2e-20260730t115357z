@@ -1,0 +1,409 @@
+TAP version 13
+# Subtest: caller accepts object with real independent reproduction
+ok 1 - caller accepts object with real independent reproduction
+  ---
+  duration_ms: 79.181628
+  type: 'test'
+  ...
+# Subtest: caller accepts canary-shaped array with real independent reproduction
+ok 2 - caller accepts canary-shaped array with real independent reproduction
+  ---
+  duration_ms: 47.590441
+  type: 'test'
+  ...
+# Subtest: caller accepts actual local Node wallet execution emitting both numeric examples
+ok 3 - caller accepts actual local Node wallet execution emitting both numeric examples
+  ---
+  duration_ms: 93.621876
+  type: 'test'
+  ...
+# Subtest: caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+ok 4 - caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+  ---
+  duration_ms: 113.998727
+  type: 'test'
+  ...
+# Subtest: caller denies invalid JSONL lines and exact numeric mismatches
+ok 5 - caller denies invalid JSONL lines and exact numeric mismatches
+  ---
+  duration_ms: 395.739103
+  type: 'test'
+  ...
+# Subtest: caller retains reads, terminal, genuine final and successful tool requirements with JSONL
+ok 6 - caller retains reads, terminal, genuine final and successful tool requirements with JSONL
+  ---
+  duration_ms: 374.109398
+  type: 'test'
+  ...
+# Subtest: caller denies bad own proof and independent reproduction mismatch
+ok 7 - caller denies bad own proof and independent reproduction mismatch
+  ---
+  duration_ms: 218.150665
+  type: 'test'
+  ...
+# Subtest: caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals
+ok 8 - caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals
+  ---
+  duration_ms: 474.970809
+  type: 'test'
+  ...
+# Subtest: caller denies reasoning-only final, malformed final, agent failure and unsealed import
+ok 9 - caller denies reasoning-only final, malformed final, agent failure and unsealed import
+  ---
+  duration_ms: 8.690645
+  type: 'test'
+  ...
+# Subtest: caller diagnoses parse failures with fixed stderr and no private output
+not ok 10 - caller diagnoses parse failures with fixed stderr and no private output
+  ---
+  duration_ms: 2.208455
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:145:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   'Spike failed at evidence; inspect effects privately before retry.'
+    -   'Spike failed at evidence_parse; inspect effects privately before retry.'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Spike failed at evidence_parse; inspect effects privately before retry.'
+  actual:
+    0: 'Spike failed at evidence; inspect effects privately before retry.'
+  operator: 'deepStrictEqual'
+  stack: |-
+    safeFailure (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:142:10)
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:147:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: caller diagnoses absent or nonfinite numeric examples before local execution
+not ok 11 - caller diagnoses absent or nonfinite numeric examples before local execution
+  ---
+  duration_ms: 1.888238
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:150:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   'Spike failed at evidence; inspect effects privately before retry.'
+    -   'Spike failed at evidence_numeric_example; inspect effects privately before retry.'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Spike failed at evidence_numeric_example; inspect effects privately before retry.'
+  actual:
+    0: 'Spike failed at evidence; inspect effects privately before retry.'
+  operator: 'deepStrictEqual'
+  stack: |-
+    safeFailure (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:142:10)
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:157:43)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: caller diagnoses independent wallet rejection and private subprocess failures
+not ok 12 - caller diagnoses independent wallet rejection and private subprocess failures
+  ---
+  duration_ms: 43.782364
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:161:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   'Spike failed at evidence; inspect effects privately before retry.'
+    -   'Spike failed at evidence_independent_reproduction; inspect effects privately before retry.'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Spike failed at evidence_independent_reproduction; inspect effects privately before retry.'
+  actual:
+    0: 'Spike failed at evidence; inspect effects privately before retry.'
+  operator: 'deepStrictEqual'
+  stack: |-
+    safeFailure (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:142:10)
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:164:3)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: caller diagnoses exact own numeric matching and completed zero-exit admission
+not ok 13 - caller diagnoses exact own numeric matching and completed zero-exit admission
+  ---
+  duration_ms: 85.316638
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:169:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   'Spike failed at evidence; inspect effects privately before retry.'
+    -   'Spike failed at evidence_tool_numeric; inspect effects privately before retry.'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Spike failed at evidence_tool_numeric; inspect effects privately before retry.'
+  actual:
+    0: 'Spike failed at evidence; inspect effects privately before retry.'
+  operator: 'deepStrictEqual'
+  stack: |-
+    safeFailure (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:142:10)
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:172:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: caller diagnoses final finding, separate exact reads and genuine terminal contract
+not ok 14 - caller diagnoses final finding, separate exact reads and genuine terminal contract
+  ---
+  duration_ms: 83.784177
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:178:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   'Spike failed at evidence; inspect effects privately before retry.'
+    -   'Spike failed at evidence_agent_contract; inspect effects privately before retry.'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Spike failed at evidence_agent_contract; inspect effects privately before retry.'
+  actual:
+    0: 'Spike failed at evidence; inspect effects privately before retry.'
+  operator: 'deepStrictEqual'
+  stack: |-
+    safeFailure (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:142:10)
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:181:5)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: caller diagnoses evidence write without leaking private write error
+not ok 15 - caller diagnoses evidence write without leaking private write error
+  ---
+  duration_ms: 43.001173
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:185:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   'Spike failed at evidence; inspect effects privately before retry.'
+    -   'Spike failed at evidence_write; inspect effects privately before retry.'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Spike failed at evidence_write; inspect effects privately before retry.'
+  actual:
+    0: 'Spike failed at evidence; inspect effects privately before retry.'
+  operator: 'deepStrictEqual'
+  stack: |-
+    safeFailure (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:142:10)
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:186:3)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: caller delivers green receipt with minimal standalone Node output contract and HIGH model
+not ok 16 - caller delivers green receipt with minimal standalone Node output contract and HIGH model
+  ---
+  duration_ms: 82.388331
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:188:1'
+  failureType: 'testCodeFailure'
+  error: 'ONE standalone complete JSON object'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:196:260)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: RUN_CLIENT_SOURCE binds evidence and its transitive imports to selected source
+not ok 17 - RUN_CLIENT_SOURCE binds evidence and its transitive imports to selected source
+  ---
+  duration_ms: 63.17303
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:202:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      [
+    +   'Spike failed at evidence; inspect effects privately before retry.'
+    -   'Spike failed at evidence_agent_contract; inspect effects privately before retry.'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Spike failed at evidence_agent_contract; inspect effects privately before retry.'
+  actual:
+    0: 'Spike failed at evidence; inspect effects privately before retry.'
+  operator: 'deepStrictEqual'
+  stack: |-
+    safeFailure (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:142:10)
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r5/sub2api-evidence-r2/client-contract.test.mjs:212:33)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: numeric proof accepts actual run36869316283 strict JSONL matching either exact example
+ok 18 - numeric proof accepts actual run36869316283 strict JSONL matching either exact example
+  ---
+  duration_ms: 1.308709
+  type: 'test'
+  ...
+# Subtest: strict JSONL consumes every nonblank line as a complete finite numeric object
+ok 19 - strict JSONL consumes every nonblank line as a complete finite numeric object
+  ---
+  duration_ms: 1.599485
+  type: 'test'
+  ...
+# Subtest: strict JSONL compares all three finite fields in one exact example
+ok 20 - strict JSONL compares all three finite fields in one exact example
+  ---
+  duration_ms: 0.92942
+  type: 'test'
+  ...
+# Subtest: strict JSONL retains completed command admission and successful exit gates
+ok 21 - strict JSONL retains completed command admission and successful exit gates
+  ---
+  duration_ms: 0.167406
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts the existing complete JSON object
+ok 22 - numeric proof accepts the existing complete JSON object
+  ---
+  duration_ms: 0.118856
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts canary two-object JSON array matching either reported example
+ok 23 - numeric proof accepts canary two-object JSON array matching either reported example
+  ---
+  duration_ms: 0.127455
+  type: 'test'
+  ...
+# Subtest: numeric proof preserves existing direct and shell-wrapped Node command matching
+ok 24 - numeric proof preserves existing direct and shell-wrapped Node command matching
+  ---
+  duration_ms: 0.160328
+  type: 'test'
+  ...
+# Subtest: numeric proof requires exact finite numbers in all three actual fields
+ok 25 - numeric proof requires exact finite numbers in all three actual fields
+  ---
+  duration_ms: 0.26757
+  type: 'test'
+  ...
+# Subtest: numeric proof parses the complete output and never scans fragments or nested objects
+ok 26 - numeric proof parses the complete output and never scans fragments or nested objects
+  ---
+  duration_ms: 0.271827
+  type: 'test'
+  ...
+# Subtest: numeric proof rejects failed or incomplete tools, reasoning, and wrong commands
+ok 27 - numeric proof rejects failed or incomplete tools, reasoning, and wrong commands
+  ---
+  duration_ms: 0.32239
+  type: 'test'
+  ...
+# Subtest: A06 successful separate shell-wrapped rules read validates actual source and finding
+ok 28 - A06 successful separate shell-wrapped rules read validates actual source and finding
+  ---
+  duration_ms: 1.163696
+  type: 'test'
+  ...
+# Subtest: A06 malformed and fabricated financial success fail inherited validator
+ok 29 - A06 malformed and fabricated financial success fail inherited validator
+  ---
+  duration_ms: 0.272158
+  type: 'test'
+  ...
+# Subtest: A10 E04 streamed UTF8 and missing native terminal rejected
+ok 30 - A10 E04 streamed UTF8 and missing native terminal rejected
+  ---
+  duration_ms: 7.287044
+  type: 'test'
+  ...
+# Subtest: BR04 integrated mismatches deny before any agent effects and receipt
+ok 31 - BR04 integrated mismatches deny before any agent effects and receipt
+  ---
+  duration_ms: 38.440635
+  type: 'test'
+  ...
+# Subtest: BR04 integrated valid binding projects exact identity and preserves high reasoning
+ok 32 - BR04 integrated valid binding projects exact identity and preserves high reasoning
+  ---
+  duration_ms: 5.292128
+  type: 'test'
+  ...
+# Subtest: BR04 model metadata cannot authorize mismatched run
+ok 33 - BR04 model metadata cannot authorize mismatched run
+  ---
+  duration_ms: 2.896702
+  type: 'test'
+  ...
+# Subtest: BR04 receipt still requires successful terminal and numeric financial finding
+ok 34 - BR04 receipt still requires successful terminal and numeric financial finding
+  ---
+  duration_ms: 10.238716
+  type: 'test'
+  ...
+# Subtest: BR04 workflow rejects every mismatched receipt before publication
+ok 35 - BR04 workflow rejects every mismatched receipt before publication
+  ---
+  duration_ms: 11.469729
+  type: 'test'
+  ...
+# Subtest: BR04 caller projects both other supported native mappings
+ok 36 - BR04 caller projects both other supported native mappings
+  ---
+  duration_ms: 6.411729
+  type: 'test'
+  ...
+# Subtest: BR04 unsealed import path aborts before agent effects and receipt
+ok 37 - BR04 unsealed import path aborts before agent effects and receipt
+  ---
+  duration_ms: 2.952472
+  type: 'test'
+  ...
+1..37
+# tests 37
+# suites 0
+# pass 29
+# fail 8
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2279.812138
