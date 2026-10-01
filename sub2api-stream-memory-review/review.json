@@ -1,0 +1,91 @@
+{
+  "verdict": "APPROVE",
+  "production_patch_sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239",
+  "findings": [],
+  "W1_P1": "Resolved: cancellation ownership is independent of successful semantic output and transfers before replay; both guards corrected",
+  "scope": "Exact isolated W2 package only",
+  "source_files": [
+    {
+      "path": "backend/internal/service/gateway_anthropic_passthrough.go",
+      "kind": "production",
+      "before_sha256": "fd03d4dafdd8e2c82feace54fcba151f831d526944488a4454ab4926c4a9ece2",
+      "after_sha256": "9ef4adbc7dc4c2567e6d8ca68a070725c51018639813c64798e465d120b00871"
+    },
+    {
+      "path": "backend/internal/service/openai_first_output_timeout.go",
+      "kind": "production",
+      "before_sha256": "cd12f076c8e8b8ce57059d5b46e7422d0e9ed3d1dab94cc83e0e3ac348ebd2b7",
+      "after_sha256": "316e2fd01518ea636bb0ed08870542e0beca3872008957bd816acd2586496166"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_messages_anthropic_native.go",
+      "kind": "production",
+      "before_sha256": "88258388e24fa739150996c9bb39fb94448d0c421af5473af09b084126d28bf0",
+      "after_sha256": "8820231ac3431a45ebba1303cb40e14920548f01e70a9e50eec6ee4a7b6b4035"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "kind": "production",
+      "before_sha256": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3",
+      "after_sha256": "81a4de0bb2d3baac55e75e1202295b62852fb3242dc248ee099adc76b7973a79"
+    },
+    {
+      "path": "backend/internal/service/stream_memory_behavior_test.go",
+      "kind": "tests",
+      "before_sha256": null,
+      "after_sha256": "ce8fc9ef475305ea10654e57099e6852d795506bae8bb139199712ce976ce0d2"
+    },
+    {
+      "path": "backend/internal/service/stream_memory_lifecycle_test.go",
+      "kind": "tests",
+      "before_sha256": null,
+      "after_sha256": "c626ffec30727787f053bd4f7b18a13412291572063553a0ed4ded75adcfe4c9"
+    },
+    {
+      "path": "backend/internal/service/stream_memory_replay_handoff_test.go",
+      "kind": "tests",
+      "before_sha256": null,
+      "after_sha256": "933131f9371e3dd6f4f9ceb8dc4cbe0c432ebb6a68b69204ab3d2f73942c7b8e"
+    },
+    {
+      "path": "backend/internal/service/stream_memory_stage_test.go",
+      "kind": "tests",
+      "before_sha256": null,
+      "after_sha256": "d1be61e5e5547873d2635010e0807459af388226fbdfbe405860adb53f215858"
+    },
+    {
+      "path": "backend/internal/service/stream_memory_volume_test.go",
+      "kind": "tests",
+      "before_sha256": null,
+      "after_sha256": "e75d15f5cb6096084fcd39ceaf1db4f790cf7a29b29b1f68c4ac956c6d110a73"
+    }
+  ],
+  "prescribed_reproducer_sha256": "933131f9371e3dd6f4f9ceb8dc4cbe0c432ebb6a68b69204ab3d2f73942c7b8e",
+  "supplied_actual_Go_gates": {
+    "old_behavior": "Four required RED; compilation succeeded",
+    "green": 35,
+    "native": 292,
+    "probe": 63,
+    "skips": 0,
+    "race": false
+  },
+  "independent_old_handoff": "3 PASS / 0 skips",
+  "independent_W1_handoff": "Both writer cases RED / 0 skips",
+  "locally_executed_Go": false,
+  "local_checks": "Offline Python audit and standalone pinned gofmt passed",
+  "callback_caveat": "Stop does not join an already firing callback. Body close/read failure can still leave terminal usage incomplete; no join or complete-usage guarantee.",
+  "future_merged_W3_review_and_race": "Mandatory, not supplied and outside isolated W2 approval",
+  "historical_memory_FAIL_retained": 20,
+  "report": "REPORT.md",
+  "evidence": "evidence.json",
+  "reproduction": "audit.py",
+  "changed_files": [
+    "sub2api-stream-memory-review/audit.py",
+    "sub2api-stream-memory-review/evidence.json",
+    "sub2api-stream-memory-review/REPORT.md",
+    "sub2api-stream-memory-review/review.json",
+    "sub2api-stream-memory-review/completion-audit.json",
+    "sub2api-stream-memory-review/artifact-hashes.json"
+  ],
+  "blockers": []
+}

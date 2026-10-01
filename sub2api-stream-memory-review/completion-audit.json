@@ -1,0 +1,45 @@
+{
+  "review_objective_complete": true,
+  "requirements": {
+    "exact_current_source_and_receipts": {
+      "status": "PROVEN",
+      "evidence": "10,344 frozen hash bindings; 15 exact patch/file applications; SOURCE hunk/file hashes; current W2 patch identity"
+    },
+    "mandatory_W1_P1_fixed": {
+      "status": "PROVEN",
+      "evidence": "entire W1 file equals W2 after only declared minimal repair; two corrected guards and ownership transfer before replay"
+    },
+    "exact_regression_and_default_account": {
+      "status": "PROVEN",
+      "evidence": "byte-exact 933131f9 reproducer; both writer cases, true failure/no-error/canceled-context and 7/5 usage assertions retained; old PASS/W1 RED/W2 35 GREEN summaries"
+    },
+    "pre_handoff_cancellation_and_bounded_resources": {
+      "status": "PROVEN_WITHIN_REVIEW_SCOPE",
+      "evidence": "unchanged close callback, strict stage and lifecycle tests; current supplied GREEN; no claim to arbitrary Body implementations"
+    },
+    "post_handoff_semantic_and_drain_policy": {
+      "status": "PROVEN",
+      "evidence": "minimal entire-source identity; seven original files byte unchanged; successful semantic output state kept distinct"
+    },
+    "native_bytes_buffers_messages_idle_probe_retry": {
+      "status": "PROVEN_WITHIN_REVIEW_SCOPE",
+      "evidence": "audited source/unchanged native-probe pins; preserved exact-byte/lifecycle/idle tests; supplied 292 native and 63 probe summaries"
+    },
+    "already_firing_callback_limit": {
+      "status": "DISCLOSED",
+      "evidence": "AfterFunc stop not joined; possible incomplete terminal usage explicitly retained"
+    },
+    "future_W3_merge_race": {
+      "status": "OUTSIDE_ISOLATED_APPROVAL_NOT_PROVEN",
+      "evidence": "no merged source/race receipt supplied; current 35 is normal Go; mandatory future merged review retained"
+    },
+    "ownership_and_command_constraints": {
+      "status": "SATISFIED",
+      "evidence": "only owned review artifacts written; offline Python/pinned gofmt; no Go/Docker/network/auth/Git writes/subagents"
+    },
+    "historical_memory_verdicts": {
+      "status": "PRESERVED",
+      "evidence": "20 original execution entries verified functional PASS, empirical FAIL, physical interval NOTPROVEN"
+    }
+  }
+}
