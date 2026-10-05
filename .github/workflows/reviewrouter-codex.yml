@@ -1,0 +1,26 @@
+name: ReviewRouter Codex
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, converted_to_draft]
+permissions: {}
+jobs:
+  codex-review:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.user.type != 'Bot' && github.event.pull_request.draft == false }}
+    concurrency:
+      group: reviewrouter-codex-${{ github.repository_id }}
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      pull-requests: read
+      id-token: write
+    uses: 777genius/review-router/.github/workflows/reviewrouter-t0-reusable.yml@8c0ac1cd30a8ca966abd5c0b089be7ecf899dcb0
+    with:
+      runtime_ref: "8c0ac1cd30a8ca966abd5c0b089be7ecf899dcb0"
+      api_url: "https://aberdeen-say-beverages-testimony.trycloudflare.com"
+      pr_number: ${{ format('{0}', github.event.pull_request.number) }}
+      review_head_sha: ${{ github.event.pull_request.head.sha }}
+      provider_instance_id: "codex-rotating:1317214237"
+      runtime_config_mode: oidc
+      codex_session_mode: account-gateway
+      workflow_schema_version: 2
+      review_timeout_minutes: 60
