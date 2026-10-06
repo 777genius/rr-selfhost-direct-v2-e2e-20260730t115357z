@@ -1,0 +1,111 @@
+✔ B06 concurrent grants idempotent before upstream effects (133.215174ms)
+✔ B07 revoked grant denies replay and provider rescope (75.114719ms)
+✔ A07 A08 B08 B12 pinned model routes headers and unsupported scopes (102.245672ms)
+✔ A03 A09 exact Claude beta query preserves native Messages (92.972944ms)
+✔ A04 native structured content cannot change server-pinned identity (90.160639ms)
+✔ D05 native responses failed SSE removes upstream diagnostics (81.622136ms)
+✔ D05 native messages failed SSE removes upstream diagnostics (99.418479ms)
+✔ D05 capability denies an unfiltered nonstream response mode before upstream effects (89.41703ms)
+✔ B09 body request and concurrency limits before effects (367.56923ms)
+✔ B10 G03 restart denies stale capabilities replay and ledger failure (118.231892ms)
+✔ B11 E06 active stream expiry aborts upstream releases capacity (263.622562ms)
+✔ B11 E06 active stream revoke aborts upstream releases capacity (127.070314ms)
+✔ C04 membership removal blocks new grants and work (69.453259ms)
+✖ A04 A09 native responses two-turn wire preservation (69.454235ms)
+✖ A05 A09 native messages two-turn wire preservation (52.69752ms)
+✔ A10 E07 large unicode chunks retain bounded transport integrity (82.225337ms)
+✔ E01 E09 E12 D02 D08 HTTP errors sanitized with status and count intact (61.512895ms)
+✔ E02 terminal-error responses fails terminal validator (46.42001ms)
+✔ E03 terminal-error messages fails terminal validator (55.305413ms)
+✔ E04 truncate responses fails terminal validator (49.680128ms)
+✔ E04 malformed messages fails terminal validator (46.743667ms)
+✔ E05 E11 reset bounded failure zero automatic retries (50.894075ms)
+✔ E05 E11 slow-headers bounded failure zero automatic retries (145.680047ms)
+✔ E05 E11 slow-body bounded failure zero automatic retries (155.322883ms)
+✔ E05 E11 partial-reset bounded failure zero automatic retries (52.148295ms)
+✔ G06 two concurrent tenant identities select distinct private keys (65.001053ms)
+✔ E06 client stream cancellation aborts upstream and allows next request (602.913093ms)
+✔ F02 server session stable per grant and isolated across tenants (96.227331ms)
+✔ C08 F06 server account-authority revocation cancels only owned workspace (68.364601ms)
+✔ C01 C07 D05 account CRUD roundtrip with sanitized responses (187.20685ms)
+✔ C02 C03 two tenant guessed IDs and member management denied before admin effects (102.849349ms)
+✔ C04 account membership removal and suspension fail closed (36.045607ms)
+✔ C06 concurrent update delete stale IDs and durable ownership (283.171244ms)
+✔ C09 groups routing restriction drift is observable (112.853387ms)
+✔ C10 partial create failure persists recovery_required with no public binding (139.739786ms)
+✔ D07 customer unsafe URLs and routing input denied (35.924896ms)
+✔ F05 API-key refresh honestly requires OAuth identity (92.839616ms)
+✔ C08 account replacement retires old identity and uses rotated server credential (151.234205ms)
+✔ A06 successful separate shell-wrapped rules read validates actual source and finding (1.180604ms)
+✔ A06 malformed and fabricated financial success fail inherited validator (0.195829ms)
+✔ A10 E04 streamed UTF8 and missing native terminal rejected (18.413836ms)
+✔ B01 signed new workflow accepted; baseline verifier remains strict (3.453214ms)
+✔ B02 forged signature unknown key invalid algorithm denied (19.971374ms)
+✔ B03 B04 B05 immutable identity scope and time denial (8.819604ms)
+✔ receipt provenance false green and secret field rejection at file boundary (15.117649ms)
+ℹ tests 45
+ℹ suites 0
+ℹ pass 43
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3584.184728
+
+✖ failing tests:
+
+test at sub2api-spike/broker.test.mjs:92:51
+✖ A04 A09 native responses two-turn wire preservation (69.454235ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+
+    {
+      input: [
+        {
+          call_id: 'synthetic-call-1',
+          output: '金🙂 tool result',
+  ...
+      model: 'mimo-v2.6-pro',
+  +   stream: true
+    }
+
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/source/sub2api-spike/broker.test.mjs:98:121)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { input: [ [Object] ], stream: true, model: 'mimo-v2.6-pro' },
+    expected: { input: [ [Object] ], model: 'mimo-v2.6-pro' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-spike/broker.test.mjs:92:51
+✖ A05 A09 native messages two-turn wire preservation (52.69752ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+
+    {
+      messages: [
+        {
+          content: [
+            {
+  ...
+      model: 'mimo-v2.6-pro',
+  +   stream: true
+    }
+
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/source/sub2api-spike/broker.test.mjs:98:121)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: { messages: [ [Object] ], stream: true, model: 'mimo-v2.6-pro' },
+    expected: { messages: [ [Object] ], model: 'mimo-v2.6-pro' },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

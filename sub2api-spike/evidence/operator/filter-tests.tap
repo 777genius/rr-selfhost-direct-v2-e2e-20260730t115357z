@@ -1,0 +1,67 @@
+✔ B06 concurrent grants idempotent before upstream effects (138.398004ms)
+✔ B07 revoked grant denies replay and provider rescope (72.070972ms)
+✔ A07 A08 B08 B12 pinned model routes headers and unsupported scopes (93.394166ms)
+✔ A03 A09 exact Claude beta query preserves native Messages (87.813577ms)
+✔ A04 native structured content cannot change server-pinned identity (78.894547ms)
+✔ D05 native responses failed SSE removes upstream diagnostics (97.201448ms)
+✔ D05 native messages failed SSE removes upstream diagnostics (110.119672ms)
+✔ B09 body request and concurrency limits before effects (366.419099ms)
+✔ B10 G03 restart denies stale capabilities replay and ledger failure (96.171277ms)
+✔ B11 E06 active stream expiry aborts upstream releases capacity (233.840998ms)
+✔ B11 E06 active stream revoke aborts upstream releases capacity (106.752471ms)
+✔ C04 membership removal blocks new grants and work (47.570802ms)
+✔ A04 A09 native responses two-turn wire preservation (49.042319ms)
+✔ A05 A09 native messages two-turn wire preservation (52.671108ms)
+✔ A10 E07 large unicode chunks retain bounded transport integrity (65.872041ms)
+✔ E01 E09 E12 D02 D08 HTTP errors sanitized with status and count intact (60.032121ms)
+✔ E02 terminal-error responses fails terminal validator (46.325582ms)
+✔ E03 terminal-error messages fails terminal validator (46.184459ms)
+✔ E04 truncate responses fails terminal validator (46.135365ms)
+✖ E04 malformed messages fails terminal validator (52.414062ms)
+✔ E05 E11 reset bounded failure zero automatic retries (48.582426ms)
+✔ E05 E11 slow-headers bounded failure zero automatic retries (147.684921ms)
+✔ E05 E11 slow-body bounded failure zero automatic retries (150.21446ms)
+✔ E05 E11 partial-reset bounded failure zero automatic retries (47.034056ms)
+✔ G06 two concurrent tenant identities select distinct private keys (67.479895ms)
+✔ E06 client stream cancellation aborts upstream and allows next request (601.940598ms)
+✔ F02 server session stable per grant and isolated across tenants (88.481271ms)
+✔ C08 F06 server account-authority revocation cancels only owned workspace (78.368909ms)
+✔ C01 C07 D05 account CRUD roundtrip with sanitized responses (189.220557ms)
+✔ C02 C03 two tenant guessed IDs and member management denied before admin effects (108.2452ms)
+✔ C04 account membership removal and suspension fail closed (33.773704ms)
+✔ C06 concurrent update delete stale IDs and durable ownership (259.717464ms)
+✔ C09 groups routing restriction drift is observable (143.941013ms)
+✔ C10 partial create failure persists recovery_required with no public binding (146.54548ms)
+✔ D07 customer unsafe URLs and routing input denied (37.014297ms)
+✔ F05 API-key refresh honestly requires OAuth identity (59.791083ms)
+✔ C08 account replacement retires old identity and uses rotated server credential (129.62447ms)
+✔ A06 successful separate shell-wrapped rules read validates actual source and finding (1.433545ms)
+✔ A06 malformed and fabricated financial success fail inherited validator (0.201617ms)
+✔ A10 E04 streamed UTF8 and missing native terminal rejected (29.984948ms)
+✔ B01 signed new workflow accepted; baseline verifier remains strict (7.211135ms)
+✔ B02 forged signature unknown key invalid algorithm denied (44.949722ms)
+✔ B03 B04 B05 immutable identity scope and time denial (8.989032ms)
+✔ receipt provenance false green and secret field rejection at file boundary (27.139982ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 43
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3367.343122
+
+✖ failing tests:
+
+test at sub2api-spike/broker.test.mjs:108:185
+✖ E04 malformed messages fails terminal validator (52.414062ms)
+  [TypeError: fetch failed] {
+    [cause]: Error [SocketError]: other side closed
+        at Socket.onHttpSocketEnd (node:internal/deps/undici/undici:7833:26)
+        at Socket.emit (node:events:526:24)
+        at endReadableNT (node:internal/streams/readable:1764:12)
+        at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+      code: 'UND_ERR_SOCKET',
+      socket: { localAddress: '127.0.0.1', localPort: 54166, remoteAddress: '127.0.0.1', remotePort: 41859, remoteFamily: 'IPv4', timeout: undefined, bytesWritten: 302, bytesRead: 0 }
+    }
+  }

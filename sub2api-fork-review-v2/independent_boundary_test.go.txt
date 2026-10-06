@@ -1,0 +1,72 @@
+//go:build unit
+
+// Copy only into a disposable exact patched backend/internal/service tree.
+// These are independent contract assertions, not replacement normalization.
+package service
+
+import (
+    "context"
+    "fmt"
+    "io"
+    "net/http"
+    "strings"
+    "testing"
+
+    "github.com/stretchr/testify/require"
+    "github.com/tidwall/gjson"
+)
+
+const independentOpaqueReasoning = `{"type":"reasoning","id":"rs_independent","namespace":"provider.private","encrypted_content":"synthetic-opaque-cipher","summary":[],"content":[{"type":"reasoning_text","text":"keep provider history"}],"opaque":9007199254740993}`
+
+func independentReviewResponse(status int, raw string) *http.Response {
+    return &http.Response{StatusCode: status, Header: http.Header{"Content-Type": []string{"application/json"}}, Body: io.NopCloser(strings.NewReader(raw))}
+}
+
+func TestIndependentCompatibleReasoningRejectedContent(t *testing.T) {
+    for _, passthrough := range []bool{false, true} {
+        t.Run(fmt.Sprint(passthrough), func(t *testing.T) {
+            rejection := `{"error":{"code":"array_above_max_length","message":"Invalid 'input[0].content': array too long. Expected an array with maximum length 0, but got an array with length 1 instead.","param":"input[0].content","type":"invalid_request_error"}}`
+            upstream := &httpUpstreamSequenceRecorder{responses: []*http.Response{
+                independentReviewResponse(http.StatusBadRequest, rejection),
+                independentReviewResponse(http.StatusOK, `{"id":"resp_fixture","output":[],"usage":{"input_tokens":1,"output_tokens":1}}`),
+            }}
+            svc := newOpenAIImageGenerationControlTestService(nil)
+            svc.httpUpstream = upstream
+            account := newOpenAIImageGenerationControlTestAccount()
+            account.Extra = map[string]any{"openai_passthrough": passthrough, "openai_preserve_compatible_reasoning": true}
+            c, rec := newOpenAIImageGenerationControlTestContext(true, "unit-test-agent/1.0")
+            body := []byte(`{"model":"mimo-v2.6-pro","stream":false,"store":false,"input":[` + independentOpaqueReasoning + `,{"role":"user","content":"continue"}]}`)
+            _, err := svc.Forward(context.Background(), c, account, body)
+            require.Equal(t, 1, upstream.callCount, "opaque reasoning rejection must not trigger mutated replay")
+            require.Error(t, err)
+            require.Equal(t, http.StatusBadRequest, rec.Code)
+            for _, outbound := range upstream.bodies {
+                require.JSONEq(t, independentOpaqueReasoning, gjson.GetBytes(outbound, "input.0").Raw)
+                require.Equal(t, "9007199254740993", gjson.GetBytes(outbound, "input.0.opaque").Raw)
+            }
+        })
+    }
+}
+
+func TestIndependentCompatibleReasoningEmptyImagePrecision(t *testing.T) {
+    for _, passthrough := range []bool{false, true} {
+        t.Run(fmt.Sprint(passthrough), func(t *testing.T) {
+            upstream := &httpUpstreamSequenceRecorder{responses: []*http.Response{
+                independentReviewResponse(http.StatusOK, `{"id":"resp_fixture","output":[],"usage":{"input_tokens":1,"output_tokens":1}}`),
+            }}
+            svc := newOpenAIImageGenerationControlTestService(nil)
+            svc.httpUpstream = upstream
+            account := newOpenAIImageGenerationControlTestAccount()
+            account.Extra = map[string]any{"openai_passthrough": passthrough, "openai_preserve_compatible_reasoning": true}
+            c, _ := newOpenAIImageGenerationControlTestContext(true, "unit-test-agent/1.0")
+            body := []byte(`{"model":"mimo-v2.6-pro","stream":false,"store":false,"input":[` + independentOpaqueReasoning + `,{"type":"message","role":"user","content":[{"type":"input_text","text":"continue"},{"type":"input_image","image_url":"data:image/png;base64,"}]}]}`)
+            _, err := svc.Forward(context.Background(), c, account, body)
+            require.NoError(t, err)
+            require.Equal(t, 1, upstream.callCount)
+            outbound := upstream.bodies[0]
+            require.Equal(t, "9007199254740993", gjson.GetBytes(outbound, "input.0.opaque").Raw, "empty-image cleanup must retain opaque integer precision")
+            require.JSONEq(t, independentOpaqueReasoning, gjson.GetBytes(outbound, "input.0").Raw)
+            require.Equal(t, int64(1), gjson.GetBytes(outbound, "input.1.content.#").Int(), "image cleanup must actually run")
+        })
+    }
+}

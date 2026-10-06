@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "ids": [
+    "D09",
+    "G07"
+  ],
+  "evidence_kind": "actual-operator-teardown",
+  "containers_removed": 9,
+  "networks_removed": 4,
+  "private_paths_removed": 23,
+  "remaining_owned_containers": false,
+  "original_root_only_provider_files_preserved": true,
+  "public_ports": [],
+  "workflow": "disabled_manually",
+  "live_oauth_identities_imported": 0,
+  "production_pool_imported_or_replaced": false,
+  "at": 1790804332.5827794,
+  "custody_limit": "Logical file/container removal; no secure-erasure guarantee for underlying storage snapshots."
+}

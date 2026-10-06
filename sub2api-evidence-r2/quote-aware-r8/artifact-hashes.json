@@ -1,0 +1,16 @@
+{
+  "sub2api-evidence-r2/quote-aware-r8/REPORT.md": "7031dfe1da76dc655852f481f171779fd6bcdff1c1061f860cd8e554aa6d9e50",
+  "sub2api-evidence-r2/quote-aware-r8/RUNBOOK.md": "d3c81be57573fccccf6aa81446b10169c3958b0b853b5303f769bf68f4e853a5",
+  "sub2api-evidence-r2/quote-aware-r8/change-metrics.json": "672f5d07a6af27791b194881b4a123cfd8cced1445a9986dd6f924164bd8e470",
+  "sub2api-evidence-r2/quote-aware-r8/command-results.json": "6501f1a1f8dca5302c4f0f665c547dfffee13d794d7c4675e0ff56146f463344",
+  "sub2api-evidence-r2/quote-aware-r8/first-green.tap": "767925151252b617a8516d6096eb55aa287e7890f899c837d2118589c3669e2f",
+  "sub2api-evidence-r2/quote-aware-r8/green.tap": "0a8df2d36d1b6c797cd7f4aebfc3117184a6fdb53b17d0844df580fa1b1815f9",
+  "sub2api-evidence-r2/quote-aware-r8/implementation.patch": "e47f772b1ff28f9c3c7e4c355398e6dc58aa10eb99ce1bbb682a4f40e7763186",
+  "sub2api-evidence-r2/quote-aware-r8/preservation.json": "e0dc502df8a48471f54f354c49a9859d2f8b0970f9b532377fcdf92a242c9f36",
+  "sub2api-evidence-r2/quote-aware-r8/preserved-gates.tap": "33392c8d4d847e7c961da48790f5dbfa82ba743a04da0bc167ddb141deb156d4",
+  "sub2api-evidence-r2/quote-aware-r8/quote-breakout.test.mjs": "528b4ec96c27de9ebe31550addd828bd698a13cc1bb6a256dab872eb8fbc0522",
+  "sub2api-evidence-r2/quote-aware-r8/r7-red.tap": "565d9d30f61b5775d4cbffb79e0a6994bb16618791046381eccac99e3a8f829b",
+  "sub2api-evidence-r2/quote-aware-r8/r8-green.tap": "33a01df42416136d0389ec7bc11a1391c5a266682e482f0becf06d545aa1d7a8",
+  "sub2api-evidence-r2/quote-aware-r8/syntax.json": "a5dcb4f9c2e06b6c4fad60f6a1bea5d84747866a7b3ee5b738bc5a9104f2a4a7",
+  "sub2api-evidence-r2/quote-aware-r8/worktree-implementation.patch": "4bbe29ec78be22a9730bfbcdae37f0f2959ee51d14419e9ef4b06da238bec6ae"
+}

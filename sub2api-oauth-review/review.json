@@ -1,0 +1,201 @@
+{
+  "schema": "oauth-independent-review/v1",
+  "task_id": "rr-gateway-spike-20260930-oauth-review-w1",
+  "decision": "requestchanges",
+  "review_status": "complete",
+  "scope": "frozen oauth-fork-w2 full replacement + canonical tests + overlay versus supplied official archive",
+  "source_pin": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "patches": {
+    "source.patch": "f26d8e06e4efeebfc4b705efb0f55c52a670ce1a64aee92753fc399b54cecd52",
+    "tests-overlay.patch": "5131c0f6e070cc89587786aee0a7ef9d6182094bb0069639b01ee437e1a938fe"
+  },
+  "source_bindings_file": "evidence.json",
+  "prioritized_findings": [
+    {
+      "id": "F5",
+      "priority": "P1",
+      "title": "Neutral usage Extra writes strand successful rotation indefinitely",
+      "classification": "concrete source correctness/availability defect",
+      "locations": [
+        "backend/migrations/241_openai_oauth_refresh_ownership.sql:32",
+        "backend/internal/service/openai_gateway_usage.go:1125",
+        "backend/internal/repository/account_repo.go:2752",
+        "backend/internal/repository/openai_oauth_durable.go:94"
+      ],
+      "remediation": "Use a refresh/lifecycle/routing revision independent of neutral telemetry; preserve credential/owner/lifecycle/routing CAS and non-replay evidence.",
+      "regression": "Real successful issuer barrier + real neutral usage update; successor durable, one consumption, no pending block."
+    },
+    {
+      "id": "F1",
+      "priority": "P1",
+      "title": "Fresh bearer forwarded using stale identity and proxy snapshot",
+      "classification": "concrete source correctness/security defect; actual exposure unmeasured",
+      "locations": [
+        "backend/internal/service/openai_gateway_service.go:1203",
+        "backend/internal/service/openai_gateway_forward.go:783",
+        "backend/internal/service/openai_gateway_forward.go:1049",
+        "backend/internal/service/openai_chatgpt_headers.go:8",
+        "backend/internal/service/openai_plugin_transport.go:11"
+      ],
+      "remediation": "Carry a single revision-validated credential/routing snapshot into HTTP and WebSocket forwarding or deny/reselect on mismatch; preserve separate shadow scheduling identity.",
+      "regression": "Select old row then commit identity/proxy reconnect before bearer selection; observe actual wire tuple."
+    },
+    {
+      "id": "F2",
+      "priority": "P1",
+      "title": "Refresh-token non-replay evidence is scoped to account ID",
+      "classification": "concrete source security/correctness defect conditional on duplicate/reimported credential material",
+      "locations": [
+        "backend/internal/repository/openai_oauth_durable.go:53",
+        "backend/migrations/241_openai_oauth_refresh_ownership.sql:4",
+        "backend/internal/service/admin_account.go:478",
+        "backend/internal/service/crs_sync_service.go:673"
+      ],
+      "remediation": "Canonical credential owner or unique durable keyed token-identity digest across account IDs, retaining uncertainty across deletion/recreation.",
+      "regression": "Two IDs sharing one fabricated refresh token, including reimport after uncertainty; no second issuer consumption."
+    },
+    {
+      "id": "F3",
+      "priority": "P2",
+      "title": "Credential parent admission incorrectly applies direct scheduling vetoes",
+      "classification": "concrete supported shadow compatibility defect",
+      "locations": [
+        "backend/internal/repository/openai_oauth_durable.go:22",
+        "backend/internal/service/openai_oauth_durable.go:185",
+        "backend/internal/service/account.go:207",
+        "backend/internal/service/openai_account_scheduler.go:1749",
+        "backend/internal/service/openai_gateway_service.go:1203"
+      ],
+      "remediation": "Separate durable credential-parent admission from direct-account scheduling; keep genuine disabled/deleted/pending/shared-cooldown rejection.",
+      "regression": "Real selection/token path with paused, global-limited and overloaded parent must preserve independent shadow success."
+    },
+    {
+      "id": "F4",
+      "priority": "P2",
+      "title": "Manual PAT/access-only refresh bypasses validation and enrichment",
+      "classification": "concrete admin operation compatibility defect",
+      "locations": [
+        "backend/internal/service/openai_oauth_durable.go:99",
+        "backend/internal/service/openai_oauth_durable.go:155",
+        "backend/internal/service/token_refresher.go:102",
+        "backend/internal/service/openai_oauth_service.go:341"
+      ],
+      "remediation": "Explicit manual PAT validation/access-only enrichment branch with durable metadata CAS; keep rotating issuer refresh claimed.",
+      "regression": "Observe validator call, invalid-PAT failure and fresh metadata from a fabricated coordinator endpoint."
+    }
+  ],
+  "requirements": [
+    {
+      "requirement": "universal request/background/admin/CRS/mixed Redis PG ownership",
+      "evidence": "common production helper and mandatory owner context; real request/background/mixed Redis PASS",
+      "limitation": "No handler-level admin/CRS execution; F2 account-ID scope"
+    },
+    {
+      "requirement": "uncertain consumption never replayed",
+      "evidence": "pending no expiry/takeover, contained error paths, real crash/TTL/DB rejection PASS",
+      "limitation": "F2 cross-ID replay gap"
+    },
+    {
+      "requirement": "lost ACK exact completion and DB failure",
+      "evidence": "exact owner/revision/document reconciliation; real commit-then-hide ACK and rejection trigger PASS",
+      "limitation": "claim ACK and role variants not run"
+    },
+    {
+      "requirement": "revision credential document lifecycle routing CAS, same clock/new disable wins",
+      "evidence": "source predicates and triggers; real same/reversed-clock, reconnect, stale-disable PASS",
+      "limitation": "F5 telemetry false conflict; F1 later forwarding mismatch"
+    },
+    {
+      "requirement": "cache-hit durable eligibility",
+      "evidence": "post-cache-I/O durable reread and actual paused cache-read disable case PASS",
+      "limitation": "No instantaneous revocation after final admission"
+    },
+    {
+      "requirement": "owner-safe release tombstones exact large integers",
+      "evidence": "real Redis PASS cases and literal local Lua assertions",
+      "limitation": "Local Lua harness not Redis; restart/eviction/cluster not measured"
+    },
+    {
+      "requirement": "Redis outage eight-request availability",
+      "evidence": "eight successes required in real case, coordinator PASS",
+      "limitation": "two-process cases permit protected denial; no latency SLO"
+    },
+    {
+      "requirement": "seven metadata fields plus exact revision excluding refresh tokens",
+      "evidence": "serialized actual Go metadata unit PASS, complete map oracle and immutability",
+      "limitation": "Existing api_key allowed; full payload remains credential-bearing"
+    },
+    {
+      "requirement": "PAT/token-only compatibility and callers",
+      "evidence": "official manual validator, new helper and handlers traced",
+      "limitation": "F4; raw unregistered-token endpoint intentionally broken; registered active/schedulable identity required"
+    },
+    {
+      "requirement": "migration permissions storage history retention",
+      "evidence": "source schema/migration runner/credential-history inspected; real fixture migrations PASS",
+      "limitation": "Separate runtime role, upgrade load, encryption/redaction/retention/deletion/backup unmeasured"
+    },
+    {
+      "requirement": "independent oracles beyond mocks",
+      "evidence": "real synthetic issuer single-use state, actual HTTP OAuth parser, Ent/PG rereads, Redis boundaries and real driver fault inspected; offline extracted SQL + independent predicates",
+      "limitation": "Public receipt projection omits raw values; Forward/HTTPUpstream, privacy enrichment, live providers not exercised"
+    },
+    {
+      "requirement": "decision bindings actionable findings rollout limits stop",
+      "evidence": "REPORT.md, review.json, evidence.json, reproducible offline checks",
+      "limitation": "Review finished; controller remediation/integration only"
+    }
+  ],
+  "validation": {
+    "command": "python3 sub2api-oauth-review/reproductions/offline_review.py",
+    "result": "PASS: evidence/counterexamples, not production acceptance",
+    "immutable_input_hashes": 6313,
+    "changed_files_reconstructed": 28,
+    "source_counterexamples": 5,
+    "local_literal_lua": "PASS (Lua 5.3, in-memory command harness)",
+    "new_Go_or_service_tests": "NOT RUN: outside authorized review scope",
+    "frozen_coordinator": {
+      "execution_sha256": "9cebf5ed84b6e86bd7a67ca155116313f64d987778bd4a7266d92adef5727347",
+      "public_receipts_sha256": "fd52d497beeb1b137c91cb8686b6e1d39d4b374c63e0618a152085a27303e27f",
+      "gofmt_list_sha256": "d97a5703aed8da2cdb8b2fa9f1e155cef8db7484d86f3929bac02e81ccb65fa4",
+      "service_cases": 23,
+      "metadata_unit_pass": true,
+      "public_projection_limitation": "Only status and field names are supplied. Raw counters, PID values, timing, durable state, service versions and event values cannot be independently audited.",
+      "receipt_count_field": 3,
+      "receipt_count_interpretation": "Execution metadata says 3; public file explicitly parses 23 case items. No raw capture provided to reconcile aggregation."
+    }
+  },
+  "mechanical_gate": {
+    "gofmt_unformatted_files": 25,
+    "candidate_paths": 27,
+    "disposition": "pending controller formatting; not substantive decision cause"
+  },
+  "non_findings_and_limits": {
+    "credential_history": "Full expected/result JSONB documents retained across delete; footprint proven, actual breach/growth/retention compliance unmeasured. Keep minimal non-replay evidence while protecting/redacting historical credential material.",
+    "live_oauth": "NOT RUN; no live-provider acceptance",
+    "latency": "UNMEASURED; repeated durable reads and 20ms pending polling need load measurement",
+    "raw_token_endpoint": "Explicit breaking change: unregistered/ambiguous token rejected; version/migrate onboarding without an unsafe bypass",
+    "native_api_key_probe": "Separate fork/image lane; no OAuth image integration claim",
+    "runtime_roles": "No separate migrator/runtime-role clearance"
+  },
+  "handoff": {
+    "production_edits": false,
+    "git_operations": false,
+    "network_or_services": false,
+    "agents": false,
+    "external_waits": false,
+    "changed_files": [
+      "sub2api-oauth-review/REPORT.md",
+      "sub2api-oauth-review/review.json",
+      "sub2api-oauth-review/evidence.json",
+      "sub2api-oauth-review/reproductions/offline_review.py"
+    ],
+    "controller_next_steps": [
+      "remediate concrete findings",
+      "focused real regressions plus original 23 cases/metadata",
+      "format candidate with new exact binding",
+      "role/upgrade/retention/load/image rollout checks"
+    ],
+    "stop": true
+  }
+}

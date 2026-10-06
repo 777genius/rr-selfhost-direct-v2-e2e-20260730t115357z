@@ -1,0 +1,65 @@
+{
+  "decision": "APPROVE",
+  "scope": "W8 child offline source and deadline review only",
+  "bounded_child_complete": true,
+  "code_blockers": [],
+  "production_GO": false,
+  "native84_GO": false,
+  "canary_GO": false,
+  "RSS_production_NO_GO_unchanged": true,
+  "candidate_root_10_sha256": {
+    "root-driver.py": "ba31a676fcc2d59a8d1077162dd7886c4f7fd244ad2ccc461806015986a0ecde",
+    "adapter.mjs": "7c5200d2f7d86ec11f2be6050ccfb35da55021ee1c34cf76de273a8c91b1e6be",
+    "prepare.py": "a24fc17e632ef578f289d7384b451d90fbe46ff6753c49d46cda17bf8a51116d",
+    "contracts.mjs": "adf4f64e2ae9d320a743c2657290bc72be0adb3919bfdca87657b292f7977245",
+    "redis.mjs": "b335a7d3eb3b062232ec71ac7132f48b11a89a00ec39e289011665fb6463634c",
+    "run.mjs": "e32258026ee0675635a216f1ba6578770fbc553bf72b11b17a716587c666ed35",
+    "native-sse.mjs": "a82680bbc8e62bed8ccb3fc39c6e4aad8e57431071f30d38c7cd295d594a8527",
+    "build-gate.py": "165e05a342d7f53e16122a9be1f27097251005bdd1516f6ab172ab64d4739b9a",
+    "build-manifest.json": "a1d9c2d8303aee2f6c748d52b57c0411bffe86c959628d5a5cd71c92056c4d9d",
+    "tls-server.ext": "50234c98fdeb8757d10c747e852ca78555b2123aaef9f1fda78e0f4b91b8dafc"
+  },
+  "profile_root_driver_sha256": "56c79a155352ee3e7626277eb79ba0ce61c11d8cca11eda7b21ec7961f3972cc",
+  "tests": {
+    "same_phase_old": {
+      "pass": 0,
+      "fail": 5,
+      "evidence": "evidence/phase-red-actual.txt"
+    },
+    "same_phase_new": {
+      "pass": 5,
+      "fail": 0,
+      "evidence": "evidence/phase-green.txt"
+    },
+    "inherited_node": {
+      "pass": 68,
+      "fail": 0,
+      "evidence": "evidence/inherited-node-rerun.txt"
+    },
+    "deadline_python": {
+      "pass": 5,
+      "fail": 0,
+      "evidence": "evidence/deadline-python.txt"
+    },
+    "adversarial": {
+      "pass": 5,
+      "fail": 0,
+      "evidence": "evidence/extra.txt"
+    }
+  },
+  "nonblocking_evidence_correction": {
+    "sub2api-slot-lab/run.mjs": {
+      "reported": "4c151b3ab8eac917f437875515f99947165d75768edc4d43b0634b16ece7512d",
+      "actual": "e32258026ee0675635a216f1ba6578770fbc553bf72b11b17a716587c666ed35"
+    }
+  },
+  "supplied_native_TLS_receipt": "Literal BAD_CERTIFICATE, zero effects and five zero leases, owned cleanup and native image binding verified from supplied receipts; TLS execution not performed here.",
+  "retained_native_W7": "FAIL 21/84; row21 BATCH_DEADLINE. Historical 20 PASS rows do not establish W8/native84 PASS.",
+  "retained_cleanup_limitation": "Expired root kernel cleanup cannot dispatch; unchanged W7 limitation, root compensating cleanup/e2e owns verification. Offline W8 expired adapter teardown preserves FAIL and four remaining resources.",
+  "input_receipt_sha256": {
+    "parent-evidence/namespace-correction.json": "ad61eca43c9d86cb6eb3dcbcead39f92721f6b588b392c1ad4b2bb5c2aa00371",
+    "parent-evidence/w7-failure.json": "24b10492b4988db675a6e4a3fc8ca611acfdfd8216204aed02b124ac417a94d0",
+    "parent-evidence/wrong-ca.json": "38ef896980c329ccce40b6688d18d3b04902109e58abe76cf0fdbf1106d78858",
+    "parent-evidence/w7-cleanup.json": "4e36451745d0272ee612611b77411f5bf0f18d6e790438c91c6a315fb6fa78e7"
+  }
+}

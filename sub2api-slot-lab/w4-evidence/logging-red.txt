@@ -1,0 +1,36 @@
+FFF
+======================================================================
+FAIL: test_emitted_config_and_environment_pass_native_output_predicate (logging_preflight_test.LoggingPreflight.test_emitted_config_and_environment_pass_native_output_predicate) (surface='config')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-root-config-w4/sub2api-slot-lab/logging_preflight_test.py", line 48, in test_emitted_config_and_environment_pass_native_output_predicate
+    self.assertTrue(native_accepts(config['output_to_stdout'], config['output_to_file']),
+AssertionError: False is not true : native rejects both emitted outputs false
+
+======================================================================
+FAIL: test_emitted_config_and_environment_pass_native_output_predicate (logging_preflight_test.LoggingPreflight.test_emitted_config_and_environment_pass_native_output_predicate) (surface='environment')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-root-config-w4/sub2api-slot-lab/logging_preflight_test.py", line 51, in test_emitted_config_and_environment_pass_native_output_predicate
+    self.assertTrue(native_accepts(env['LOG_OUTPUT_TO_STDOUT']=='true', env['LOG_OUTPUT_TO_FILE']=='true'),
+AssertionError: False is not true : native rejects both environment outputs false
+
+======================================================================
+FAIL: test_emitted_config_and_environment_pass_native_output_predicate (logging_preflight_test.LoggingPreflight.test_emitted_config_and_environment_pass_native_output_predicate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-root-config-w4/sub2api-slot-lab/logging_preflight_test.py", line 53, in test_emitted_config_and_environment_pass_native_output_predicate
+    self.assertEqual((config['output_to_stdout'], config['output_to_file']), (True, False))
+AssertionError: Tuples differ: (False, False) != (True, False)
+
+First differing element 0:
+False
+True
+
+- (False, False)
++ (True, False)
+
+----------------------------------------------------------------------
+Ran 1 test in 0.008s
+
+FAILED (failures=3)

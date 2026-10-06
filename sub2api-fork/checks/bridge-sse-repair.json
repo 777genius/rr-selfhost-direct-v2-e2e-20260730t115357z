@@ -1,0 +1,31 @@
+{
+  "status": "PREPARED_BEHAVIOR_NOT_RUN",
+  "predecessor_patch_sha256": "2f358949eae00de6ed681e86b0b1f57ee6afd8667d33b95cb81c86b36b8576aa",
+  "replacement_patch_sha256": "7dec93ec55da38f15e719f5b7b7769ad2ec874ae548e1125a8a028e12cc51bdf",
+  "delta_path": "checks/bridge-sse-boundary.patch",
+  "delta_sha256": "7bb92288a6db171860b077d21c1ad742e6d75d411128edbf3a6e9b64f7b3824f",
+  "files": [
+    {
+      "path": "backend/internal/service/openai_ws_http_bridge.go",
+      "before_sha256": "5076d1b0749d0e1d6feeb21e3a5cd25d9ffcf8376d53b9e25ea201d3f14ccd4b",
+      "after_sha256": "bde2e5df105932dfb7bd3314dc84d86ac053a452ef7f9899168fb7cea00d657d",
+      "added_lines": 12,
+      "removed_lines": 0
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_review_test.go",
+      "before_sha256": "a3e7606d2f5864f6fd1787fa4b835a5b1cdf185681e64be20dbcc2784ec503f6",
+      "after_sha256": "f9d388154edc0313c9265bcde71ee72ff7583e3ec3895e80ea4380fa0a16d976",
+      "added_lines": 70,
+      "removed_lines": 15
+    }
+  ],
+  "added_lines": 82,
+  "removed_lines": 15,
+  "unchanged_predecessor_files": 12,
+  "source_scope": "Only bridge production and its existing review test changed from verified materialized 2f3589; all other F1/F2 policy/namespace/interleaving files remain byte-identical.",
+  "diagnosis": "Legacy response.failed without invalid_request_error type enters generic failover before the client terminal. NoError in the false control contradicted established legacy UpstreamFailoverError(502). The opt-in boundary needed a narrow non-failover decision and original client terminal.",
+  "behavioral_proof_status": "NOT RUN: Go/gofmt unavailable; direct and real higher-ingress socket oracles prepared for coordinator.",
+  "ingress_retry_evidence": "Real ProxyResponsesWebSocketFromClient return and AfterTurn callback; errors.As UpstreamFailoverError=false (existing handler retry gate), no local ingress retry or current-turn retry payload; one HTTP call and zero native upstream WS frames. SSE cases require natural proxy termination before client closure; disconnect cannot manufacture the no-retry result.",
+  "not_claimed": "Full handler account-selection loop, real provider reasoning and live native final answer are not executed."
+}

@@ -1,0 +1,1671 @@
+TAP version 13
+# (node:37) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: responses: revoke observation precedes first actual abort and physical close
+not ok 1 - responses: revoke observation precedes first actual abort and physical close
+  ---
+  duration_ms: 3.7382
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:57:60'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:62:48)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+# Subtest: responses: expiry observation precedes first actual abort and physical close
+not ok 2 - responses: expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 1.861431
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:57:60'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:62:48)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: responses: request-expiry observation precedes first actual abort and physical close
+not ok 3 - responses: request-expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 2.326855
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:57:60'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:62:48)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: messages: revoke observation precedes first actual abort and physical close
+not ok 4 - messages: revoke observation precedes first actual abort and physical close
+  ---
+  duration_ms: 2.416172
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:57:60'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:62:48)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: messages: expiry observation precedes first actual abort and physical close
+not ok 5 - messages: expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 2.744568
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:57:60'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:62:48)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: messages: request-expiry observation precedes first actual abort and physical close
+not ok 6 - messages: request-expiry observation precedes first actual abort and physical close
+  ---
+  duration_ms: 2.511005
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:57:60'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:62:48)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: observer exception cannot prevent real cancellation
+ok 7 - observer exception cannot prevent real cancellation
+  ---
+  duration_ms: 1.888224
+  type: 'test'
+  ...
+# Subtest: request timeout remains distinct from expiry
+not ok 8 - request timeout remains distinct from expiry
+  ---
+  duration_ms: 2.641416
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:77:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:81:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: downstream close remains distinct from capability cancellation
+not ok 9 - downstream close remains distinct from capability cancellation
+  ---
+  duration_ms: 1.589588
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:83:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/broker.test.mjs:85:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: responses before client: rapid physical close is valid
+ok 10 - responses before client: rapid physical close is valid
+  ---
+  duration_ms: 1.456425
+  type: 'test'
+  ...
+# Subtest: responses before revoke: rapid physical close is valid
+ok 11 - responses before revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.128556
+  type: 'test'
+  ...
+# Subtest: responses before expiry: rapid physical close is valid
+ok 12 - responses before expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.088877
+  type: 'test'
+  ...
+# Subtest: responses after client: rapid physical close is valid
+ok 13 - responses after client: rapid physical close is valid
+  ---
+  duration_ms: 0.079612
+  type: 'test'
+  ...
+# Subtest: responses after revoke: rapid physical close is valid
+ok 14 - responses after revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.081333
+  type: 'test'
+  ...
+# Subtest: responses after expiry: rapid physical close is valid
+ok 15 - responses after expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.073037
+  type: 'test'
+  ...
+# Subtest: responses: expiry callback anchors expiry, not setup
+ok 16 - responses: expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.136946
+  type: 'test'
+  ...
+# Subtest: responses: request-expiry callback anchors expiry, not setup
+ok 17 - responses: request-expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.096272
+  type: 'test'
+  ...
+# Subtest: messages before client: rapid physical close is valid
+ok 18 - messages before client: rapid physical close is valid
+  ---
+  duration_ms: 0.08909
+  type: 'test'
+  ...
+# Subtest: messages before revoke: rapid physical close is valid
+ok 19 - messages before revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.155946
+  type: 'test'
+  ...
+# Subtest: messages before expiry: rapid physical close is valid
+ok 20 - messages before expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.748777
+  type: 'test'
+  ...
+# Subtest: messages after client: rapid physical close is valid
+ok 21 - messages after client: rapid physical close is valid
+  ---
+  duration_ms: 0.087842
+  type: 'test'
+  ...
+# Subtest: messages after revoke: rapid physical close is valid
+ok 22 - messages after revoke: rapid physical close is valid
+  ---
+  duration_ms: 0.04082
+  type: 'test'
+  ...
+# Subtest: messages after expiry: rapid physical close is valid
+ok 23 - messages after expiry: rapid physical close is valid
+  ---
+  duration_ms: 0.033912
+  type: 'test'
+  ...
+# Subtest: messages: expiry callback anchors expiry, not setup
+ok 24 - messages: expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.029577
+  type: 'test'
+  ...
+# Subtest: messages: request-expiry callback anchors expiry, not setup
+ok 25 - messages: request-expiry callback anchors expiry, not setup
+  ---
+  duration_ms: 0.029228
+  type: 'test'
+  ...
+# Subtest: physical close at 1201ms exceeds original 1200ms acceptance
+ok 26 - physical close at 1201ms exceeds original 1200ms acceptance
+  ---
+  duration_ms: 0.075109
+  type: 'test'
+  ...
+# Subtest: physical close at 1249.9ms exceeds original 1200ms acceptance
+ok 27 - physical close at 1249.9ms exceeds original 1200ms acceptance
+  ---
+  duration_ms: 0.04165
+  type: 'test'
+  ...
+# Subtest: physical close at 1250ms exceeds original 1200ms acceptance
+ok 28 - physical close at 1250ms exceeds original 1200ms acceptance
+  ---
+  duration_ms: 0.027403
+  type: 'test'
+  ...
+# Subtest: reject close before abort despite being after request
+not ok 29 - reject close before abort despite being after request
+  ---
+  duration_ms: 0.654155
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject close before action request
+ok 30 - reject close before action request
+  ---
+  duration_ms: 0.085386
+  type: 'test'
+  ...
+# Subtest: reject close before upstream request
+ok 31 - reject close before upstream request
+  ---
+  duration_ms: 0.054064
+  type: 'test'
+  ...
+# Subtest: reject close after 1250ms deadline
+ok 32 - reject close after 1250ms deadline
+  ---
+  duration_ms: 0.049683
+  type: 'test'
+  ...
+# Subtest: reject late broker response cannot extend deadline
+ok 33 - reject late broker response cannot extend deadline
+  ---
+  duration_ms: 0.040496
+  type: 'test'
+  ...
+# Subtest: reject upstream semantic terminal
+ok 34 - reject upstream semantic terminal
+  ---
+  duration_ms: 0.044757
+  type: 'test'
+  ...
+# Subtest: reject downstream terminal even with transport error
+not ok 35 - reject downstream terminal even with transport error
+  ---
+  duration_ms: 0.135426
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject normal complete upstream close
+not ok 36 - reject normal complete upstream close
+  ---
+  duration_ms: 0.111882
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject manual upstream release
+ok 37 - reject manual upstream release
+  ---
+  duration_ms: 0.058582
+  type: 'test'
+  ...
+# Subtest: reject manual upstream reset
+not ok 38 - reject manual upstream reset
+  ---
+  duration_ms: 0.100065
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject upstream safety reset
+not ok 39 - reject upstream safety reset
+  ---
+  duration_ms: 0.096404
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject missing physical close
+ok 40 - reject missing physical close
+  ---
+  duration_ms: 0.057594
+  type: 'test'
+  ...
+# Subtest: reject missing pre-abort event
+not ok 41 - reject missing pre-abort event
+  ---
+  duration_ms: 0.102756
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject foreign pre-abort protocol
+not ok 42 - reject foreign pre-abort protocol
+  ---
+  duration_ms: 0.113988
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject foreign pre-abort request
+not ok 43 - reject foreign pre-abort request
+  ---
+  duration_ms: 0.104446
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject foreign source clock
+not ok 44 - reject foreign source clock
+  ---
+  duration_ms: 0.142929
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject missing clock custody
+not ok 45 - reject missing clock custody
+  ---
+  duration_ms: 0.124429
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject foreign physical protocol
+not ok 46 - reject foreign physical protocol
+  ---
+  duration_ms: 0.101452
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject foreign physical identity
+not ok 47 - reject foreign physical identity
+  ---
+  duration_ms: 0.082107
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject foreign physical request
+not ok 48 - reject foreign physical request
+  ---
+  duration_ms: 0.083091
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject double upstream dispatch
+ok 49 - reject double upstream dispatch
+  ---
+  duration_ms: 0.052413
+  type: 'test'
+  ...
+# Subtest: reject double broker dispatch
+not ok 50 - reject double broker dispatch
+  ---
+  duration_ms: 0.082817
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject second broker dispatch substituted
+not ok 51 - reject second broker dispatch substituted
+  ---
+  duration_ms: 0.093362
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject multiple effects
+ok 52 - reject multiple effects
+  ---
+  duration_ms: 0.107549
+  type: 'test'
+  ...
+# Subtest: reject missing immediate snapshot
+not ok 53 - reject missing immediate snapshot
+  ---
+  duration_ms: 0.133448
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject late close only in final snapshot
+not ok 54 - reject late close only in final snapshot
+  ---
+  duration_ms: 0.099992
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject foreign immediate sequence
+not ok 55 - reject foreign immediate sequence
+  ---
+  duration_ms: 0.083956
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject immediate terminal later erased
+not ok 56 - reject immediate terminal later erased
+  ---
+  duration_ms: 0.070726
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject shortened hold
+not ok 57 - reject shortened hold
+  ---
+  duration_ms: 0.067395
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject oracle observation too early
+not ok 58 - reject oracle observation too early
+  ---
+  duration_ms: 0.063029
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject oracle observation after hold
+not ok 59 - reject oracle observation after hold
+  ---
+  duration_ms: 0.061761
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject healthy boolean without physical control
+not ok 60 - reject healthy boolean without physical control
+  ---
+  duration_ms: 0.062807
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject missing healthy downstream
+not ok 61 - reject missing healthy downstream
+  ---
+  duration_ms: 0.063722
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject missing healthy ack size
+not ok 62 - reject missing healthy ack size
+  ---
+  duration_ms: 0.064287
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject null upstream record
+not ok 63 - reject null upstream record
+  ---
+  duration_ms: 0.094326
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of null (reading 'effects')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    cancellationVerdict (data:text/javascript;base64,aW1wb3J0IHsgTWlCIH0gZnJvbSAiZmlsZTovLy9zcnYvd29ya2Vycy9qb2JzL3Jldmlldy1yb3V0ZXItZ2F0ZXdheS1zcGlrZS9wb2MtMjAyNjA5MzAvd29ya3NwYWNlcy9jYW5jZWwtb3JhY2xlLXJldmlldy13Mi9zdWIyYXBpLWNhbmNlbC1vcmFjbGUtcmV2aWV3Ly5zcGlrZS1pbnB1dHMvb3JpZ2luYWwtaW5wdXRzL2Nhbm9uaWNhbC9zdWIyYXBpLXJlZ3Jlc3Npb24tbGFiL2NvbW1vbi5tanMiOwppbXBvcnQgeyBzdWNjZXNzIH0gZnJvbSAiZmlsZTovLy9zcnYvd29ya2Vycy9qb2JzL3Jldmlldy1yb3V0ZXItZ2F0ZXdheS1zcGlrZS9wb2MtMjAyNjA5MzAvd29ya3NwYWNlcy9jYW5jZWwtb3JhY2xlLXJldmlldy13Mi9zdWIyYXBpLWNhbmNlbC1vcmFjbGUtcmV2aWV3Ly5zcGlrZS1pbnB1dHMvb3JpZ2luYWwtaW5wdXRzL2Nhbm9uaWNhbC9zdWIyYXBpLXJlZ3Jlc3Npb24tbGFiL2NsaWVudC5tanMiOwpleHBvcnQgZnVuY3Rpb24gdW5jZXJ0YWludHlWZXJkaWN0KHJvdywgbW9kZSkgewogIGNvbnN0IHJzID0gcm93LnVwc3RyZWFtID8/IFtdLCBkID0gcm93LmRvd25zdHJlYW07CiAgaWYgKCFyb3cuaGVhbHRoeV9jb250cm9sIHx8IHJzLmxlbmd0aCA9PT0gMCkgcmV0dXJuIHsgc3RhdHVzOiAnTk9UIFJVTicsIHJlYXNvbjogJ1VQU1RSRUFNX0ZBVUxUX05PVF9FWEVSQ0lTRUQnIH07CiAgaWYgKHJzLmxlbmd0aCAhPT0gMSB8fCBycy5yZWR1Y2UoKG4sIHIpID0+IG4gKyByLmVmZmVjdHMsIDApICE9PSAobW9kZSA9PT0gJ3BlbmRpbmcnID8gMCA6IDEpKQogICAgcmV0dXJuIHsgc3RhdHVzOiAnRkFJTCcsIHJlYXNvbjogJ0FVVE9NQVRJQ19SRVRSWV9PUl9FRkZFQ1RfQ09VTlQnIH07CiAgY29uc3QgciA9IHJzWzBdOwogIGlmICghTnVtYmVyLmlzRmluaXRlKHIucmVzZXRfbXMpIHx8ICFOdW1iZXIuaXNGaW5pdGUoci5jbG9zZV9tcykgfHwgIWQgfHwgc3VjY2VzcyhkKSB8fCBkLnRlcm1pbmFsX21zICE9PSBudWxsKQogICAgcmV0dXJuIHsgc3RhdHVzOiAnRkFJTCcsIHJlYXNvbjogJ1JFU0VUX0hJRERFTl9PUl9OT1RfT0JTRVJWRUQnIH07CiAgaWYgKG1vZGUgPT09ICd1bmNlcnRhaW4tYWZ0ZXInICYmICEoW3IuZmlyc3RfZmx1c2hfbXMsIGQuYWNrX21zLCByLmFja19yZWNlaXZlZF9tc10uZXZlcnkoTnVtYmVyLmlzRmluaXRlKSAmJiBkLmFja19mcmFtZV9ieXRlcyA+IDQwOTYgJiYgci5maXJzdF9mbHVzaF9tcyA8PSBkLmFja19tcyAmJiBkLmFja19tcyA8PSByLmFja19yZWNlaXZlZF9tcyAmJiByLmFja19yZWNlaXZlZF9tcyA8IHIucmVzZXRfbXMpKQogICAgcmV0dXJuIHsgc3RhdHVzOiAnRkFJTCcsIHJlYXNvbjogJ0NPTU1JVFRFRF9GUkFNRV9OT1RfQUNLTk9XTEVER0VEJyB9OwogIGlmIChtb2RlID09PSAndG9vbC1hY2NlcHRlZCcgJiYgKCFyb3cudG9vbF90dXJuX3ZlcmlmaWVkIHx8IHIudG9vbF9yZXN1bHRfYWNjZXB0ZWQgIT09IHRydWUpKQogICAgcmV0dXJuIHsgc3RhdHVzOiAnRkFJTCcsIHJlYXNvbjogJ1RPT0xfUkVTVUxUX05PVF9BQ0NFUFRFRCcgfTsKICBpZiAobW9kZSAhPT0gJ3BlbmRpbmcnICYmICEoTnVtYmVyLmlzRmluaXRlKHIuZWZmZWN0X21zKSAmJiByLmVmZmVjdF9tcyA8PSByLnJlc2V0X21zKSkgcmV0dXJuIHsgc3RhdHVzOiAnRkFJTCcsIHJlYXNvbjogJ0VGRkVDVF9OT1RfQUNDRVBURUQnIH07CiAgaWYgKG1vZGUgPT09ICdwZW5kaW5nJyAmJiByLmVmZmVjdF9tcyAhPT0gbnVsbCkgcmV0dXJuIHsgc3RhdHVzOiAnRkFJTCcsIHJlYXNvbjogJ1BFTkRJTkdfRUZGRUNUX0FMUkVBRFlfQUNDRVBURUQnIH07CiAgcmV0dXJuIHsgc3RhdHVzOiAnUEFTUycsIHJlYXNvbjogJ09CU0VSVkFCTEVfRkFJTFVSRV9TSU5HTEVfQVRURU1QVF9OT19SRVRSWScgfTsKfQpleHBvcnQgZnVuY3Rpb24gY2FuY2VsbGF0aW9uVmVyZGljdChyb3csIHBsYWNlbWVudCkgewogIGNvbnN0IHJzID0gcm93LnVwc3RyZWFtID8/IFtdLCBjYW5jZWwgPSByb3cuY2FuY2VsX21zOwogIGlmICghcm93LmhlYWx0aHlfY29udHJvbCB8fCBycy5sZW5ndGggPT09IDApIHJldHVybiB7IHN0YXR1czogJ05PVCBSVU4nLCByZWFzb246ICdVUFNUUkVBTV9DQU5DRUxfTk9UX0VYRVJDSVNFRCcgfTsKICBpZiAocnMubGVuZ3RoICE9PSAxIHx8IHJzWzBdLmVmZmVjdHMgIT09IDEpIHJldHVybiB7IHN0YXR1czogJ0ZBSUwnLCByZWFzb246ICdVUFNUUkVBTV9BVFRFTVBUX09SX0VGRkVDVF9DT1VOVCcgfTsKICBjb25zdCByID0gcnNbMF0sIGQgPSByb3cuZG93bnN0cmVhbTsKICBpZiAoIU51bWJlci5pc0Zpbml0ZShjYW5jZWwpIHx8ICFOdW1iZXIuaXNGaW5pdGUoci5lZmZlY3RfbXMpIHx8IHIuZWZmZWN0X21zID4gY2FuY2VsKSByZXR1cm4geyBzdGF0dXM6ICdGQUlMJywgcmVhc29uOiAnQ0FOQ0VMX09SREVSX05PVF9QUk9WRU4nIH07CiAgaWYgKHBsYWNlbWVudCA9PT0gJ2FmdGVyJyAmJiAhKFtyLmZpcnN0X2ZsdXNoX21zLCBkLmFja19tcywgci5hY2tfcmVjZWl2ZWRfbXNdLmV2ZXJ5KE51bWJlci5pc0Zpbml0ZSkgJiYgZC5hY2tfZnJhbWVfYnl0ZXMgPiA0MDk2ICYmIHIuZmlyc3RfZmx1c2hfbXMgPD0gZC5hY2tfbXMgJiYgZC5hY2tfbXMgPD0gci5hY2tfcmVjZWl2ZWRfbXMgJiYgci5hY2tfcmVjZWl2ZWRfbXMgPCBjYW5jZWwpKQogICAgcmV0dXJuIHsgc3RhdHVzOiAnRkFJTCcsIHJlYXNvbjogJ0VBUkxZX0ZSQU1FX05PVF9BQ0tOT1dMRURHRUQnIH07CiAgaWYgKHBsYWNlbWVudCA9PT0gJ2JlZm9yZScgJiYgKGQuYWNrX21zICE9PSBudWxsIHx8IHIuZmlyc3RfZmx1c2hfbXMgIT09IG51bGwgJiYgci5maXJzdF9mbHVzaF9tcyA8IGNhbmNlbCkpCiAgICByZXR1cm4geyBzdGF0dXM6ICdGQUlMJywgcmVhc29uOiAnQ0FOQ0VMX1dBU19BRlRFUl9PVVRQVVQnIH07CiAgaWYgKCEoci5jbG9zZV9tcyAhPT0gbnVsbCAmJiByLmNsb3NlX21zID49IGNhbmNlbCAmJiByLmNsb3NlX21zIC0gY2FuY2VsIDw9IDEyMDAgJiYgci50ZXJtaW5hbF9tcyA9PT0gbnVsbCAmJiByLnJlbGVhc2VfbXMgPT09IG51bGwpKQogICAgcmV0dXJuIHsgc3RhdHVzOiAnRkFJTCcsIHJlYXNvbjogJ0lNTUVESUFURV9BQk9SVF9PUkFDTEVfVVNBR0VfRFJBSU5fUFJFU0VSVkVEJyB9OwogIGlmIChzdWNjZXNzKGQpKSByZXR1cm4geyBzdGF0dXM6ICdGQUlMJywgcmVhc29uOiAnQ0FOQ0VMX0ZBTFNFX1NVQ0NFU1MnIH07CiAgcmV0dXJuIHsgc3RhdHVzOiAnUEFTUycsIHJlYXNvbjogJ1VQU1RSRUFNX0FCT1JUX09CU0VSVkVEX1dJVEhJTl8xMjAwTVMnIH07Cn0KZXhwb3J0IGZ1bmN0aW9uIHRlbGVtZXRyeVZlcmRpY3Qoc2FtcGxlcywgbWV0YSwgeyBmaW5hbCA9IHRydWUgfSA9IHt9KSB7CiAgY29uc3QgbWlzc2luZyA9IHJlYXNvbiA9PiAoeyBzdGF0dXM6ICdOT1QgUlVOJywgcmVhc29uIH0pOwogIGlmICghQXJyYXkuaXNBcnJheShzYW1wbGVzKSB8fCBzYW1wbGVzLmxlbmd0aCA8IDIpIHJldHVybiBtaXNzaW5nKCdBQ1RVQUxfRU5HSU5FX1RFTEVNRVRSWV9NSVNTSU5HJyk7CiAgY29uc3QgbnVtZXJpYyA9IFsnbW9ub19tcycsICdyc3NfYnl0ZXMnLCAnY2dyb3VwX2N1cnJlbnRfYnl0ZXMnLCAnY2dyb3VwX3BlYWtfYnl0ZXMnLCAnc29ja2V0cycsICdnb3JvdXRpbmVzJ107CiAgaWYgKHNhbXBsZXMuc29tZShzID0+IHMuY29sbGVjdG9yICE9PSAncm9vdC1nby1waWQnIHx8IHMuYmF0Y2hfaWQgIT09IG1ldGEuaWQgfHwgcy5pbnN0YW5jZSAhPT0gbWV0YS5pbnN0YW5jZSB8fAogICAgICBzLmVuZ2luZV9waWQgIT09IG1ldGEuZW5naW5lX3BpZCB8fCBzLmNsb2NrICE9PSAnbGludXgtQ0xPQ0tfTU9OT1RPTklDJyB8fCBzLmNncm91cF9saW1pdF9ieXRlcyAhPT0gNzY4ICogTWlCIHx8CiAgICAgIG51bWVyaWMuc29tZShrID0+ICFOdW1iZXIuaXNGaW5pdGUoc1trXSkgfHwgc1trXSA8IDApIHx8IHMuY2dyb3VwX3BlYWtfYnl0ZXMgPCBzLmNncm91cF9jdXJyZW50X2J5dGVzKSkKICAgIHJldHVybiBtaXNzaW5nKCdURUxFTUVUUllfSURFTlRJVFlfT1JfRklFTERTX1VOVkVSSUZJRUQnKTsKICBjb25zdCBiYXNlID0gc2FtcGxlc1swXTsKICBpZiAoYmFzZS5waGFzZSAhPT0gJ2Jhc2VsaW5lJyB8fCBiYXNlLm1vbm9fbXMgPiBtZXRhLnN0YXJ0ZWRfbXMgfHwgbWV0YS5zdGFydGVkX21zIC0gYmFzZS5tb25vX21zID4gMTAwMCB8fAogICAgICAhTnVtYmVyLmlzRmluaXRlKGJhc2UucGVha19yZXNldF9tcykgfHwgYmFzZS5wZWFrX3Jlc2V0X21zID4gYmFzZS5tb25vX21zIHx8IGJhc2UubW9ub19tcyAtIGJhc2UucGVha19yZXNldF9tcyA+IDEwMDApCiAgICByZXR1cm4gbWlzc2luZygnQkFUQ0hfQkFTRUxJTkVfT1JfQ0dST1VQX1BFQUtfUkVTRVRfTUlTU0lORycpOwogIGlmIChzYW1wbGVzLnNvbWUoKHMsIGkpID0+IGkgJiYgKHMubW9ub19tcyA8PSBzYW1wbGVzW2kgLSAxXS5tb25vX21zIHx8IHMubW9ub19tcyAtIHNhbXBsZXNbaSAtIDFdLm1vbm9fbXMgPiAyNTApKSkKICAgIHJldHVybiBtaXNzaW5nKCdURUxFTUVUUllfU0FNUExJTkdfR0FQJyk7CiAgY29uc3QgcGVhayA9IE1hdGgubWF4KC4uLnNhbXBsZXMubWFwKHMgPT4gcy5yc3NfYnl0ZXMpKSwgY2dyb3VwUGVhayA9IE1hdGgubWF4KC4uLnNhbXBsZXMubWFwKHMgPT4gcy5jZ3JvdXBfcGVha19ieXRlcykpOwogIGNvbnN0IG9ic2VydmF0aW9uID0geyBiYXNlbGluZV9yc3NfYnl0ZXM6IGJhc2UucnNzX2J5dGVzLCBwZWFrX3Jzc19ieXRlczogcGVhaywgZGVsdGFfYnl0ZXM6IHBlYWsgLSBiYXNlLnJzc19ieXRlcywKICAgIGNncm91cF9wZWFrX2J5dGVzOiBjZ3JvdXBQZWFrLCBzYW1wbGVzOiBzYW1wbGVzLmxlbmd0aCwgbWF4X3NvY2tldHM6IE1hdGgubWF4KC4uLnNhbXBsZXMubWFwKHMgPT4gcy5zb2NrZXRzKSksCiAgICBtYXhfZ29yb3V0aW5lczogTWF0aC5tYXgoLi4uc2FtcGxlcy5tYXAocyA9PiBzLmdvcm91dGluZXMpKSB9OwogIGlmIChwZWFrID4gNTEyICogTWlCIHx8IHBlYWsgLSBiYXNlLnJzc19ieXRlcyA+ICgxMjggKyAxNiAqIG1ldGEuc3RyZWFtcykgKiBNaUIgfHwgY2dyb3VwUGVhayA+PSA3NjggKiBNaUIpCiAgICByZXR1cm4geyBzdGF0dXM6ICdGQUlMJywgcmVhc29uOiAnRU5HSU5FX01FTU9SWV9FTlZFTE9QRV9FWENFRURFRCcsIC4uLm9ic2VydmF0aW9uIH07CiAgaWYgKCFmaW5hbCkgcmV0dXJuIHsgc3RhdHVzOiAnT0JTRVJWSU5HJywgLi4ub2JzZXJ2YXRpb24gfTsKICBjb25zdCBsYXN0ID0gc2FtcGxlcy5hdCgtMSk7CiAgaWYgKGxhc3QucGhhc2UgIT09ICdxdWllc2NlbnQnIHx8IGxhc3QubW9ub19tcyA8IG1ldGEuZW5kZWRfbXMgfHwgbGFzdC5tb25vX21zIC0gbWV0YS5lbmRlZF9tcyA+IDUwMDAgfHwKICAgICAgIXNhbXBsZXMuc29tZShzID0+IHMubW9ub19tcyA+PSBtZXRhLmVuZGVkX21zKSkgcmV0dXJuIG1pc3NpbmcoJ1FVSUVTQ0VOVF9URUxFTUVUUllfTUlTU0lORycpOwogIGlmIChsYXN0LnJzc19ieXRlcyAtIGJhc2UucnNzX2J5dGVzID4gMzIgKiBNaUIpCiAgICByZXR1cm4geyBzdGF0dXM6ICdGQUlMJywgcmVhc29uOiAnRU5HSU5FX0RJRF9OT1RfUkVUVVJOX1RPX1FVSUVTQ0VOQ0UnLCAuLi5vYnNlcnZhdGlvbiwgcXVpZXNjZW50X3Jzc19ieXRlczogbGFzdC5yc3NfYnl0ZXMgfTsKICByZXR1cm4geyBzdGF0dXM6ICdQQVNTJywgLi4ub2JzZXJ2YXRpb24sIHF1aWVzY2VudF9yc3NfYnl0ZXM6IGxhc3QucnNzX2J5dGVzLCBxdWllc2NlbnRfc29ja2V0czogbGFzdC5zb2NrZXRzLCBxdWllc2NlbnRfZ29yb3V0aW5lczogbGFzdC5nb3JvdXRpbmVzIH07Cn0K:22:32)
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:16)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject null broker event
+not ok 64 - reject null broker event
+  ---
+  duration_ms: 0.082519
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject missing healthy acknowledgment
+not ok 65 - reject missing healthy acknowledgment
+  ---
+  duration_ms: 0.084904
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject foreign healthy request
+not ok 66 - reject foreign healthy request
+  ---
+  duration_ms: 0.082175
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject missing healthy physical close
+not ok 67 - reject missing healthy physical close
+  ---
+  duration_ms: 0.074063
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject tiny acknowledged healthy frame
+not ok 68 - reject tiny acknowledged healthy frame
+  ---
+  duration_ms: 0.072107
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject tiny acknowledged early frame
+ok 69 - reject tiny acknowledged early frame
+  ---
+  duration_ms: 0.044155
+  type: 'test'
+  ...
+# Subtest: reject ack before upstream flush
+ok 70 - reject ack before upstream flush
+  ---
+  duration_ms: 0.055111
+  type: 'test'
+  ...
+# Subtest: reject ack at cancellation
+ok 71 - reject ack at cancellation
+  ---
+  duration_ms: 0.040732
+  type: 'test'
+  ...
+# Subtest: reject before placement already wrote output
+not ok 72 - reject before placement already wrote output
+  ---
+  duration_ms: 0.075666
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject request timeout pretending expiry
+not ok 73 - reject request timeout pretending expiry
+  ---
+  duration_ms: 0.076646
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject finally abort pretending revoke
+not ok 74 - reject finally abort pretending revoke
+  ---
+  duration_ms: 0.068117
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: reject client completion pretending cancellation
+not ok 75 - reject client completion pretending cancellation
+  ---
+  duration_ms: 0.069731
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:108:57'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:111:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: historical cancel-messages-after-expiry: absent pre-abort evidence cannot become green
+ok 76 - historical cancel-messages-after-expiry: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.084177
+  type: 'test'
+  ...
+# Subtest: historical cancel-messages-after-revoke: absent pre-abort evidence cannot become green
+ok 77 - historical cancel-messages-after-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.026257
+  type: 'test'
+  ...
+# Subtest: historical cancel-messages-before-revoke: absent pre-abort evidence cannot become green
+not ok 78 - historical cancel-messages-before-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.072276
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:113:29'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected "actual" to be strictly unequal to:
+    
+    'PASS'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'PASS'
+  actual: 'PASS'
+  operator: 'notStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:115:10)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: historical cancel-responses-after-expiry: absent pre-abort evidence cannot become green
+ok 79 - historical cancel-responses-after-expiry: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.035655
+  type: 'test'
+  ...
+# Subtest: historical cancel-responses-after-revoke: absent pre-abort evidence cannot become green
+ok 80 - historical cancel-responses-after-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.018761
+  type: 'test'
+  ...
+# Subtest: historical cancel-responses-before-revoke: absent pre-abort evidence cannot become green
+ok 81 - historical cancel-responses-before-revoke: absent pre-abort evidence cannot become green
+  ---
+  duration_ms: 0.020808
+  type: 'test'
+  ...
+# Subtest: missing upstream exercise stays NOT RUN
+ok 82 - missing upstream exercise stays NOT RUN
+  ---
+  duration_ms: 0.060921
+  type: 'test'
+  ...
+# Subtest: responses client: physical close +1200ms is PASS
+ok 83 - responses client: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.091147
+  type: 'test'
+  ...
+# Subtest: responses client: physical close +1200.001ms is FAIL
+ok 84 - responses client: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.03229
+  type: 'test'
+  ...
+# Subtest: responses client: physical close +1249ms is FAIL
+ok 85 - responses client: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.025589
+  type: 'test'
+  ...
+# Subtest: responses revoke: physical close +1200ms is PASS
+ok 86 - responses revoke: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.023992
+  type: 'test'
+  ...
+# Subtest: responses revoke: physical close +1200.001ms is FAIL
+ok 87 - responses revoke: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.023249
+  type: 'test'
+  ...
+# Subtest: responses revoke: physical close +1249ms is FAIL
+ok 88 - responses revoke: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.022768
+  type: 'test'
+  ...
+# Subtest: responses expiry: physical close +1200ms is PASS
+ok 89 - responses expiry: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.023471
+  type: 'test'
+  ...
+# Subtest: responses expiry: physical close +1200.001ms is FAIL
+ok 90 - responses expiry: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.022755
+  type: 'test'
+  ...
+# Subtest: responses expiry: physical close +1249ms is FAIL
+ok 91 - responses expiry: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.066317
+  type: 'test'
+  ...
+# Subtest: messages client: physical close +1200ms is PASS
+ok 92 - messages client: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.055897
+  type: 'test'
+  ...
+# Subtest: messages client: physical close +1200.001ms is FAIL
+ok 93 - messages client: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.045331
+  type: 'test'
+  ...
+# Subtest: messages client: physical close +1249ms is FAIL
+ok 94 - messages client: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.048498
+  type: 'test'
+  ...
+# Subtest: messages revoke: physical close +1200ms is PASS
+ok 95 - messages revoke: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.028903
+  type: 'test'
+  ...
+# Subtest: messages revoke: physical close +1200.001ms is FAIL
+ok 96 - messages revoke: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.023522
+  type: 'test'
+  ...
+# Subtest: messages revoke: physical close +1249ms is FAIL
+ok 97 - messages revoke: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.021362
+  type: 'test'
+  ...
+# Subtest: messages expiry: physical close +1200ms is PASS
+ok 98 - messages expiry: physical close +1200ms is PASS
+  ---
+  duration_ms: 0.02116
+  type: 'test'
+  ...
+# Subtest: messages expiry: physical close +1200.001ms is FAIL
+ok 99 - messages expiry: physical close +1200.001ms is FAIL
+  ---
+  duration_ms: 0.021993
+  type: 'test'
+  ...
+# Subtest: messages expiry: physical close +1249ms is FAIL
+ok 100 - messages expiry: physical close +1249ms is FAIL
+  ---
+  duration_ms: 0.021392
+  type: 'test'
+  ...
+# Subtest: revoke transit consumes acceptance time; abort cannot grant grace
+not ok 101 - revoke transit consumes acceptance time; abort cannot grant grace
+  ---
+  duration_ms: 0.116386
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:134:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'PASS' !== 'FAIL'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'FAIL'
+  actual: 'PASS'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/oracle.test.mjs:139:32)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: expiry: acceptance starts at actual expiry callback
+ok 102 - expiry: acceptance starts at actual expiry callback
+  ---
+  duration_ms: 0.061268
+  type: 'test'
+  ...
+# Subtest: request-expiry: acceptance starts at actual expiry callback
+ok 103 - request-expiry: acceptance starts at actual expiry callback
+  ---
+  duration_ms: 0.025449
+  type: 'test'
+  ...
+# (node:39) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: runner before client: binds real cancellation, physical proof, unchanged hold
+not ok 104 - runner before client: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 4.750444
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:55:93'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + undefined
+    - 'client'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'client'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:57:53)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+# Subtest: runner before revoke: binds real cancellation, physical proof, unchanged hold
+not ok 105 - runner before revoke: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 2.332478
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:55:93'
+  failureType: 'testCodeFailure'
+  error: |-
+    IMMEDIATE_ABORT_ORACLE_USAGE_DRAIN_PRESERVED
+    
+    'FAIL' !== 'PASS'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'PASS'
+  actual: 'FAIL'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:57:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: runner before expiry: binds real cancellation, physical proof, unchanged hold
+not ok 106 - runner before expiry: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 2.315159
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:55:93'
+  failureType: 'testCodeFailure'
+  error: |-
+    IMMEDIATE_ABORT_ORACLE_USAGE_DRAIN_PRESERVED
+    
+    'FAIL' !== 'PASS'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'PASS'
+  actual: 'FAIL'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:57:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: runner after client: binds real cancellation, physical proof, unchanged hold
+not ok 107 - runner after client: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 1.433763
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:55:93'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + undefined
+    - 'client'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'client'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:57:53)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: runner after revoke: binds real cancellation, physical proof, unchanged hold
+not ok 108 - runner after revoke: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 3.177297
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:55:93'
+  failureType: 'testCodeFailure'
+  error: |-
+    IMMEDIATE_ABORT_ORACLE_USAGE_DRAIN_PRESERVED
+    
+    'FAIL' !== 'PASS'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'PASS'
+  actual: 'FAIL'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:57:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: runner after expiry: binds real cancellation, physical proof, unchanged hold
+not ok 109 - runner after expiry: binds real cancellation, physical proof, unchanged hold
+  ---
+  duration_ms: 3.183009
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:55:93'
+  failureType: 'testCodeFailure'
+  error: |-
+    IMMEDIATE_ABORT_ORACLE_USAGE_DRAIN_PRESERVED
+    
+    'FAIL' !== 'PASS'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'PASS'
+  actual: 'FAIL'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:57:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: runner accepts the request expiry timer as the actual expiry trigger
+not ok 110 - runner accepts the request expiry timer as the actual expiry trigger
+  ---
+  duration_ms: 3.049185
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:64:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    IMMEDIATE_ABORT_ORACLE_USAGE_DRAIN_PRESERVED
+    
+    'FAIL' !== 'PASS'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'PASS'
+  actual: 'FAIL'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:65:72)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: runner waits until the source clock reaches 1250ms when a timer returns early
+not ok 111 - runner waits until the source clock reaches 1250ms when a timer returns early
+  ---
+  duration_ms: 1.46751
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:68:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    IMMEDIATE_ABORT_ORACLE_USAGE_DRAIN_PRESERVED
+    
+    'FAIL' !== 'PASS'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'PASS'
+  actual: 'FAIL'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/cancel-oracle-review-w2/sub2api-cancel-oracle-review/tests/runner.test.mjs:69:69)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+1..111
+# tests 111
+# suites 0
+# pass 58
+# fail 53
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 95.533613

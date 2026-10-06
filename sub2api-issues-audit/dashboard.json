@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "dataset": {
+    "issues_sha256": "64429e77142ad78e7ed8ed9695c2e0322a082b4208b5776cc2a9d8f8901e9259",
+    "releases_sha256": "1d7bf9984869d1dcaa42125ce39cfb7820f6384cc0d79e055607816e9d1df0c7",
+    "analysis_reference_utc": "2026-09-30T18:24:51Z",
+    "latest_observed_issue_event_utc": "2026-09-30T18:24:51Z",
+    "snapshot_capture_utc": "not supplied; latest observed event is a lower bound, not capture timestamp",
+    "first_created_at": "2025-12-18T12:12:55Z",
+    "last_created_at": "2026-09-30T18:15:29Z",
+    "non_pr_census_assertion": "3935 all non-PR issues per supplied snapshot contract; unique numbers and absence of PR marker verified offline; no independent GitHub completeness proof",
+    "source_version": "v0.2.11",
+    "requested_source_pin": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+    "source_pin_provenance": "operator supplied; git metadata unavailable, immutable commit not independently authenticated; cited file fingerprints recorded",
+    "release_snapshot_count": 30,
+    "release_scope": "latest 30 only; not full release history"
+  },
+  "counts": {
+    "total": 3935,
+    "states": {
+      "closed": 1335,
+      "open": 2600
+    },
+    "unique_authors": 2315,
+    "without_labels_percent": 99.644,
+    "windows": {
+      "30": {
+        "start_inclusive": "2026-08-31T18:24:51Z",
+        "end_inclusive": "2026-09-30T18:24:51Z",
+        "opened": 608,
+        "closed": 211,
+        "net_snapshot_flow": 397,
+        "opened_per_day": 20.267,
+        "closed_per_day": 7.033,
+        "closure_to_opening_ratio": 0.347,
+        "opened_cohort_current_states": {
+          "closed": 154,
+          "open": 454
+        },
+        "limitation": "closed_at is last closure in snapshot; reopen/reclose events unavailable. Flows use different cohorts; not fix/success/failure rates."
+      },
+      "90": {
+        "start_inclusive": "2026-07-02T18:24:51Z",
+        "end_inclusive": "2026-09-30T18:24:51Z",
+        "opened": 2013,
+        "closed": 787,
+        "net_snapshot_flow": 1226,
+        "opened_per_day": 22.367,
+        "closed_per_day": 8.744,
+        "closure_to_opening_ratio": 0.391,
+        "opened_cohort_current_states": {
+          "closed": 734,
+          "open": 1279
+        },
+        "limitation": "closed_at is last closure in snapshot; reopen/reclose events unavailable. Flows use different cohorts; not fix/success/failure rates."
+      }
+    }
+  },
+  "reviewed": 52,
+  "recommendations": [
+    {
+      "mode": "BYOK native API",
+      "verdict": "CONDITIONAL GO for isolated validation; production gate pending",
+      "fragility_out_of_10": 5,
+      "confidence": "medium-low",
+      "rationale": "Fewer identity lifecycle dependencies than subscription pool, but real Responses/Messages tool semantics, SSE error handling and custody/tenant isolation are unproven on the operator runtime."
+    },
+    {
+      "mode": "OAuth subscription pool",
+      "verdict": "NO-GO for production adoption now; continue test-only spike",
+      "fragility_out_of_10": 8,
+      "confidence": "medium",
+      "rationale": "Rotating tokens, provider bans/quotas, sticky state and encrypted history portability compound gateway risk. Source mitigations exist; test-only identity and normalized live receipts are absent."
+    },
+    {
+      "mode": "Our UI + private backend",
+      "verdict": "CONDITIONAL GO as chosen topology; production boundary gate pending",
+      "fragility_out_of_10": 6,
+      "confidence": "medium",
+      "rationale": "Own workspace ownership ledger, capability broker, admin network isolation, egress allowlist and hard budgets are required. Groups are routing constraints, not proof of tenant account ownership; built-in payment/UI is outside this decision."
+    }
+  ],
+  "critical_gates": [
+    "tenant and credential custody",
+    "native tool/terminal outcome",
+    "rotating refresh under Redis failure",
+    "hard spend limits",
+    "DB restore and multi-process invalidation"
+  ],
+  "pending_inputs": [
+    "4 focused tool-ID/session comment follow-ups and pagination-completeness assertion",
+    "normalized live operator receipts",
+    "test-only OAuth identity"
+  ],
+  "live_e2e_status": "NOT RUN by audit lane",
+  "limitations": [
+    "All 3935 metadata/bodies included in machine aggregation; 52 relevant issues studied, not all manually read.",
+    "Keyword selection/classification is heuristic and overlapping; support/enhancement/duplicates cannot be reliably separated using near-empty labels alone.",
+    "Screenshots/videos not fetched; raw credentials/config snippets deliberately excluded from report; reporter claims are not independent reproduction.",
+    "Closed/completed is workflow state, not fix proof. Original 48-issue staged comments have NONE/CONTRIBUTOR associations only; focused follow-ups pending, no independently authenticated maintainer confirmation.",
+    "No upstream tests, container, agent E2E, OAuth refresh, MiMo/OpenRouter or security exploit executed by audit lane.",
+    "Fragility scores are ordinal engineering judgment, not calibrated failure probabilities. No request/operator exposure denominator, no star-based reliability claim.",
+    "Source/test presence corroborates mechanism or mitigation; does not prove deployed image or client lifecycle success."
+  ]
+}

@@ -1,0 +1,418 @@
+TAP version 13
+# Subtest: known native 429 waits exactly Retry-After once; request bytes, redirect and signal retained
+ok 1 - known native 429 waits exactly Retry-After once; request bytes, redirect and signal retained
+  ---
+  duration_ms: 2.36986
+  type: 'test'
+  ...
+# Subtest: invalid header null fails without retry
+ok 2 - invalid header null fails without retry
+  ---
+  duration_ms: 0.394872
+  type: 'test'
+  ...
+# Subtest: invalid header  fails without retry
+ok 3 - invalid header  fails without retry
+  ---
+  duration_ms: 0.245236
+  type: 'test'
+  ...
+# Subtest: invalid header 0 fails without retry
+ok 4 - invalid header 0 fails without retry
+  ---
+  duration_ms: 0.148476
+  type: 'test'
+  ...
+# Subtest: invalid header 01 fails without retry
+ok 5 - invalid header 01 fails without retry
+  ---
+  duration_ms: 0.165897
+  type: 'test'
+  ...
+# Subtest: invalid header -1 fails without retry
+ok 6 - invalid header -1 fails without retry
+  ---
+  duration_ms: 3.409656
+  type: 'test'
+  ...
+# Subtest: invalid header 1.0 fails without retry
+ok 7 - invalid header 1.0 fails without retry
+  ---
+  duration_ms: 0.91569
+  type: 'test'
+  ...
+# Subtest: invalid header 1e1 fails without retry
+ok 8 - invalid header 1e1 fails without retry
+  ---
+  duration_ms: 0.205308
+  type: 'test'
+  ...
+# Subtest: invalid header 61 fails without retry
+ok 9 - invalid header 61 fails without retry
+  ---
+  duration_ms: 0.22528
+  type: 'test'
+  ...
+# Subtest: invalid header 99999999999999999999999 fails without retry
+ok 10 - invalid header 99999999999999999999999 fails without retry
+  ---
+  duration_ms: 0.215347
+  type: 'test'
+  ...
+# Subtest: invalid header Thu, 01 Oct 2026 18:00:00 GMT fails without retry
+ok 11 - invalid header Thu, 01 Oct 2026 18:00:00 GMT fails without retry
+  ---
+  duration_ms: 0.123443
+  type: 'test'
+  ...
+# Subtest: 401 exactly one dispatch
+ok 12 - 401 exactly one dispatch
+  ---
+  duration_ms: 0.147226
+  type: 'test'
+  ...
+# Subtest: 403 exactly one dispatch
+ok 13 - 403 exactly one dispatch
+  ---
+  duration_ms: 0.071811
+  type: 'test'
+  ...
+# Subtest: 500 exactly one dispatch
+ok 14 - 500 exactly one dispatch
+  ---
+  duration_ms: 0.050026
+  type: 'test'
+  ...
+# Subtest: 503 exactly one dispatch
+ok 15 - 503 exactly one dispatch
+  ---
+  duration_ms: 0.058813
+  type: 'test'
+  ...
+# Subtest: network exactly one dispatch
+ok 16 - network exactly one dispatch
+  ---
+  duration_ms: 0.157316
+  type: 'test'
+  ...
+# Subtest: unknown 429 effect no retry
+ok 17 - unknown 429 effect no retry
+  ---
+  duration_ms: 0.111307
+  type: 'test'
+  ...
+# Subtest: second native 429 no third dispatch
+ok 18 - second native 429 no third dispatch
+  ---
+  duration_ms: 0.118593
+  type: 'test'
+  ...
+# Subtest: near zero admission budget no dispatch
+ok 19 - near zero admission budget no dispatch
+  ---
+  duration_ms: 0.113807
+  type: 'test'
+  ...
+# Subtest: wait plus normal response cannot fit no retry
+ok 20 - wait plus normal response cannot fit no retry
+  ---
+  duration_ms: 0.110495
+  type: 'test'
+  ...
+# Subtest: 60 second header cannot extend original 35 second deadline
+ok 21 - 60 second header cannot extend original 35 second deadline
+  ---
+  duration_ms: 0.134672
+  type: 'test'
+  ...
+# Subtest: sleep deadline overrun no retry dispatch
+ok 22 - sleep deadline overrun no retry dispatch
+  ---
+  duration_ms: 0.144566
+  type: 'test'
+  ...
+# Subtest: body limit preserved
+ok 23 - body limit preserved
+  ---
+  duration_ms: 0.267484
+  type: 'test'
+  ...
+# Subtest: code rejection preserved
+ok 24 - code rejection preserved
+  ---
+  duration_ms: 0.171043
+  type: 'test'
+  ...
+# Subtest: valid boundary 1 waits exactly once
+ok 25 - valid boundary 1 waits exactly once
+  ---
+  duration_ms: 0.172678
+  type: 'test'
+  ...
+# Subtest: valid boundary 60 waits exactly once
+ok 26 - valid boundary 60 waits exactly once
+  ---
+  duration_ms: 0.10222
+  type: 'test'
+  ...
+# Subtest: known 429 with rejected API code cannot retry
+ok 27 - known 429 with rejected API code cannot retry
+  ---
+  duration_ms: 0.166863
+  type: 'test'
+  ...
+# Subtest: malformed response cannot retry
+ok 28 - malformed response cannot retry
+  ---
+  duration_ms: 0.183903
+  type: 'test'
+  ...
+# Subtest: matrix is exactly 20 opt-in cycles per protocol/lane plus four default controls, unique requests
+ok 29 - matrix is exactly 20 opt-in cycles per protocol/lane plus four default controls, unique requests
+  ---
+  duration_ms: 2.395001
+  type: 'test'
+  ...
+# Subtest: exact numeric owned Redis namespaces and rejection of non-owned IDs
+ok 30 - exact numeric owned Redis namespaces and rejection of non-owned IDs
+  ---
+  duration_ms: 0.552964
+  type: 'test'
+  ...
+# Subtest: real-handler queue shape requires correct lane, pending lease and original first members
+ok 31 - real-handler queue shape requires correct lane, pending lease and original first members
+  ---
+  duration_ms: 0.936204
+  type: 'test'
+  ...
+# Subtest: RED mutations: waiter, pending lease, retained active lease, forced close, late close and duplicate effect all fail
+ok 32 - RED mutations: waiter, pending lease, retained active lease, forced close, late close and duplicate effect all fail
+  ---
+  duration_ms: 1.084961
+  type: 'test'
+  ...
+# Subtest: deadline counts slow observation overhead and never restarts after timeout
+ok 33 - deadline counts slow observation overhead and never restarts after timeout
+  ---
+  duration_ms: 0.767787
+  type: 'test'
+  ...
+# Subtest: deadline also counts assertion overhead after an otherwise timely observation
+ok 34 - deadline also counts assertion overhead after an otherwise timely observation
+  ---
+  duration_ms: 1.067488
+  type: 'test'
+  ...
+# Subtest: RESP parser handles arbitrary partial frames, null GET, arrays and redacted Redis errors offline
+ok 35 - RESP parser handles arbitrary partial frames, null GET, arrays and redacted Redis errors offline
+  ---
+  duration_ms: 0.999247
+  type: 'test'
+  ...
+# Subtest: Redis snapshot requests only read-only exact keys and rejects malformed real-count replies
+ok 36 - Redis snapshot requests only read-only exact keys and rejects malformed real-count replies
+  ---
+  duration_ms: 0.898517
+  type: 'test'
+  ...
+# Subtest: actual Redis leak cardinalities and near-expiry TTLs remain available for failure evidence
+ok 37 - actual Redis leak cardinalities and near-expiry TTLs remain available for failure evidence
+  ---
+  duration_ms: 0.544732
+  type: 'test'
+  ...
+# Subtest: late invalid or expiring failure snapshots fail closed without throwing past resource cleanup
+ok 38 - late invalid or expiring failure snapshots fail closed without throwing past resource cleanup
+  ---
+  duration_ms: 0.476905
+  type: 'test'
+  ...
+# Subtest: reused genuine SSE fixtures validate fragmented Responses and Messages healthy terminals
+ok 39 - reused genuine SSE fixtures validate fragmented Responses and Messages healthy terminals
+  ---
+  duration_ms: 80.808586
+  type: 'test'
+  ...
+# Subtest: actual admin adapter persists trusted opt-in/default, limits and stable native key, journals create before transport
+ok 40 - actual admin adapter persists trusted opt-in/default, limits and stable native key, journals create before transport
+  ---
+  duration_ms: 33.503954
+  type: 'test'
+  ...
+# Subtest: responses: actual existing healthy mock remains valid
+ok 41 - responses: actual existing healthy mock remains valid
+  ---
+  duration_ms: 4.314343
+  type: 'test'
+  ...
+# Subtest: responses: review malformed reproduction fails recovery
+ok 42 - responses: review malformed reproduction fails recovery
+  ---
+  duration_ms: 0.212567
+  type: 'test'
+  ...
+# Subtest: responses: reject start
+ok 43 - responses: reject start
+  ---
+  duration_ms: 0.463651
+  type: 'test'
+  ...
+# Subtest: responses: reject terminal
+ok 44 - responses: reject terminal
+  ---
+  duration_ms: 4.116885
+  type: 'test'
+  ...
+# Subtest: responses: reject usage
+ok 45 - responses: reject usage
+  ---
+  duration_ms: 3.262567
+  type: 'test'
+  ...
+# Subtest: responses: reject usage-conflict
+ok 46 - responses: reject usage-conflict
+  ---
+  duration_ms: 3.16288
+  type: 'test'
+  ...
+# Subtest: responses: reject id
+ok 47 - responses: reject id
+  ---
+  duration_ms: 1.311228
+  type: 'test'
+  ...
+# Subtest: responses: reject delta
+ok 48 - responses: reject delta
+  ---
+  duration_ms: 1.136566
+  type: 'test'
+  ...
+# Subtest: responses: reject duplicate
+ok 49 - responses: reject duplicate
+  ---
+  duration_ms: 3.462588
+  type: 'test'
+  ...
+# Subtest: responses: reject junk
+ok 50 - responses: reject junk
+  ---
+  duration_ms: 2.365266
+  type: 'test'
+  ...
+# Subtest: responses: reject tool
+ok 51 - responses: reject tool
+  ---
+  duration_ms: 0.431592
+  type: 'test'
+  ...
+# Subtest: messages: actual existing healthy mock remains valid
+ok 52 - messages: actual existing healthy mock remains valid
+  ---
+  duration_ms: 0.924488
+  type: 'test'
+  ...
+# Subtest: messages: review malformed reproduction fails recovery
+ok 53 - messages: review malformed reproduction fails recovery
+  ---
+  duration_ms: 0.166315
+  type: 'test'
+  ...
+# Subtest: messages: reject start
+ok 54 - messages: reject start
+  ---
+  duration_ms: 0.293194
+  type: 'test'
+  ...
+# Subtest: messages: reject terminal
+ok 55 - messages: reject terminal
+  ---
+  duration_ms: 0.772034
+  type: 'test'
+  ...
+# Subtest: messages: reject usage
+ok 56 - messages: reject usage
+  ---
+  duration_ms: 0.708797
+  type: 'test'
+  ...
+# Subtest: messages: reject usage-conflict
+ok 57 - messages: reject usage-conflict
+  ---
+  duration_ms: 0.6685
+  type: 'test'
+  ...
+# Subtest: messages: reject id
+ok 58 - messages: reject id
+  ---
+  duration_ms: 0.978776
+  type: 'test'
+  ...
+# Subtest: messages: reject delta
+ok 59 - messages: reject delta
+  ---
+  duration_ms: 0.310662
+  type: 'test'
+  ...
+# Subtest: messages: reject duplicate
+ok 60 - messages: reject duplicate
+  ---
+  duration_ms: 0.408962
+  type: 'test'
+  ...
+# Subtest: messages: reject junk
+ok 61 - messages: reject junk
+  ---
+  duration_ms: 0.376578
+  type: 'test'
+  ...
+# Subtest: messages: reject tool
+ok 62 - messages: reject tool
+  ---
+  duration_ms: 0.126977
+  type: 'test'
+  ...
+# Subtest: actual setup retries only native login and preserves default binding, private custody and cleanup
+ok 63 - actual setup retries only native login and preserves default binding, private custody and cleanup
+  ---
+  duration_ms: 14.627866
+  type: 'test'
+  ...
+# Subtest: actual setup never retries /admin/groups POST429
+ok 64 - actual setup never retries /admin/groups POST429
+  ---
+  duration_ms: 1.354635
+  type: 'test'
+  ...
+# Subtest: actual setup never retries /admin/accounts POST429
+ok 65 - actual setup never retries /admin/accounts POST429
+  ---
+  duration_ms: 2.12863
+  type: 'test'
+  ...
+# Subtest: actual setup never retries /admin/users POST429
+ok 66 - actual setup never retries /admin/users POST429
+  ---
+  duration_ms: 1.819982
+  type: 'test'
+  ...
+# Subtest: actual setup never retries /keys POST429
+ok 67 - actual setup never retries /keys POST429
+  ---
+  duration_ms: 1.781107
+  type: 'test'
+  ...
+# Subtest: generated mock creates one native HTTPS server with the existing handler, without a listening socket
+ok 68 - generated mock creates one native HTTPS server with the existing handler, without a listening socket
+  ---
+  duration_ms: 55.826717
+  type: 'test'
+  ...
+1..68
+# tests 68
+# suites 0
+# pass 68
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 222.258589

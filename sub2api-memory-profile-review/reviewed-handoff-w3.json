@@ -1,0 +1,53 @@
+{
+  "status": "SOURCE_AND_BINDING_VERIFIED_OFFLINE",
+  "native_baseline_files_checked": 3322,
+  "native_probe_preservation_pins_verified": 21,
+  "production_patch_sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239",
+  "real_production_patch_files_applied_and_matched": [
+    "backend/internal/service/gateway_anthropic_passthrough.go",
+    "backend/internal/service/openai_first_output_timeout.go",
+    "backend/internal/service/openai_gateway_messages_anthropic_native.go",
+    "backend/internal/service/openai_gateway_passthrough.go"
+  ],
+  "complete_merged_source_map_accepted": true,
+  "repaired_explicit_manifest_authorization_executed": true,
+  "merged_binary_pin": "SYNTHETIC e*64; no real build/binary pin verified",
+  "profiling_file_preserved": true,
+  "dependencies_and_toolchain_source_preserved": true,
+  "W2_delta_hunks_reversed_and_reapplied": 4,
+  "W1_before_sha256_recovered": "93baafd90df032bb5880ecf44037bcfb82e928ff7826324cd124edd46bf73c4b",
+  "minimal_ownership_repair_entire_source_identity": true,
+  "callback_stop_then_ownership_release_then_replay": true,
+  "both_pre_handoff_guards_use_ownership": true,
+  "seven_W1_source_and_test_files_byte_unchanged": [
+    "tests/backend/internal/service/stream_memory_lifecycle_test.go",
+    "tests/backend/internal/service/stream_memory_stage_test.go",
+    "tests/backend/internal/service/stream_memory_volume_test.go",
+    "tests/backend/internal/service/stream_memory_behavior_test.go",
+    "production/backend/internal/service/gateway_anthropic_passthrough.go",
+    "production/backend/internal/service/openai_first_output_timeout.go",
+    "production/backend/internal/service/openai_gateway_messages_anthropic_native.go"
+  ],
+  "reproducer_sha256": "933131f9371e3dd6f4f9ceb8dc4cbe0c432ebb6a68b69204ab3d2f73942c7b8e",
+  "profiled_frozen_source_contains_W2_ownership_state": false,
+  "archived_summary_bindings": {
+    "green": {
+      "count": 35,
+      "kind": "archived embedded summary only; original receipt bytes/raw logs absent from current frozen bundle"
+    },
+    "native": {
+      "count": 292,
+      "kind": "archived embedded summary only; original receipt bytes/raw logs absent from current frozen bundle"
+    },
+    "probe": {
+      "count": 63,
+      "kind": "archived embedded summary only; original receipt bytes/raw logs absent from current frozen bundle"
+    }
+  },
+  "Go": "NOT RUN",
+  "race": "NOT RUN / original receipt absent",
+  "full_root_raw": "NOT SUPPLIED HERE",
+  "goal_complete": false,
+  "producer": "current repaired W3 analyzer and unchanged exact patch engine",
+  "limitations": "Static exact-byte/source binding and archived summary consistency; no fresh handler execution, callback race proof, merged binary, or new profile/RSS claim."
+}

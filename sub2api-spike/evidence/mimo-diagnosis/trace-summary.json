@@ -1,0 +1,761 @@
+{
+  "scope": "isolated hosted diagnostic containers, not GitHub Actions",
+  "date": "2026-10-01",
+  "source_sha": "4aa287a383fc73446bc5f0aeee147db123b2f04e",
+  "engine_revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "client": "Codex0.159.2",
+  "original_actions_raw_stream_available": false,
+  "responses": [
+    {
+      "request": 1,
+      "response_bytes": 14455,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 223
+            }
+          ]
+        },
+        {
+          "type": "message",
+          "content": [
+            {
+              "type": "output_text",
+              "text_characters": 96
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 129,
+      "reasoning_tokens": 44,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 2,
+      "response_bytes": 14455,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 223
+            }
+          ]
+        },
+        {
+          "type": "message",
+          "content": [
+            {
+              "type": "output_text",
+              "text_characters": 96
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 129,
+      "reasoning_tokens": 44,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 3,
+      "response_bytes": 9669,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 92
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 84,
+      "reasoning_tokens": 16,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 4,
+      "response_bytes": 9669,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 92
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 84,
+      "reasoning_tokens": 16,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 5,
+      "response_bytes": 13948,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 117
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 139,
+      "reasoning_tokens": 18,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 6,
+      "response_bytes": 13948,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 117
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 139,
+      "reasoning_tokens": 18,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 7,
+      "response_bytes": 82920,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 2967
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 715,
+      "reasoning_tokens": 598,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 8,
+      "response_bytes": 82920,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 2967
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 715,
+      "reasoning_tokens": 598,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 9,
+      "response_bytes": 11324,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 55
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 135,
+      "reasoning_tokens": 12,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 10,
+      "response_bytes": 11324,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 55
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 135,
+      "reasoning_tokens": 12,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 11,
+      "response_bytes": 18817,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 1172
+            }
+          ]
+        }
+      ],
+      "output_tokens": 284,
+      "reasoning_tokens": 284,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 12,
+      "response_bytes": 18817,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 1172
+            }
+          ]
+        }
+      ],
+      "output_tokens": 284,
+      "reasoning_tokens": 284,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 13,
+      "response_bytes": 19685,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 619
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 180,
+      "reasoning_tokens": 113,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 14,
+      "response_bytes": 8349,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 59
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 82,
+      "reasoning_tokens": 14,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 15,
+      "response_bytes": 42827,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 1396
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 410,
+      "reasoning_tokens": 261,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 16,
+      "response_bytes": 51127,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "reasoning",
+          "content": [
+            {
+              "type": "reasoning_text",
+              "text_characters": 1659
+            }
+          ]
+        },
+        {
+          "type": "message",
+          "content": [
+            {
+              "type": "output_text",
+              "text_characters": 563
+            }
+          ]
+        }
+      ],
+      "output_tokens": 439,
+      "reasoning_tokens": 316,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 17,
+      "response_bytes": 8888,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "message",
+          "content": [
+            {
+              "type": "output_text",
+              "text_characters": 90
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 82,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 18,
+      "response_bytes": 8888,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "message",
+          "content": [
+            {
+              "type": "output_text",
+              "text_characters": 90
+            }
+          ]
+        },
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 82,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 19,
+      "response_bytes": 5262,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 67,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 20,
+      "response_bytes": 5262,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 67,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 21,
+      "response_bytes": 9743,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 129,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 22,
+      "response_bytes": 9743,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 129,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 23,
+      "response_bytes": 9355,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 129,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 24,
+      "response_bytes": 9355,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 129,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 25,
+      "response_bytes": 9363,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 133,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 26,
+      "response_bytes": 9363,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 133,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 27,
+      "response_bytes": 12699,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 163,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 28,
+      "response_bytes": 12699,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 163,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 29,
+      "response_bytes": 12537,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 172,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 30,
+      "response_bytes": 12537,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "function_call",
+          "content": []
+        }
+      ],
+      "output_tokens": 172,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 31,
+      "response_bytes": 15618,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "message",
+          "content": [
+            {
+              "type": "output_text",
+              "text_characters": 767
+            }
+          ]
+        }
+      ],
+      "output_tokens": 180,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    },
+    {
+      "request": 32,
+      "response_bytes": 15618,
+      "terminal": "response.completed",
+      "status": "completed",
+      "output": [
+        {
+          "type": "message",
+          "content": [
+            {
+              "type": "output_text",
+              "text_characters": 767
+            }
+          ]
+        }
+      ],
+      "output_tokens": 180,
+      "reasoning_tokens": 0,
+      "end_turn_present": false,
+      "error_present": false
+    }
+  ],
+  "transport_pairs": [
+    {
+      "client_request": 1,
+      "provider_request": 2,
+      "exact_response_bytes_equal": true
+    },
+    {
+      "client_request": 3,
+      "provider_request": 4,
+      "exact_response_bytes_equal": true
+    },
+    {
+      "client_request": 5,
+      "provider_request": 6,
+      "exact_response_bytes_equal": true
+    },
+    {
+      "client_request": 7,
+      "provider_request": 8,
+      "exact_response_bytes_equal": true
+    },
+    {
+      "client_request": 9,
+      "provider_request": 10,
+      "exact_response_bytes_equal": true
+    },
+    {
+      "client_request": 11,
+      "provider_request": 12,
+      "exact_response_bytes_equal": true
+    }
+  ],
+  "last_request_delta": {
+    "changed_top_level_fields": [
+      "input"
+    ],
+    "client_input_items": 19,
+    "provider_input_items": 14,
+    "only_reasoning_removed": true,
+    "removed_reasoning_items": 5,
+    "store": false,
+    "max_output_tokens": null,
+    "reasoning_effort": null,
+    "reasoning_summary": "auto"
+  },
+  "custody": {
+    "client_files_scanned": 196,
+    "provider_master_key_found_in_client_files": false,
+    "raw_capture_exported": false,
+    "chain_of_thought_exported": false,
+    "agent_master_key_mount": false
+  }
+}

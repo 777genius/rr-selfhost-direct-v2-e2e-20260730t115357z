@@ -1,0 +1,1 @@
+PASS manifest, canonical zero-fuzz patch, exact six output hashes, syntax, runnable 40case plan; frozen-root baseline and requested r3 missing

@@ -1,0 +1,1944 @@
+{
+  "schema": "rr-sub2-real-lab/v1",
+  "evidence_kind": "synthetic-container",
+  "source_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "image": "weishaw/sub2api@sha256:2e3b7fab1e84d2e862cde664d09c1ae84fc897093357cf200cbeb0f64b2f2390",
+  "node": "v24.21.0",
+  "stage": "faults-fixed",
+  "run_mode": "standard",
+  "model_mapping": {
+    "responses": "gpt-4.1",
+    "messages": "claude-sonnet-4-5"
+  },
+  "started_at": "2026-09-30T20:36:03.941Z",
+  "real_actions_e2e": false,
+  "live_oauth": "NOTRUN",
+  "receipt_state": "executed",
+  "results": [
+    {
+      "id": "E01-A-403",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 502,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 70,
+              "duration_ms": 22
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 28,
+                "identity": "A",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "http-403",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0,
+            "duplicate_effect_warning": false
+          }
+        ]
+      },
+      "limitations": [
+        "HTTP remapping is recorded; retry count is not inferred from client exceptions."
+      ],
+      "duration_ms": 455
+    },
+    {
+      "id": "E01-A-404",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 404,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 71,
+              "duration_ms": 8
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 29,
+                "identity": "A",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "http-404",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0,
+            "duplicate_effect_warning": false
+          }
+        ]
+      },
+      "limitations": [
+        "HTTP remapping is recorded; retry count is not inferred from client exceptions."
+      ],
+      "duration_ms": 412
+    },
+    {
+      "id": "E01-A-429",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 429,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 98,
+              "duration_ms": 11
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 30,
+                "identity": "A",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "http-429",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0,
+            "duplicate_effect_warning": false
+          }
+        ]
+      },
+      "limitations": [
+        "HTTP remapping is recorded; retry count is not inferred from client exceptions."
+      ],
+      "duration_ms": 415
+    },
+    {
+      "id": "E01-A-500",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 502,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 88,
+              "duration_ms": 9
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 31,
+                "identity": "A",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "http-500",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0,
+            "duplicate_effect_warning": false
+          }
+        ]
+      },
+      "limitations": [
+        "HTTP remapping is recorded; retry count is not inferred from client exceptions."
+      ],
+      "duration_ms": 413
+    },
+    {
+      "id": "E01-A-502",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 502,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 88,
+              "duration_ms": 8
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 32,
+                "identity": "A",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "http-502",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0,
+            "duplicate_effect_warning": false
+          }
+        ]
+      },
+      "limitations": [
+        "HTTP remapping is recorded; retry count is not inferred from client exceptions."
+      ],
+      "duration_ms": 416
+    },
+    {
+      "id": "E01-A-503",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 6
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "no_upstream_fault_exercised",
+      "duration_ms": 413
+    },
+    {
+      "id": "E-A-failed",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 6
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "no_upstream_fault_exercised",
+      "duration_ms": 402
+    },
+    {
+      "id": "E-A-error",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 6
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "no_upstream_fault_exercised",
+      "duration_ms": 398
+    },
+    {
+      "id": "E-A-truncated",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 6
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "no_upstream_fault_exercised",
+      "duration_ms": 394
+    },
+    {
+      "id": "E-A-malformed",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 6
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "no_upstream_fault_exercised",
+      "duration_ms": 411
+    },
+    {
+      "id": "E-A-reset-before",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 5
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "no_upstream_fault_exercised",
+      "duration_ms": 406
+    },
+    {
+      "id": "E-A-reset-after",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 6
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "no_upstream_fault_exercised",
+      "duration_ms": 403
+    },
+    {
+      "id": "E-A-slow-headers",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 6
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "no_upstream_fault_exercised",
+      "duration_ms": 398
+    },
+    {
+      "id": "E-A-slow-body",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 6
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "no_upstream_fault_exercised",
+      "duration_ms": 407
+    },
+    {
+      "id": "E06-A",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Client disconnect leaves upstream alive or capacity unreleased.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": "client_cancelled",
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 5
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "unexpected_upstream_request_count",
+      "duration_ms": 1500
+    },
+    {
+      "id": "E01-M-403",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 502,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 118,
+              "duration_ms": 14
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 33,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "http-403",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0,
+            "duplicate_effect_warning": false
+          }
+        ]
+      },
+      "limitations": [
+        "HTTP remapping is recorded; retry count is not inferred from client exceptions."
+      ],
+      "duration_ms": 414
+    },
+    {
+      "id": "E01-M-404",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 502,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 86,
+              "duration_ms": 6
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 34,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "http-404",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0,
+            "duplicate_effect_warning": false
+          }
+        ]
+      },
+      "limitations": [
+        "HTTP remapping is recorded; retry count is not inferred from client exceptions."
+      ],
+      "duration_ms": 403
+    },
+    {
+      "id": "E01-M-429",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 429,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 113,
+              "duration_ms": 8
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 35,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "http-429",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0,
+            "duplicate_effect_warning": false
+          }
+        ]
+      },
+      "limitations": [
+        "HTTP remapping is recorded; retry count is not inferred from client exceptions."
+      ],
+      "duration_ms": 405
+    },
+    {
+      "id": "E01-M-500",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 502,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 103,
+              "duration_ms": 6
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 36,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "http-500",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0,
+            "duplicate_effect_warning": false
+          }
+        ]
+      },
+      "limitations": [
+        "HTTP remapping is recorded; retry count is not inferred from client exceptions."
+      ],
+      "duration_ms": 396
+    },
+    {
+      "id": "E01-M-502",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 502,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 103,
+              "duration_ms": 6
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 37,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "http-502",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0,
+            "duplicate_effect_warning": false
+          }
+        ]
+      },
+      "limitations": [
+        "HTTP remapping is recorded; retry count is not inferred from client exceptions."
+      ],
+      "duration_ms": 401
+    },
+    {
+      "id": "E01-M-503",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Upstream HTTP error becomes successful terminal or crosses tenant/model; engine retries are measured.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": null,
+              "transport": "client_timeout",
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 0,
+              "duration_ms": 9001
+            },
+            "upstream_requests": 5,
+            "engine_retries": 4,
+            "upstream": [
+              {
+                "sequence": 38,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "http-503",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              },
+              {
+                "sequence": 39,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "http-503",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              },
+              {
+                "sequence": 40,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "http-503",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              },
+              {
+                "sequence": 41,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "http-503",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              },
+              {
+                "sequence": 42,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "http-503",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0,
+            "duplicate_effect_warning": true
+          }
+        ]
+      },
+      "limitations": [
+        "HTTP remapping is recorded; retry count is not inferred from client exceptions."
+      ],
+      "duration_ms": 10494
+    },
+    {
+      "id": "E-M-failed",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 200,
+              "transport": null,
+              "terminal": false,
+              "failed": true,
+              "malformed": false,
+              "calls": [],
+              "utf8": true,
+              "event_types": [
+                "message_start",
+                "content_block_start",
+                "content_block_delta",
+                "content_block_stop",
+                "error"
+              ],
+              "success": false,
+              "bytes": 783,
+              "duration_ms": 6
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 43,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "failed",
+                "finished": true,
+                "cancelled": false,
+                "committed": true,
+                "bytes": 689,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 1
+              }
+            ],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [
+        "Client timeout bounds own connection; engine cancellation is assessed separately at mock."
+      ],
+      "duration_ms": 403
+    },
+    {
+      "id": "E-M-error",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 200,
+              "transport": null,
+              "terminal": false,
+              "failed": true,
+              "malformed": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [
+                "error"
+              ],
+              "success": false,
+              "bytes": 182,
+              "duration_ms": 6
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 44,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "error",
+                "finished": true,
+                "cancelled": false,
+                "committed": true,
+                "bytes": 88,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [
+        "Client timeout bounds own connection; engine cancellation is assessed separately at mock."
+      ],
+      "duration_ms": 400
+    },
+    {
+      "id": "E-M-truncated",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 200,
+              "transport": null,
+              "terminal": false,
+              "failed": true,
+              "malformed": false,
+              "calls": [],
+              "utf8": true,
+              "event_types": [
+                "message_start",
+                "content_block_start",
+                "content_block_delta",
+                "content_block_stop",
+                "message_delta",
+                "error"
+              ],
+              "success": false,
+              "bytes": 816,
+              "duration_ms": 6
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 45,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "truncated",
+                "finished": true,
+                "cancelled": false,
+                "committed": true,
+                "bytes": 722,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 1
+              }
+            ],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [
+        "Client timeout bounds own connection; engine cancellation is assessed separately at mock."
+      ],
+      "duration_ms": 399
+    },
+    {
+      "id": "E-M-malformed",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 200,
+              "transport": null,
+              "terminal": false,
+              "failed": true,
+              "malformed": true,
+              "calls": [],
+              "utf8": false,
+              "event_types": [
+                "message_start",
+                "error"
+              ],
+              "success": false,
+              "bytes": 379,
+              "duration_ms": 5
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 46,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "malformed",
+                "finished": true,
+                "cancelled": false,
+                "committed": true,
+                "bytes": 285,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [
+        "Client timeout bounds own connection; engine cancellation is assessed separately at mock."
+      ],
+      "duration_ms": 407
+    },
+    {
+      "id": "E-M-reset-before",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 502,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 103,
+              "duration_ms": 6
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 47,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "reset-before",
+                "finished": false,
+                "cancelled": true,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [
+        "Client timeout bounds own connection; engine cancellation is assessed separately at mock."
+      ],
+      "duration_ms": 415
+    },
+    {
+      "id": "E-M-reset-after",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 502,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 86,
+              "duration_ms": 7
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 48,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "reset-after",
+                "finished": false,
+                "cancelled": true,
+                "committed": true,
+                "bytes": 584,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": 2
+              }
+            ],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [
+        "Client timeout bounds own connection; engine cancellation is assessed separately at mock."
+      ],
+      "duration_ms": 406
+    },
+    {
+      "id": "E-M-slow-headers",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": null,
+              "transport": "client_timeout",
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 0,
+              "duration_ms": 2201
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 49,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "slow-headers",
+                "finished": false,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": null
+              }
+            ],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [
+        "Client timeout bounds own connection; engine cancellation is assessed separately at mock."
+      ],
+      "duration_ms": 3694
+    },
+    {
+      "id": "E-M-slow-body",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failed/error/missing terminal stream is accepted, or partial-stream outcome creates duplicate upstream effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 200,
+              "transport": "client_timeout",
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [
+                "message_start"
+              ],
+              "success": false,
+              "bytes": 249,
+              "duration_ms": 2201
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 50,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "slow-body",
+                "finished": false,
+                "cancelled": false,
+                "committed": true,
+                "bytes": 249,
+                "backpressure": 0,
+                "active_identity": 2,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": null
+              }
+            ],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [
+        "Client timeout bounds own connection; engine cancellation is assessed separately at mock."
+      ],
+      "duration_ms": 3702
+    },
+    {
+      "id": "E06-M",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Client disconnect leaves upstream alive or capacity unreleased.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 200,
+              "transport": "client_cancelled",
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [
+                "message_start"
+              ],
+              "success": false,
+              "bytes": 249,
+              "duration_ms": 4
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 51,
+                "identity": "M",
+                "protocol": "messages",
+                "path": "/v1/messages",
+                "model": "claude-sonnet-4-5",
+                "scenario": "hold",
+                "finished": false,
+                "cancelled": false,
+                "committed": true,
+                "bytes": 249,
+                "backpressure": 0,
+                "active_identity": 2,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": "2023-06-01",
+                "upstream_duration_ms": null
+              }
+            ],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "engine_did_not_abort_upstream_promptly",
+      "duration_ms": 1486
+    },
+    {
+      "id": "E08",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "429 routes outside exclusive group or produces a successful terminal.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 429,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 98,
+              "duration_ms": 10
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 52,
+                "identity": "A",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "http-429",
+                "finished": true,
+                "cancelled": false,
+                "committed": false,
+                "bytes": 0,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 0
+              }
+            ],
+            "background_requests": 0
+          },
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 4
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          },
+          {
+            "downstream": {
+              "http_status": 503,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 74,
+              "duration_ms": 7
+            },
+            "upstream_requests": 0,
+            "engine_retries": 0,
+            "upstream": [],
+            "background_requests": 0
+          }
+        ],
+        "cooldown": {
+          "rate_limited_at_present": true,
+          "rate_limit_reset_at_present": true,
+          "status": "active"
+        }
+      },
+      "limitations": [],
+      "failure_code": "missing_successful_native_terminal",
+      "duration_ms": 2918
+    },
+    {
+      "id": "E10-E11",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Failover after committed partial stream duplicates side effects.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 502,
+              "transport": null,
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "success": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "bytes": 88,
+              "duration_ms": 16
+            },
+            "upstream_requests": 2,
+            "engine_retries": 1,
+            "upstream": [
+              {
+                "sequence": 53,
+                "identity": "S1",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "reset-after",
+                "finished": false,
+                "cancelled": true,
+                "committed": true,
+                "bytes": 867,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 2
+              },
+              {
+                "sequence": 54,
+                "identity": "S2",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "reset-after",
+                "finished": false,
+                "cancelled": true,
+                "committed": true,
+                "bytes": 867,
+                "backpressure": 0,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 2
+              }
+            ],
+            "background_requests": 0
+          }
+        ]
+      },
+      "limitations": [],
+      "failure_code": "unexpected_upstream_request_count",
+      "duration_ms": 451
+    },
+    {
+      "id": "E07",
+      "status": "FAIL",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Slow consumer loses terminal, duplicates effects, or upstream remains stuck after bounded pressure.",
+      "observations": {
+        "samples": [
+          {
+            "downstream": {
+              "http_status": 200,
+              "transport": "client_timeout",
+              "terminal": false,
+              "failed": false,
+              "malformed": false,
+              "calls": [],
+              "utf8": false,
+              "event_types": [],
+              "success": false,
+              "bytes": 3490643,
+              "duration_ms": 12003
+            },
+            "upstream_requests": 1,
+            "engine_retries": 0,
+            "upstream": [
+              {
+                "sequence": 55,
+                "identity": "A",
+                "protocol": "responses",
+                "path": "/v1/responses",
+                "model": "gpt-4.1",
+                "scenario": "backpressure",
+                "finished": true,
+                "cancelled": false,
+                "committed": true,
+                "bytes": 8393014,
+                "backpressure": 128,
+                "active_identity": 1,
+                "tool_result_id": null,
+                "tool_result_utf8": false,
+                "tool_result_length": 0,
+                "version_header": null,
+                "upstream_duration_ms": 9
+              }
+            ],
+            "background_requests": 0
+          }
+        ],
+        "control_rss_delta_bytes": 10321920
+      },
+      "limitations": [],
+      "failure_code": "missing_successful_native_terminal",
+      "duration_ms": 13502
+    },
+    {
+      "id": "G05-1",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Concurrent native requests fail, duplicate, cross sentinel, or remain open.",
+      "observations": {
+        "client_requests": 1,
+        "errors": 0,
+        "p50_ms": 9,
+        "p95_ms": 9,
+        "control_rss_bytes": 106663936,
+        "engine_rss_bytes": null,
+        "upstream_requests": 1,
+        "engine_retries": 0,
+        "identities": [
+          "A"
+        ],
+        "stuck_upstream": 0
+      },
+      "limitations": [],
+      "duration_ms": 114
+    },
+    {
+      "id": "G05-5",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Concurrent native requests fail, duplicate, cross sentinel, or remain open.",
+      "observations": {
+        "client_requests": 5,
+        "errors": 0,
+        "p50_ms": 11,
+        "p95_ms": 12,
+        "control_rss_bytes": 106663936,
+        "engine_rss_bytes": null,
+        "upstream_requests": 5,
+        "engine_retries": 0,
+        "identities": [
+          "A"
+        ],
+        "stuck_upstream": 0
+      },
+      "limitations": [],
+      "duration_ms": 117
+    },
+    {
+      "id": "G05-20",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Concurrent native requests fail, duplicate, cross sentinel, or remain open.",
+      "observations": {
+        "client_requests": 20,
+        "errors": 0,
+        "p50_ms": 46,
+        "p95_ms": 231,
+        "control_rss_bytes": 106663936,
+        "engine_rss_bytes": null,
+        "upstream_requests": 20,
+        "engine_retries": 0,
+        "identities": [
+          "A"
+        ],
+        "stuck_upstream": 0
+      },
+      "limitations": [],
+      "duration_ms": 340
+    },
+    {
+      "id": "G05-soak",
+      "status": "PASS",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Bounded synthetic soak produces error/duplicate/stuck connections or tenant crossover.",
+      "observations": {
+        "client_requests": 485,
+        "errors": 0,
+        "p50_ms": 10,
+        "p95_ms": 12,
+        "control_rss_bytes": 108138496,
+        "engine_rss_bytes": null,
+        "max_requests": 500,
+        "duration_bound_ms": 30000,
+        "upstream_requests": 485,
+        "engine_retries": 0,
+        "stuck_upstream": 0
+      },
+      "limitations": [],
+      "duration_ms": 30464
+    },
+    {
+      "id": "F04-F05",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "No synthetic OAuth refresh server/identity supplied; API-key scheduling does not prove OAuth lifecycle.",
+      "limitations": [
+        "No synthetic OAuth refresh server/identity supplied; API-key scheduling does not prove OAuth lifecycle."
+      ]
+    },
+    {
+      "id": "F07-F08",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Live OAuth test identity absent.",
+      "limitations": [
+        "Live OAuth test identity absent."
+      ]
+    },
+    {
+      "id": "G01-outage",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Requires separate operator outage run and normalized receipt.",
+      "limitations": [
+        "Requires separate operator outage run and normalized receipt."
+      ]
+    },
+    {
+      "id": "G04",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Separate database restore and stale-key behavior require coordinator receipt.",
+      "limitations": [
+        "Separate database restore and stale-key behavior require coordinator receipt."
+      ]
+    },
+    {
+      "id": "G07",
+      "status": "NOTRUN",
+      "evidence_kind": "synthetic-container",
+      "observable_failure": "Network/public-port and teardown verification require coordinator receipt.",
+      "limitations": [
+        "Network/public-port and teardown verification require coordinator receipt."
+      ]
+    }
+  ],
+  "resources": [
+    {
+      "kind": "groups",
+      "id": 4
+    },
+    {
+      "kind": "accounts",
+      "id": 3
+    },
+    {
+      "kind": "users",
+      "id": 4
+    },
+    {
+      "kind": "keys",
+      "id": 3,
+      "user_id": 4
+    },
+    {
+      "kind": "groups",
+      "id": 5
+    },
+    {
+      "kind": "accounts",
+      "id": 4
+    },
+    {
+      "kind": "users",
+      "id": 5
+    },
+    {
+      "kind": "keys",
+      "id": 4,
+      "user_id": 5
+    },
+    {
+      "kind": "groups",
+      "id": 6
+    },
+    {
+      "kind": "accounts",
+      "id": 5
+    },
+    {
+      "kind": "users",
+      "id": 6
+    },
+    {
+      "kind": "keys",
+      "id": 5,
+      "user_id": 6
+    },
+    {
+      "kind": "groups",
+      "id": 7
+    },
+    {
+      "kind": "accounts",
+      "id": 6
+    },
+    {
+      "kind": "accounts",
+      "id": 7
+    },
+    {
+      "kind": "users",
+      "id": 7
+    },
+    {
+      "kind": "keys",
+      "id": 6,
+      "user_id": 7
+    }
+  ],
+  "limitations": [
+    "Synthetic upstream fixtures are gateway fault evidence, not real Actions or agent-review proof.",
+    "Live OAuth refresh/rotation/revocation and production pool regression remain unproven.",
+    "Client RSS is not engine RSS. Engine RSS requires coordinator-supplied Docker stats."
+  ],
+  "run_id": "first-20260930",
+  "config_mode": "private-admin-auth; synthetic-user-keys; standard; trusted-HTTP-mock-only",
+  "pin_evidence": "operator must confirm deployed digest/source; constants are expected pins",
+  "ended_at": "2026-09-30T20:37:23.230Z",
+  "mock_total_upstream_requests": 566,
+  "mock_active_at_end": 0,
+  "mock_record_overflow": false
+}

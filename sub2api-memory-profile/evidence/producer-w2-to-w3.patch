@@ -1,0 +1,186 @@
+--- a/sub2api-memory-profile/analyze.py
++++ b/sub2api-memory-profile/analyze.py
+@@ -13,17 +13,31 @@
+     require(p.is_file() and p.stat().st_size<=16*1024**2,'MISSING_OR_OVERSIZED_EVIDENCE')
+     return strict_json(p.read_text())
+ 
++LEGACY_MANIFEST_SHA256='8a8103f73486912aa86f972fd2914bbff295d91126483447930da15ca227f704'
++
++def expected_source_manifest(path=None):
++    legacy=OWN/'source-manifest.json'
++    require(sha(legacy)==LEGACY_MANIFEST_SHA256,'LEGACY_MANIFEST_CHANGED')
++    path=legacy if path is None else path
++    require(path.is_file() and path.stat().st_size<=16*1024**2,'MISSING_OR_OVERSIZED_EVIDENCE')
++    data=path.read_bytes()
++    digest=hashlib.sha256(data).hexdigest()
++    sm=strict_json(data.decode())
++    if digest!=LEGACY_MANIFEST_SHA256:
++        validate_reviewed_manifest(sm)
++    return digest,sm
++
+ def analyze(root, expected_manifest=None):
++    # Authorize the source input before reading any run evidence.
++    expected_hash,sm=expected_source_manifest(expected_manifest)
+     run=read(root/'run.json')
+     require(run['schema']=='rrsub2profile-run-v1' and run['status']=='COMPLETE','INCOMPLETE_RUN')
+     require(run['protocol'] in ('responses','messages'),'PROTOCOL_REQUIRED')
+     require(run['no_forced_gc'] is True and run['new_image_and_binary'] is True,'INSTRUMENTATION_ATTESTATION')
+     source=root/'stage/source-manifest.json'
+-    expected_manifest=expected_manifest or OWN/'source-manifest.json'
+-    require(sha(source)==run['source_manifest_sha256']==sha(expected_manifest),'SOURCE_MANIFEST_CHANGED')
+-    sm=read(source)
++    require(sha(source)==run['source_manifest_sha256']==expected_hash,'SOURCE_MANIFEST_CHANGED')
+     require(sm['tag']=='rrsub2profile' and sm['go_version']=='go1.27.1','BUILD_TAG_TOOLCHAIN')
+-    if sm.get('reviewed_source'):
++    if 'reviewed_source' in sm:
+         validate_reviewed_manifest(sm)
+         require(run['build']['binary_sha256']==sm['reviewed_source']['binary_sha256'],'REVIEWED_BINARY_PIN')
+     for name,h in sm['source_after_sha256'].items():
+@@ -138,8 +152,10 @@
+ 
+ def validate_reviewed_manifest(sm):
+     from launch_contracts import BASE,digest
+-    legacy=read(OWN/'source-manifest.json');r=sm['reviewed_source']
++    require(sha(OWN/'source-manifest.json')==LEGACY_MANIFEST_SHA256,'LEGACY_MANIFEST_CHANGED')
++    legacy=read(OWN/'source-manifest.json')
+     require(type(sm) is dict and set(sm)==set(legacy)|{'reviewed_source'},'REVIEWED_MANIFEST_FIELDS')
++    r=sm['reviewed_source']
+     require(type(r) is dict and set(r)=={'schema','base_manifest_sha256','base_image','binary_sha256','patches','reviewed_manifest_sha256'} and r['schema']=='rrsub2profile-reviewed-v1' and digest(r['reviewed_manifest_sha256']) and r.get('base_manifest_sha256')==sha(OWN/'source-manifest.json') and r.get('base_image')==BASE and digest(r.get('binary_sha256')),'REVIEWED_MANIFEST_BASE')
+     require(type(r.get('patches')) is list and 1<=len(r['patches'])<=2,'REVIEWED_PATCH_LIST')
+     expected=dict(legacy['source_after_sha256']);changed=set()
+--- a/sub2api-memory-profile/root-driver.py
++++ b/sub2api-memory-profile/root-driver.py
+@@ -37,6 +37,13 @@
+         self.net=self.name+'-net';self.containers=[];self.network_id=None;self.image=None;self.base_tag=None
+         self.deadline=None;self.collector=None;self.rows=[];self.checkpoints=[];self.cleanup_errors=[]
+         self.identity=None;self.started=None;self.baseline=None
++        self.toolchain_env=None
++    def toolchain_environment(self):
++        if self.toolchain_env is None:
++            self.toolchain_env={k:v for k,v in os.environ.items() if k in ('PATH','LANG')}
++            self.toolchain_env.update(GOENV='off',GOTOOLCHAIN='local',GOWORK='off',GOPROXY='off',GOSUMDB='off',
++                CGO_ENABLED='0',GOOS='linux',GOARCH='amd64',GOCACHE=self.c['compilation_cache'],GOMODCACHE=self.c['modules_cache'],GOMAXPROCS='2')
++        return self.toolchain_env
+     def cmd(self,args,timeout=30,input=None,env=None):
+         if self.deadline: timeout=max(.1,min(timeout,(self.deadline-mono())/1000))
+         r=subprocess.run(args,input=input,env=env,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=timeout)
+@@ -80,10 +87,12 @@
+         self.memory_env={k:self.env.get(k) for k in ('GOGC','GOMEMLIMIT','GODEBUG')}
+         for image in (BASE,NODE,self.c['postgres_image'],self.c['redis_image']):self.docker('image','inspect',image)
+         require(sha(Path(self.c['go_binary']))==self.c['go_binary_sha256'],'TOOLCHAIN_PIN')
+-        require(self.cmd([self.c['go_binary'],'version']).decode().strip()=='go version go1.27.1 linux/amd64','GO_VERSION')
++        require(self.cmd([self.c['go_binary'],'version'],env=self.toolchain_environment()).decode().strip()=='go version go1.27.1 linux/amd64','GO_VERSION')
+         require(self.cmd(['uname','-m']).decode().strip()=='x86_64','ARCH_PIN')
+         # This is a read-only comparison of the ACTUAL build toolchain stdlib.
+-        goroot=Path(self.cmd([self.c['go_binary'],'env','GOROOT']).decode().strip())
++        goroot=Path(self.cmd([self.c['go_binary'],'env','GOROOT'],env=self.toolchain_environment()).decode().strip())
++        require(goroot.is_absolute() and goroot.is_dir(),'EFFECTIVE_GOROOT_REQUIRED')
++        self.effective_goroot=goroot
+         receipt=Path(self.c['toolchain_receipt'])
+         require(sha(receipt)==self.c['toolchain_receipt_sha256'],'TOOLCHAIN_RECEIPT_PIN')
+         self.toolchain=strict_json(receipt.read_text());toolchain_gate(self.toolchain,self.c)
+@@ -117,9 +126,11 @@
+     def build(self):
+         b=self.root/'build';b.mkdir(mode=0o700)
+         context=b/'image';context.mkdir(mode=0o700)
+-        env={k:v for k,v in os.environ.items() if k in ('PATH','LANG')}
+-        env.update(GOENV='off',GOTOOLCHAIN='local',GOWORK='off',GOPROXY='off',GOSUMDB='off',
+-                   CGO_ENABLED='0',GOOS='linux',GOARCH='amd64',GOCACHE=self.c['compilation_cache'],GOMODCACHE=self.c['modules_cache'],GOMAXPROCS='2')
++        env=self.toolchain_environment()
++        if hasattr(self,'effective_goroot'):
++            require(sha(Path(self.c['go_binary']))==self.c['go_binary_sha256'],'TOOLCHAIN_PIN')
++            for n,h in self.toolchain['stdlib_sha256'].items():
++                require(sha(self.effective_goroot/'src'/n)==h,'MATCHING_STDLIB_REQUIRED')
+         binary=b/'profile-server'
+         args=[self.c['go_binary'],'-C',str(self.root/'stage/backend'),'build','-trimpath','-buildvcs=false','-tags=rrsub2profile','-o',str(binary),'./cmd/server']
+         build_gate(args,env,self.c)
+@@ -127,7 +138,7 @@
+         digest=sha(binary);require(digest!=OLD_BINARY,'BINARY_MUST_BE_DISTINCT')
+         if self.source.get('reviewed_source'):
+             require(digest==self.source['reviewed_source']['binary_sha256'],'REVIEWED_BINARY_PIN')
+-        info=self.cmd([self.c['go_binary'],'version','-m',str(binary)]).decode()
++        info=self.cmd([self.c['go_binary'],'version','-m',str(binary)],env=env).decode()
+         require('go1.27.1' in info and '-tags=rrsub2profile' in info,'BINARY_BUILD_INFO')
+         # Only fixed build fields are retained; no environment values are logged.
+         self.build_info={'go_version':'go1.27.1','tag':'rrsub2profile','binary_sha256':digest,
+--- a/sub2api-memory-profile/operator_config.py
++++ b/sub2api-memory-profile/operator_config.py
+@@ -3,29 +3,71 @@
+ Read the existing synthetic config and reviewed W1 stdlib freeze. The actual
+ Go executable/version/stdlib are checked separately by root-driver preflight.
+ """
+-import argparse,json
++import argparse,hashlib,json,os,stat
+ from pathlib import Path
+ from contracts import require,strict_json
+ from prepare import sha
+ from launch_contracts import config_gate,toolchain_gate
+ 
++def private_parent(path):
++    require(path.is_absolute() and path.name not in ('','.', '..') and '..' not in path.parts,'OUTPUT_PATH_REQUIRED')
++    # Traverse with directory descriptors: no symlink ancestor can redirect publication.
++    fd=os.open('/',os.O_RDONLY|os.O_DIRECTORY)
++    try:
++        for part in path.parent.parts[1:]:
++            child=os.open(part,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW,dir_fd=fd)
++            os.close(fd);fd=child
++        st=os.fstat(fd)
++        require(st.st_uid==os.geteuid() and stat.S_IMODE(st.st_mode)==0o700,'PRIVATE_OUTPUT_PARENT_REQUIRED')
++        return fd
++    except BaseException:
++        os.close(fd);raise
++
+ def migrate(old,out,receipt,freeze,cache,collector):
+     c=strict_json(old.read_text())
+-    require(not out.exists() and not receipt.exists(),'OUTPUT_REUSE_DENIED')
++    require(out!=receipt,'OUTPUT_REUSE_DENIED')
+     require(sha(Path(c['go_binary']))==c['go_binary_sha256'],'TOOLCHAIN_PIN')
+     require(cache.is_dir() and collector.is_file(),'OFFLINE_INPUTS_MISSING')
+     r={'go_version':'go1.27.1','go_binary_sha256':c['go_binary_sha256'],'compilation_cache':str(cache),
+       'stdlib_sha256':{n:sha(freeze/n) for n in ('runtime/mprof.go','runtime/mstats.go','runtime/pprof/pprof.go','runtime/pprof/protomem.go')}}
+-    c.update(compilation_cache=str(cache),toolchain_receipt=str(receipt),collector_source=str(collector))
+-    receipt.write_text(json.dumps(r,indent=2)+'\n');receipt.chmod(0o600)
+-    c['toolchain_receipt_sha256']=sha(receipt);config_gate(c);toolchain_gate(r,c)
+-    out.write_text(json.dumps(c,indent=2)+'\n');out.chmod(0o600)
++    receipt_bytes=(json.dumps(r,indent=2)+'\n').encode()
++    c.update(compilation_cache=str(cache),toolchain_receipt=str(receipt),collector_source=str(collector),
++      toolchain_receipt_sha256=hashlib.sha256(receipt_bytes).hexdigest())
++    config_gate(c);toolchain_gate(r,c)
++    config_bytes=(json.dumps(c,indent=2)+'\n').encode()
++    parents=[];created=[]
++    try:
++        # Validate both destinations before first creation. O_EXCL also closes
++        # the check/create race; a concurrent existing output is never overwritten.
++        for path in (receipt,out):
++            fd=private_parent(path);parents.append((path,fd))
++            try:os.stat(path.name,dir_fd=fd,follow_symlinks=False)
++            except FileNotFoundError:pass
++            else:require(False,'OUTPUT_REUSE_DENIED')
++        for (path,parent),data in zip(parents,(receipt_bytes,config_bytes)):
++            fd=os.open(path.name,os.O_WRONLY|os.O_CREAT|os.O_EXCL|os.O_NOFOLLOW,0o600,dir_fd=parent)
++            created.append((path,parent,fd,os.fstat(fd)))
++        for (_,_,fd,_),data in zip(created,(receipt_bytes,config_bytes)):
++            view=memoryview(data)
++            while view:
++                count=os.write(fd,view);require(count>0,'PRIVATE_OUTPUT_WRITE_FAILED');view=view[count:]
++            os.fsync(fd)
++    except BaseException:
++        for path,parent,fd,initial in reversed(created):
++            try:
++                current=os.stat(path.name,dir_fd=parent,follow_symlinks=False)
++                if (current.st_dev,current.st_ino)==(initial.st_dev,initial.st_ino):os.unlink(path.name,dir_fd=parent)
++            except FileNotFoundError:pass
++        raise
++    finally:
++        for _,_,fd,_ in created:os.close(fd)
++        for _,fd in parents:os.close(fd)
+ 
+ if __name__=='__main__':
+     ap=argparse.ArgumentParser()
+     for key in ('old-config','out','receipt','stdlib-freeze','compilation-cache','collector-source'):ap.add_argument('--'+key,type=Path,required=True)
+     a=ap.parse_args()
+     try:
+-        migrate(a.old_config.resolve(),a.out.resolve(),a.receipt.resolve(),a.stdlib_freeze.resolve(),a.compilation_cache.resolve(),a.collector_source.resolve())
++        migrate(a.old_config.resolve(),a.out.absolute(),a.receipt.absolute(),a.stdlib_freeze.resolve(),a.compilation_cache.resolve(),a.collector_source.resolve())
+     except Exception:raise SystemExit('PRIVATE_CONFIG_MIGRATION_STOP_NO_VALUES_EXPORTED')
+     print('PRIVATE_CONFIG_AND_REVIEWED_TOOLCHAIN_RECEIPT_WRITTEN')

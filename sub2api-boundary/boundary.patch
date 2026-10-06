@@ -1,0 +1,1315 @@
+--- a/sub2api-spike/customer.mjs
++++ b/sub2api-spike/customer.mjs
+@@ -1,20 +1,71 @@
+ import http from 'node:http';
+ import { randomBytes } from 'node:crypto';
++import { isDeepStrictEqual } from 'node:util';
+ import { atomicJSON, loadJSON, serial, fault, send, readJSON, bearer } from './util.mjs';
+ export const providerProfiles = Object.freeze({
+-  'mimo:responses': { platform: 'openai', baseURL: 'https://token-plan-sgp.xiaomimimo.com/v1', model: 'mimo-v2.6-pro' },
+-  'mimo:messages': { platform: 'anthropic', baseURL: 'https://token-plan-sgp.xiaomimimo.com/anthropic', model: 'mimo-v2.6-pro' },
+-  'openrouter:responses': { platform: 'openai', baseURL: 'https://openrouter.ai/api/v1', model: 'openai/gpt-4.1' }
++  'mimo:responses': Object.freeze({ platform: 'openai', baseURL: 'https://token-plan-sgp.xiaomimimo.com/v1', model: 'mimo-v2.6-pro' }),
++  'mimo:messages': Object.freeze({ platform: 'anthropic', baseURL: 'https://token-plan-sgp.xiaomimimo.com/anthropic', model: 'mimo-v2.6-pro' }),
++  'openrouter:responses': Object.freeze({ platform: 'openai', baseURL: 'https://openrouter.ai/api/v1', model: 'openai/gpt-4.1' })
+ });
+ export function safeProviderURL(value) {
+   let u; try { u = new URL(value); } catch { throw fault(400, 'unsafe_url'); }
+   if (u.username || u.password || u.hash || u.search || !Object.values(providerProfiles).some(p => p.baseURL === u.href.replace(/\/$/, ''))) throw fault(400, 'unsafe_url');
+   return u.href.replace(/\/$/, '');
+ }
++// Only trusted stock full account DTOs have these non-omitempty authority
++// fields. Missing group slices mean empty in this DTO, never in arbitrary/lite
++// projections. Present null/malformed/conflicting slices are always rejected.
++function stockGroups(a) {
++  const object = x => x !== null && typeof x === 'object' && !Array.isArray(x);
++  if (!object(a) || !Number.isSafeInteger(a.id) || a.id < 1 ||
++      !['name', 'platform', 'type', 'status'].every(k => typeof a[k] === 'string') || typeof a.schedulable !== 'boolean' ||
++      !Object.hasOwn(a, 'credentials') || !(a.credentials === null || object(a.credentials)) ||
++      !Object.hasOwn(a, 'extra') || !(a.extra === null || object(a.extra))) throw fault(502, 'account_dto_invalid');
++  const validID = x => Number.isSafeInteger(x) && x > 0;
++  const slices = [];
++  for (const key of ['group_ids', 'groups', 'account_groups']) if (Object.hasOwn(a, key)) {
++    if (!Array.isArray(a[key])) throw fault(502, 'account_groups_invalid');
++    const ids = a[key].map(x => {
++      if (key === 'group_ids') return x;
++      if (!object(x)) throw fault(502, 'account_groups_invalid');
++      if (key === 'groups') return x.id;
++      if (x.account_id !== a.id || Object.hasOwn(x, 'group') && (!object(x.group) || x.group.id !== x.group_id) ||
++          Object.hasOwn(x, 'account') && (!object(x.account) || x.account.id !== a.id)) throw fault(502, 'account_groups_invalid');
++      return x.group_id;
++    });
++    if (!ids.every(validID) || new Set(ids).size !== ids.length) throw fault(502, 'account_groups_invalid');
++    slices.push(ids.sort((x, y) => x - y));
++  }
++  // group_ids is canonical in stock. A nonempty secondary representation cannot
++  // coexist with its omission: that contradicts the full DTO's empty slice.
++  const ids = Object.hasOwn(a, 'group_ids') ? slices[0] : [];
++  if (slices.some(x => !isDeepStrictEqual(x, ids))) throw fault(502, 'account_groups_conflict');
++  return ids;
++}
+ export class AdminAPI {
+   constructor({ baseURL, adminKey, timeoutMs = 10000 }) { this.baseURL = baseURL; this.adminKey = adminKey; this.timeoutMs = timeoutMs; }
+-  async call(method, path, body) {
+-    const r = await fetch(`${this.baseURL}/api/v1/admin${path}`, { method, headers: { 'x-api-key': this.adminKey, 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body), redirect: 'error', signal: AbortSignal.timeout(this.timeoutMs) });
++  async createQuarantined(body, { templateID, workspace, provider, protocol, intentID, checkpoint = () => {} } = {}) {
++    // Stock POST /accounts ignores status/schedulable and auto-binds defaults.
++    // Duplicate instead persists an unschedulable copy and its group set in one
++    // transaction. Only a trusted, per-workspace ungrouped template is eligible.
++    if (!Number.isSafeInteger(templateID) || templateID < 1) throw fault(503, 'quarantine_template_required');
++    const path = `/accounts/${templateID}`;
++    checkpoint(); const template = await this.call('GET', path); checkpoint();
++    const groups = stockGroups(template);
++    const marker = template.extra?.rr_quarantine_template;
++    if (marker?.workspace !== workspace || marker?.provider !== provider || marker?.protocol !== protocol ||
++        template.type !== 'apikey' || template.platform !== body.platform || template.status !== 'inactive' || template.schedulable !== false ||
++        template.id !== templateID || groups.length || !template.name?.startsWith('rr-sub2-spike-20260930-')) throw fault(409, 'quarantine_template_denied');
++    const prepared = await this.call('PUT', path, { ...body, extra: { ...body.extra, rr_quarantine_template: marker }, status: 'inactive', group_ids: [] });
++    checkpoint(); const preparedGroups = stockGroups(prepared);
++    if (prepared.id !== templateID || prepared.type !== body.type || prepared.platform !== body.platform ||
++        prepared.status !== 'inactive' || prepared.schedulable !== false || preparedGroups.length || prepared.name !== body.name ||
++        !isDeepStrictEqual(prepared.extra?.rr_quarantine_template, marker) || !isDeepStrictEqual(prepared.extra?.rr_quarantine, body.extra.rr_quarantine)) throw fault(409, 'quarantine_template_drift');
++    // Intentionally exactly one create attempt, even with an idempotency key.
++    return this.call('POST', `${path}/duplicate`, {}, { 'Idempotency-Key': intentID });
++  }
++  async call(method, path, body, headers = {}) {
++    const r = await fetch(`${this.baseURL}/api/v1/admin${path}`, { method, headers: { 'x-api-key': this.adminKey, 'content-type': 'application/json', ...headers }, body: body === undefined ? undefined : JSON.stringify(body), redirect: 'error', signal: AbortSignal.timeout(this.timeoutMs) });
+     if (!r.ok) { await r.body?.cancel(); throw fault(502, `admin_http_${r.status}`); }
+     let n = 0; const chunks = []; for await (const b of r.body) { n += b.length; if (n > 2 * 1024 * 1024) throw fault(502, 'admin_response_limit'); chunks.push(b); }
+     let data; try { data = JSON.parse(Buffer.concat(chunks)); } catch { throw fault(502, 'admin_invalid_json'); }
+@@ -26,90 +77,223 @@
+ export function publicAccount(a, binding) {
+   return { id: binding.id, provider: binding.provider, protocol: binding.protocol, status: ['active', 'inactive', 'error'].includes(a.status) ? a.status : 'unknown', concurrency: Number.isSafeInteger(a.concurrency) ? a.concurrency : null };
+ }
+-export async function customerAdapter({ statePath, admin, workspaces, credentialProfiles, onAuthorityChange = async () => {} }) {
+-  const state = await loadJSON(statePath, { schema: 1, bindings: {} });
++export async function customerAdapter({ statePath, admin, workspaces, credentialProfiles, quarantineTemplates = {}, onAuthorityChange = async () => {} }) {
++  const state = await loadJSON(statePath, { schema: 1, owner: randomBytes(16).toString('hex'), bindings: {} });
+   if (state.schema !== 1 || !state.bindings || Array.isArray(state.bindings)) throw Error('Invalid account state');
++  // Legacy intents have no ownership marker and cannot be adopted by name.
++  state.owner ??= randomBytes(16).toString('hex');
+   const lock = serial(); let poisoned = false;
+   async function save() { try { await atomicJSON(statePath, state); } catch { poisoned = true; throw fault(503, 'metadata_unavailable'); } }
+   await save();
++  // Interrupted promotion may already have enabled engine scheduling. Fence the
++  // server-owned workspace authority before serving any subsequent requests.
++  for (const b of Object.values(state.bindings)) if (!['active', 'deleted'].includes(b.state) && (['bound', 'replacing', 'deleting'].includes(b.state) || b.fenced || !b.quarantineOwner)) {
++    if (workspaces[b.workspace]) workspaces[b.workspace].suspended = true;
++    await onAuthorityChange(b.workspace);
++  }
+   function membership(identity, manage = false) {
+     const w = workspaces[identity?.workspace];
+     const role = w?.members?.[identity?.user];
+-    if (!w || w.suspended || !role || manage && !['owner', 'manager'].includes(role)) throw fault(403, 'membership_denied');
++    if (!w || w.suspended || !['owner', 'manager', 'member'].includes(role) || manage && !['owner', 'manager'].includes(role)) throw fault(403, 'membership_denied');
+     if (poisoned) throw fault(503, 'metadata_unavailable'); return w;
+   }
++  function authority(identity, manage) {
++    const w = membership(identity, manage), workspace = identity.workspace;
++    const snapshot = structuredClone(w), members = w.members, groups = w.groups, workspaceTemplates = w.quarantineTemplates;
++    const credentials = credentialProfiles?.[workspace], templates = quarantineTemplates[workspace];
++    const credentialSnapshot = { ...credentials }, templateSnapshot = structuredClone(templates);
++    return { w, group: key => snapshot.groups?.[key], template: key => templateSnapshot?.[key] ?? snapshot.quarantineTemplates?.[key],
++      credential: key => credentialSnapshot[key], check() {
++        const current = membership(identity, manage);
++        if (current !== w || current.members !== members || current.groups !== groups || current.quarantineTemplates !== workspaceTemplates ||
++            !isDeepStrictEqual(current, snapshot) || credentialProfiles?.[workspace] !== credentials ||
++            !isDeepStrictEqual(credentialProfiles?.[workspace] ?? {}, credentialSnapshot) || quarantineTemplates[workspace] !== templates ||
++            !isDeepStrictEqual(quarantineTemplates[workspace], templateSnapshot)) throw fault(409, 'authority_changed');
++      } };
++  }
++  async function checked(guard, fn) { guard.check(); const value = await fn(); guard.check(); return value; }
+   function owned(identity, id) {
+     const b = state.bindings[id]; if (!b || b.workspace !== identity.workspace || b.state !== 'active') throw fault(404, 'account_not_found'); return b;
+   }
+-  async function fetchOwned(identity, id) {
+-    const b = owned(identity, id); const a = await admin.call('GET', `/accounts/${b.upstreamID}`);
+-    const expected = workspaces[identity.workspace].groups[`${b.provider}:${b.protocol}`];
+-    // Sub2API groups restrict routing, not upstream credential ownership.
+-    const groups = a.group_ids ?? a.groups?.map(g => g.id);
+-    if (!Array.isArray(groups) || groups.length !== 1 || groups[0] !== expected) throw fault(409, 'group_drift');
+-    return { a, b };
+-  }
+-  async function connectOwned(w, identity, input, replacingID) {
+-        if (Object.keys(input).some(k => !['provider', 'protocol'].includes(k))) throw fault(400, 'customer_routing_denied');
+-        const profile = providerProfiles[`${input.provider}:${input.protocol}`];
+-        const group = w.groups?.[`${input.provider}:${input.protocol}`];
+-        const credentialRef = credentialProfiles?.[identity.workspace]?.[`${input.provider}:${input.protocol}`];
+-        const credential = typeof credentialRef === 'function' ? await credentialRef() : credentialRef;
+-        if (!profile || !group || !credential) throw fault(400, 'unsupported_account');
+-        safeProviderURL(profile.baseURL);
+-        if (Object.values(state.bindings).some(b => b.workspace === identity.workspace && b.provider === input.provider && b.protocol === input.protocol && b.id !== replacingID && ['creating', 'recovery_required', 'deleting', 'replacing'].includes(b.state))) throw fault(409, 'recovery_required');
+-        const id = randomBytes(16).toString('hex');
+-        const b = { id, workspace: identity.workspace, provider: input.provider, protocol: input.protocol, state: 'creating' };
+-        state.bindings[id] = b; await save();
+-        // Persist intention BEFORE remote create. An ambiguous failure remains
+-        // recovery_required: no automatic create retry or authority publication.
+-        try {
+-          const a = await admin.call('POST', '/accounts', { name: `rr-sub2-spike-20260930-${id}`, platform: profile.platform, type: 'apikey', credentials: { api_key: credential, base_url: profile.baseURL, model_mapping: { [profile.model]: profile.model } }, extra: profile.platform === 'openai' ? { openai_responses_mode: 'force_responses', openai_passthrough: true } : { anthropic_passthrough: true }, group_ids: [group], concurrency: 2, priority: 1, rate_multiplier: 1 });
+-          if (!Number.isSafeInteger(a.id) || a.id < 1) throw fault(502, 'invalid_account_id');
+-          b.upstreamID = a.id; b.state = 'active'; await save(); return publicAccount(a, b);
+-        } catch (e) { b.state = 'recovery_required'; await save(); throw e; }
++  async function fetchOwned(identity, id, guard) {
++    const b = owned(identity, id);
++    try {
++      const a = await checked(guard, () => admin.call('GET', `/accounts/${b.upstreamID}`));
++      const expected = guard.group(`${b.provider}:${b.protocol}`);
++      // Sub2API groups restrict routing, not upstream credential ownership.
++      const groups = stockGroups(a);
++      if (a.id !== b.upstreamID || a.platform !== providerProfiles[`${b.provider}:${b.protocol}`]?.platform ||
++          a.type !== 'apikey' || b.quarantineOwner && !matches(a, b) || groups.length !== 1 || groups[0] !== expected) throw fault(409, 'group_drift');
++      return { a, b };
++    } catch (e) { return failClosed(b, e); }
++  }
++  const baseNameOf = b => `rr-sub2-spike-20260930-${state.owner}-${b.id}`;
++  const nameOf = b => `${baseNameOf(b)} (Copy)`;
++  const markerOf = b => ({ owner: state.owner, binding: b.id, workspace: b.workspace });
++  function matches(a, b) {
++    const m = a.extra?.rr_quarantine;
++    return a.name === nameOf(b) && m?.owner === state.owner && m?.binding === b.id && m?.workspace === b.workspace &&
++      a.platform === providerProfiles[`${b.provider}:${b.protocol}`]?.platform && a.type === 'apikey';
++  }
++  const groupsOf = stockGroups;
++  function quarantined(a) { return ['active', 'inactive'].includes(a.status) && a.schedulable === false && groupsOf(a).length === 0; }
++  async function quarantine(b, guard) {
++    // No publication even when compensation is unreachable. Retain intent for
++    // explicit operator recovery; never create a second account automatically.
++    if (!b.upstreamID) return;
++    const call = (method, path, body) => guard ? checked(guard, () => admin.call(method, path, body)) : admin.call(method, path, body);
++    const before = await call('GET', `/accounts/${b.upstreamID}`);
++    // Never compensate a different/foreign account even if the stored ID is reused.
++    if (before?.id !== b.upstreamID || b.quarantineOwner && !matches(before, b)) throw fault(409, 'compensation_ownership_denied');
++    await call('POST', `/accounts/${b.upstreamID}/schedulable`, { schedulable: false });
++    await call('PUT', `/accounts/${b.upstreamID}`, { status: 'inactive', group_ids: [] });
++    const a = await call('GET', `/accounts/${b.upstreamID}`);
++    if (a.id !== b.upstreamID || a.status !== 'inactive' || !quarantined(a) || b.quarantineOwner && !matches(a, b)) throw fault(502, 'compensation_unconfirmed');
++  }
++  async function promote(identity, b, guard) {
++    guard.check(); const group = guard.group(`${b.provider}:${b.protocol}`);
++    if (!Number.isSafeInteger(group) || group < 1) throw fault(403, 'routing_denied');
++    // Ownership is durable before any active workspace group is attached.
++    b.state = 'bound'; await checked(guard, save);
++    const validate = (a, status, schedulable) => {
++      if (a.id !== b.upstreamID || !matches(a, b) || a.status !== status || a.schedulable !== schedulable ||
++          !isDeepStrictEqual(groupsOf(a), [group])) throw fault(502, 'promotion_invalid');
++    };
++    validate(await checked(guard, () => admin.call('PUT', `/accounts/${b.upstreamID}`, { group_ids: [group], status: 'inactive' })), 'inactive', false);
++    validate(await checked(guard, () => admin.call('PUT', `/accounts/${b.upstreamID}`, { status: 'active' })), 'active', false);
++    const a = await checked(guard, () => admin.call('POST', `/accounts/${b.upstreamID}/schedulable`, { schedulable: true }));
++    validate(a, 'active', true);
++    b.state = 'active'; b.fenced = false; await checked(guard, save); return publicAccount(a, b);
++  }
++  async function failClosed(b, error) {
++    b.state = 'recovery_required';
++    try { await quarantine(b); } catch {
++      b.fenced = true;
++      if (workspaces[b.workspace]) workspaces[b.workspace].suspended = true;
++      try { await onAuthorityChange(b.workspace); } catch { poisoned = true; }
++    }
++    try { await save(); } finally {
++      // Revocation/persistence can themselves replace the server-owned object.
++      if (b.fenced && workspaces[b.workspace]) workspaces[b.workspace].suspended = true;
++    }
++    throw error;
++  }
++  async function connectOwned(guard, identity, input, replacingID) {
++    if (Object.keys(input).some(k => !['provider', 'protocol'].includes(k))) throw fault(400, 'customer_routing_denied');
++    const profile = providerProfiles[`${input.provider}:${input.protocol}`];
++    const group = guard.group(`${input.provider}:${input.protocol}`);
++    const credentialRef = guard.credential(`${input.provider}:${input.protocol}`);
++    const credential = await checked(guard, () => typeof credentialRef === 'function' ? credentialRef() : credentialRef);
++    if (!profile || !Number.isSafeInteger(group) || group < 1 || typeof credential !== 'string' || !credential) throw fault(400, 'unsupported_account');
++    safeProviderURL(profile.baseURL);
++    if (Object.values(state.bindings).some(b => b.workspace === identity.workspace && b.provider === input.provider && b.protocol === input.protocol && b.id !== replacingID && !['active', 'deleted'].includes(b.state))) throw fault(409, 'recovery_required');
++    const id = randomBytes(16).toString('hex');
++    const b = { id, workspace: identity.workspace, provider: input.provider, protocol: input.protocol, state: 'creating', quarantineOwner: state.owner };
++    state.bindings[id] = b;
++    try {
++      await checked(guard, save);
++      const extra = profile.platform === 'openai' ? { openai_responses_mode: 'force_responses', openai_passthrough: true } : { anthropic_passthrough: true };
++      if (input.provider === 'mimo' && input.protocol === 'responses') extra.openai_preserve_compatible_reasoning = true;
++      extra.rr_quarantine = markerOf(b);
++      const a = await admin.createQuarantined({ name: baseNameOf(b), platform: profile.platform, type: 'apikey', credentials: { api_key: credential, base_url: profile.baseURL, model_mapping: { [profile.model]: profile.model } }, extra, concurrency: 2, priority: 1, rate_multiplier: 1 }, { templateID: guard.template(`${input.provider}:${input.protocol}`), workspace: identity.workspace, provider: input.provider, protocol: input.protocol, intentID: id, checkpoint: guard.check });
++      if (!Number.isSafeInteger(a?.id) || a.id < 1 || !matches(a, b)) throw fault(502, 'quarantine_invalid');
++      b.upstreamID = a.id;
++      guard.check(); if (!quarantined(a)) throw fault(502, 'quarantine_invalid');
++      await checked(guard, save);
++      await checked(guard, () => quarantine(b, guard));
++      const result = await promote(identity, b, guard); guard.check(); return result;
++    } catch (e) { return failClosed(b, e); }
+   }
+   const api = {
+     membership,
+     async operate(identity, action, id, input = {}) { return lock(async () => {
+-      const w = membership(identity, !['list', 'read'].includes(action));
+-      if (action === 'connect') return connectOwned(w, identity, input);
+-      if (action === 'list') {
+-        const out = []; for (const b of Object.values(state.bindings)) if (b.workspace === identity.workspace && b.state === 'active') { const { a } = await fetchOwned(identity, b.id); out.push(publicAccount(a, b)); } return out;
++      const manage = !['list', 'read'].includes(action), guard = authority(identity, manage);
++      let b, mutated = false; const readBindings = [];
++      try {
++        let result;
++        if (action === 'connect') {
++          result = await connectOwned(guard, identity, input); b = state.bindings[result.id];
++        } else if (action === 'list') {
++          result = [];
++          for (const binding of Object.values(state.bindings)) if (binding.workspace === identity.workspace && binding.state === 'active') {
++            const { a } = await fetchOwned(identity, binding.id, guard); readBindings.push(binding); result.push(publicAccount(a, binding));
++          }
++        } else {
++          const fetched = await fetchOwned(identity, id, guard); b = fetched.b; const a = fetched.a; guard.check();
++          if (action === 'read') result = publicAccount(a, b);
++          else if (action === 'export') {
++            // Credential-bearing stock export is read privately; never reflected.
++            await checked(guard, () => admin.call('GET', `/accounts/data?ids=${b.upstreamID}&include_proxies=false`));
++            result = { schema: 1, restorable: false, account: publicAccount(a, b) };
++          } else if (action === 'delete' || action === 'replace') {
++            if (action === 'replace' && Object.keys(input).length) throw fault(400, 'customer_routing_denied');
++            b.state = action === 'delete' ? 'deleting' : 'replacing'; await checked(guard, save);
++            await checked(guard, () => onAuthorityChange(identity.workspace));
++            mutated = true;
++            if (action === 'replace') {
++              await checked(guard, () => quarantine(b, guard));
++              result = await connectOwned(guard, identity, { provider: b.provider, protocol: b.protocol }, b.id);
++              // Until old retirement is confirmed, a replacement cannot escape
++              // compensation if authority changes while the final delete awaits.
++              readBindings.push(state.bindings[result.id]); guard.check();
++            }
++            await checked(guard, () => admin.call('DELETE', `/accounts/${b.upstreamID}`));
++            b.state = 'deleted'; await checked(guard, save);
++            if (action === 'delete') result = { deleted: true };
++          } else if (action === 'refresh' || action === 'pause' || action === 'update') {
++            if (action === 'refresh' && a.type !== 'oauth') throw fault(409, 'refresh_requires_oauth');
++            if (action === 'update' && (Object.keys(input).some(k => k !== 'concurrency') || !Number.isSafeInteger(input.concurrency) || input.concurrency < 1 || input.concurrency > 2)) throw fault(400, 'customer_routing_denied');
++            await checked(guard, () => onAuthorityChange(identity.workspace)); mutated = true;
++            const updated = await checked(guard, () => admin.call(action === 'refresh' ? 'POST' : 'PUT', `/accounts/${b.upstreamID}${action === 'refresh' ? '/refresh' : ''}`, action === 'refresh' ? {} : action === 'pause' ? { status: 'inactive' } : { concurrency: input.concurrency }));
++            if (!isDeepStrictEqual(stockGroups(updated), [guard.group(`${b.provider}:${b.protocol}`)]) || updated.id !== b.upstreamID || b.quarantineOwner && !matches(updated, b)) throw fault(409, 'group_drift');
++            result = publicAccount(updated, b);
++          } else throw fault(404, 'action_denied');
++        }
++        guard.check(); return result;
++      } catch (e) {
++        if (e.code === 'authority_changed' || mutated) {
++          for (const binding of readBindings) if (binding.state !== 'deleted') {
++            try { await failClosed(binding, e); } catch { /* continue compensation */ }
++          }
++          if (b && b.state !== 'deleted') return failClosed(b, e);
++        }
++        throw e;
+       }
+-      const { a, b } = await fetchOwned(identity, id);
+-      if (action === 'read') return publicAccount(a, b);
+-      if (action === 'export') {
+-        // Exercise credential-bearing source route privately, only publish the
+-        // same metadata projection. Export is deliberately non-restorable.
+-        await admin.call('GET', `/accounts/data?ids=${b.upstreamID}&include_proxies=false`);
+-        return { schema: 1, restorable: false, account: publicAccount(a, b) };
+-      }
+-      if (action === 'delete') {
+-        b.state = 'deleting'; await save(); await onAuthorityChange(identity.workspace);
+-        await admin.call('DELETE', `/accounts/${b.upstreamID}`); b.state = 'deleted'; await save(); return { deleted: true };
+-      }
+-      if (action === 'replace') {
+-        if (Object.keys(input).length) throw fault(400, 'customer_routing_denied');
+-        b.state = 'replacing'; await save(); await onAuthorityChange(identity.workspace);
+-        await admin.call('PUT', `/accounts/${b.upstreamID}`, { status: 'inactive' });
+-        const replacement = await connectOwned(w, identity, { provider: b.provider, protocol: b.protocol }, b.id);
+-        await admin.call('DELETE', `/accounts/${b.upstreamID}`); b.state = 'deleted'; await save(); return replacement;
+-      }
+-      if (action === 'refresh') {
+-        // API-key accounts have no OAuth lifecycle. Report it honestly.
+-        if (a.type !== 'oauth') throw fault(409, 'refresh_requires_oauth');
+-        await onAuthorityChange(identity.workspace);
+-        await admin.call('POST', `/accounts/${b.upstreamID}/refresh`, {});
+-        return publicAccount(await admin.call('GET', `/accounts/${b.upstreamID}`), b);
+-      }
+-      if (action === 'pause' || action === 'update') {
+-        if (action === 'update' && (Object.keys(input).some(k => k !== 'concurrency') || !Number.isSafeInteger(input.concurrency) || input.concurrency < 1 || input.concurrency > 2)) throw fault(400, 'customer_routing_denied');
+-        await onAuthorityChange(identity.workspace);
+-        const updated = await admin.call('PUT', `/accounts/${b.upstreamID}`, action === 'pause' ? { status: 'inactive' } : { concurrency: input.concurrency });
+-        return publicAccount(updated, b);
+-      }
+-      throw fault(404, 'action_denied');
++    }); },
++    // Trusted operator API, deliberately absent from customer HTTP routes.
++    async reconcile(identity, id, decision = 'retire') { return lock(async () => {
++      const guard = authority(identity, true);
++      if (!['retire', 'complete'].includes(decision)) throw fault(400, 'recovery_decision_denied');
++      const b = state.bindings[id];
++      if (!b || b.workspace !== identity.workspace || ['active', 'deleted'].includes(b.state) || b.quarantineOwner !== state.owner) throw fault(404, 'recovery_not_found');
++      try {
++        let a;
++        if (b.upstreamID) {
++          a = await checked(guard, () => admin.call('GET', `/accounts/${b.upstreamID}`));
++          stockGroups(a);
++          if (a.id !== b.upstreamID || !matches(a, b)) throw fault(409, 'recovery_ownership_denied');
++        } else {
++          const found = [];
++          for (let page = 1; ; page++) {
++            if (page > 100) throw fault(503, 'recovery_scan_limit');
++            const data = await checked(guard, () => admin.call('GET', `/accounts?page=${page}&page_size=100&lite=false&search=${encodeURIComponent(nameOf(b))}`));
++            if (!Array.isArray(data?.items) || !Number.isSafeInteger(data.total) || data.total < 0) throw fault(502, 'recovery_list_invalid');
++            for (const item of data.items) { stockGroups(item); if (matches(item, b)) found.push(item); }
++            if (page * 100 >= data.total) break;
++          }
++          if (found.length !== 1 || !quarantined(found[0])) throw fault(409, 'recovery_quarantine_denied');
++          a = found[0]; b.upstreamID = a.id; await checked(guard, save);
++          // Re-fetch full authority before adopting the list observation.
++          a = await checked(guard, () => admin.call('GET', `/accounts/${b.upstreamID}`));
++          if (!matches(a, b) || a.id !== b.upstreamID || !quarantined(a)) throw fault(409, 'recovery_quarantine_denied');
++        }
++        await checked(guard, () => quarantine(b, guard));
++        if (decision === 'complete') {
++          const result = await promote(identity, b, guard); guard.check(); return result;
++        }
++        await checked(guard, () => admin.call('DELETE', `/accounts/${b.upstreamID}`));
++        b.state = 'deleted'; b.fenced = false; await checked(guard, save); return { retired: true };
++      } catch (e) { return failClosed(b, e); }
+     }); },
+     async recovery() { return Object.values(state.bindings).filter(b => b.state !== 'active' && b.state !== 'deleted').map(b => ({ id: b.id, workspace: b.workspace, state: b.state, upstreamID: b.upstreamID ?? null })); }
+   };
+--- a/sub2api-spike/customer.test.mjs
++++ b/sub2api-spike/customer.test.mjs
+@@ -1,40 +1,57 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+ import http from 'node:http';
+-import { mkdtemp, rm, readFile } from 'node:fs/promises';
++import { mkdtemp, rm, readFile, mkdir, writeFile } from 'node:fs/promises';
+ import { tmpdir } from 'node:os';
+ import { join } from 'node:path';
+ import { AdminAPI, customerAdapter, testCustomerServer, safeProviderURL } from './customer.mjs';
+ import { listen, stop, readJSON, send } from './util.mjs';
+-async function setup(t, { createFailure = false } = {}) {
++const stockEmptyAccount = JSON.parse(await readFile(new URL('../sub2api-boundary/fixtures/stock-empty-account.json', import.meta.url), 'utf8'));
++// Independent stock Go omitempty serialization, not adapter normalization.
++function stockWire(a) {
++  const dto = structuredClone(a);
++  for (const key of ['group_ids', 'groups', 'account_groups']) if (Array.isArray(dto[key]) && dto[key].length === 0) delete dto[key];
++  return dto;
++}
++async function setup(t, { createFailure = false, inject = async () => {}, revoke = async () => {} } = {}) {
+   const dir = await mkdtemp(join(tmpdir(), 'rr-sub2-spike-20260930-customer-'));
+-  const records = new Map(), observations = []; let next = 1;
+-  // Faithful SOURCE API transport fake, explicitly NOT a live Sub2API instance.
++  const records = new Map(), observations = [], authorityChanges = []; let next = 1;
++  // HTTP fault lab exercises the inspected duplicate transport contract.
++  // It cannot prove the engine transaction; real-admin receipt remains required.
++  const templates = new Map([['a', 101], ['b', 102]].map(([workspace, id]) => [id, { ...structuredClone(stockEmptyAccount), id, name: 'rr-sub2-spike-20260930-template', type: 'apikey', platform: 'openai', status: 'inactive', schedulable: false, group_ids: [], extra: { rr_quarantine_template: { workspace, provider: 'mimo', protocol: 'responses' } } }]));
+   const adminServer = http.createServer(async (req, res) => {
+     observations.push({ method: req.method, path: req.url, headers: req.headers });
+     if (req.headers['x-api-key'] !== 'synthetic-shared-admin') { send(res, 401, { code: 401 }); return; }
+     const u = new URL(req.url, 'http://admin'); const id = Number(u.pathname.split('/').at(-1));
+     if (u.pathname.endsWith('/accounts/data')) { send(res, 200, { code: 0, data: { accounts: [...records.values()].filter(a => String(a.id) === u.searchParams.get('ids')) } }); return; }
+-    if (req.method === 'POST' && u.pathname.endsWith('/accounts')) {
+-      const b = await readJSON(req); const a = { ...b, id: next++, status: 'active', name: 'synthetic-credential-in-name', extra: { nested: 'synthetic-refresh-in-extra' } }; records.set(a.id, a);
++    if (req.method === 'POST' && u.pathname.endsWith('/duplicate')) {
++      const template = templates.get(Number(u.pathname.split('/').at(-2)));
++      const a = { ...structuredClone(template), name: template.name + ' (Copy)', id: next++, status: 'active', schedulable: false };
++      assert.match(req.headers['idempotency-key'], /^[a-f0-9]{32}$/); records.set(a.id, a);
++      await inject('created', { a, dir, workspaces });
+       if (createFailure) { send(res, 503, { code: 503, message: 'synthetic-credential-leak' }); return; }
+-      send(res, 200, { code: 0, data: a }); return;
+-    }
+-    const a = records.get(id); if (!a) { send(res, 404, { code: 404 }); return; }
++      send(res, 200, { code: 0, data: stockWire(a) }); return;
++    }
++    if (req.method === 'GET' && u.pathname.endsWith('/accounts')) { send(res, 200, { code: 0, data: { items: [...records.values()].map(stockWire), total: records.size } }); return; }
++    const accountID = u.pathname.endsWith('/schedulable') ? Number(u.pathname.split('/').at(-2)) : id;
++    const a = records.get(accountID) ?? templates.get(accountID); if (!a) { send(res, 404, { code: 404 }); return; }
+     if (req.method === 'DELETE') { records.delete(id); send(res, 200, { code: 0, data: {} }); return; }
+-    if (req.method === 'PUT') Object.assign(a, await readJSON(req));
+-    send(res, 200, { code: 0, data: a });
++    if (req.method === 'PUT' || req.method === 'POST' && u.pathname.endsWith('/schedulable')) {
++      const body = await readJSON(req); Object.assign(a, body);
++      if (await inject('updated', { a, body, dir, workspaces }) === '503') { send(res, 503, { code: 503 }); return; }
++    }
++    send(res, 200, { code: 0, data: stockWire(a) });
+   });
+   const adminURL = await listen(adminServer);
+   const workspaces = { a: { members: { owner: 'owner', member: 'member' }, groups: { 'mimo:responses': 11 } }, b: { members: { owner: 'owner' }, groups: { 'mimo:responses': 22 } } };
+-  const config = { statePath: join(dir, 'customer.json'), admin: new AdminAPI({ baseURL: adminURL, adminKey: 'synthetic-shared-admin' }), workspaces, credentialProfiles: { a: { 'mimo:responses': 'synthetic-upstream-a' }, b: { 'mimo:responses': 'synthetic-upstream-b' } } };
++  const config = { onAuthorityChange: async workspace => { authorityChanges.push(workspace); await revoke(workspaces, workspace); }, statePath: join(dir, 'customer.json'), admin: new AdminAPI({ baseURL: adminURL, adminKey: 'synthetic-shared-admin' }), workspaces, quarantineTemplates: { a: { 'mimo:responses': 101 }, b: { 'mimo:responses': 102 } }, credentialProfiles: { a: { 'mimo:responses': 'synthetic-upstream-a' }, b: { 'mimo:responses': 'synthetic-upstream-b' } } };
+   const adapter = await customerAdapter(config);
+   const customer = testCustomerServer({ adapter, testOnly: true, identities: { 'synthetic-owner-a': { workspace: 'a', user: 'owner' }, 'synthetic-member-a': { workspace: 'a', user: 'member' }, 'synthetic-owner-b': { workspace: 'b', user: 'owner' } } });
+   const url = await listen(customer);
+   t.after(async () => { await stop(customer); await stop(adminServer); await rm(dir, { force: true, recursive: true }); });
+   async function call(identity, method, path = '/accounts', body) { return fetch(`${url}${path}`, { method, headers: { authorization: `Bearer synthetic-${identity}`, 'content-type': 'application/json' }, body: body === undefined ? undefined : JSON.stringify(body) }); }
+   const connect = who => call(who, 'POST', '/accounts', { provider: 'mimo', protocol: 'responses' });
+-  return { dir, config, records, observations, workspaces, adapter, call, connect };
++  return { dir, config, records, templates, authorityChanges, observations, workspaces, adapter, call, connect };
+ }
+ // Regression: customer changes group/URL or admin credential fields escape UI.
+ test('C01 C07 D05 account CRUD roundtrip with sanitized responses', async t => {
+@@ -71,6 +88,8 @@
+ // Regression: ambiguous create publishes account authority or silently recreates it.
+ test('C10 partial create failure persists recovery_required with no public binding', async t => {
+   const r = await setup(t, { createFailure: true }); assert.equal((await r.connect('owner-a')).status, 502); assert.equal(r.records.size, 1);
++  assert.equal([...r.records.values()][0].status, 'active'); assert.equal([...r.records.values()][0].schedulable, false); assert.deepEqual([...r.records.values()][0].group_ids, []);
++  assert.equal((await r.connect('owner-a')).status, 409); assert.equal(r.records.size, 1);
+   assert.deepEqual(await (await r.call('owner-a', 'GET')).json(), []); assert.equal((await r.adapter.recovery())[0].state, 'recovery_required');
+   const state = JSON.parse(await readFile(join(r.dir, 'customer.json'), 'utf8')); assert.ok(!JSON.stringify(state).includes('synthetic-upstream-a')); assert.equal((await (await customerAdapter(r.config)).recovery()).length, 1);
+ });
+@@ -93,3 +112,376 @@
+   const changed = await r.call('owner-a', 'POST', `/accounts/${a.id}/replace`); assert.equal(changed.status, 200); const replacement = await changed.json(); assert.notEqual(replacement.id, a.id);
+   assert.equal((await r.call('owner-a', 'GET', `/accounts/${a.id}`)).status, 404); assert.equal(r.records.size, 1); assert.equal([...r.records.values()][0].credentials.api_key, 'synthetic-rotated-upstream-a');
+ });
++
++// Regression: stock POST defaults silently create an active/default-group orphan.
++test('stock admin create contract is denied before any remote write', async () => {
++  const admin = new AdminAPI({ baseURL: 'https://unused.invalid', adminKey: 'synthetic-only' });
++  await assert.rejects(admin.createQuarantined({}), { status: 503, code: 'quarantine_template_required' });
++});
++// Regression: ownership is not fsynced before group binding, or final save failure
++// leaves an engine account routable even though the adapter never returned its ID.
++test('real filesystem persistence failure quarantines acknowledged create', async t => {
++  const r = await setup(t, { inject: async (event, { dir }) => {
++    if (event === 'created') await mkdir(join(dir, 'customer.json.new'));
++  } });
++  assert.equal((await r.connect('owner-a')).status, 503);
++  const a = [...r.records.values()][0]; assert.equal(a.status, 'inactive'); assert.equal(a.schedulable, false); assert.deepEqual(a.group_ids, []);
++  await rm(join(r.dir, 'customer.json.new'), { recursive: true });
++  const restarted = await customerAdapter(r.config); const [intent] = await restarted.recovery();
++  assert.equal((await restarted.reconcile({ workspace: 'a', user: 'owner' }, intent.id)).retired, true);
++  assert.equal(r.records.size, 0);
++});
++// Regression: promotion publishes authority after membership disappears in flight.
++test('membership loss during promotion compensates engine routing', async t => {
++  const r = await setup(t, { inject: async (event, { body, workspaces }) => {
++    if (event === 'updated' && body.group_ids?.length) delete workspaces.a.members.owner;
++  } });
++  assert.equal((await r.connect('owner-a')).status, 403);
++  const a = [...r.records.values()][0]; assert.equal(a.status, 'inactive'); assert.equal(a.schedulable, false); assert.deepEqual(a.group_ids, []);
++});
++// Regression: name-only reconciliation adopts another workspace's account or
++// reissues POST after an ambiguous commit. Recovery must use durable full marker.
++test('restart reconciliation completes only the exact owned quarantine', async t => {
++  const r = await setup(t, { createFailure: true }); await r.connect('owner-a');
++  const a = [...r.records.values()][0]; r.records.set(999, { ...a, id: 999, extra: { ...a.extra, rr_quarantine: { ...a.extra.rr_quarantine, workspace: 'b' } } });
++  const restarted = await customerAdapter(r.config); const [intent] = await restarted.recovery();
++  await assert.rejects(restarted.reconcile({ workspace: 'b', user: 'owner' }, intent.id, 'complete'), { status: 404 });
++  const result = await restarted.reconcile({ workspace: 'a', user: 'owner' }, intent.id, 'complete');
++  assert.equal(result.status, 'active'); assert.deepEqual(a.group_ids, [11]); assert.equal(a.schedulable, true);
++  assert.equal(r.records.get(999).schedulable, false);
++  assert.equal(r.observations.filter(x => x.method === 'POST' && x.path.endsWith('/duplicate')).length, 1);
++});
++// Regression: omitted financial/account limits or customer overrides widen routing.
++test('MiMo native reasoning and server limits survive quarantine promotion', async t => {
++  const r = await setup(t); await r.connect('owner-a'); const a = [...r.records.values()][0];
++  assert.equal(a.concurrency, 2); assert.equal(a.priority, 1); assert.equal(a.rate_multiplier, 1);
++  assert.equal(a.extra.openai_preserve_compatible_reasoning, true); assert.equal(a.extra.openai_responses_mode, 'force_responses'); assert.equal(a.extra.openai_passthrough, true);
++  assert.equal((await r.call('owner-a', 'PUT', `/accounts/${(await r.adapter.operate({ workspace: 'a', user: 'owner' }, 'list'))[0].id}`, { concurrency: 3 })).status, 400);
++});
++
++// Regression: failed final publication leaves a promoted engine account live.
++test('final ownership save failure removes active group and scheduler permission', async t => {
++  const r = await setup(t, { inject: async (event, { dir, body, a }) => {
++    if (event === 'updated' && body.schedulable === true) {
++      const persisted = JSON.parse(await readFile(join(dir, 'customer.json'), 'utf8'));
++      const b = Object.values(persisted.bindings)[0]; assert.equal(b.upstreamID, a.id); assert.equal(b.state, 'bound');
++      await mkdir(join(dir, 'customer.json.new'));
++    }
++  } });
++  assert.equal((await r.connect('owner-a')).status, 503);
++  const a = [...r.records.values()][0]; assert.equal(a.status, 'inactive'); assert.equal(a.schedulable, false); assert.deepEqual(a.group_ids, []);
++});
++// Regression: create intents exist only in RAM when the remote transaction commits.
++test('create transport sees fsynced prebind without credentials or active authority', async t => {
++  const r = await setup(t, { inject: async (event, { dir, a }) => {
++    if (event === 'created') {
++      const bytes = await readFile(join(dir, 'customer.json'), 'utf8'); const state = JSON.parse(bytes);
++      const b = Object.values(state.bindings)[0]; assert.equal(b.state, 'creating'); assert.equal(b.upstreamID, undefined);
++      assert.equal(a.extra.rr_quarantine.binding, b.id); assert.equal(a.extra.rr_quarantine.owner, state.owner);
++      assert.equal(bytes.includes('synthetic-upstream'), false);
++    }
++  } });
++  assert.equal((await r.connect('owner-a')).status, 200);
++});
++
++// Regression: guessed/misconfigured template ID crosses tenants or copies an
++// active/default group before local ownership is acknowledged.
++test('foreign workspace and grouped templates fail before duplicate effects', async t => {
++  const r = await setup(t); r.config.quarantineTemplates.a['mimo:responses'] = 102;
++  assert.equal((await r.connect('owner-a')).status, 409); assert.equal(r.records.size, 0);
++  assert.equal(r.observations.some(x => x.path.endsWith('/duplicate')), false);
++});
++// Regression: the MiMo-only flag or provider impersonation leaks into the two
++// unchanged native paths. Exercise actual request configuration through HTTP.
++test('OpenRouter Responses and MiMo Messages retain their native configuration', async t => {
++  const r = await setup(t);
++  for (const [provider, protocol, platform, templateID, group] of [['openrouter','responses','openai',103,12], ['mimo','messages','anthropic',104,13]]) {
++    const key = `${provider}:${protocol}`;
++    r.templates.set(templateID, { ...structuredClone(stockEmptyAccount), id: templateID, name: 'rr-sub2-spike-20260930-template', type: 'apikey', platform, status: 'inactive', schedulable: false, group_ids: [], extra: { rr_quarantine_template: { workspace: 'a', provider, protocol } } });
++    r.workspaces.a.groups[key] = group; r.config.quarantineTemplates.a[key] = templateID; r.config.credentialProfiles.a[key] = 'synthetic-upstream';
++    assert.equal((await r.call('owner-a', 'POST', '/accounts', { provider, protocol })).status, 200);
++    const a = [...r.records.values()].at(-1); assert.equal(a.platform, platform); assert.equal(Object.hasOwn(a.extra, 'openai_preserve_compatible_reasoning'), false);
++    if (platform === 'openai') { assert.equal(a.extra.openai_responses_mode, 'force_responses'); assert.equal(a.extra.openai_passthrough, true); }
++    else { assert.equal(a.extra.anthropic_passthrough, true); assert.equal(Object.hasOwn(a.extra, 'openai_responses_mode'), false); }
++  }
++});
++
++// Regression: failed promotion/compensation leaves other capability holders able
++// to route an uncertain engine account; server-owned workspace authority fences.
++test('uncertain promotion with unavailable compensation suspends workspace durably', async t => {
++  let promoting = false;
++  const r = await setup(t, { inject: async (event, { body }) => {
++    if (event === 'updated' && body.schedulable === true) { promoting = true; return '503'; }
++    if (event === 'updated' && promoting && body.schedulable === false) return '503';
++  } });
++  assert.equal((await r.connect('owner-a')).status, 502); assert.equal(r.workspaces.a.suspended, true);
++  assert.ok(r.authorityChanges.includes('a'));
++  assert.equal((await r.call('owner-a', 'GET')).status, 403);
++  r.workspaces.a.suspended = false; await customerAdapter(r.config); assert.equal(r.workspaces.a.suspended, true);
++});
++
++// Regression: upgrading leaves the old active ambiguous orphan reachable while
++// refusing to adopt it; legacy uncertain intents must suspend workspace routing.
++test('legacy orphan intent fences workspace on startup without adoption or admin IO', async t => {
++  const dir = await mkdtemp(join(tmpdir(), 'rr-sub2-legacy-fence-'));
++  t.after(() => rm(dir, { recursive: true, force: true }));
++  const statePath = join(dir, 'customer.json');
++  await writeFile(statePath, JSON.stringify({ schema: 1, bindings: { old: { id: 'old', workspace: 'a', state: 'recovery_required', provider: 'mimo', protocol: 'responses' } } }));
++  const workspaces = { a: { members: { owner: 'owner' }, suspended: false } }, revoked = [];
++  const adapter = await customerAdapter({ statePath, workspaces, admin: new AdminAPI({ baseURL: 'https://unused.invalid', adminKey: 'synthetic-only' }), onAuthorityChange: workspace => revoked.push(workspace) });
++  assert.equal(workspaces.a.suspended, true); assert.deepEqual(revoked, ['a']);
++  await assert.rejects(adapter.operate({ workspace: 'a', user: 'owner' }, 'list'), { status: 403 });
++  workspaces.a.suspended = false;
++  await assert.rejects(adapter.reconcile({ workspace: 'a', user: 'owner' }, 'old', 'complete'), { status: 404 });
++});
++
++// Regression: revocation awaits can remove membership/suspend the workspace after
++// the initial check, yet the adapter still sends an administrative mutation.
++test('membership changes during authority revocation stop subsequent admin mutations', async t => {
++  for (const action of ['pause', 'update', 'delete', 'replace']) {
++    const r = await setup(t, { revoke: async (workspaces, workspace) => { delete workspaces[workspace].members.owner; } });
++    const account = await (await r.connect('owner-a')).json(); const before = r.observations.length;
++    const path = `/accounts/${account.id}${['pause','replace'].includes(action) ? '/' + action : ''}`;
++    const method = action === 'delete' ? 'DELETE' : action === 'update' ? 'PUT' : 'POST';
++    assert.equal((await r.call('owner-a', method, path, action === 'update' ? { concurrency: 1 } : undefined)).status, 403);
++    assert.ok(r.observations.slice(before).every(x => x.method === 'GET'));
++    assert.equal(r.records.size, 1); const record = [...r.records.values()][0];
++    assert.equal(record.status, 'active'); assert.equal(record.concurrency, 2);
++  }
++});
++
++// Offline tests override only the admin transport: no sockets, UID changes or
++// inference. The fixture is independent source-derived stock JSON (see REPORT).
++async function offlineLab(t, { hook = async () => {}, ambiguous = false } = {}) {
++  const dir = await mkdtemp(join(tmpdir(), 'rr-sub2-offline-'));
++  t.after(() => rm(dir, { recursive: true, force: true }));
++  const workspaces = { a: { members: { owner: 'owner', member: 'member' }, groups: { 'mimo:responses': 11 } } };
++  const records = new Map(), trace = [], revoked = []; let template = structuredClone(stockEmptyAccount), next = 1;
++  const admin = new AdminAPI({ baseURL: 'https://unused.invalid', adminKey: 'synthetic-only' });
++  const config = { statePath: join(dir, 'customer.json'), admin, workspaces,
++    credentialProfiles: { a: { 'mimo:responses': 'synthetic-only' } }, quarantineTemplates: { a: { 'mimo:responses': 101 } },
++    onAuthorityChange: async workspace => { revoked.push(workspace); await hook('revoked', { workspaces, config, records }); } };
++  admin.call = async (method, path, body) => {
++    trace.push({ method, path, body: structuredClone(body) }); let event, dto;
++    if (path.startsWith('/accounts?page=')) { event = 'list'; dto = { items: [...records.values()].map(stockWire), total: records.size }; }
++    else if (path.startsWith('/accounts/data?')) { event = 'export'; dto = { accounts: [...records.values()] }; }
++    else if (path === '/accounts/101/duplicate') {
++      event = 'duplicate'; const record = { ...structuredClone(template), id: next++, name: template.name + ' (Copy)', status: 'active', schedulable: false };
++      records.set(record.id, record); dto = stockWire(record);
++    } else if (path === '/accounts/101') {
++      event = method === 'GET' ? 'template-get' : 'template-put';
++      if (body) Object.assign(template, structuredClone(body)); dto = stockWire(template);
++    } else {
++      const id = Number(path.split('/')[2]); const record = records.get(id);
++      if (!record) throw Object.assign(Error('missing'), { code: 'admin_http_404', status: 502 });
++      if (method === 'DELETE') { event = 'delete'; records.delete(id); dto = {}; }
++      else {
++        if (body) Object.assign(record, structuredClone(body));
++        event = !body ? 'account-get' : body.schedulable === true ? 'schedule' : body.schedulable === false ? 'unschedule' : body.group_ids?.length ? 'group-attach' : body.status === 'active' ? 'activate' : 'account-put';
++        dto = stockWire(record);
++      }
++    }
++    await hook(event, { dto, body, workspaces, config, records, trace });
++    if (ambiguous && event === 'duplicate') throw Object.assign(Error('ambiguous'), { code: 'admin_http_503', status: 502 });
++    return dto;
++  };
++  const adapter = await customerAdapter(config), identity = { workspace: 'a', user: 'owner' };
++  return { adapter, identity, workspaces, config, records, trace, revoked,
++    connect: () => adapter.operate(identity, 'connect', null, { provider: 'mimo', protocol: 'responses' }) };
++}
++
++test('offline boundary authentic omitted-group fixture completes stock roundtrip', async t => {
++  // This literal fixture has no group metadata; the rejected candidate required
++  // arrays and failed at template GET, before duplicate (independent red oracle).
++  for (const key of ['group_ids', 'groups', 'account_groups']) assert.equal(Object.hasOwn(stockEmptyAccount, key), false);
++  const r = await offlineLab(t); const account = await r.connect();
++  assert.equal(account.status, 'active'); assert.equal(r.records.get(1).schedulable, true);
++  assert.deepEqual(r.records.get(1).group_ids, [11]);
++  assert.equal((await r.adapter.operate(r.identity, 'read', account.id)).id, account.id);
++  assert.equal((await r.adapter.operate(r.identity, 'list')).length, 1);
++  await r.adapter.operate(r.identity, 'pause', account.id);
++  await r.adapter.operate(r.identity, 'delete', account.id); assert.equal(r.records.size, 0);
++  assert.equal(r.trace.filter(x => x.path.endsWith('/duplicate')).length, 1);
++});
++
++test('offline boundary authentic omitted-group fixture reconciles full stock list and get', async t => {
++  for (const decision of ['retire', 'complete']) {
++    const r = await offlineLab(t, { ambiguous: true }); await assert.rejects(r.connect(), { code: 'admin_http_503' });
++    assert.equal(r.records.get(1).schedulable, false);
++    const restart = await customerAdapter(r.config), [intent] = await restart.recovery();
++    const result = await restart.reconcile(r.identity, intent.id, decision);
++    if (decision === 'retire') { assert.equal(result.retired, true); assert.equal(r.records.size, 0); }
++    else { assert.equal(result.status, 'active'); assert.equal(r.records.get(1).schedulable, true); }
++    assert.equal(r.trace.filter(x => x.path.endsWith('/duplicate')).length, 1);
++    assert.ok(r.trace.some(x => x.path.includes('lite=false')));
++  }
++});
++
++test('offline boundary actual in-flight group remap compensates at every promotion await', async t => {
++  for (const stage of ['duplicate', 'group-attach', 'activate', 'schedule']) {
++    let changed = false;
++    const r = await offlineLab(t, { hook: async (event, { workspaces }) => {
++      if (event === stage && !changed) { workspaces.a.groups['mimo:responses'] = 22; changed = true; }
++    } });
++    await assert.rejects(r.connect(), { code: 'authority_changed' }); assert.equal(changed, true);
++    const record = r.records.get(1); assert.equal(record.schedulable, false); assert.equal(record.status, 'inactive'); assert.deepEqual(record.group_ids, []);
++    assert.deepEqual(await r.adapter.operate(r.identity, 'list'), []);
++    assert.equal((await r.adapter.recovery())[0].state, 'recovery_required');
++  }
++});
++
++test('offline boundary replaced deleted credentials templates and membership authority stop promotion', async t => {
++  for (const change of ['replace-workspace', 'delete-workspace', 'role', 'replace-groups', 'credential', 'credential-scope', 'template', 'workspace-template', 'suspension']) {
++    let changed = false;
++    const r = await offlineLab(t, { hook: async (event, { workspaces, config }) => {
++      if (event !== 'schedule' || changed) return; changed = true;
++      if (change === 'replace-workspace') workspaces.a = structuredClone(workspaces.a);
++      if (change === 'delete-workspace') delete workspaces.a;
++      if (change === 'role') workspaces.a.members.owner = 'member';
++      if (change === 'replace-groups') workspaces.a.groups = { ...workspaces.a.groups };
++      if (change === 'credential') config.credentialProfiles.a['mimo:responses'] = 'synthetic-rotated';
++      if (change === 'credential-scope') config.credentialProfiles.a = { ...config.credentialProfiles.a };
++      if (change === 'template') config.quarantineTemplates.a['mimo:responses'] = 102;
++      if (change === 'workspace-template') workspaces.a.quarantineTemplates = { 'mimo:responses': 102 };
++      if (change === 'suspension') workspaces.a.suspended = true;
++    } });
++    await assert.rejects(r.connect(), e => ['authority_changed', 'membership_denied'].includes(e.code));
++    assert.equal(r.records.get(1).schedulable, false); assert.deepEqual(r.records.get(1).group_ids, []);
++  }
++});
++
++test('offline boundary authority changes during template and credential awaits prevent duplicate', async t => {
++  for (const stage of ['credential', 'template-get', 'template-put']) {
++    const r = await offlineLab(t, { hook: async (event, { config }) => {
++      if (event === stage) config.quarantineTemplates.a['mimo:responses'] = 102;
++    } });
++    if (stage === 'credential') r.config.credentialProfiles.a['mimo:responses'] = async () => {
++      r.workspaces.a.groups['mimo:responses'] = 22; return 'synthetic-only';
++    };
++    await assert.rejects(r.connect(), { code: 'authority_changed' });
++    assert.equal(r.records.size, 0); assert.equal(r.trace.some(x => x.path.endsWith('/duplicate')), false);
++  }
++});
++
++test('offline boundary remapped existing reads exports and mutations compensate before publication', async t => {
++  for (const stage of ['account-get', 'export', 'revoked', 'account-put']) {
++    let armed = false, changed = false;
++    const r = await offlineLab(t, { hook: async (event, { workspaces }) => {
++      if (armed && event === stage && !changed) { changed = true; workspaces.a.groups['mimo:responses'] = 22; }
++    } });
++    const account = await r.connect(); armed = true;
++    const action = stage === 'export' ? 'export' : ['revoked', 'account-put'].includes(stage) ? 'update' : 'read';
++    await assert.rejects(r.adapter.operate(r.identity, action, account.id, { concurrency: 1 }), { code: 'authority_changed' });
++    assert.equal(r.records.get(1).schedulable, false); assert.deepEqual(r.records.get(1).group_ids, []);
++  }
++});
++
++test('offline boundary contradictory null malformed or lite group authority never publishes', async t => {
++  const changes = [a => { a.group_ids = null; }, a => { a.groups = null; }, a => { a.group_ids = 'bad'; },
++    a => { a.group_ids = [11]; a.groups = [{ id: 22 }]; }, a => { a.group_ids = [11, 11]; },
++    a => { a.account_groups = [{ account_id: a.id, group_id: 22 }]; },
++    a => { a.group_ids = [11]; a.account_groups = [{ account_id: 999, group_id: 11 }]; },
++    a => { delete a.credentials; delete a.extra; }, a => { a.groups = [null]; },
++    a => { a.group_ids = [11]; a.account_groups = [{ account_id: a.id, group_id: 11, group: { id: 22 } }]; },
++    a => { a.account_groups = [{ account_id: a.id, group_id: 11, account: { id: 999 } }]; },
++    a => { a.account_groups = [{ account_id: a.id, group_id: 11, account: null }]; }];
++  for (const stage of ['template-get', 'template-put', 'duplicate', 'schedule']) for (const change of changes) {
++    let altered = false;
++    const r = await offlineLab(t, { hook: async (event, { dto }) => { if (event === stage && !altered) { altered = true; change(dto); } } });
++    await assert.rejects(r.connect()); assert.equal(altered, true);
++    assert.equal([...r.records.values()].some(a => a.schedulable), false);
++    if (stage.startsWith('template')) assert.equal(r.records.size, 0);
++  }
++});
++
++test('offline boundary malformed lite recovery list and contradictory fetchOwned are refused', async t => {
++  let corruptList = true;
++  const r = await offlineLab(t, { ambiguous: true, hook: async (event, { dto }) => {
++    if (event === 'list' && corruptList) { delete dto.items[0].credentials; delete dto.items[0].extra; }
++  } });
++  await assert.rejects(r.connect()); const [intent] = await r.adapter.recovery();
++  await assert.rejects(r.adapter.reconcile(r.identity, intent.id, 'complete'), { code: 'account_dto_invalid' });
++  assert.equal(r.records.get(1).schedulable, false); corruptList = false;
++  const account = await r.adapter.reconcile(r.identity, intent.id, 'complete');
++  r.records.get(1).account_groups = [{ account_id: 1, group_id: 22 }];
++  await assert.rejects(r.adapter.operate(r.identity, 'read', account.id), { code: 'account_groups_conflict' });
++  assert.equal(r.records.get(1).schedulable, false); assert.equal(r.workspaces.a.suspended, true); assert.ok(r.revoked.includes('a'));
++});
++
++test('offline boundary uncertain compensation fences current replaced authority durably', async t => {
++  let changed = false;
++  const r = await offlineLab(t, { hook: async (event, { workspaces }) => {
++    if (event === 'schedule' && !changed) { changed = true; workspaces.a = { ...structuredClone(workspaces.a), groups: { 'mimo:responses': 22 } }; }
++    if (changed && event === 'unschedule') throw Error('synthetic unreachable compensation');
++  } });
++  await assert.rejects(r.connect(), { code: 'authority_changed' });
++  assert.equal(r.workspaces.a.suspended, true); assert.ok(r.revoked.includes('a'));
++  r.workspaces.a.suspended = false; await customerAdapter(r.config); assert.equal(r.workspaces.a.suspended, true);
++});
++
++test('offline boundary recovery rechecks remaps during list get and promotion', async t => {
++  for (const stage of ['list', 'account-get', 'group-attach', 'schedule']) {
++    let armed = false, changed = false;
++    const r = await offlineLab(t, { ambiguous: true, hook: async (event, { workspaces }) => {
++      if (armed && event === stage && !changed) { changed = true; workspaces.a.groups['mimo:responses'] = 22; }
++    } });
++    await assert.rejects(r.connect()); const [intent] = await r.adapter.recovery(); armed = true;
++    await assert.rejects(r.adapter.reconcile(r.identity, intent.id, 'complete'), { code: 'authority_changed' });
++    assert.equal(changed, true); assert.equal(r.records.get(1).schedulable, false);
++    assert.equal(r.trace.filter(x => x.path.endsWith('/duplicate')).length, 1);
++  }
++});
++
++test('offline boundary replacement remap during old retirement compensates new account', async t => {
++  let armed = false;
++  const r = await offlineLab(t, { hook: async (event, { config }) => {
++    if (armed && event === 'delete') config.credentialProfiles.a['mimo:responses'] = 'synthetic-rotated-again';
++  } });
++  const old = await r.connect(); r.config.credentialProfiles.a['mimo:responses'] = 'synthetic-rotated'; armed = true;
++  await assert.rejects(r.adapter.operate(r.identity, 'replace', old.id), { code: 'authority_changed' });
++  assert.equal(r.records.size, 1); assert.equal(r.records.get(2).schedulable, false); assert.deepEqual(r.records.get(2).group_ids, []);
++  assert.equal(r.workspaces.a.suspended, true); assert.ok(r.revoked.includes('a'));
++});
++
++test('offline boundary replaced authority during failed compensation revocation remains fenced', async t => {
++  let changed = false;
++  const r = await offlineLab(t, { hook: async (event, { workspaces }) => {
++    if (event === 'schedule') { changed = true; workspaces.a.groups['mimo:responses'] = 22; }
++    if (changed && event === 'unschedule') throw Error('synthetic compensation failure');
++    if (changed && event === 'revoked') workspaces.a = { ...structuredClone(workspaces.a), suspended: false };
++  } });
++  await assert.rejects(r.connect(), { code: 'authority_changed' }); assert.equal(r.workspaces.a.suspended, true);
++});
++
++test('offline boundary matching group representations and null redacted credentials are valid full DTOs', async t => {
++  const r = await offlineLab(t, { hook: async (event, { dto }) => {
++    if (event === 'template-get') dto.credentials = null;
++    if (event === 'schedule') {
++      dto.groups = [{ id: 11 }]; dto.account_groups = [{ account_id: dto.id, group_id: 11, group: { id: 11 } }];
++    }
++  } });
++  assert.equal((await r.connect()).status, 'active');
++});
++
++test('offline boundary prepared template identity and scope mutation cannot duplicate', async t => {
++  for (const change of [a => { a.id = 102; }, a => { a.type = 'oauth'; }, a => { a.platform = 'anthropic'; },
++    a => { a.extra.rr_quarantine_template.workspace = 'b'; }, a => { a.extra.rr_quarantine.owner = 'foreign'; }]) {
++    const r = await offlineLab(t, { hook: async (event, { dto }) => { if (event === 'template-put') change(dto); } });
++    await assert.rejects(r.connect(), { code: 'quarantine_template_drift' });
++    assert.equal(r.trace.some(x => x.path.endsWith('/duplicate')), false); assert.equal(r.records.size, 0);
++  }
++});
++
++test('offline boundary acknowledged interrupted promotion retains explicit retire and complete recovery', async t => {
++  for (const decision of ['retire', 'complete']) {
++    const r = await offlineLab(t); const account = await r.connect();
++    const state = JSON.parse(await readFile(r.config.statePath, 'utf8')); state.bindings[account.id].state = 'bound';
++    await writeFile(r.config.statePath, JSON.stringify(state));
++    const restart = await customerAdapter(r.config); assert.equal(r.workspaces.a.suspended, true);
++    // Trusted operator clears the fence with routing stopped before recovery.
++    r.workspaces.a.suspended = false; const result = await restart.reconcile(r.identity, account.id, decision);
++    if (decision === 'retire') { assert.equal(result.retired, true); assert.equal(r.records.size, 0); }
++    else { assert.equal(result.status, 'active'); assert.equal(r.records.get(1).schedulable, true); assert.deepEqual(r.records.get(1).group_ids, [11]); }
++    assert.equal(r.trace.filter(x => x.path.endsWith('/duplicate')).length, 1);
++  }
++});
+--- a/sub2api-spike/run-client.mjs
++++ b/sub2api-spike/run-client.mjs
+@@ -1,75 +1,57 @@
+-import { mkdtemp, mkdir, writeFile, readFile, rm, stat } from 'node:fs/promises';
+-import { tmpdir } from 'node:os';
+-import { join, resolve, dirname } from 'node:path';
+-import { fileURLToPath } from 'node:url';
+-import { spawn } from 'node:child_process';
++import { mkdir, writeFile, readFile, rm, chown } from 'node:fs/promises';
++import { join } from 'node:path';
++import { requireControl, readControlInput, privateControlHome, agentHome, cleanAgentEnv, spawnAgent, safeAgentFile, verifyFixture, verifyTools, agentIdentity } from './runner-isolation.mjs';
+ import { financialEvidence, parseFindingDocument } from './evidence.mjs';
+ if (Number(process.versions.node.split('.')[0]) !== 24) throw Error('Node 24 required');
+-const [provider, agent = 'codex'] = process.argv.slice(2);
+-if (!['mimo', 'openrouter'].includes(provider) || !['codex', 'claude'].includes(agent) || (agent === 'claude' && provider !== 'mimo')) throw Error('Unsupported provider/agent combination');
++requireControl();
++const runtime = await readControlInput();
++if (runtime.workflowSHA !== (await readFile('/opt/rr-sub2-harness/reviewed-workflow.sha', 'utf8')).trim()) throw Error('Reviewed workflow SHA mismatch');
++const { provider, agent } = runtime;
+ const broker = 'http://broker:8787';
+-const home = await mkdtemp(join(tmpdir(), 'rr-sub2-spike-20260930-client-'));
+-const sourceFixture = resolve(dirname(fileURLToPath(import.meta.url)), 'fixture');
+-const fixture = '/opt/rr-gateway-spike-fixture'; // Operator-pinned read-only snapshot in the disposable runner image.
+-const env = { PATH: process.env.PATH, LANG: 'C.UTF-8', HOME: home, TMPDIR: home };
++const controlHome = await privateControlHome();
++const home = await agentHome(controlHome);
++const fixture = '/opt/rr-gateway-spike-fixture';
++let env = cleanAgentEnv(home);
+ let phase = 'fixture', completed = false;
+ const prompt = 'Review the implementation and business rules in this directory. Actually read wallet.mjs and BUSINESS_RULES.md with tools. For Codex read the implementation in a separate tool call running exactly cat wallet.mjs, then read rules with cat BUSINESS_RULES.md; do not combine the commands. For Claude use Read. Identify material financial correctness issues. Do not modify files. Return only JSON with a findings array. Each finding has file, function, summary, and example containing numeric initial_balance, amount, and final_balance. Use an empty findings array if there are no issues. Choose your own concrete example for each issue and report the actual final_balance produced by the current implementation. For Codex run a local reproduction with tools using node to import withdraw from ./wallet.mjs, and emit JSON with numeric initial_balance, amount, final_balance; verify your example before reporting it.';
+-function execute(binary, args, onLine = () => {}) {
+-  return new Promise((resolvePromise, reject) => {
+-    const p = spawn(binary, args, { cwd: fixture, env, stdio: ['ignore', 'pipe', 'pipe'] });
+-    let output = '', pending = '', diagnostic = '', size = 0;
+-    const timer = setTimeout(() => { p.kill('SIGTERM'); setTimeout(() => p.kill('SIGKILL'), 5000).unref(); }, 12 * 60 * 1000); timer.unref();
+-    p.stdout.on('data', b => { size += b.length; if (size > 16 * 1024 * 1024) { p.kill('SIGKILL'); reject(Error('Agent output too large')); return; } output += b; pending += b; const lines = pending.split('\n'); pending = lines.pop(); for (const line of lines) onLine(line); });
+-    // Retain failures privately in the disposable runner, never in Actions logs/artifacts.
+-    p.stderr.on('data', b => { if (diagnostic.length < 65536) diagnostic += b.toString().slice(0, 65536 - diagnostic.length); });
+-    p.on('error', e => { clearTimeout(timer); reject(e); });
+-    p.on('close', async code => { clearTimeout(timer); if (pending) onLine(pending); if (code !== 0) {
+-      try { await writeFile(join(home, 'private-events.jsonl'), output, { mode: 0o600 }); await writeFile(join(home, 'private-stderr.txt'), diagnostic, { mode: 0o600 }); } catch {}
+-      reject(Error('Agent command failed; inspect ephemeral runtime privately'));
+-    } else resolvePromise(output); });
+-  });
+-}
++const execute = (binary, args, onLine = () => {}) => spawnAgent(binary, args, { cwd: fixture, env, onLine });
++async function configDirectory(path) { await mkdir(path, { mode: 0o700 }); await chown(path, agentIdentity.uid, agentIdentity.gid); }
+ try {
+-  if (process.getuid() === 0) throw Error('Unprivileged disposable runner required');
+-  const directory = await stat(fixture);
+-  if (directory.uid !== 0 || directory.mode & 0o222) throw Error('Fixture directory must be sealed');
+-  for (const file of ['wallet.mjs', 'BUSINESS_RULES.md']) {
+-    const info = await stat(join(fixture, file));
+-    if (info.uid !== 0 || info.mode & 0o222 || !(await readFile(join(fixture, file))).equals(await readFile(join(sourceFixture, file)))) throw Error('Sealed fixture must match checked-out source');
+-  }
++  await verifyFixture(fixture); await verifyTools();
+   phase = 'version';
+   const version = (await execute(agent, ['--version'])).trim();
+   const expected = agent === 'codex' ? '0.159.2' : '2.1.285';
+-  if (!version.includes(expected)) throw Error('Installed client version does not match pinned canary');
+-  phase = 'oidc'; const oidcURL = new URL(process.env.ACTIONS_ID_TOKEN_REQUEST_URL);
+-  if (oidcURL.protocol !== 'https:' || !oidcURL.hostname.endsWith('.actions.githubusercontent.com') || !process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN) throw Error('Missing trusted GitHub OIDC runtime');
++  if (!(agent === 'codex' ? /^codex-cli 0\.159\.2$/ : /^2\.1\.285 \(Claude Code\)$/).test(version)) throw Error('Installed client version does not match pinned canary');
++  phase = 'oidc'; const oidcURL = new URL(runtime.oidcURL);
++  if (oidcURL.protocol !== 'https:' || !oidcURL.hostname.endsWith('.actions.githubusercontent.com') || !runtime.oidcToken) throw Error('Missing trusted GitHub OIDC runtime');
+   oidcURL.searchParams.set('audience', 'review-router-gateway-spike');
+-  const oidc = await fetch(oidcURL, { headers: { authorization: `Bearer ${process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN}` }, signal: AbortSignal.timeout(10000), redirect: 'error' });
++  const oidc = await fetch(oidcURL, { headers: { authorization: `Bearer ${runtime.oidcToken}` }, signal: AbortSignal.timeout(10000), redirect: 'error' });
+   if (!oidc.ok) throw Error('GitHub OIDC failed');
+   const { value } = await oidc.json();
+   phase = 'grant'; const grant = await fetch(`${broker}/grant`, { method: 'POST', headers: { authorization: `Bearer ${value}`, 'content-type': 'application/json' }, body: JSON.stringify({ provider, protocol: agent === 'codex' ? 'responses' : 'messages' }), signal: AbortSignal.timeout(15000), redirect: 'error' });
+   if (!grant.ok) throw Error('Broker grant failed');
+   const { capability, model } = await grant.json();
+   if (!/^[A-Za-z0-9_-]{43}$/.test(capability) || typeof model !== 'string') throw Error('Invalid grant response');
+-  console.log(`::add-mask::${capability}`);
+   const events = []; const collect = line => { try { events.push(JSON.parse(line)); } catch { /* Non-JSON diagnostic is never evidence. */ } };
+   phase = 'agent'; let raw, review;
+   if (agent === 'codex') {
+-    env.CODEX_HOME = join(home, 'codex'); env.SPIKE_RUN_CAPABILITY = capability; await mkdir(env.CODEX_HOME);
+-    const config = `model = ${JSON.stringify(model)}\nmodel_provider = "spike"\nweb_search = "disabled"\n[model_providers.spike]\nname = "Run gateway"\nbase_url = "${broker}/v1"\nenv_key = "SPIKE_RUN_CAPABILITY"\nwire_api = "responses"\nrequires_openai_auth = false\nrequest_max_retries = 0\nstream_max_retries = 0\nsupports_websockets = false\n`;
++    env.CODEX_HOME = join(home, 'codex'); env.SPIKE_RUN_CAPABILITY = capability; await configDirectory(env.CODEX_HOME);
++    const thinking = provider === 'mimo' ? 'model_reasoning_effort = \"high\"\n' : '';
++    const config = `${thinking}model = ${JSON.stringify(model)}\nmodel_provider = "spike"\nweb_search = "disabled"\n[model_providers.spike]\nname = "Run gateway"\nbase_url = "${broker}/v1"\nenv_key = "SPIKE_RUN_CAPABILITY"\nwire_api = "responses"\nrequires_openai_auth = false\nrequest_max_retries = 0\nstream_max_retries = 0\nsupports_websockets = false\n`;
+     await writeFile(join(env.CODEX_HOME, 'config.toml'), config, { mode: 0o600 });
++    await chown(join(env.CODEX_HOME, 'config.toml'), agentIdentity.uid, agentIdentity.gid);
+     // Outer disposable container is the sandbox; fixture is root-owned and immutable to this UID.
+     raw = await execute('codex', ['--ask-for-approval', 'never', 'exec', '--sandbox', 'danger-full-access', '--skip-git-repo-check', '--json', '--output-last-message', join(home, 'review.txt'), prompt], collect);
+-    review = await readFile(join(home, 'review.txt'), 'utf8');
++    review = await safeAgentFile(join(home, 'review.txt'));
+   } else {
+-    env.CLAUDE_CONFIG_DIR = join(home, 'claude'); await mkdir(env.CLAUDE_CONFIG_DIR);
++    env.CLAUDE_CONFIG_DIR = join(home, 'claude'); await configDirectory(env.CLAUDE_CONFIG_DIR);
+     Object.assign(env, { ANTHROPIC_BASE_URL: `${broker}/anthropic`, ANTHROPIC_AUTH_TOKEN: capability, CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC: '1', DISABLE_TELEMETRY: '1', DISABLE_ERROR_REPORTING: '1' });
+     // Read-only tool allowlist; CLI/protocol compatibility still needs an operator canary.
+     raw = await execute('claude', ['--print', '--verbose', '--output-format', 'stream-json', '--permission-mode', 'default', '--model', model, '--tools', 'Read,Glob,Grep', '--allowedTools', 'Read,Glob,Grep', '--strict-mcp-config', '--mcp-config', '{"mcpServers":{}}', '--', prompt], collect);
+     review = events.findLast(e => e.type === 'result')?.result ?? '';
+-    await writeFile(join(home, 'review.txt'), review, { mode: 0o600 });
++
+   }
+-  await writeFile(join(home, 'events.jsonl'), raw, { mode: 0o600 });
++  // Transcripts stay in memory; no capability-bearing raw artifact is persisted.
+   phase = 'evidence'; let parsed; try { parsed = parseFindingDocument(review); } catch { throw Error('Malformed final JSON'); }
+   const numeric = parsed.findings?.find(f => f.file === 'wallet.mjs' && f.function === 'withdraw' && f.example?.amount < 0)?.example;
+   if (!numeric) throw Error('Missing numeric example');
+@@ -82,11 +64,10 @@
+     if (!/^node\s/.test(cmd) || !/withdraw/.test(cmd) || !/wallet\.mjs/.test(cmd)) return false;
+     try { const n = JSON.parse(i.aggregated_output.trim()); return ['initial_balance', 'amount', 'final_balance'].every(k => Number.isFinite(n[k]) && n[k] === numeric[k]); } catch { return false; }
+   })) throw Error('Codex did not prove own numeric local reproduction');
+-  const evidence = { ...financialEvidence(agent, events, review, provider), id: agent === 'claude' ? 'A03' : provider === 'mimo' ? 'A01' : 'A02', evidence_kind: 'real-Actions', independent_numeric_reproduction: true, workflow_sha: process.env.GITHUB_SHA, run_id: process.env.GITHUB_RUN_ID, run_attempt: process.env.GITHUB_RUN_ATTEMPT, node: process.version, client_version: expected, transport: agent === 'codex' ? 'responses' : 'messages' };
+-  const output = resolve('evidence'); // Workflow uses owned sub2api-spike cwd.
+-  await mkdir(output, { recursive: true }); await writeFile(join(output, 'result.json'), JSON.stringify(evidence, null, 2) + '\n');
+-  console.log('Verified tool read and financial finding; normalized evidence saved.');
++  const evidence = { ...financialEvidence(agent, events, review, provider), id: agent === 'claude' ? 'A03' : provider === 'mimo' ? 'A01' : 'A02', evidence_kind: 'real-Actions', independent_numeric_reproduction: true, workflow_sha: runtime.workflowSHA, run_id: runtime.runID, run_attempt: runtime.runAttempt, node: process.version, client_version: expected, transport: agent === 'codex' ? 'responses' : 'messages' };
++  // Only positive-projected evidence crosses back to the uid1001 workflow.
++  process.stdout.write(JSON.stringify(evidence) + '\n');
+   completed = true;
+ } catch {
+-  console.error(`Spike failed at ${phase}; no raw transcript published. Operator must inspect private disposable runtime before retry.`); process.exitCode = 1;
+-} finally { if (completed) await rm(home, { recursive: true, force: true }); }
++  console.error(`Spike failed at ${phase}; inspect effects privately before retry.`); process.exitCode = 1;
++} finally { if (completed) await rm(controlHome, { recursive: true, force: true }); }
+--- a/.github/workflows/sub2api-gateway-spike.yml
++++ b/.github/workflows/sub2api-gateway-spike.yml
+@@ -31,7 +31,24 @@
+         env:
+           SPIKE_PROVIDER: ${{ inputs.provider }}
+           SPIKE_AGENT: ${{ inputs.agent }}
+-        run: node run-client.mjs "$SPIKE_PROVIDER" "$SPIKE_AGENT"
++        run: |
++          node --input-type=module <<'NODE'
++          import { spawn } from 'node:child_process';
++          import { mkdir, writeFile } from 'node:fs/promises';
++          const input = { provider: process.env.SPIKE_PROVIDER, agent: process.env.SPIKE_AGENT,
++            oidcURL: process.env.ACTIONS_ID_TOKEN_REQUEST_URL, oidcToken: process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN,
++            workflowSHA: process.env.GITHUB_SHA, runID: process.env.GITHUB_RUN_ID, runAttempt: process.env.GITHUB_RUN_ATTEMPT };
++          const child = spawn('/usr/bin/sudo', ['-n', '/usr/local/libexec/rr-sub2-canary'], { stdio: ['pipe', 'pipe', 'inherit'] });
++          child.stdin.end(JSON.stringify(input));
++          let out = '', size = 0;
++          child.stdout.on('data', b => { size += b.length; if (size > 65536) child.kill('SIGKILL'); else out += b; });
++          const code = await new Promise((resolve, reject) => { child.on('error', reject); child.on('close', resolve); });
++          if (code !== 0 || size > 65536) throw Error('Trusted canary failed; inspect effects before any new run');
++          const result = JSON.parse(out);
++          if (result.result !== 'passed' || result.workflow_sha !== input.workflowSHA) throw Error('Invalid control receipt');
++          await mkdir('evidence', { recursive: true });
++          await writeFile('evidence/result.json', JSON.stringify(result, null, 2) + '\n');
++          NODE
+       - name: Publish normalized client evidence only
+         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+         with:
+--- /dev/null
++++ b/sub2api-spike/runner-isolation.mjs
+@@ -0,0 +1,95 @@
++import { spawn } from 'node:child_process';
++import { constants } from 'node:fs';
++import { open, lstat, realpath, mkdir, chown, mkdtemp, readFile } from 'node:fs/promises';
++import { join, dirname, resolve } from 'node:path';
++import { createHash } from 'node:crypto';
++export const agentIdentity = Object.freeze({ uid: 1002, gid: 1002 });
++export const trustedPATH = '/usr/local/bin:/usr/bin:/bin';
++const fixtureHashes = Object.freeze({
++  'wallet.mjs': 'c47fcdfb32c95bf1ede68c01a3705084a658ecbd2882ab21ca4e8cc5fc658f71',
++  'BUSINESS_RULES.md': '1a9837e5e95ee86f22eb171c7bc9ee1226c55ff859973ad573417feb6aae43a5'
++});
++export function requireControl(identity = { uid: process.getuid(), gid: process.getgid() }) {
++  if (identity.uid !== 0 || identity.gid !== 0) throw Error('Root trusted control launcher required');
++}
++export async function sealedPath(path) {
++  const absolute = resolve(path);
++  if (await realpath(absolute) !== absolute) throw Error('Sealed path cannot contain symlinks');
++  for (let current = absolute; ; current = dirname(current)) {
++    const info = await lstat(current);
++    if (info.uid !== 0 || info.mode & 0o022 || info.isSymbolicLink()) throw Error('Root ownership and no group/other writes required');
++    if (dirname(current) === current) break;
++  }
++}
++export async function verifyTools() {
++  await sealedPath('/usr/local/bin');
++  for (const binary of ['node', 'codex', 'claude']) await sealedPath(await realpath(`/usr/local/bin/${binary}`));
++}
++export async function verifyFixture(fixture) {
++  await sealedPath(fixture);
++  const directory = await lstat(fixture);
++  if (!directory.isDirectory() || directory.mode & 0o222) throw Error('Fixture directory must be sealed');
++  for (const [name, hash] of Object.entries(fixtureHashes)) {
++    const path = join(fixture, name); await sealedPath(path); const info = await lstat(path);
++    if (!info.isFile() || info.mode & 0o222 || createHash('sha256').update(await readFile(path)).digest('hex') !== hash) throw Error('Pinned fixture mismatch');
++  }
++}
++export function cleanAgentEnv(home, extra = {}) {
++  const allowed = new Set(['CODEX_HOME', 'SPIKE_RUN_CAPABILITY', 'CLAUDE_CONFIG_DIR', 'ANTHROPIC_BASE_URL', 'ANTHROPIC_AUTH_TOKEN', 'CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC', 'DISABLE_TELEMETRY', 'DISABLE_ERROR_REPORTING']);
++  if (Object.keys(extra).some(k => !allowed.has(k))) throw Error('Agent environment field denied');
++  return { PATH: trustedPATH, LANG: 'C.UTF-8', HOME: home, TMPDIR: home, ...extra };
++}
++export async function agentHome(controlHome) {
++  requireControl(); const home = join(controlHome, 'agent');
++  // Root container directory must allow traversal but never directory listing.
++  const { chmod } = await import('node:fs/promises'); await chmod(controlHome, 0o711);
++  await mkdir(home, { mode: 0o700 }); await chown(home, agentIdentity.uid, agentIdentity.gid); return home;
++}
++export async function privateControlHome() {
++  requireControl(); return mkdtemp('/tmp/rr-sub2-control-');
++}
++export async function safeAgentFile(path, limit = 1024 * 1024) {
++  // A model-controlled symlink must never make the root parent read a secret.
++  const h = await open(path, constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK);
++  try {
++    const s = await h.stat();
++    if (!s.isFile() || s.uid !== agentIdentity.uid || s.nlink !== 1 || s.size > limit) throw Error('Invalid agent output file');
++    const bytes = Buffer.alloc(limit + 1); const { bytesRead } = await h.read(bytes, 0, bytes.length, 0);
++    if (bytesRead > limit) throw Error('Agent output limit'); return bytes.subarray(0, bytesRead).toString('utf8');
++  } finally { await h.close(); }
++}
++export async function spawnAgent(binary, args, { cwd, env, onLine = () => {}, timeoutMs = 720000, limit = 16 * 1024 * 1024 }) {
++  requireControl();
++  if (!['codex', 'claude', 'node'].includes(binary)) throw Error('Agent executable denied');
++  // Root fixed PATH and installed tools must be sealed by the image operator.
++  return new Promise((resolvePromise, reject) => {
++    const p = spawn(binary, args, { cwd, env, uid: agentIdentity.uid, gid: agentIdentity.gid, detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
++    let output = '', pending = '', size = 0, failure;
++    const kill = () => { if (p.pid) { try { process.kill(-p.pid, 'SIGKILL'); } catch {} } };
++    const timer = setTimeout(() => { failure = Error('Agent timeout'); kill(); }, timeoutMs); timer.unref();
++    p.stdout.on('data', b => {
++      size += b.length; if (size > limit) { failure = Error('Agent output too large'); kill(); return; }
++      output += b; pending += b; const lines = pending.split('\n'); pending = lines.pop();
++      try { for (const line of lines) onLine(line); } catch { failure = Error('Agent event rejected'); kill(); }
++    });
++    // Never print raw agent stderr or command lines, including on failure.
++    p.stderr.resume();
++    p.on('error', () => { clearTimeout(timer); reject(Error('Agent launch failed')); });
++    p.on('close', code => {
++      clearTimeout(timer); kill();
++      try { if (pending) onLine(pending); } catch { failure = Error('Agent event rejected'); }
++      if (failure || code !== 0) reject(failure ?? Error('Agent command failed')); else resolvePromise(output);
++    });
++  });
++}
++export async function readControlInput(stream = process.stdin) {
++  let n = 0; const chunks = [];
++  for await (const chunk of stream) { n += chunk.length; if (n > 16384) throw Error('Control input limit'); chunks.push(chunk); }
++  const input = JSON.parse(Buffer.concat(chunks));
++  const keys = ['provider', 'agent', 'oidcURL', 'oidcToken', 'workflowSHA', 'runID', 'runAttempt'];
++  if (!input || Object.keys(input).some(k => !keys.includes(k)) || keys.some(k => typeof input[k] !== 'string')) throw Error('Control input fields');
++  if (!['mimo', 'openrouter'].includes(input.provider) || !['codex', 'claude'].includes(input.agent) || input.agent === 'claude' && input.provider !== 'mimo') throw Error('Unsupported provider/agent');
++  const url = new URL(input.oidcURL);
++  if (url.protocol !== 'https:' || !url.hostname.endsWith('.actions.githubusercontent.com') || url.port || url.username || url.password || url.hash || !input.oidcToken || !/^[a-f0-9]{40}$/.test(input.workflowSHA) || !/^[1-9][0-9]*$/.test(input.runID) || !/^[1-9][0-9]*$/.test(input.runAttempt)) throw Error('Invalid trusted runtime');
++  return input;
++}
+--- /dev/null
++++ b/sub2api-spike/runner-isolation.test.mjs
+@@ -0,0 +1,34 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { Readable } from 'node:stream';
++import { cleanAgentEnv, requireControl, readControlInput, agentIdentity } from './runner-isolation.mjs';
++// Red oracle: the old same-UID caller is accepted as trusted control.
++test('uid1001 Actions service and agent cannot serve as control parent', () => {
++  assert.throws(() => requireControl({ uid: 1001, gid: 1001 }));
++  assert.throws(() => requireControl(agentIdentity));
++  assert.throws(() => requireControl({ uid: 0, gid: 1001 }));
++  assert.doesNotThrow(() => requireControl({ uid: 0, gid: 0 }));
++});
++// Red oracle: ambient OIDC/Actions/provider keys enter the actual spawn env
++// builder, or a caller widens it through the explicit child configuration.
++test('clean child environment rejects control tokens and arbitrary overrides', () => {
++  const old = process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN;
++  process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN = 'synthetic-oidc';
++  try {
++    const env = cleanAgentEnv('/agent', { SPIKE_RUN_CAPABILITY: 'synthetic-run-only' });
++    assert.deepEqual(Object.keys(env).sort(), ['HOME', 'LANG', 'PATH', 'SPIKE_RUN_CAPABILITY', 'TMPDIR']);
++    for (const key of ['ACTIONS_ID_TOKEN_REQUEST_TOKEN', 'GITHUB_TOKEN', 'NODE_OPTIONS', 'PATH', 'HOME', 'OPENAI_API_KEY']) assert.throws(() => cleanAgentEnv('/agent', { [key]: 'synthetic-control' }));
++  } finally { if (old === undefined) delete process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN; else process.env.ACTIONS_ID_TOKEN_REQUEST_TOKEN = old; }
++});
++const valid = { provider: 'mimo', agent: 'codex', oidcURL: 'https://test.actions.githubusercontent.com/token', oidcToken: 'synthetic-only', workflowSHA: 'a'.repeat(40), runID: '1', runAttempt: '1' };
++const parse = value => readControlInput(Readable.from([Buffer.from(JSON.stringify(value))]));
++// Red oracle: the fixed launcher accepts code/path/env input or malformed trust
++// metadata that could redirect OIDC bearer delivery away from GitHub.
++test('fixed control contract validates selectors and token destination', async () => {
++  assert.deepEqual(await parse(valid), valid);
++  for (const override of [{ command: 'arbitrary' }, { uid: '0' }, { oidcURL: 'https://evil.example/token' }, { oidcURL: 'https://user@test.actions.githubusercontent.com/token' }, { oidcURL: 'https://test.actions.githubusercontent.com:444/token' }, { provider: 'openrouter', agent: 'claude' }, { workflowSHA: 'main' }, { runID: '0' }]) await assert.rejects(parse({ ...valid, ...override }));
++});
++// Red oracle: unbounded stdin lets a runner feed arbitrary control workload.
++test('fixed control input has a hard byte limit', async () => {
++  await assert.rejects(readControlInput(Readable.from([Buffer.alloc(16385)])), /Control input limit/);
++});
+--- /dev/null
++++ b/sub2api-spike/operator/runner-containment.mjs
+@@ -0,0 +1,45 @@
++// Independent operator check. Run directly as trusted root in the derived
++// disposable image, never through the workflow's fixed canary sudo entry.
++import { mkdtemp, writeFile, rm } from 'node:fs/promises';
++import { join } from 'node:path';
++import { randomBytes } from 'node:crypto';
++import { requireControl, agentHome, spawnAgent, cleanAgentEnv, trustedPATH, agentIdentity, verifyFixture, verifyTools, safeAgentFile } from '../runner-isolation.mjs';
++requireControl();
++const control = await mkdtemp('/tmp/rr-sub2-containment-');
++let receipt = { schema: 1, evidence_kind: 'operator-uid-containment', status: 'FAIL' };
++try {
++  await verifyFixture('/opt/rr-gateway-spike-fixture'); await verifyTools();
++  const sentinel = join(control, 'sentinel');
++  await writeFile(sentinel, randomBytes(32), { mode: 0o600 });
++  const home = await agentHome(control);
++  // Paths and PID are harmless test inputs; sentinel content is never exported.
++  const probe = `
++    const fs = require('node:fs');
++    const denied = path => { try { fs.readFileSync(path); return false; } catch(e) { return ['EACCES','EPERM'].includes(e.code); } };
++    const groups = process.getgroups();
++    const uid = process.getuid(), gid = process.getgid();
++    const fixture = fs.readFileSync('wallet.mjs','utf8');
++    fs.writeFileSync(process.env.HOME + '/tool-output', 'normal tool IO');
++    fs.symlinkSync(${JSON.stringify(sentinel)}, process.env.HOME + '/hostile-review');
++    console.log(JSON.stringify({uid, gid, groups, parent_environment_denied: denied('/proc/${process.pid}/environ'), sentinel_denied: denied(${JSON.stringify(sentinel)}), tool_io: fixture.includes('withdraw') && fs.readFileSync(process.env.HOME+'/tool-output','utf8')==='normal tool IO', clean_env: Object.keys(process.env).sort()}));
++  `;
++  const result = JSON.parse(await spawnAgent('node', ['-e', probe], { cwd: '/opt/rr-gateway-spike-fixture', env: cleanAgentEnv(home), timeoutMs: 10000 }));
++  if (result.uid !== agentIdentity.uid || result.gid !== agentIdentity.gid || result.groups.some(g => g !== agentIdentity.gid) || !result.parent_environment_denied || !result.sentinel_denied || !result.tool_io || JSON.stringify(result.clean_env) !== JSON.stringify(['HOME','LANG','PATH','TMPDIR'])) throw Error('Containment oracle failed');
++  if (await safeAgentFile(join(home, 'tool-output')) !== 'normal tool IO') throw Error('Control read of normal tool IO failed');
++  let symlinkRejected = false;
++  try { await safeAgentFile(join(home, 'hostile-review')); } catch { symlinkRejected = true; }
++  if (!symlinkRejected) throw Error('Privileged output reader followed a hostile symlink');
++  // Independent hostile real-child negative control must detect same-UID custody.
++  const { spawn } = await import('node:child_process');
++  const sameUID = await new Promise((resolve, reject) => {
++    const p = spawn('/usr/local/bin/node', ['-e', `const fs=require('node:fs'); fs.readFileSync('/proc/${process.pid}/environ'); fs.readFileSync(${JSON.stringify(sentinel)}); console.log('readable');`], { env: { PATH: trustedPATH }, stdio: ['ignore','pipe','ignore'] });
++    let out = ''; p.stdout.on('data', b => out += b); p.on('error', reject); p.on('close', code => resolve(code === 0 && out.trim() === 'readable'));
++  });
++  if (!sameUID) throw Error('Negative control did not reproduce R07');
++  receipt = { ...receipt, status: 'PASS', ...result, same_uid_negative_control_readable: true, fixture_pinned: true, hostile_output_symlink_rejected: true };
++} catch { process.exitCode = 1; }
++finally {
++  await rm(control, { recursive: true, force: true });
++  // stdout contains booleans/UIDs/environment NAMES only. No runtime token values.
++  process.stdout.write(JSON.stringify(receipt) + '\n');
++}
+--- /dev/null
++++ b/sub2api-spike/operator/runner-launcher.sh
+@@ -0,0 +1,9 @@
++#!/bin/sh
++# Root-owned, fixed no-argument sudo entry. Never run workflow-supplied commands.
++set -eu
++[ "$#" -eq 0 ]
++[ "$(/usr/bin/id -u)" -eq 0 ]
++[ "${SUDO_UID:-}" = 1001 ]
++cd /opt/rr-sub2-harness
++/usr/bin/sha256sum --status --check harness.sha256
++exec /usr/bin/env -i PATH=/usr/local/bin:/usr/bin:/bin LANG=C.UTF-8 /usr/local/bin/node /opt/rr-sub2-harness/sub2api-spike/run-client.mjs
+--- /dev/null
++++ b/sub2api-boundary/fixtures/stock-empty-account.json
+@@ -0,0 +1,31 @@
++{
++  "id": 101,
++  "name": "rr-sub2-spike-20260930-template",
++  "notes": null,
++  "platform": "openai",
++  "type": "apikey",
++  "credentials": {"base_url": "https://token-plan-sgp.xiaomimimo.com/v1"},
++  "credentials_status": {"has_api_key": true},
++  "extra": {"rr_quarantine_template": {"workspace": "a", "provider": "mimo", "protocol": "responses"}},
++  "proxy_id": null,
++  "proxy_fallback_origin_id": null,
++  "concurrency": 2,
++  "priority": 1,
++  "rate_multiplier": 1,
++  "status": "inactive",
++  "error_message": "",
++  "last_used_at": null,
++  "expires_at": null,
++  "auto_pause_on_expired": false,
++  "created_at": "2026-10-01T00:00:00Z",
++  "updated_at": "2026-10-01T00:00:00Z",
++  "schedulable": false,
++  "rate_limited_at": null,
++  "rate_limit_reset_at": null,
++  "overload_until": null,
++  "temp_unschedulable_until": null,
++  "temp_unschedulable_reason": "",
++  "session_window_start": null,
++  "session_window_end": null,
++  "session_window_status": ""
++}
+--- /dev/null
++++ b/sub2api-boundary/regression-oracle.mjs
+@@ -0,0 +1,47 @@
++// Independent reviewer-style red/green observations. No sockets, UID changes,
++// real credentials or inference. Optional module path selects the prior bytes.
++import { readFile, mkdtemp, rm } from 'node:fs/promises';
++import { join, resolve } from 'node:path';
++import { tmpdir } from 'node:os';
++import { pathToFileURL } from 'node:url';
++const { AdminAPI, customerAdapter } = await import(process.argv[2] ? pathToFileURL(resolve(process.argv[2])).href : '../sub2api-spike/customer.mjs');
++const fixture = JSON.parse(await readFile(new URL('./fixtures/stock-empty-account.json', import.meta.url), 'utf8'));
++const observations = {};
++const admin = new AdminAPI({ baseURL: 'https://unused.invalid', adminKey: 'synthetic-only' });
++let duplicateCalls = 0;
++admin.call = async (method, path, body) => {
++  if (method === 'GET') return structuredClone(fixture);
++  if (method === 'PUT') {
++    const dto = { ...structuredClone(fixture), ...body }; delete dto.group_ids; return dto;
++  }
++  duplicateCalls++; return { ...fixture, id: 1, name: 'rr-sub2-spike-20260930-owned (Copy)', status: 'active' };
++};
++try {
++  await admin.createQuarantined({ name: 'rr-sub2-spike-20260930-owned', platform: 'openai', type: 'apikey', extra: { rr_quarantine: { binding: 'synthetic-intent' } } },
++    { templateID: 101, workspace: 'a', provider: 'mimo', protocol: 'responses', intentID: 'synthetic-intent' });
++  observations.stock_empty_template = { PASS: true, duplicate_calls: duplicateCalls };
++} catch (e) { observations.stock_empty_template = { PASS: false, error: e.code, duplicate_calls: duplicateCalls }; }
++const directory = await mkdtemp(join(tmpdir(), 'rr-sub2-independent-oracle-'));
++try {
++  let record, remapped = false;
++  const workspaces = { a: { members: { owner: 'owner' }, groups: { 'mimo:responses': 11 } } };
++  const controlledAdmin = {
++    async createQuarantined(body) { record = { ...body, id: 1, name: body.name + ' (Copy)', status: 'active', schedulable: false, group_ids: [] }; return structuredClone(record); },
++    async call(method, path, body) {
++      if (body) Object.assign(record, body);
++      if (body?.group_ids?.length && !remapped) { workspaces.a.groups['mimo:responses'] = 22; remapped = true; }
++      return structuredClone(record);
++    }
++  };
++  const adapter = await customerAdapter({ statePath: join(directory, 'routing.json'), admin: controlledAdmin, workspaces,
++    credentialProfiles: { a: { 'mimo:responses': 'synthetic-only' } } });
++  let result, error;
++  try { result = await adapter.operate({ workspace: 'a', user: 'owner' }, 'connect', null, { provider: 'mimo', protocol: 'responses' }); }
++  catch (e) { error = e.code; }
++  observations.inflight_routing_remap = { PASS: error === 'authority_changed' && record.schedulable === false && record.group_ids.length === 0,
++    result: result?.status ?? null, error: error ?? null, schedulable: record.schedulable,
++    engine_group_ids: record.group_ids, current_workspace_group: workspaces.a.groups['mimo:responses'] };
++} finally { await rm(directory, { recursive: true, force: true }); }
++const PASS = Object.values(observations).every(x => x.PASS);
++console.log(JSON.stringify({ schema: 1, PASS, observations, limits: 'Offline adapter control flow only; no engine/DB/scheduler/kernel/inference claim.' }, null, 2));
++process.exitCode = PASS ? 0 : 1;
+--- /dev/null
++++ b/sub2api-boundary/verify-handoff.py
+@@ -0,0 +1,55 @@
++#!/usr/bin/env python3
++"""Offline byte/apply verification; archive provenance remains coordinator-owned."""
++import argparse
++import hashlib
++import json
++import pathlib
++import shutil
++import subprocess
++import tempfile
++
++
++def sha(path):
++    return hashlib.sha256(path.read_bytes()).hexdigest()
++
++
++def tree_sha(root):
++    digest = hashlib.sha256()
++    for path in sorted(p for p in root.rglob('*') if p.is_file() and '.git' not in p.relative_to(root).parts):
++        digest.update(path.relative_to(root).as_posix().encode() + b'\0' + sha(path).encode() + b'\n')
++    return digest.hexdigest()
++
++
++parser = argparse.ArgumentParser(description=__doc__)
++parser.add_argument('--candidate-root', type=pathlib.Path, default=pathlib.Path(__file__).resolve().parent.parent)
++parser.add_argument('--base-root', type=pathlib.Path)
++parser.add_argument('--upstream-root', type=pathlib.Path)
++args = parser.parse_args()
++root = args.candidate_root.resolve()
++report = json.loads((root / 'sub2api-boundary/report.json').read_text())
++patch = root / report['patch']['path']
++assert sha(patch) == report['patch']['sha256'], 'patch digest mismatch'
++for item in report['patch']['files']:
++    assert sha(root / item['path']) == item['after_sha256'], item['path']
++if args.base_root:
++    with tempfile.TemporaryDirectory(prefix='rr-boundary-patch-') as directory:
++        staged = pathlib.Path(directory)
++        for item in report['patch']['files']:
++            source = args.base_root / item['path']
++            if item['before_sha256'] is None:
++                assert not source.exists(), 'added file exists in base: ' + item['path']
++            else:
++                assert sha(source) == item['before_sha256'], 'base mismatch: ' + item['path']
++                target = staged / item['path']; target.parent.mkdir(parents=True, exist_ok=True)
++                shutil.copyfile(source, target)
++        subprocess.run(['patch', '--batch', '-p1', '-i', str(patch)], cwd=staged, check=True, capture_output=True)
++        for item in report['patch']['files']:
++            assert sha(staged / item['path']) == item['after_sha256'], 'apply mismatch: ' + item['path']
++if args.upstream_root:
++    pin = json.loads((root / 'sub2api-boundary/source-pin-check.json').read_text())
++    assert tree_sha(args.upstream_root) == pin['tree_sha256'], 'fresh upstream archive byte mismatch'
++    for name, digest in pin['inspected_files'].items():
++        assert sha(args.upstream_root / name) == digest, name
++print(json.dumps({'status': 'PASS', 'candidate_files': len(report['patch']['files']),
++                  'exact_base_and_patch_apply': bool(args.base_root), 'fresh_upstream_tree_matches': bool(args.upstream_root),
++                  'limits': 'Bytes only. Coordinator must independently authenticate the original base and exact revision archive.'}))

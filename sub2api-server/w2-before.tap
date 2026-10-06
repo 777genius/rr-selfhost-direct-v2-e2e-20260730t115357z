@@ -1,0 +1,81 @@
+TAP version 13
+# Subtest: SR1 constructor recovers after malformed JSON
+not ok 1 - SR1 constructor recovers after malformed JSON
+  ---
+  duration_ms: 9.55182
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/server-wiring-w2/sub2api-spike/broker.test.mjs:13:3'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    code: 'ENOENT'
+  operator: 'rejects'
+  stack: |-
+    async TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/server-wiring-w2/sub2api-spike/broker.test.mjs:24:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+# Subtest: SR1 constructor recovers after invalid schema
+not ok 2 - SR1 constructor recovers after invalid schema
+  ---
+  duration_ms: 1.727694
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/server-wiring-w2/sub2api-spike/broker.test.mjs:13:3'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    code: 'ENOENT'
+  operator: 'rejects'
+  stack: |-
+    async TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/server-wiring-w2/sub2api-spike/broker.test.mjs:24:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# (node:11) Warning: Closing file descriptor 18 on garbage collection
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# (node:11) [DEP0137] DeprecationWarning: Closing a FileHandle object on garbage collection is deprecated. Please close FileHandle objects explicitly using FileHandle.prototype.close(). In the future, an error will be thrown if a file descriptor is closed during garbage collection.
+# (node:11) Warning: Closing file descriptor 19 on garbage collection
+# (node:11) Warning: Closing file descriptor 20 on garbage collection
+# Subtest: SR1 constructor recovers after read EISDIR
+not ok 3 - SR1 constructor recovers after read EISDIR
+  ---
+  duration_ms: 2.568848
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/server-wiring-w2/sub2api-spike/broker.test.mjs:13:3'
+  failureType: 'testCodeFailure'
+  error: 'Missing expected rejection.'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    code: 'ENOENT'
+  operator: 'rejects'
+  stack: |-
+    async TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/server-wiring-w2/sub2api-spike/broker.test.mjs:24:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: SR1 constructor recovers after persist failure
+ok 4 - SR1 constructor recovers after persist failure
+  ---
+  duration_ms: 3.991608
+  type: 'test'
+  ...
+# Subtest: SR1 constructor preserves an existing foreign or crash lock
+ok 5 - SR1 constructor preserves an existing foreign or crash lock
+  ---
+  duration_ms: 1.595424
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 2
+# fail 3
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 118.831598

@@ -1,0 +1,169 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "External exact reviewed source input",
+  "description": "Shape documentation. Python additionally verifies canonical paths, exact patch bytes/context, all before/after hashes and file lists. Legacy acceptance requires byte-exact SHA-256, not JSON equivalence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "base_manifest_sha256",
+    "base_image",
+    "binary_sha256",
+    "patches"
+  ],
+  "properties": {
+    "schema": {
+      "const": "rrsub2profile-reviewed-v1"
+    },
+    "base_manifest_sha256": {
+      "const": "8a8103f73486912aa86f972fd2914bbff295d91126483447930da15ca227f704"
+    },
+    "base_image": {
+      "const": "sha256:6df1cc33771f1bc94028cc18440a13e7d31a3513331bbb8d7d686584d19b79e2"
+    },
+    "binary_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "patches": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256",
+          "files"
+        ],
+        "properties": {
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "files": {
+            "type": "object",
+            "minProperties": 1,
+            "propertyNames": {
+              "pattern": "^backend/(?!cmd/server/rr_sub2_profile\\.go$)(?!.*(?:^|/)\\.\\.(?:/|$)).+\\.go$"
+            },
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "before_sha256",
+                "after_sha256"
+              ],
+              "properties": {
+                "before_sha256": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "after_sha256": {
+                  "type": "string",
+                  "pattern": "^[a-f0-9]{64}$"
+                }
+              }
+            }
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^/"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "base_manifest_sha256",
+        "base_image",
+        "binary_sha256",
+        "patches",
+        "reviewed_manifest_sha256"
+      ],
+      "properties": {
+        "schema": {
+          "const": "rrsub2profile-reviewed-v1"
+        },
+        "base_manifest_sha256": {
+          "const": "8a8103f73486912aa86f972fd2914bbff295d91126483447930da15ca227f704"
+        },
+        "base_image": {
+          "const": "sha256:6df1cc33771f1bc94028cc18440a13e7d31a3513331bbb8d7d686584d19b79e2"
+        },
+        "binary_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "patches": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sha256",
+              "files"
+            ],
+            "properties": {
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "files": {
+                "type": "object",
+                "minProperties": 1,
+                "propertyNames": {
+                  "pattern": "^backend/(?!cmd/server/rr_sub2_profile\\.go$)(?!.*(?:^|/)\\.\\.(?:/|$)).+\\.go$"
+                },
+                "additionalProperties": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "before_sha256",
+                    "after_sha256"
+                  ],
+                  "properties": {
+                    "before_sha256": {
+                      "anyOf": [
+                        {
+                          "type": "string",
+                          "pattern": "^[a-f0-9]{64}$"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "after_sha256": {
+                      "type": "string",
+                      "pattern": "^[a-f0-9]{64}$"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "reviewed_manifest_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

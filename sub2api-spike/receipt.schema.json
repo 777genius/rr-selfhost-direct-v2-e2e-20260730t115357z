@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema", "evidence_kind", "operator_reviewed", "versions", "results"],
+  "properties": {
+    "schema": {"const": 1},
+    "evidence_kind": {"enum": ["contract", "synthetic-upstream", "synthetic-container", "real-Actions", "source-audit"]},
+    "operator_reviewed": {"const": true},
+    "versions": {
+      "type": "object",
+      "required": ["harness_git_sha", "harness_tree_sha256", "sub2api_source_sha", "source_pin_verified", "node"],
+      "properties": {
+        "harness_git_sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+        "harness_tree_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "sub2api_source_sha": {"const": "96f4c115c9749078f90cbf210a01d39baf3f53b6"},
+        "source_pin_verified": {"type": "boolean"},
+        "node": {"type": "string", "pattern": "^v24\\."}
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "expected", "actual", "duration_ms", "upstream_requests", "limitation", "covers_requirement"],
+        "properties": {
+          "id": {"type": "string", "pattern": "^[A-H][0-9]{2}$"},
+          "status": {"enum": ["PASS", "FAIL", "NOT RUN"]},
+          "duration_ms": {"type": "number", "minimum": 0},
+          "upstream_requests": {"type": ["integer", "null"], "minimum": 0},
+          "covers_requirement": {"type": "boolean"},
+          "limitation": {"type": "string"}
+        }
+      }
+    }
+  }
+}

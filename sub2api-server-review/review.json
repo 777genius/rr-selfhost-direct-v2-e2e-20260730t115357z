@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "status": "BOUNDED_INDEPENDENT_SERVER_REVIEW_COMPLETE",
+  "decision": "REQUEST_CHANGES_TRANSITIVE_STARTUP_LOCK_CLEANUP",
+  "scope": {
+    "target": "frozen server-wiring-w1 serve.mjs and serve.test.mjs plus actual consumer/grant/broker imports",
+    "ownership": "sub2api-server-review/ only",
+    "new_serve_wiring_defects": 0,
+    "native_fork_decision": "Not reassessed in this server-only assignment",
+    "production_approval": false
+  },
+  "source_sha256": {
+    ".spike-inputs/consumer/sub2api-spike/serve.mjs": "fb2ec7e3aa5eadb60cde72d25f2004d77e8ece52de318d5c53abca14a190275c",
+    ".spike-inputs/consumer/sub2api-spike/serve.test.mjs": "a5f1908d5bab1579deb7ed80273868d87ec3c14bf1c818a0cd0e966eb765047c",
+    ".spike-inputs/consumer/sub2api-spike/customer.mjs": "b8bd9c31fe4de4a4fd8ba04b6c9d25161f07476a928f65228b2b716b22be7508",
+    ".spike-inputs/consumer/sub2api-spike/broker.mjs": "976def94620b9a01e9523c640c7134c6d930f06babe0612fc6aa06eb078a91dd",
+    ".spike-inputs/consumer/sub2api-spike/oidc.mjs": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647",
+    ".spike-inputs/consumer/sub2api-spike/util.mjs": "1dc20fa471b4e2784ff45748bd0a517ff6fd5517aa5b325c8467430cbb22bed4",
+    ".spike-inputs/consumer/sub2api-spike/native-errors.mjs": "6367e40dc016e95acef8a39632bec28cea81a090d2cf59ce318ae62c165a5a4e",
+    ".spike-inputs/consumer/sub2api-spike/granted-run.mjs": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+    ".spike-inputs/consumer/sub2api-spike/run-client.mjs": "484d454a3aacf25c3ea2e21e9400bbaa1fbd5b1615b485c24e6088bc881d2599",
+    ".spike-inputs/consumer/sub2api-spike/runner-isolation.mjs": "3eb6a0844007d088609dccf959962d319cac93ea77c1cf9233a90993c4293d03",
+    ".spike-inputs/consumer/sub2api-spike/evidence.mjs": "2f8b6d1d2adda68a97a28d3672617508da09bf3845d9d60e6df608505eb28856",
+    ".spike-inputs/consumer/sub2api-spike/operator/live-setup.mjs": "1aee77ea68df897fe01e5f9c661ff9543ddbba87cb1cd7ad0a6d999d53c3794e",
+    ".spike-inputs/consumer/sub2api-spike/operator/admin-roundtrip.mjs": "3535ce99223d632c7e0ccce719ac9201f6fb883b4a436d0973f472b08a2380c8",
+    "gateway-spike/oidc.mjs": "6827d0d0726d8a12582da22c5b3f7497c3f35fdbe58fcf69b0f3ffe98a603cca",
+    "gateway-spike/evidence.mjs": "f21567866c5c3433809d60af26223d8a6341becc2cf7500e1be4f4b9b56c9755",
+    "sub2api-spike/serve.mjs": "749cd722f800661c89cb73f0ada8566fd395495d9e14e3fc48f94a0a52105f24",
+    ".spike-inputs/INPUT-HASHES.json": "ca3c66547ee1d066931ce2b855898ee77354ec4303cde6337a11e6b95a156a24",
+    ".spike-inputs/coordinator/consumer-actual-HTTP.json": "60929b280f61cf91aecf1cbd2f1e4126c9f589a18bd00338e640b744b579771a",
+    ".spike-inputs/coordinator/actual-stock-probe-only.json": "1262c00d90fb4d327e2ba16ee32091f6c6fdfc4523e4b733dde54886357f0cf2",
+    ".spike-inputs/coordinator/actual-metadata-audit.json": "1df0f60cc480e40a8eaad9c65d0205daa97cfa635b5bc4f3f4604aebbb41c3a8"
+  },
+  "input_manifest_verification": {
+    "checked": 160,
+    "mismatches": 0
+  },
+  "findings": [
+    {
+      "id": "SR1",
+      "priority": "P2",
+      "introduced_by_serve_diff": false,
+      "title": "Broker construction failure strands its exclusive ledger lock",
+      "path": ".spike-inputs/consumer/sub2api-spike/broker.mjs",
+      "line": 18,
+      "related_lines": [
+        21,
+        22,
+        25
+      ],
+      "trigger": "Existing malformed JSON, unreadable ledger or invalid ledger schema after exclusive lock acquisition",
+      "actual": "createBroker rejects before returning a server; boot shutdown has no server reference and cannot release the lock. A corrected same-process restart rejects EEXIST.",
+      "impact": "Recoverable startup error requires manual stale-lock cleanup and leaves the opened file handle outside cleanup.",
+      "evidence": "independent.test.mjs imports actual frozen boot and broker; invalid-schema rejection, retained lock, corrected-ledger EEXIST all observed without listen or network",
+      "remedy": "Cover all initialization after successful lock acquisition with try/finally or catch that closes the handle and releases the owned lock on failure; preserve deliberate crash fail-closed policy."
+    }
+  ],
+  "requirements": {
+    "installation_before_effects": "PASS_SOURCE_AND_FROZEN_NEGATIVE_TEST_REVIEW",
+    "templates_invalid_present_ids": "PASS_SOURCE_AND_FROZEN_NEGATIVE_TEST_REVIEW",
+    "actual_AdminAPI_adapter_wiring": "PASS_SOURCE; runtime valid-path coordinator receipt only",
+    "recovery_revocation": "PASS_SOURCE: adapter initializes before broker; suspends uncertain workspace and queues revocations",
+    "test_only_control_binding": "PASS_SOURCE: synthetic auth enforced and literal IPv4/IPv6 wildcards rejected; topology authorization remains operator responsibility",
+    "both_listeners_shutdown_partial_listen_failure": "PASS_SOURCE_AND_FROZEN_TEST_REVIEW; independent socket execution denied",
+    "source_JSON_attestation": "Operator configuration only; not installation authentication"
+  },
+  "verification": {
+    "node": "v24.21.0",
+    "independent_defect_probe": {
+      "pass": 1,
+      "fail": 0,
+      "skip": 0,
+      "artifact": "verification/independent.tap"
+    },
+    "canonical_offline_tests": {
+      "pass": 42,
+      "fail": 0,
+      "skip": 0,
+      "artifact": "verification/offline-node.tap",
+      "limitation": "Explicit name-filtered selection; excludes HTTP tests and is not full96 proof"
+    },
+    "local_HTTP_suite": "NOT_RUN_TO_COMPLETION: sandbox rejected 127.0.0.1 socket access; partial log is not a pass receipt",
+    "root_HTTP_suite": {
+      "user_supplied": "96 PASS 0 skip",
+      "frozen_receipt": "consumer-actual-HTTP.json exit0; pinned Node image, provider_calls0",
+      "limits": "Frozen JSON does not contain counts, command or raw log; full_log points outside frozen inputs. No independent 96/0 attestation."
+    },
+    "stock_gate": {
+      "pass_results": 8,
+      "synthetic_provider_requests": 0,
+      "real_provider_inference_calls": 0,
+      "source": ".spike-inputs/coordinator/actual-stock-probe-only.json",
+      "capability_audit": "observed_updates0 false_writes0 unexpected_true_to_false0 in actual-metadata-audit.json"
+    }
+  },
+  "runtime_limits": [
+    "Unbundled independent observer/drain NOT_RUN here; not a source defect and no implementation or wait requested.",
+    "No production membership/SSO proof, installed custody proof, live provider, genuine Actions or integrated native financial canary claimed.",
+    "Frozen consumer omits unchanged gateway-spike baseline imports. Independent probe resolves only these imports to actual canonical gateway source, hashed above.",
+    "Existing canonical serve.mjs is older and must not be confused with frozen candidate. No source files changed."
+  ],
+  "artifacts": [
+    "REPORT.md",
+    "review.json",
+    "independent.test.mjs",
+    "verification/"
+  ],
+  "report_sha256": "f9113a29d89bb52fb32fc7f0067e3f99b8b249c3b0de2ae77f399c1e068330c8"
+}

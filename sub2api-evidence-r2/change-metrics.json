@@ -1,0 +1,60 @@
+{
+  "node": "v24.21.0",
+  "baseline": "entry source bytes of evidence-r4 (existing e335880 object/array helper)",
+  "run_id": "36869316283",
+  "files": [
+    {
+      "file": "sub2api-spike/run-client.mjs",
+      "added": 0,
+      "removed": 0,
+      "baseline_sha256": "0cafcb8b3adf01f607b62786f7d95021deefddaba7b71a0c62b86ba0419f2565",
+      "sha256": "0cafcb8b3adf01f607b62786f7d95021deefddaba7b71a0c62b86ba0419f2565"
+    },
+    {
+      "file": "sub2api-spike/evidence.mjs",
+      "added": 15,
+      "removed": 5,
+      "baseline_sha256": "4a13f43b05ed54d9e6d267525b89179bc9e6eff246213d6eb63abd8258e1af1f",
+      "sha256": "44f17424b5057ab94693809d05bc33db6305f065ead928f95aa0b066137f2160"
+    },
+    {
+      "file": "sub2api-spike/evidence.test.mjs",
+      "added": 47,
+      "removed": 1,
+      "baseline_sha256": "3cd0e9fe1b99e0cbd3ef7ed6aae03cbe517d3ebf1395ec9eb4eb97c79788d087",
+      "sha256": "0b2a8eae3f3000598ddc868b0ee449c4c3ca12791343e6fb163fc6d74570bbb0"
+    },
+    {
+      "file": "sub2api-evidence-r2/client-contract.test.mjs",
+      "added": 46,
+      "removed": 4,
+      "baseline_sha256": "7b1cebb0eeef65363b8d5b90a9153cde4930079d70a8bb3d4276769884359d07",
+      "sha256": "4c9d4eed62708962b86f396f69d00b9f582b34a0a331ea3753f012d95cfda3d8"
+    }
+  ],
+  "production": {
+    "added": 15,
+    "removed": 5
+  },
+  "tests": {
+    "added": 93,
+    "removed": 5
+  },
+  "fixture": {
+    "file": "sub2api-evidence-r2/numeric-jsonl-fixture.json",
+    "sha256": "13f41a252197709f3382adca88b3924132aa50fa3cb081e88ce83cc2790b5bbb",
+    "source": ".spike-inputs/actual-numeric-jsonl-projection.json",
+    "exact_source_bytes": true,
+    "raw_transcript": false
+  },
+  "log_sha256": {
+    "jsonl-red.tap": "37b5a5ef4c42c631fb0546b30155299c7e8c0413d1006fe74bcb862ae0b61c2d",
+    "jsonl-green.tap": "cec152d7e4f66f7e03fc8d1eadfbe1d66eed13001dd24c2f6e07cf2123d87fe9",
+    "red.tap": "72f3bb9a882a2401fa3dec22613170fad5804f7d632f84348cb3adf9d4884777",
+    "caller-red.tap": "562f19d7e3c44c4ca4f021e218196b265742ebabdd407742ed395749477c610e",
+    "green.tap": "550c6fb140dd121dddbbd3d73c66a328595d0a4334953df53032fcfcb4af5905",
+    "implementation.patch": "a61fb8a6e83962cb0dcc6ba317fcf00b40fff21d11105c7b98ecade9fcf49758"
+  },
+  "coordinator_paid_e2e": "NOT RUN",
+  "previous_metrics": "previous-change-metrics.json"
+}

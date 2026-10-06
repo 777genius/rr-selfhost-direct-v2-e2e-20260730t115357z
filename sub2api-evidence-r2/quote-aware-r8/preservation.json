@@ -1,0 +1,232 @@
+{
+  "numeric_parser_byte_identical": true,
+  "history": [
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/COORDINATOR-NOTES.md",
+      "sha256": "471928afd5c3f568cb6bca8992fc325fc1cb92723f2a8f935d4fa21e1b785cd5",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/REPORT.md",
+      "sha256": "2925e8e414bc1f0fe3db47f9cdb9924994023a4579537cc153357953f189a5a5",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/caller-red.tap",
+      "sha256": "562f19d7e3c44c4ca4f021e218196b265742ebabdd407742ed395749477c610e",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/change-metrics.json",
+      "sha256": "721b7d132f473bb36218a2339c509c1befe9ebc1b93f11ecc01311575b58c5f7",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/green.tap",
+      "sha256": "550c6fb140dd121dddbbd3d73c66a328595d0a4334953df53032fcfcb4af5905",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/implementation.patch",
+      "sha256": "a61fb8a6e83962cb0dcc6ba317fcf00b40fff21d11105c7b98ecade9fcf49758",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/jsonl-green.tap",
+      "sha256": "cec152d7e4f66f7e03fc8d1eadfbe1d66eed13001dd24c2f6e07cf2123d87fe9",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/jsonl-implementation.patch",
+      "sha256": "05e5b40af9b1ed17bd44e30aba6d9b4562a9eae1df0fea91d84008f7e48485a1",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/jsonl-red.tap",
+      "sha256": "37b5a5ef4c42c631fb0546b30155299c7e8c0413d1006fe74bcb862ae0b61c2d",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/numeric-jsonl-fixture.json",
+      "sha256": "13f41a252197709f3382adca88b3924132aa50fa3cb081e88ce83cc2790b5bbb",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/phase-baseline-29.tap",
+      "sha256": "43a6e3a7d513605d8df737c3f8c1c271e8245397c890b8cf450d769b24d275ad",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/phase-change-metrics.json",
+      "sha256": "25395967ba1b6a2ac42af172d167e73989b556bb7bf9e50ad2280548ef389955",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/phase-green.tap",
+      "sha256": "847732d8067a7655498f3f03350d74924e2ee3a0215cea3c874ff4ed271ab70a",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/phase-implementation.patch",
+      "sha256": "7f55b7e8f3b7d9c2b442c9ae05d5df13bd9cd8039dd2c4d274db03834b3957d0",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/phase-red.tap",
+      "sha256": "4fe1760726947c0b949d8a87ec2d7fcf89611261491461ca36a47f5a66801d24",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/previous-change-metrics.json",
+      "sha256": "ab05fa6e705c601637fc582c32818c59cbb672723d8d8bd1c8d5277477a09162",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/red.tap",
+      "sha256": "72f3bb9a882a2401fa3dec22613170fad5804f7d632f84348cb3adf9d4884777",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/selector-green.tap",
+      "sha256": "156cdd9a4d84c97d3b20b64f120473e70d2063353d7309b13f20ab45093114ef",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/selector-red.tap",
+      "sha256": "396e23a97ce3109f45cc83be00fc03dec4e410712e18f5d2fee44073446373dc",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/REPORT.md",
+      "sha256": "548a4c42ef8714907cc4149d01a332428ff81940290901fe907b3c37ac55b9af",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/actual-agent-projection.json",
+      "sha256": "46af8168849de783328f22e653debcee1feaa1197680737fce1712352e27affa",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/actual-command-projection.json",
+      "sha256": "c0e9755421784d9d892c3f4c2034436d7d66ca3b1b0cdece90368e606a4def4b",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/baseline.json",
+      "sha256": "7a92ca362ed14e54475f253c4cdeb79604d3b57343f40a26669e0df6b23ab8a9",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/change-metrics.json",
+      "sha256": "8dec0d5076ac550079be46ffa07fe868293c6190f7721e9b9e73bc9f974c67bf",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/gateway-spike__evidence.mjs.baseline",
+      "sha256": "f21567866c5c3433809d60af26223d8a6341becc2cf7500e1be4f4b9b56c9755",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/gateway-spike__evidence.test.mjs.baseline",
+      "sha256": "7f1dced2470eff4666fb2b3d139ba47c3b7f4f3e5c2163ac09aab7db2d9d92b7",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/green-result.json",
+      "sha256": "49440a2e7ed0bb8eff46ea2df0dd682cf9d6c73a46b90961b8bbd3a66bcd7fa6",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/green.tap",
+      "sha256": "bfb58f2062bef4e5a90aaa03aa5b4aa68e0bc5f29ead0ede28a7d5ce417bb86a",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/implementation.patch",
+      "sha256": "46313d8ff724881bd8e44018c760c258cccfeec7600770f29c1e07d53e3b61c3",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/preserved-gates-result.json",
+      "sha256": "ffefc39cafc6eb26c4224ce3712d6045d3ab930ed0459ed055f918226f3e2384",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/preserved-gates.tap",
+      "sha256": "a6cc4001786458473b270e170aedc74973bacc2ad6c04b45ca114827c341a065",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/preserved.json",
+      "sha256": "f7ffe20fc31c5dd258965ef1df022e12a1e00b267a6e4e57168a4f69cea2974e",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/red-result.json",
+      "sha256": "ec25ca17b8f5edbade37b630f73da26295e79e304db3e2e479f0342a704da51e",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/red.tap",
+      "sha256": "77fb3264e238d0efd585472facb59d4cd3380735e9c3a5f9c8168c493f788646",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/sub2api-evidence-r2__client-contract.test.mjs.baseline",
+      "sha256": "629088ea085ea86707748155cdb2df439c28024a33e94285deef9f4cac382080",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/sub2api-spike__evidence.mjs.baseline",
+      "sha256": "44f17424b5057ab94693809d05bc33db6305f065ead928f95aa0b066137f2160",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/sub2api-spike__evidence.test.mjs.baseline",
+      "sha256": "0b2a8eae3f3000598ddc868b0ee449c4c3ca12791343e6fb163fc6d74570bbb0",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/shell-prefix-r7/syntax.json",
+      "sha256": "01836943567ef73557fc540952496265210e38781a6267b453a88013aba094ea",
+      "matches_frozen": true
+    }
+  ],
+  "preserved_production": [
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/run-client.mjs",
+      "sha256": "3308b5cbaaf2b5be10d616ace4a1e47a24e013fa944514ae61054fd37d7fb490",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/granted-run.mjs",
+      "sha256": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/runner-isolation.mjs",
+      "sha256": "3eb6a0844007d088609dccf959962d319cac93ea77c1cf9233a90993c4293d03",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/oidc.mjs",
+      "sha256": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/receipts.mjs",
+      "sha256": "1d0a3b67fb24ea8d542208667eb47e8fd7b22b635294aec422059ae8660989cc",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/fixture/wallet.mjs",
+      "sha256": "c47fcdfb32c95bf1ede68c01a3705084a658ecbd2882ab21ca4e8cc5fc658f71",
+      "matches_frozen": true
+    },
+    {
+      "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/fixture/BUSINESS_RULES.md",
+      "sha256": "1a9837e5e95ee86f22eb171c7bc9ee1226c55ff859973ad573417feb6aae43a5",
+      "matches_frozen": true
+    }
+  ]
+}

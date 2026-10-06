@@ -1,0 +1,16 @@
+✔ before-test history remains11FAIL9NOTRUN/686 attempts and all cleanup (0.758775ms)
+✔ documented Linux6.8 raw decline remains raw with sampled maxima, never physical bound (0.893253ms)
+✔ raw HWM below RSS allowed; missing metrics and fabricated exact values fail closed (1.132453ms)
+✔ PID, cgroup, executable, freshness, baseline and source clock stay strict (1.346157ms)
+✔ limit, cgroup peak regression,250ms gaps, slow reads, fake resets/goroutines rejected (0.446751ms)
+✔ 512absolute/128+16perstream/768cgroup bounds unchanged (0.572416ms)
+✔ full5second tail, acknowledged DONE, and actual endpoint within5sec mandatory;32MiB retained (0.823655ms)
+✔ cgroup charge smaller than processRSS valid and never substituted for RSS (0.320432ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 63.174103

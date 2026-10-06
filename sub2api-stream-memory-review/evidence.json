@@ -1,0 +1,259 @@
+{
+  "reviewed_at_utc": "2026-10-01T16:19:53Z",
+  "locally_executed_Go": false,
+  "race": "NOT RUN / not supplied",
+  "scope": "exact isolated W2 package; future W3 merge excluded",
+  "frozen_inputs": {
+    "checked": 10344,
+    "manifest_sha256": "730a8ee0c75b5b3650326a124513f61057d36d52e20e0091d1949327286b84aa"
+  },
+  "package_inventory_checked": 33,
+  "source_files": [
+    {
+      "path": "backend/internal/service/gateway_anthropic_passthrough.go",
+      "kind": "production",
+      "before_sha256": "fd03d4dafdd8e2c82feace54fcba151f831d526944488a4454ab4926c4a9ece2",
+      "after_sha256": "9ef4adbc7dc4c2567e6d8ca68a070725c51018639813c64798e465d120b00871"
+    },
+    {
+      "path": "backend/internal/service/openai_first_output_timeout.go",
+      "kind": "production",
+      "before_sha256": "cd12f076c8e8b8ce57059d5b46e7422d0e9ed3d1dab94cc83e0e3ac348ebd2b7",
+      "after_sha256": "316e2fd01518ea636bb0ed08870542e0beca3872008957bd816acd2586496166"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_messages_anthropic_native.go",
+      "kind": "production",
+      "before_sha256": "88258388e24fa739150996c9bb39fb94448d0c421af5473af09b084126d28bf0",
+      "after_sha256": "8820231ac3431a45ebba1303cb40e14920548f01e70a9e50eec6ee4a7b6b4035"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "kind": "production",
+      "before_sha256": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3",
+      "after_sha256": "81a4de0bb2d3baac55e75e1202295b62852fb3242dc248ee099adc76b7973a79"
+    },
+    {
+      "path": "backend/internal/service/stream_memory_behavior_test.go",
+      "kind": "tests",
+      "before_sha256": null,
+      "after_sha256": "ce8fc9ef475305ea10654e57099e6852d795506bae8bb139199712ce976ce0d2"
+    },
+    {
+      "path": "backend/internal/service/stream_memory_lifecycle_test.go",
+      "kind": "tests",
+      "before_sha256": null,
+      "after_sha256": "c626ffec30727787f053bd4f7b18a13412291572063553a0ed4ded75adcfe4c9"
+    },
+    {
+      "path": "backend/internal/service/stream_memory_replay_handoff_test.go",
+      "kind": "tests",
+      "before_sha256": null,
+      "after_sha256": "933131f9371e3dd6f4f9ceb8dc4cbe0c432ebb6a68b69204ab3d2f73942c7b8e"
+    },
+    {
+      "path": "backend/internal/service/stream_memory_stage_test.go",
+      "kind": "tests",
+      "before_sha256": null,
+      "after_sha256": "d1be61e5e5547873d2635010e0807459af388226fbdfbe405860adb53f215858"
+    },
+    {
+      "path": "backend/internal/service/stream_memory_volume_test.go",
+      "kind": "tests",
+      "before_sha256": null,
+      "after_sha256": "e75d15f5cb6096084fcd39ceaf1db4f790cf7a29b29b1f68c4ac956c6d110a73"
+    }
+  ],
+  "exact_patch_applications": {
+    "full": 13,
+    "W1_delta": 2,
+    "delta_hashes": {
+      "patches/w2-prefix-ownership.production.patch": "8a5cc1205d70e51a62d406f833d6ea23476281a208e0c45307e23d47a8b530ab",
+      "patches/w2-prefix-ownership.tests.patch": "472a8ea89778accbedfd2e9c3a9f560700b37b31c4b8fe1decabc7df13190062"
+    }
+  },
+  "seven_W1_files_byte_unchanged": [
+    "production/backend/internal/service/gateway_anthropic_passthrough.go",
+    "production/backend/internal/service/openai_first_output_timeout.go",
+    "production/backend/internal/service/openai_gateway_messages_anthropic_native.go",
+    "tests/backend/internal/service/stream_memory_behavior_test.go",
+    "tests/backend/internal/service/stream_memory_lifecycle_test.go",
+    "tests/backend/internal/service/stream_memory_stage_test.go",
+    "tests/backend/internal/service/stream_memory_volume_test.go"
+  ],
+  "native_probe_source_pins_checked": 21,
+  "mandatory_P1_review_sha256": "6418ff852302ad93fd5355f0fd01c2ae0765e6fe3f54d341d7331a3785921472",
+  "byte_exact_reproducer_sha256": "933131f9371e3dd6f4f9ceb8dc4cbe0c432ebb6a68b69204ab3d2f73942c7b8e",
+  "W1_passthrough_sha256": "93baafd90df032bb5880ecf44037bcfb82e928ff7826324cd124edd46bf73c4b",
+  "minimal_ownership_delta": "PASS: exact entire W1 source plus declaration, handoff assignment, both guard replacements and explanatory comment",
+  "source_derived_phase_evaluation": [
+    {
+      "phase": "pre_cancel",
+      "W1_guard_rejects": true,
+      "W2_both_guards_reject": true,
+      "semantic_output": false
+    },
+    {
+      "phase": "pre_deadline",
+      "W1_guard_rejects": true,
+      "W2_both_guards_reject": true,
+      "semantic_output": false
+    },
+    {
+      "phase": "prefix_writer_failure",
+      "W1_guard_rejects": true,
+      "W2_both_guards_reject": false,
+      "semantic_output": false
+    },
+    {
+      "phase": "semantic_writer_failure",
+      "W1_guard_rejects": true,
+      "W2_both_guards_reject": false,
+      "semantic_output": false
+    },
+    {
+      "phase": "successful_output",
+      "W1_guard_rejects": false,
+      "W2_both_guards_reject": false,
+      "semantic_output": true
+    }
+  ],
+  "AfterFunc_limit": "Stop does not join an already firing callback. Body close/read failure can still leave terminal usage incomplete; no join or complete-usage guarantee.",
+  "production_patch_sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239",
+  "supplied_receipts": {
+    "green": {
+      "sha256": "1172d99f56454a50f2f6a999ac39aa7262d515443d4ac12bcdf368d8579800fc",
+      "receipt": {
+        "suite": "green",
+        "exit": 0,
+        "duration_s": 59.46,
+        "compile_failed": false,
+        "failed_tests": [],
+        "pass_count": 35,
+        "skip_count": 0,
+        "production_patch_sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239",
+        "image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+        "provider_requests": 0
+      },
+      "kind": "supplied actual normal Go summary; not independently rerun"
+    },
+    "native": {
+      "sha256": "fb5afced439ae9933beca764d7b69bf1e698aacb628fc633936fb81634a40263",
+      "receipt": {
+        "suite": "native",
+        "exit": 0,
+        "duration_s": 39.27,
+        "compile_failed": false,
+        "failed_tests": [],
+        "pass_count": 292,
+        "skip_count": 0,
+        "production_patch_sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239",
+        "image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+        "provider_requests": 0
+      },
+      "kind": "supplied actual normal Go summary; not independently rerun"
+    },
+    "probe": {
+      "sha256": "45350d340d39462cb9585c0bad6db50b91f6ee0e7d4ac6fee0cf9daa035d1f31",
+      "receipt": {
+        "suite": "probe",
+        "exit": 0,
+        "duration_s": 31.85,
+        "compile_failed": false,
+        "failed_tests": [],
+        "pass_count": 63,
+        "skip_count": 0,
+        "production_patch_sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239",
+        "image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+        "provider_requests": 0
+      },
+      "kind": "supplied actual normal Go summary; not independently rerun"
+    },
+    "red": {
+      "sha256": "958a8b0cc4beab8dddc664ddd586c7a68494d7be64532af5613d2747d395f6f9",
+      "receipt": {
+        "suite": "red",
+        "exit": 1,
+        "duration_s": 54.27,
+        "compile_failed": false,
+        "failed_tests": [
+          "TestStreamMemoryMessagesReadAhead/passthrough",
+          "TestStreamMemoryMessagesReadAhead/native",
+          "TestStreamMemoryMessagesReadAhead",
+          "TestStreamMemoryResponsesPrefixOverflow",
+          "TestStreamMemoryResponsesPrefixCancellationClosesReader"
+        ],
+        "pass_count": 0,
+        "skip_count": 0,
+        "production_patch_sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239",
+        "image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+        "provider_requests": 0
+      },
+      "kind": "supplied actual normal Go summary; not independently rerun"
+    },
+    "handoff-old": {
+      "sha256": "467b308463d040892d9c94e28a34f8fd9166262ebd2d0971b3b584b7fe2f30a3",
+      "receipt": {
+        "suite": "handoff-old",
+        "exit": 0,
+        "duration_s": 54.91,
+        "compile_failed": false,
+        "failed_tests": [],
+        "pass_count": 3,
+        "skip_count": 0,
+        "production_patch_sha256": "5f1e3abf6cc0fa8369f615a3e509eb9890915252dded83fda9b7e2f916313ccd",
+        "image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+        "provider_requests": 0
+      },
+      "kind": "supplied independent old/W1 control summary"
+    },
+    "handoff-new": {
+      "sha256": "13900ee0405cdad5d03cb74c922ae33e064ff1357f63cff232964f1cbd9624a4",
+      "receipt": {
+        "suite": "handoff-new",
+        "exit": 1,
+        "duration_s": 55.08,
+        "compile_failed": false,
+        "failed_tests": [
+          "TestSubreviewCancellationAfterReplayHandoffPreservesUsageDrain/prefix_writer_error",
+          "TestSubreviewCancellationAfterReplayHandoffPreservesUsageDrain/first_semantic_writer_error",
+          "TestSubreviewCancellationAfterReplayHandoffPreservesUsageDrain"
+        ],
+        "pass_count": 0,
+        "skip_count": 0,
+        "production_patch_sha256": "5f1e3abf6cc0fa8369f615a3e509eb9890915252dded83fda9b7e2f916313ccd",
+        "image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+        "provider_requests": 0
+      },
+      "kind": "supplied independent old/W1 control summary"
+    }
+  },
+  "standalone_gofmt": {
+    "files": 9,
+    "executable_sha256": "86dd91f69254432a37ca365f964720677040fd6f049a412c23e25f8b3812f342"
+  },
+  "offline_OS_check": "PASS: 0600, unlink-before-data, exact LF/opaque bytes, closed FD; Python OS check, not Go",
+  "historical_memory_FAIL_retained": [
+    "memory-messages-8-1",
+    "memory-messages-8-5",
+    "memory-messages-8-20",
+    "memory-messages-32-1",
+    "memory-messages-32-5",
+    "memory-messages-32-20",
+    "memory-messages-64-1",
+    "memory-messages-64-5",
+    "memory-messages-64-20",
+    "soak-messages",
+    "memory-responses-8-1",
+    "memory-responses-8-5",
+    "memory-responses-8-20",
+    "memory-responses-32-1",
+    "memory-responses-32-5",
+    "memory-responses-32-20",
+    "memory-responses-64-1",
+    "memory-responses-64-5",
+    "memory-responses-64-20",
+    "soak-responses"
+  ],
+  "verdict": "APPROVE"
+}

@@ -1,0 +1,55 @@
+{
+  "patch_sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5",
+  "status": "BOUNDED_R3_SOURCE_REMEDIATION_DELIVERED_RUNTIME_UNVERIFIED",
+  "R1": {
+    "implementation": "Account-aware proposal comparison of complete reasoning/reference items with exact numbers at all four callers, before retry budget; original semantic rejection returns plain non-retryable error",
+    "prepared_cases": [
+      "encrypted nonempty content maximum-zero",
+      "null content",
+      "status across reasoning items",
+      "cache extension",
+      "item-reference status",
+      "ordinary null/status/truncation and false controls"
+    ],
+    "observed_before_fix": {
+      "path": ".spike-inputs/coordinator/reasoning-w3-independent-execution.json",
+      "sha256": "e517bf927f31d3d95aa9e87c23f0dfc4e1ab8e8534cd88c0ae861011d00eceb2",
+      "evidence": {
+        "kind": "actual-independent-real-forward-R1-R2",
+        "patch_sha256": "7dec93ec55da38f15e719f5b7b7769ad2ec874ae548e1125a8a028e12cc51bdf",
+        "review_test_sha256": "3ca97c2d50f0c3c498c51d1fb0af9b7fa5352089953f84d1224e6ea5e03887ce",
+        "exit": 1,
+        "duration_s": 47.6,
+        "failed_tests": [
+          "TestIndependentCompatibleReasoningRejectedContent/false",
+          "TestIndependentCompatibleReasoningRejectedContent/true",
+          "TestIndependentCompatibleReasoningRejectedContent",
+          "TestIndependentCompatibleReasoningEmptyImagePrecision/true",
+          "TestIndependentCompatibleReasoningEmptyImagePrecision"
+        ],
+        "passed_count": 1,
+        "compile_failed": false
+      },
+      "worker_executed": false,
+      "replacement_validation": false
+    }
+  },
+  "R2": {
+    "implementation": "Strict UseNumber raw cleanup plus opaque reasoning/reference traversal exemption in both HTTP modes; ordinary images still removed",
+    "prepared_cases": [
+      "original unchanged independent precision case",
+      "opaque content containing blank input_image alongside user blank image",
+      "bogus number decoder controls"
+    ],
+    "observed_before_fix": "Exact 7dec coordinator independent passthrough precision failure; ordinary precision control passes"
+  },
+  "limitations": [
+    "Current Go/WS behavior and gofmt NOT RUN",
+    "Docker/image/live/production gates NOT RUN; no wait"
+  ],
+  "R3": {
+    "source": "Central exemption extended using opaque comparator normalization",
+    "before_fix": "Both opted-in normal/passthrough Forward cases fail in captured coordinator receipt; both default controls pass",
+    "after_fix": "NOT RUN: coordinator Go gate"
+  }
+}

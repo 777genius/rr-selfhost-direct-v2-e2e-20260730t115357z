@@ -1,0 +1,340 @@
+{
+  "approved_test_adaptation": {
+    "after_sha256": "c43c8569d205da65679cacf975607dfbf20741a82d43929acbc9efc912caf9e5",
+    "assertions_unchanged": true,
+    "before_sha256": "89807c417d2f62126088620014661588d2bd0fc29888056f8a4ff340c902ac0f",
+    "new_expression": "max(int(gatewayUpstreamErrorBodyReadLimit), int(openAIUpstreamErrorBodyReadLimit))+1",
+    "occurrences": 1,
+    "old_expression": "int(max(gatewayUpstreamErrorBodyReadLimit, openAIUpstreamErrorBodyReadLimit))+1",
+    "path": "backend/internal/service/native_api_key_cancellation_gaps_test.go",
+    "production_unchanged": true,
+    "reason": "Existing max(int,int) shadows builtin; typed 512KiB constants fit int",
+    "references": {
+      ".spike-inputs/original-inputs/independent-cancel-review/evidence.json": "1fbb6b0325fe99118234338a7099041a7e888b5c4d71665b27306a6d62a497a9",
+      ".spike-inputs/original-inputs/independent-cancel-review/native-complete-intcast.patch": "0c9d96a211ef84f75a4005d991dba0f2d580fb3f59bd4667ef958a233d08cc4d",
+      ".spike-inputs/original-inputs/independent-cancel-review/native-regression-intcast.patch": "632615233435c7fba7069397360edbf033a60b50e2f2308df37c27544dd9f7f3",
+      ".spike-inputs/original-inputs/independent-cancel-review/required-test-compile-fix.patch": "12bdad1587a5e32c406c3a0eae7692ded71e1c6f88eeac13facc4f2162f34620",
+      ".spike-inputs/original-inputs/independent-cancel-review/review.json": "f568537a40df87daeed20335b43ec641a5b4fb4b92f3bce3c1712bd125a18bf6"
+    },
+    "root_metadata_reference": ".spike-inputs/original-inputs/independent-cancel-review/evidence.json#adaptation",
+    "root_results_scope": "Standalone corrected W3 ONLY: 527 PASS, 0 FAIL, 0 SKIP; W2 RED 12 leaf failures, 42 controls PASS; NOT merged",
+    "supplied_review_manifest": {
+      "path": ".spike-inputs/INPUT-HASHES.json",
+      "sha256": "03265c0c811615481e36f6cce16e3d484f25408bc92f7faae9b910f3347b11b4"
+    }
+  },
+  "base_tree_sha256": "0268c0eec94f4f404d0ffdbbbce62251d9c2bbeaf5d1e125a27bc1aa1d654566",
+  "canonical_patches": [
+    {
+      "input_reference": "sub2api-fork/patches/native-reasoning.patch",
+      "path": "canonical-native.patch",
+      "sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5"
+    },
+    {
+      "input_reference": ".spike-inputs/original-inputs/original-inputs/probe/patches/disable-capability-probe.patch",
+      "path": "canonical-probe.patch",
+      "sha256": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45"
+    }
+  ],
+  "components": {
+    "cancel_W3_approved_gap_test_sha256": "c43c8569d205da65679cacf975607dfbf20741a82d43929acbc9efc912caf9e5",
+    "cancel_W3_complete_sha256": "6befb28012ae72e00676acf445cce3e0074cd8680588f9586cf3441a018eb8fb",
+    "cancel_W3_original_gap_test_sha256": "89807c417d2f62126088620014661588d2bd0fc29888056f8a4ff340c902ac0f",
+    "cancel_W3_production_sha256": "46b48c5ad31ebf6c1f1f524af4f7a62a8d5e886a7b3d1132a6bc3fb2e99b6baa",
+    "memory_W2_production_sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239"
+  },
+  "gofmt": {
+    "executable_sha256": "86dd91f69254432a37ca365f964720677040fd6f049a412c23e25f8b3812f342",
+    "format_files": 14,
+    "frozen_unformatted_control_retained": "backend/internal/service/independent_boundary_test.go",
+    "syntax_and_format_only": true,
+    "syntax_files": 15
+  },
+  "merged_tree_sha256": "82662b8666b05b6a0a95c76c79bde630ba73a27e2ae89e72363908a1f2117c42",
+  "namespace": "sub2api-native-merged",
+  "official_tree_sha256": "58240767aad20dfba5eb74a454001ecab9e0bf1f2c3da9f42fa924f7690b8800",
+  "patches": {
+    "W2-to-W3.patch": "f582207e622753a953d271197b1690a069a42777813f67c46a7d53da75596d1f",
+    "canonical-native.patch": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5",
+    "canonical-probe.patch": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45",
+    "default-drain-loss.RED-only.patch": "19c6671cd32cc41f15133c5fe80d34f300a988809d39233174c0e4c5b0a798ba",
+    "interaction-replay-loss.RED-only.patch": "dd7a3c18361403fb3a835548bcf5bfde64a7d798a86886e5b786c1ac5338fc8c",
+    "production.patch": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+    "regression.patch": "f6909228e016be8817057f2f3c5bd5f460550d9139dff19810c8df59d22d466d"
+  },
+  "preservation_sources": [
+    {
+      "lane": "native",
+      "path": "backend/internal/handler/openai_compatible_reasoning_review_test.go",
+      "production_overlap": false,
+      "source_sha256": "1139abc487ff687fe42b2f8f10609c4395d776505b69ebf37976c89368a58b68"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/handler/openai_gateway_reasoning_failover.go",
+      "production_overlap": false,
+      "source_sha256": "91b754a8824db9438af6db2b9fd9199c9652ec602e059852014d9a46d0dfa10e"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/account.go",
+      "production_overlap": false,
+      "source_sha256": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/independent_reference_namespace_test.go",
+      "production_overlap": false,
+      "source_sha256": "5863f7d72bf5d31865f4a162c614895358fefdc042de9b6128f4d75021e9fa47"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_compatible_reasoning_policy_test.go",
+      "production_overlap": false,
+      "source_sha256": "30e59f3de298e9f1a82a0afe570f5207e82aafc3ab0aaf2f0cfefe191d35536d"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_compatible_reasoning_repair_test.go",
+      "production_overlap": false,
+      "source_sha256": "6a9013541f2d9b893ee2193429ca2d88228c36b6f2121a3a3f5d4510675febff"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_compatible_reasoning_review_test.go",
+      "production_overlap": false,
+      "source_sha256": "f9d388154edc0313c9265bcde71ee72ff7583e3ec3895e80ea4380fa0a16d976"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "production_overlap": false,
+      "source_sha256": "ae1542077e98c581d9f5ee0e4e6afc4fbeffce76cefef992f38d6aa1f9f4688f"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "production_overlap": true,
+      "source_sha256": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_gateway_request_body.go",
+      "production_overlap": false,
+      "source_sha256": "799e9e31bfc445ad482096fb515c80198cb9f9f6aff9f41de89c7231b5b8b746"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_gateway_upstream_errors.go",
+      "production_overlap": false,
+      "source_sha256": "d38f5ff1f3ebf09bdd782cebf817cf3c25df5a70e10613a616d89f7b25d63355"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_responses_item_id.go",
+      "production_overlap": false,
+      "source_sha256": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_responses_namespace.go",
+      "production_overlap": false,
+      "source_sha256": "1b94667ececbd2c3721aafdd7c0f9ca90216f293090a9e0f69e4d31a564d2467"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_responses_rejected_field_retry.go",
+      "production_overlap": false,
+      "source_sha256": "f600f1df274c10ebc3200d6e1e2fbe72b59b2721f8814af015e531483900537f"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_ws_forwarder_ingress.go",
+      "production_overlap": false,
+      "source_sha256": "b10e7e25e643f436ed871e7803a6c929a2677bc10b49f4c0e450f150c1fb315a"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_ws_forwarder_v2.go",
+      "production_overlap": false,
+      "source_sha256": "bdf33814241c22951c9ea9a4faa50b1c6d4b701f62584bf267cd5e0df9f0d43c"
+    },
+    {
+      "lane": "native",
+      "path": "backend/internal/service/openai_ws_http_bridge.go",
+      "production_overlap": false,
+      "source_sha256": "1dd995c6a362947ee5b0aef18f1fccd3ced6eb2fcb0a81914ffe012559c19a8f"
+    },
+    {
+      "lane": "probe",
+      "path": "backend/internal/handler/admin/account_capability_probe_test.go",
+      "production_overlap": false,
+      "source_sha256": "02713e466cf95581cfe2b3d3c7df98cd76cb4aad0dde2070b3bc8bfa762bd7a4"
+    },
+    {
+      "lane": "probe",
+      "path": "backend/internal/handler/admin/account_handler.go",
+      "production_overlap": false,
+      "source_sha256": "400339bed0a0d6f5c6ec3e9a781555b2c89e459ab0e0ce2a3a21860a5bf85044"
+    },
+    {
+      "lane": "probe",
+      "path": "backend/internal/service/openai_apikey_responses_probe.go",
+      "production_overlap": false,
+      "source_sha256": "56a41272e23a13c8dcb3c0fde6ea0b1948ad5e1641367be0c2f9587ddd3b7bba"
+    },
+    {
+      "lane": "probe",
+      "path": "backend/internal/service/openai_capability_probe_duplicate_test.go",
+      "production_overlap": false,
+      "source_sha256": "dc5b7cf0a37c9fffe4af8c1d8f649b86bd8439e547c777130587ffc55b0e6cdf"
+    }
+  ],
+  "production": [
+    {
+      "added": 62,
+      "after_LOC": 969,
+      "after_sha256": "6c44a53b9947e4d463e8f9ab10c34746b6c561be0890603cf221575c51eb5730",
+      "before_LOC": 919,
+      "before_sha256": "fd03d4dafdd8e2c82feace54fcba151f831d526944488a4454ab4926c4a9ece2",
+      "path": "backend/internal/service/gateway_anthropic_passthrough.go",
+      "removed": 12
+    },
+    {
+      "added": 118,
+      "after_LOC": 118,
+      "after_sha256": "9a6c53df354c34af89302c3749b68c4e0b3d51ca75f5025c8bf6830507d445ad",
+      "before_LOC": 0,
+      "before_sha256": null,
+      "path": "backend/internal/service/native_api_key_cancellation.go",
+      "removed": 0
+    },
+    {
+      "added": 12,
+      "after_LOC": 328,
+      "after_sha256": "1064d22a4ae618515cf86f8180d778536e5109c57e3d0b8b50874b6b9a55b6b9",
+      "before_LOC": 318,
+      "before_sha256": "57f68c88cc7cbd5847d228394faeac53a81900bb6195e0d0acc497f5316c5dcb",
+      "path": "backend/internal/service/openai_compact_sse_keepalive.go",
+      "removed": 2
+    },
+    {
+      "added": 41,
+      "after_LOC": 372,
+      "after_sha256": "316e2fd01518ea636bb0ed08870542e0beca3872008957bd816acd2586496166",
+      "before_LOC": 343,
+      "before_sha256": "cd12f076c8e8b8ce57059d5b46e7422d0e9ed3d1dab94cc83e0e3ac348ebd2b7",
+      "path": "backend/internal/service/openai_first_output_timeout.go",
+      "removed": 12
+    },
+    {
+      "added": 52,
+      "after_LOC": 618,
+      "after_sha256": "a29e3616c9e63f25ca5552c3d2d624a62d6908fca3f8263dc2f7505e6b6c3813",
+      "before_LOC": 576,
+      "before_sha256": "88258388e24fa739150996c9bb39fb94448d0c421af5473af09b084126d28bf0",
+      "path": "backend/internal/service/openai_gateway_messages_anthropic_native.go",
+      "removed": 10
+    },
+    {
+      "added": 101,
+      "after_LOC": 2587,
+      "after_sha256": "23a326cb8213bc5b2c61c477f3863ed5c1a5b792a30965e7ef407661735ec6ff",
+      "before_LOC": 2507,
+      "before_sha256": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3",
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "removed": 21
+    }
+  ],
+  "regression": [
+    {
+      "added": 72,
+      "after_LOC": 72,
+      "after_sha256": "3ca97c2d50f0c3c498c51d1fb0af9b7fa5352089953f84d1224e6ea5e03887ce",
+      "before_LOC": 0,
+      "before_sha256": null,
+      "path": "backend/internal/service/independent_boundary_test.go",
+      "removed": 0
+    },
+    {
+      "added": 406,
+      "after_LOC": 406,
+      "after_sha256": "c43c8569d205da65679cacf975607dfbf20741a82d43929acbc9efc912caf9e5",
+      "before_LOC": 0,
+      "before_sha256": null,
+      "path": "backend/internal/service/native_api_key_cancellation_gaps_test.go",
+      "removed": 0
+    },
+    {
+      "added": 708,
+      "after_LOC": 708,
+      "after_sha256": "a0de3ca78328cdff0a3d0a4ce8d10322e673ba1f67c8420462faeb95780e1d90",
+      "before_LOC": 0,
+      "before_sha256": null,
+      "path": "backend/internal/service/native_api_key_cancellation_test.go",
+      "removed": 0
+    },
+    {
+      "added": 150,
+      "after_LOC": 150,
+      "after_sha256": "94ef8c31470dd8af1f1a23393ab0659d540fbfb0307663080bb399e3959fd6bc",
+      "before_LOC": 0,
+      "before_sha256": null,
+      "path": "backend/internal/service/native_stream_merged_interaction_test.go",
+      "removed": 0
+    },
+    {
+      "added": 282,
+      "after_LOC": 282,
+      "after_sha256": "ce8fc9ef475305ea10654e57099e6852d795506bae8bb139199712ce976ce0d2",
+      "before_LOC": 0,
+      "before_sha256": null,
+      "path": "backend/internal/service/stream_memory_behavior_test.go",
+      "removed": 0
+    },
+    {
+      "added": 206,
+      "after_LOC": 206,
+      "after_sha256": "c626ffec30727787f053bd4f7b18a13412291572063553a0ed4ded75adcfe4c9",
+      "before_LOC": 0,
+      "before_sha256": null,
+      "path": "backend/internal/service/stream_memory_lifecycle_test.go",
+      "removed": 0
+    },
+    {
+      "added": 67,
+      "after_LOC": 67,
+      "after_sha256": "933131f9371e3dd6f4f9ceb8dc4cbe0c432ebb6a68b69204ab3d2f73942c7b8e",
+      "before_LOC": 0,
+      "before_sha256": null,
+      "path": "backend/internal/service/stream_memory_replay_handoff_test.go",
+      "removed": 0
+    },
+    {
+      "added": 152,
+      "after_LOC": 152,
+      "after_sha256": "d1be61e5e5547873d2635010e0807459af388226fbdfbe405860adb53f215858",
+      "before_LOC": 0,
+      "before_sha256": null,
+      "path": "backend/internal/service/stream_memory_stage_test.go",
+      "removed": 0
+    },
+    {
+      "added": 98,
+      "after_LOC": 98,
+      "after_sha256": "e75d15f5cb6096084fcd39ceaf1db4f790cf7a29b29b1f68c4ac956c6d110a73",
+      "before_LOC": 0,
+      "before_sha256": null,
+      "path": "backend/internal/service/stream_memory_volume_test.go",
+      "removed": 0
+    }
+  ],
+  "runtime": {
+    "cancel_W3_independent_review": "APPROVE production plus exact intcast; NOT merged approval",
+    "cancel_W3_newgap_RED_GREEN": "Reviewer supplies root W2 RED 12 leaves / 42 controls PASS, corrected standalone W3 527 PASS / 0 SKIP; NOT merged",
+    "merged_Go": "NOT RUN",
+    "merged_race": "NOT RUN"
+  },
+  "schema": 1,
+  "source": "exact original combined native/probe backend; full production delta includes both components"
+}

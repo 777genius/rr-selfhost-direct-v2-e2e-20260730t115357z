@@ -1,0 +1,49 @@
+{
+  "outer_manifest_sha256": "cfc09aafc43f5faf7ca17b17bdac7b513792ea6db0a89edef021f79b67d5fc28",
+  "outer_files_verified": 429,
+  "candidate_outputs_verified": 294,
+  "historical_inputs_verified": 150,
+  "candidate_historical_outputs_verified": 33,
+  "independent-review_historical_outputs_verified": 12,
+  "original_review_hashes_verified": 34,
+  "history": {
+    "sha256": "c1152dfe52e4d81a2dd3417679711a34aae38ac72744b1a37e45abfacdf6f761",
+    "FAIL": 11,
+    "NOT RUN": 9,
+    "attempts": 686,
+    "effects": 686,
+    "rerun": false
+  },
+  "patches": {
+    "canonical": {
+      "sha256": "e991506378bbe3c51dd193bf6b48b9eaa9257c15b084aaeed7d7e52a886d2b26",
+      "zero_fuzz": true,
+      "zero_offset": true,
+      "files": {
+        "sub2api-regression-lab/client.mjs": "c3a772ed23202367f87f1fcf19099b8d9d060843096b7acd8c288d1cde5cdd47",
+        "sub2api-regression-lab/common.mjs": "c6b50fb270c95d5aff4b6fbf3b54d5b4c9fb95fb8d75b4e7d7122c237357de75",
+        "sub2api-regression-lab/compose.example.yaml": "7acafaa9a2c573db3ff3ab8552d513f0ef24ddda17f16db24533099dd8657f36",
+        "sub2api-regression-lab/mock.mjs": "a253781f03a7cfaba12e46fde023e3d4af3572cc9e14e305f4e438fdc22bca38",
+        "sub2api-regression-lab/run.mjs": "1105d7cadfe10f5d5d4de25f4bd9f2cb41348ca92eb3463bf487584ec71a0f0e",
+        "sub2api-regression-lab/wire.mjs": "1e91fdbd45e9c8c4d4dc1aa8595f03c71642222b036a0db979e186ab5a2f392c"
+      },
+      "plan_cases": 40,
+      "behavioral_tests": 8
+    },
+    "frozen-root": {
+      "sha256": "e991506378bbe3c51dd193bf6b48b9eaa9257c15b084aaeed7d7e52a886d2b26",
+      "zero_fuzz": true,
+      "zero_offset": true,
+      "files": {
+        "sub2api-regression-lab/client.mjs": "c3a772ed23202367f87f1fcf19099b8d9d060843096b7acd8c288d1cde5cdd47",
+        "sub2api-regression-lab/common.mjs": "c6b50fb270c95d5aff4b6fbf3b54d5b4c9fb95fb8d75b4e7d7122c237357de75",
+        "sub2api-regression-lab/compose.example.yaml": "7acafaa9a2c573db3ff3ab8552d513f0ef24ddda17f16db24533099dd8657f36",
+        "sub2api-regression-lab/mock.mjs": "a253781f03a7cfaba12e46fde023e3d4af3572cc9e14e305f4e438fdc22bca38",
+        "sub2api-regression-lab/run.mjs": "1105d7cadfe10f5d5d4de25f4bd9f2cb41348ca92eb3463bf487584ec71a0f0e",
+        "sub2api-regression-lab/wire.mjs": "1e91fdbd45e9c8c4d4dc1aa8595f03c71642222b036a0db979e186ab5a2f392c"
+      },
+      "plan_cases": 40,
+      "behavioral_tests": 8
+    }
+  }
+}

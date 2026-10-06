@@ -1,0 +1,145 @@
+--- W6/adapter.mjs
++++ W7/adapter.mjs
+@@ -1,8 +1,37 @@
+ // Deliberate small setup delta from portable run.mjs; public AdminAPI transport reused.
+ import { randomBytes } from 'node:crypto';
+-import { admin, save } from '../sub2api-regression-lab/common.mjs';
++import { admin, save, mono, sleep, must, MiB } from '../sub2api-regression-lab/common.mjs';
+ import { models } from '../sub2api-regression-lab/wire.mjs';
+ import { limits, requireFact } from './contracts.mjs';
++const responseBudget = 5000;
++export async function login(c, body, io = {}) {
++  const now = io.mono ?? mono, pause = io.sleep ?? sleep, send = io.fetch ?? globalThis.fetch;
++  const deadline = Math.min(c.deadline, c.supervisor_deadline ?? Infinity);
++  const encoded = JSON.stringify(body);
++  for (let attempt = 0; attempt < 2; attempt++) {
++    must(deadline - now() >= responseBudget, 'BATCH_DEADLINE');
++    const r = await send(`${c.engine_url}/api/v1/auth/login`, { method: 'POST',
++      headers: { 'content-type': 'application/json', authorization: `Bearer ${c.admin_bearer}` },
++      body: encoded, redirect: 'error', signal: AbortSignal.timeout(responseBudget) });
++    must(now() < deadline, 'BATCH_DEADLINE');
++    must(r.ok || (r.status === 429 && attempt === 0), 'CONTROL_OR_ADMIN_REJECTED');
++    const bytes = await r.arrayBuffer(); must(bytes.byteLength <= 2 * MiB, 'CONTROL_OR_ADMIN_LIMIT');
++    must(now() < deadline, 'BATCH_DEADLINE');
++    const data = JSON.parse(Buffer.from(bytes));
++    must(data.code === undefined || data.code === 0, 'ADMIN_API_REJECTED');
++    if (r.ok) return data.data ?? data;
++    const header = r.headers.get('retry-after');
++    must(typeof header === 'string' && /^(?:[1-9]|[1-5][0-9]|60)$/.test(header) &&
++      data.error === 'rate limit exceeded' && data.message === 'Too many requests, please try again later',
++      'CONTROL_OR_ADMIN_REJECTED');
++    const wait = Number(header) * 1000;
++    must(deadline - now() >= wait + responseBudget, 'BATCH_DEADLINE');
++    const until = now() + wait;
++    await pause(wait);
++    must(now() >= until && deadline - now() >= responseBudget, 'BATCH_DEADLINE');
++  }
++}
++
+ export async function setup(c, spec, journal) {
+   const name = `rr-${spec.id}`, platform = spec.protocol === 'responses' ? 'openai' : 'anthropic';
+   const create = async (kind, body, bearer) => {
+@@ -24,7 +53,7 @@
+   const password = randomBytes(24).toString('hex'), email = `${name}@example.invalid`;
+   const user = await create('users', { email, password, username: name, role: 'user', balance: 1000,
+     concurrency: concurrency.user, allowed_groups: [group.id], restrict_public_groups: true });
+-  const auth = await admin(c, '/auth/login', 'POST', { email, password });
++  const auth = await login(c, { email, password });
+   requireFact(typeof auth.access_token === 'string', 'USER_LOGIN_FAILED');
+   journal.user_token = auth.access_token; await save(journal.path, journal);
+   const key = await create('keys', { name, group_id: group.id, expires_in_days: 1 }, auth.access_token);
+--- W6/launch_transport_test.py
++++ W7/launch_transport_test.py
+@@ -42,7 +42,7 @@
+                 if decoded['image'] == PIN:
+                     resolved = decoded
+                     raise CapturedEngine()
+-            output = b'offline-network-id' if args[:2] == ['network','create'] else b''
++            output = b'offline-network-id' if args[:2] == ['network','create'] else (b'1\n' if args[:2] == ['exec',d.owner+'-postgres'] and args[2:4] == ['sh','-c'] and args[4] == 'test "$(cat /proc/1/comm)" = postgres && PGOPTIONS="-c default_transaction_read_only=on" exec psql -X -qAt -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 1"' else b'')
+             return subprocess.CompletedProcess(argv, 0, output)
+         with patch.object(root.subprocess, 'run', side_effect=transport):
+             try: d.launch()
+--- W6/root-driver.py
++++ W7/root-driver.py
+@@ -75,7 +75,8 @@
+         dump(self.root/'cleanup-journal.json', {'owner':self.owner,'network_name':self.net,'network_id':self.network,
+           'containers':self.containers,'cleanup_errors':self.cleanup_errors,'cleaned':self.cleaned})
+     def cmd(self,args,timeout=30,input=None,cleanup=False):
+-        need(mono()<self.deadline,'ROOT_DEADLINE'); timeout=min(timeout,max(.05,(self.deadline-mono())/1000))
++        timeout=min(timeout,(self.deadline-mono())/1000)
++        need(timeout>0,'ROOT_DEADLINE')
+         r=subprocess.run(args,input=input,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=timeout,
+                          env={'PATH':os.environ.get('PATH','/usr/bin:/bin'),'LANG':'C.UTF-8'})
+         need(r.returncode==0,'OPERATOR_COMMAND_FAILED'); return r.stdout
+@@ -160,8 +161,8 @@
+         while mono()<ready:
+             try:
+                 result=self.docker('exec',pg,'sh','-c','test "$(cat /proc/1/comm)" = postgres && PGOPTIONS="-c default_transaction_read_only=on" exec psql -X -qAt -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 1"',
+-                                   timeout=min(2,max(.001,(ready-mono())/1000)))
+-                if result.strip()==b'1': return
++                                   timeout=min(2,(ready-mono())/1000))
++                if mono()<ready and result.strip()==b'1': return
+             except (ValueError, subprocess.TimeoutExpired):
+                 pass
+             remaining=(ready-mono())/1000
+--- W6/verify-tls.py
++++ W7/verify-tls.py
+@@ -5,11 +5,11 @@
+ sys.dont_write_bytecode=True
+ HERE=Path(__file__).resolve().parent; REPO=HERE.parent
+ sys.path.insert(0,str(HERE)); real=Path.read_text
+-image=REPO/'.spike-inputs/original-inputs/slot-original-inputs/original-inputs/actual-image.json'
++image=REPO/'.spike-inputs/slot-original-inputs/original-inputs/slot-original-inputs/original-inputs/actual-image.json'
+ with patch.object(Path,'read_text',lambda p,*a,**k:real(image if p==REPO/'.spike-inputs/actual-image.json' else p,*a,**k)):
+     suite=unittest.defaultTestLoader.discover(str(HERE),pattern='*_test.py')
+ transport=sys.modules['launch_transport_test']
+-transport.BASELINE=REPO/'.spike-inputs/original-inputs/slot-original-inputs/original-inputs/candidate/sub2api-slot-lab'
++transport.BASELINE=REPO/'.spike-inputs/slot-original-inputs/original-inputs/slot-original-inputs/original-inputs/candidate/sub2api-slot-lab'
+ original=transport.capture; captured=[]
+ def capture(package):
+     rows,resolved=original(package)
+@@ -28,16 +28,14 @@
+                 i=row.index('--env');assert row[i+1]=='NODE_EXTRA_CA_CERTS=/private/tls/ca.crt';del row[i:i+2]
+             if ca in row:
+                 i=row.index(ca);assert row[i-1]=='--mount';del row[i-1:i+1]
++    for row in rows:
++        if row[:2]==['exec',rows[0][rows[0].index('--label')+1].split('=',1)[1]+'-postgres'] and row[2:4]==['sh','-c']:
++            assert row[4]=='test "$(cat /proc/1/comm)" = postgres && PGOPTIONS="-c default_transaction_read_only=on" exec psql -X -qAt -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 1"'
++            row[2:]=['pg_isready','-U','synthetic','-d','synthetic']
+     return rows,resolved
+ transport.capture=capture
+-loader=importlib.machinery.SourceFileLoader.exec_module
+-def load(self,module):
+-    loader(self,module)
+-    if module.__name__=='launch_candidate' and hasattr(module.Driver,'wait_postgres'):
+-        module.Driver.wait_postgres=lambda d,pg:d.docker('exec',pg,'pg_isready','-U',d.dbuser,'-d',d.dbname,timeout=2)
+ output=io.StringIO()
+-with patch.object(importlib.machinery.SourceFileLoader,'exec_module',load):
+-    result=unittest.TextTestRunner(stream=output,verbosity=2).run(suite)
++result=unittest.TextTestRunner(stream=output,verbosity=2).run(suite)
+ (HERE/'build/python-18.txt').write_text(output.getvalue())
+ print(output.getvalue())
+ assert result.wasSuccessful() and result.testsRun==18
+--- profile-W5/root-driver.py
++++ profile-W7/root-driver.py
+@@ -45,7 +45,8 @@
+                 CGO_ENABLED='0',GOOS='linux',GOARCH='amd64',GOCACHE=self.c['compilation_cache'],GOMODCACHE=self.c['modules_cache'],GOMAXPROCS='2')
+         return self.toolchain_env
+     def cmd(self,args,timeout=30,input=None,env=None):
+-        if self.deadline: timeout=max(.1,min(timeout,(self.deadline-mono())/1000))
++        if self.deadline is not None: timeout=min(timeout,(self.deadline-mono())/1000)
++        require(timeout>0,'COMMAND_DEADLINE')
+         r=subprocess.run(args,input=input,env=env,stdout=subprocess.PIPE,stderr=subprocess.DEVNULL,timeout=timeout)
+         require(r.returncode==0,'COMMAND_FAILED');return r.stdout
+     def docker(self,*args,**kw): return self.cmd(['docker',*args],**kw)
+@@ -175,8 +176,8 @@
+         while mono()<ready:
+             try:
+                 result=self.docker('exec',pg,'sh','-c','test "$(cat /proc/1/comm)" = postgres && PGOPTIONS="-c default_transaction_read_only=on" exec psql -X -qAt -v ON_ERROR_STOP=1 -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT 1"',
+-                                   timeout=min(2,max(.001,(ready-mono())/1000)))
+-                if result.strip()==b'1': return
++                                   timeout=min(2,(ready-mono())/1000))
++                if mono()<ready and result.strip()==b'1': return
+             except (ValueError, subprocess.TimeoutExpired):
+                 pass
+             remaining=(ready-mono())/1000

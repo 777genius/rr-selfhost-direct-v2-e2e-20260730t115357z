@@ -1,0 +1,71 @@
+{
+  "schema": 1,
+  "task_id": "rr-gateway-spike-20260930-boundary-code-w3",
+  "date": "2026-10-01",
+  "previous_goal_turn_classification": "no progress: verified current local bytes and found no final repaired external acceptance receipts.",
+  "current_goal_turn_classification": "no progress: the same external verification blocker remains; current patch/artifact hashes still match and no new coordinator receipt or confirmed live execution handle is available.",
+  "completion_proven": false,
+  "patch_sha256": "482855b20d60917ce9081d606592366ad9f77ad865bd6f3840bbb0a4bb0a47d1",
+  "current_state_checks": {
+    "all_11_patch_file_hashes_match": true,
+    "exact_reconstructed_base_application_matches": true,
+    "supplied_upstream_tree_digest_matches": true,
+    "all_report_artifact_hashes_match": true,
+    "preserved_UID_launcher_workflow_financial_harness_bytes_match": true,
+    "recorded_local_cases_pass": 24,
+    "independent_prior_red_current_green_match": true
+  },
+  "requirements": [
+    {
+      "requirement": "Stock full DTO wire handling across template GET/PUT, duplicate/GET, promotion, list, reconciliation and fetchOwned; malformed/null/conflicting/lite denial.",
+      "local_evidence": "Current customer source, independent stock JSON fixture, 17 passing selected customer cases and red/green oracle bytes verified.",
+      "actual_stock_runtime_evidence": "MISSING for repaired patch; only the prior real-admin failure is present.",
+      "decision": "Local implementation verified; full engine behavior unproven."
+    },
+    {
+      "requirement": "Exact in-flight routing/membership/workspace/credential/template authority checks, compensation and durable fences.",
+      "local_evidence": "Current source and offline remap/mutation/replacement/recovery test receipts verified.",
+      "real_engine_broker_evidence": "MISSING for repaired patch.",
+      "decision": "Local implementation verified; real scheduler/broker acceptance unproven."
+    },
+    {
+      "requirement": "Complete reviewed UID boundary, fixed launcher and accurate derived minimal sudoers install.",
+      "local_evidence": "Preserved harness/launcher/workflow hashes and four pure helper cases verified; report documents actual mode0700 sudo/base-policy repairs.",
+      "external_evidence": "Prior coordinator kernel and installed-policy receipts PASS on earlier derived image; new integrated reviewed SHA/manifest/image receipt absent.",
+      "decision": "Preserved contribution and prior evidence verified; final installed integration unproven."
+    },
+    {
+      "requirement": "Financial prompt/assertions, native protocols/models and genuine A01/A02/A03 thinking/adoption.",
+      "local_evidence": "Preserved run-client hash and three financial/native-stream helper cases verified.",
+      "genuine_Actions_evidence": "MISSING for final repaired integration.",
+      "decision": "Local preservation verified; required native end-to-end acceptance unproven."
+    },
+    {
+      "requirement": "Full replacement patch, REPORT/report.json/source pin verification against coordinator fresh archives.",
+      "local_evidence": "Full replacement patch and all 11 target bytes verified against reconstructed original; supplied fresh96f4 tree bytes verified.",
+      "independent_archive_provenance_evidence": "MISSING; supplied bytes alone do not authenticate release/original-base archives.",
+      "decision": "Local handoff coherent; independent archive acceptance pending."
+    },
+    {
+      "requirement": "Full HTTP contracts, stock duplicate transaction/scheduler, integrated custody/77-scenario/teardown.",
+      "external_evidence": "Only prior coordinator contracts/containment/policy and failure receipts exist; final repaired receipts absent.",
+      "decision": "NOT RUN for final repaired integration."
+    }
+  ],
+  "external_blocker_audit": {
+    "same_blocker_consecutive_goal_turns": 3,
+    "condition": "Final repaired integration needs coordinator archive, HTTP/stock-admin/scheduler, installed image and genuine Actions/custody receipts; worker remains prohibited from network/root/Docker/live inference.",
+    "new_peer_receipts_found": false,
+    "confirmed_live_execution_handle": null,
+    "verified_wait": false,
+    "goal_status": "blocked",
+    "blocked_threshold_met": true
+  },
+  "next_safe_action": "Coordinator supplies final repaired integration receipts or new local failure evidence; worker then audits/fixes within the owned lane. No prohibited execution or repeated tests without new concerns.",
+  "goal_status_changed": true,
+  "goal_tool_result": {
+    "status": "blocked",
+    "tokens_used": 155140,
+    "time_used_seconds": 1868
+  }
+}

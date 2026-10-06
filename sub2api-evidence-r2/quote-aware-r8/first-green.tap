@@ -1,0 +1,304 @@
+TAP version 13
+# Subtest: finding alone, failed/incomplete tool execution and terminal error cannot be evidence
+ok 1 - finding alone, failed/incomplete tool execution and terminal error cannot be evidence
+  ---
+  duration_ms: 1.27477
+  type: 'test'
+  ...
+# Subtest: Codex evidence emits fixed normalized fields without transcript or review contents
+ok 2 - Codex evidence emits fixed normalized fields without transcript or review contents
+  ---
+  duration_ms: 0.61016
+  type: 'test'
+  ...
+# Subtest: wallet read accepts exact cat and both supported prefixes for bash sh zsh
+ok 3 - wallet read accepts exact cat and both supported prefixes for bash sh zsh
+  ---
+  duration_ms: 0.334026
+  type: 'test'
+  ...
+# Subtest: wallet read rejects malicious paths flags compounds and mismatched quotes
+ok 4 - wallet read rejects malicious paths flags compounds and mismatched quotes
+  ---
+  duration_ms: 0.338845
+  type: 'test'
+  ...
+# Subtest: echo-only output and denials cannot prove a discovered financial bug
+ok 5 - echo-only output and denials cannot prove a discovered financial bug
+  ---
+  duration_ms: 0.192382
+  type: 'test'
+  ...
+# Subtest: Messages agent evidence requires matching successful Read tool result
+ok 6 - Messages agent evidence requires matching successful Read tool result
+  ---
+  duration_ms: 0.277869
+  type: 'test'
+  ...
+# Subtest: caller accepts object with real independent reproduction
+ok 7 - caller accepts object with real independent reproduction
+  ---
+  duration_ms: 72.187982
+  type: 'test'
+  ...
+# Subtest: caller accepts canary-shaped array with real independent reproduction
+ok 8 - caller accepts canary-shaped array with real independent reproduction
+  ---
+  duration_ms: 46.695557
+  type: 'test'
+  ...
+# Subtest: caller accepts actual local Node wallet execution emitting both numeric examples
+ok 9 - caller accepts actual local Node wallet execution emitting both numeric examples
+  ---
+  duration_ms: 97.046899
+  type: 'test'
+  ...
+# Subtest: caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+ok 10 - caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+  ---
+  duration_ms: 83.701784
+  type: 'test'
+  ...
+# Subtest: caller denies invalid JSONL lines and exact numeric mismatches
+ok 11 - caller denies invalid JSONL lines and exact numeric mismatches
+  ---
+  duration_ms: 365.231529
+  type: 'test'
+  ...
+# Subtest: caller retains reads, terminal, genuine final and successful tool requirements with JSONL
+ok 12 - caller retains reads, terminal, genuine final and successful tool requirements with JSONL
+  ---
+  duration_ms: 351.909598
+  type: 'test'
+  ...
+# Subtest: caller denies bad own proof and independent reproduction mismatch
+ok 13 - caller denies bad own proof and independent reproduction mismatch
+  ---
+  duration_ms: 207.279051
+  type: 'test'
+  ...
+# Subtest: caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals
+ok 14 - caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals
+  ---
+  duration_ms: 462.717336
+  type: 'test'
+  ...
+# Subtest: caller denies reasoning-only final, malformed final, agent failure and unsealed import
+ok 15 - caller denies reasoning-only final, malformed final, agent failure and unsealed import
+  ---
+  duration_ms: 7.447696
+  type: 'test'
+  ...
+# Subtest: observed run36879127384 usr-bin-bash argv regression with locally reproduced stdout
+ok 16 - observed run36879127384 usr-bin-bash argv regression with locally reproduced stdout
+  ---
+  duration_ms: 431.075932
+  type: 'test'
+  ...
+# Subtest: caller diagnoses parse failures with fixed stderr and no private output
+ok 17 - caller diagnoses parse failures with fixed stderr and no private output
+  ---
+  duration_ms: 4.045479
+  type: 'test'
+  ...
+# Subtest: caller diagnoses absent or nonfinite numeric examples before local execution
+ok 18 - caller diagnoses absent or nonfinite numeric examples before local execution
+  ---
+  duration_ms: 21.311019
+  type: 'test'
+  ...
+# Subtest: caller diagnoses independent wallet rejection and private subprocess failures
+ok 19 - caller diagnoses independent wallet rejection and private subprocess failures
+  ---
+  duration_ms: 46.125761
+  type: 'test'
+  ...
+# Subtest: caller diagnoses exact own numeric matching and completed zero-exit admission
+ok 20 - caller diagnoses exact own numeric matching and completed zero-exit admission
+  ---
+  duration_ms: 391.974718
+  type: 'test'
+  ...
+# Subtest: caller diagnoses final finding, separate exact reads and genuine terminal contract
+ok 21 - caller diagnoses final finding, separate exact reads and genuine terminal contract
+  ---
+  duration_ms: 308.871769
+  type: 'test'
+  ...
+# Subtest: caller diagnoses evidence write without leaking private write error
+ok 22 - caller diagnoses evidence write without leaking private write error
+  ---
+  duration_ms: 45.016086
+  type: 'test'
+  ...
+# Subtest: caller delivers green receipt with minimal standalone Node output contract and HIGH model
+ok 23 - caller delivers green receipt with minimal standalone Node output contract and HIGH model
+  ---
+  duration_ms: 80.002256
+  type: 'test'
+  ...
+# Subtest: RUN_CLIENT_SOURCE binds evidence and its transitive imports to selected source
+ok 24 - RUN_CLIENT_SOURCE binds evidence and its transitive imports to selected source
+  ---
+  duration_ms: 46.92871
+  type: 'test'
+  ...
+# Subtest: R8 independent double-outer-quote breakout must fail
+ok 25 - R8 independent double-outer-quote breakout must fail
+  ---
+  duration_ms: 0.829367
+  type: 'test'
+  ...
+# Subtest: R8 independent single-outer-quote breakout must fail
+ok 26 - R8 independent single-outer-quote breakout must fail
+  ---
+  duration_ms: 0.203204
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts actual run36869316283 strict JSONL matching either exact example
+ok 27 - numeric proof accepts actual run36869316283 strict JSONL matching either exact example
+  ---
+  duration_ms: 1.581761
+  type: 'test'
+  ...
+# Subtest: strict JSONL consumes every nonblank line as a complete finite numeric object
+ok 28 - strict JSONL consumes every nonblank line as a complete finite numeric object
+  ---
+  duration_ms: 2.396256
+  type: 'test'
+  ...
+# Subtest: strict JSONL compares all three finite fields in one exact example
+ok 29 - strict JSONL compares all three finite fields in one exact example
+  ---
+  duration_ms: 0.291571
+  type: 'test'
+  ...
+# Subtest: strict JSONL retains completed command admission and successful exit gates
+ok 30 - strict JSONL retains completed command admission and successful exit gates
+  ---
+  duration_ms: 0.145548
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts the existing complete JSON object
+ok 31 - numeric proof accepts the existing complete JSON object
+  ---
+  duration_ms: 0.154708
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts canary two-object JSON array matching either reported example
+ok 32 - numeric proof accepts canary two-object JSON array matching either reported example
+  ---
+  duration_ms: 0.137513
+  type: 'test'
+  ...
+# Subtest: numeric proof preserves existing direct and shell-wrapped Node command matching
+ok 33 - numeric proof preserves existing direct and shell-wrapped Node command matching
+  ---
+  duration_ms: 0.484956
+  type: 'test'
+  ...
+# Subtest: numeric proof admits only supported shell prefixes, flags and one Node eval command
+ok 34 - numeric proof admits only supported shell prefixes, flags and one Node eval command
+  ---
+  duration_ms: 0.627299
+  type: 'test'
+  ...
+# Subtest: supported shell numeric proof still rejects incomplete, nonzero, mismatch and stdout prefixes
+ok 35 - supported shell numeric proof still rejects incomplete, nonzero, mismatch and stdout prefixes
+  ---
+  duration_ms: 0.347296
+  type: 'test'
+  ...
+# Subtest: separate rules and wallet reads admit both prefixes and all three supported shells only
+ok 36 - separate rules and wallet reads admit both prefixes and all three supported shells only
+  ---
+  duration_ms: 1.983118
+  type: 'test'
+  ...
+# Subtest: numeric proof requires exact finite numbers in all three actual fields
+ok 37 - numeric proof requires exact finite numbers in all three actual fields
+  ---
+  duration_ms: 1.065302
+  type: 'test'
+  ...
+# Subtest: numeric proof parses the complete output and never scans fragments or nested objects
+ok 38 - numeric proof parses the complete output and never scans fragments or nested objects
+  ---
+  duration_ms: 0.396833
+  type: 'test'
+  ...
+# Subtest: numeric proof rejects failed or incomplete tools, reasoning, and wrong commands
+ok 39 - numeric proof rejects failed or incomplete tools, reasoning, and wrong commands
+  ---
+  duration_ms: 0.20208
+  type: 'test'
+  ...
+# Subtest: A06 successful separate shell-wrapped rules read validates actual source and finding
+ok 40 - A06 successful separate shell-wrapped rules read validates actual source and finding
+  ---
+  duration_ms: 0.25381
+  type: 'test'
+  ...
+# Subtest: A06 malformed and fabricated financial success fail inherited validator
+ok 41 - A06 malformed and fabricated financial success fail inherited validator
+  ---
+  duration_ms: 0.327956
+  type: 'test'
+  ...
+# Subtest: A10 E04 streamed UTF8 and missing native terminal rejected
+ok 42 - A10 E04 streamed UTF8 and missing native terminal rejected
+  ---
+  duration_ms: 6.656158
+  type: 'test'
+  ...
+# Subtest: BR04 integrated mismatches deny before any agent effects and receipt
+ok 43 - BR04 integrated mismatches deny before any agent effects and receipt
+  ---
+  duration_ms: 31.253904
+  type: 'test'
+  ...
+# Subtest: BR04 integrated valid binding projects exact identity and preserves high reasoning
+ok 44 - BR04 integrated valid binding projects exact identity and preserves high reasoning
+  ---
+  duration_ms: 4.366583
+  type: 'test'
+  ...
+# Subtest: BR04 model metadata cannot authorize mismatched run
+ok 45 - BR04 model metadata cannot authorize mismatched run
+  ---
+  duration_ms: 1.723317
+  type: 'test'
+  ...
+# Subtest: BR04 receipt still requires successful terminal and numeric financial finding
+ok 46 - BR04 receipt still requires successful terminal and numeric financial finding
+  ---
+  duration_ms: 5.435114
+  type: 'test'
+  ...
+# Subtest: BR04 workflow rejects every mismatched receipt before publication
+ok 47 - BR04 workflow rejects every mismatched receipt before publication
+  ---
+  duration_ms: 5.133761
+  type: 'test'
+  ...
+# Subtest: BR04 caller projects both other supported native mappings
+ok 48 - BR04 caller projects both other supported native mappings
+  ---
+  duration_ms: 3.72279
+  type: 'test'
+  ...
+# Subtest: BR04 unsealed import path aborts before agent effects and receipt
+ok 49 - BR04 unsealed import path aborts before agent effects and receipt
+  ---
+  duration_ms: 2.762928
+  type: 'test'
+  ...
+1..49
+# tests 49
+# suites 0
+# pass 49
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3153.161918

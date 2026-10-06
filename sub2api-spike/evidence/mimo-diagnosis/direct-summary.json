@@ -1,0 +1,11 @@
+{
+  "mode": "direct",
+  "client": "Codex0.159.2",
+  "exit_code": 0,
+  "agent_message_count": 1,
+  "successful_commands": 3,
+  "turn_completed": true,
+  "review_bytes": 563,
+  "error_events": 1,
+  "raw_secrets_exported": false
+}

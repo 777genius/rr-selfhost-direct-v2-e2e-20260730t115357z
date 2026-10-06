@@ -1,0 +1,8 @@
+test_expected_manifest_without_reviewed_receipt_rejects_unreviewed_source (__main__.Independent.test_expected_manifest_without_reviewed_receipt_rejects_unreviewed_source) ... ok
+test_preflight_toolchain_query_and_compile_share_sanitized_environment (__main__.Independent.test_preflight_toolchain_query_and_compile_share_sanitized_environment) ... ok
+test_private_outputs_exclusive_0600_at_creation (__main__.Independent.test_private_outputs_exclusive_0600_at_creation) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.922s
+
+OK

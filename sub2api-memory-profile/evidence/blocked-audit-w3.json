@@ -1,0 +1,31 @@
+{
+  "objective": "Merge reviewed stream buffer bounds and repaired trusted-native cancellation into thin reusable exact source patch and preserve all behavior contracts.",
+  "current_turn": "no further implementation progress; authoritative artifact/source/evidence revalidation confirms the remaining external evidence gap",
+  "artifact_entries_verified": 63,
+  "artifact_hash_mismatches": [],
+  "consecutive_goal_turns_with_same_condition": [
+    {
+      "turn": 1,
+      "classification": "progress",
+      "evidence": "three producer fixes and RED/GREEN verification completed; REPORT.md explicitly retained missing real merged-binary/native runtime gates"
+    },
+    {
+      "turn": 2,
+      "classification": "progress",
+      "evidence": "actual four-file patch applied and current W3 source authorization proven; completion-audit-w3.json retained unverified real binary/native behavior gates"
+    },
+    {
+      "turn": 3,
+      "classification": "no progress toward remaining execution gates",
+      "evidence": "63 current artifact hashes match; raw Go/build/runtime receipt filename search finds none; current handoff still explicitly synthetic e*64 binary pin and archived 35/292/63 summaries only"
+    }
+  ],
+  "condition": "Real merged-source binary pin and fresh source-bound native/runtime behavior evidence are unavailable; existing source hashes and historical summaries cannot prove full behavior preservation.",
+  "safe_actions_exhausted": "All three authorized producer repairs, unchanged prescribed reproductions, meaningful actual CLI/subprocess/file-creation regressions, original Python/Node suites, exact patch replay, full source and numeric audits, real native patch application/current manifest authorization and preservation checks are complete. Repeating them cannot provide missing execution evidence.",
+  "constraints": "User explicitly restricts ownership to sub2api-memory-profile and forbids Go, Docker, privileged commands, network, keys/authentication, Git writes and subagents.",
+  "live_process_claim": "No live process/job/tool handle is known or claimed; no root/controller process is characterized as stopped or blocked.",
+  "required_external_change": "Project Integration applies the reviewed package; controller supplies an actual reviewed merged-binary hash and source-bound native/HTTP/WS/cancellation/runtime verification receipts/logs. This is not a request for the old numerical NDJSON, which was supplied and recomputed.",
+  "scope_complete": true,
+  "goal_complete": false,
+  "blocked_audit_threshold_satisfied": true
+}

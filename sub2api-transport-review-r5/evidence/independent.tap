@@ -1,0 +1,14 @@
+{"independent_single_corrupted_volume_checks":72}
+{"independent_mixed_numeric_checks":90}
+✔ all 18 matrix cells: one corrupted receipt rejects both signs and both wire sides (61.728567ms)
+✔ all numeric fields: JSON coercion canaries in a mixed five-stream batch fail closed (55.425712ms)
+✔ frame boundaries and actual protocol-conversion frame loss fail (3.239037ms)
+✔ fractional/unsafe counters reject, fractional finite durations pass, synthetic soak retains no physical green (9.481797ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 192.33883

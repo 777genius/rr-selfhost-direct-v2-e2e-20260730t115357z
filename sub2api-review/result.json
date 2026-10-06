@@ -1,0 +1,226 @@
+{
+  "schema": 1,
+  "language": "ru",
+  "readiness": "FAIL",
+  "bounded_review": "COMPLETE",
+  "checkpoint_requested": "078fd409ef19ff71f6062030174bb2fb5c21f3be",
+  "upstream_requested": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "checkpoint_identity": "Commit задан координатором; git rev-parse/status недоступны из-за отсутствующего/закрытого linked-worktree gitdir. Независимо проверены байты всех source files и их неизменность; commit-to-tree mapping должен проверить coordinator.",
+  "harness_tree_sha256": "7902bde772a2317e770b32dccdd249c3f8a24f3082d6a159690f483671b976c6",
+  "reviewed_manifest_sha256": "7b3d7da58d27949ddb6b45ef23d323618cdc5ffeb4c9ad3e5ea7fcd7be869829",
+  "reviewed_files": 4208,
+  "source_snapshot_hashes_verified": true,
+  "tests": {
+    "node": "v24.21.0",
+    "full_contract_command": "node --test sub2api-spike/*.test.mjs",
+    "full_contract_status": "NOT RUN: попытка прервана sandbox policy: Network access to 127.0.0.1 was blocked; сохранённый contract.tap пуст",
+    "pure_contracts": {
+      "status": "PASS",
+      "passed": 6,
+      "failed": 0,
+      "output": "sub2api-review/pure-contract.txt"
+    },
+    "read_only_branch_reproduction": {
+      "status": "PASS",
+      "facts": 8,
+      "output": "sub2api-review/reproduction.json",
+      "runner": "sub2api-review/reproduce.mjs",
+      "sockets": 0,
+      "provider_requests": 0
+    },
+    "native_engine": "NOT RUN",
+    "real_Actions_and_paid_canaries": "NOT RUN"
+  },
+  "findings": [
+    {
+      "id": "R01",
+      "priority": "P1",
+      "scope": "Блокер Claude canary",
+      "locations": [
+        "sub2api-spike/broker.mjs:31",
+        "sub2api-spike/run-client.mjs:66"
+      ],
+      "defect": "Claude 2.1.285 обращается к /anthropic/v1/messages?beta=true; брокер отклоняет любой query до проверки capability: 404 route_denied. Нативная ветка до engine не доходит.",
+      "evidence": "Выполнен настоящий обработчик брокера без listening socket; 404, upstream effects=0. Фактический wire от установленного Claude в этом review не запускался; форма URL сообщена координатором.",
+      "minimal_fix": "Разрешить ровно один параметр beta=true только на разрешённых Messages paths; неизвестные, повторные и routing-параметры по-прежнему отклонять. Отдельно проверить исходящий URL/anthropic-beta. Native engine сам добавляет beta=true."
+    },
+    {
+      "id": "R02",
+      "priority": "P1",
+      "scope": "Блокер native synthetic Messages",
+      "locations": [
+        "sub2api-spike/mock-upstream.mjs:27",
+        ".spike-inputs/upstream/backend/internal/service/gateway_anthropic_passthrough.go:310"
+      ],
+      "defect": "Engine формирует /v1/messages?beta=true, но mock выбирает Messages лишь при req.url === /v1/messages. Поэтому A05 получает Responses SSE вместо Messages.",
+      "evidence": "Прямой вызов действующего mock handler с engine URL вернул response.completed и не вернул message_stop.",
+      "minimal_fix": "Разбирать URL и выбирать протокол по pathname; проверять допустимый beta query отдельно. Добавить contract с точным исходящим engine URL."
+    },
+    {
+      "id": "R03",
+      "priority": "P1",
+      "scope": "Нативная корректность обоих протоколов",
+      "locations": [
+        "sub2api-spike/broker.mjs:10",
+        "sub2api-spike/broker.mjs:11",
+        "sub2api-spike/broker.mjs:64"
+      ],
+      "defect": "Рекурсивный denyRouting принимает обычные поля tool_use.input.account/workspace, metadata и JSON Schema за маршрутизацию. Законные structured данные получают 400. Исключение только для ключа tools не решает проблему.",
+      "evidence": "Messages assistant tool_use с input.account.balance=100 и input.workspace отклонён до upstream.",
+      "minimal_fix": "Ограничить запрет служебными routing-полями верхнего уровня и routing headers/query; закреплять реальную workspace/group/key/URL только доверенными server bindings. Вложенные input/messages/content/schema сохранять. Проверить roundtrip association и оба протокола."
+    },
+    {
+      "id": "R04",
+      "priority": "P1",
+      "scope": "Предусловие безопасного operator setup и платных canaries",
+      "locations": [
+        "sub2api-spike/operator/admin-roundtrip.mjs:36",
+        "sub2api-spike/customer.mjs:67",
+        ".spike-inputs/upstream/backend/internal/handler/admin/account_handler.go:1096",
+        ".spike-inputs/upstream/backend/internal/handler/admin/account_handler.go:1241",
+        ".spike-inputs/upstream/backend/internal/service/openai_apikey_responses_probe.go:166",
+        ".spike-inputs/upstream/backend/internal/service/openai_apikey_responses_probe.go:178",
+        ".spike-inputs/upstream/backend/internal/pkg/openai/constants.go:55"
+      ],
+      "defect": "Создание OpenAI apikey account запускает асинхронный Responses tool probe. force_responses/openai_passthrough его не отключают. Admin-roundtrip использует dummy credential с настоящим MiMo URL; live создание с настоящим ключом тоже может вызвать inference до запланированного Actions. Без model_mapping probe выбирает gpt-5.4, а не выбранную модель canary.",
+      "evidence": "Подтверждено по полной цепочке create -> goroutine -> validate baseURL -> HTTP POST. Реальных provider вызовов reviewer не делал. Эффективная synthetic allowlist [mock-a,mock-b] блокирует настоящий MiMo URL до сети; это требуется подтвердить на operator engine, а не предполагать по YAML.",
+      "minimal_fix": "Для dummy roundtrip использовать доверенный server-only mock URL override до создания, не caller input. Для live setup закрыть provider egress/allowlist на время create/update и дождаться завершения probes до включения live выхода, либо отдельно проверить pinned engine patch для отключения probes. Mock-probe requests учитывать отдельно и дождаться покоя до fault metrics. Не объявлять upstream_requests=0 по константе receipt."
+    },
+    {
+      "id": "R05",
+      "priority": "P1",
+      "scope": "Ложный FAIL обоих Codex canaries",
+      "locations": [
+        "sub2api-spike/evidence.mjs:29",
+        "gateway-spike/evidence.mjs:4",
+        "sub2api-spike/run-client.mjs:81"
+      ],
+      "defect": "Wallet-read и reproduction validators распознают /bin/bash -lc shell wrapper, а rulesRead допускает только голый cat BUSINESS_RULES.md. Корректный успешный Codex tool read через wrapper отвергается.",
+      "evidence": "Одинаковые успешные events: plain rules command принят; shell-wrapped rules command отвергнут Missing separate rules read.",
+      "minimal_fix": "Использовать общий строгий нормализатор shell command для wallet, rules и reproduction; сохранить отдельные completed tool calls, exit_code=0 и фактическое содержимое обоих файлов. Не менять classifier/User-Agent для обхода."
+    },
+    {
+      "id": "R06",
+      "priority": "P1",
+      "scope": "Недостоверный synthetic gate неопределённых эффектов",
+      "locations": [
+        "sub2api-spike/mock-upstream.mjs:39",
+        "sub2api-spike/mock-upstream.mjs:45",
+        "sub2api-spike/mock-upstream.mjs:48",
+        "sub2api-spike/operator/container-native.mjs:53",
+        "sub2api-spike/operator/container-native.mjs:59"
+      ],
+      "defect": "partial-reset сначала конструирует и записывает весь поток, включая response.completed, затем уничтожает соединение. Это не надёжное воспроизведение reset после частичного semantic output до terminal; фактическая доставка зависит от buffering. Engine fault lane также не повторяет HTTP ошибки и reset для Messages.",
+      "evidence": "Действующий handler записал response.completed до destroy; socket delivery и retries engine NOT RUN.",
+      "minimal_fix": "Выдать подтверждённый частичный output/tool-result association, оборвать до terminal после контролируемого flush/барьера; отдельно reset до headers и после частичного output. Измерять реальные engine requests/effects после quiescence для обоих протоколов и live-подобных pool_mode=false/single-account/no-fallback настроек."
+    },
+    {
+      "id": "R07",
+      "priority": "P1",
+      "scope": "Блокер D03 изоляции agent от Actions OIDC",
+      "locations": [
+        "sub2api-spike/run-client.mjs:14",
+        "sub2api-spike/run-client.mjs:19",
+        "sub2api-spike/run-client.mjs:44",
+        "sub2api-spike/run-client.mjs:62"
+      ],
+      "defect": "Env allowlist дочернего процесса не изолирует его от родителя run-client/Actions runner с OIDC request token. Codex danger-full-access в том же UID/PID namespace способен читать /proc/<parent>/environ. Sealed fixture ограничивает запись fixture, но не доступ к control runtime.",
+      "evidence": "В отдельном процессе с исключительно синтетическим родительским токеном child env не содержал токена, но parent procfs оставался читаемым. Настоящие credentials/proc environments не исследовались. Runner-specific procfs hardening пока не доказан.",
+      "minimal_fix": "После trusted OIDC exchange запускать model client в отдельном PID/mount/container boundary без Actions runner процессов и control mounts, передавая только scoped capability и sealed fixture. Либо доказать эквивалентную раздельную UID/procfs изоляцию синтетическим sentinel тестом. Проверить D03/D04 на новом runner."
+    },
+    {
+      "id": "R08",
+      "priority": "P1",
+      "scope": "Блокер custody fault gate; source-дефект native Messages",
+      "locations": [
+        "sub2api-spike/broker.mjs:76",
+        "sub2api-spike/broker.mjs:84",
+        ".spike-inputs/upstream/backend/internal/service/gateway_anthropic_passthrough.go:220",
+        ".spike-inputs/upstream/backend/internal/service/gateway_anthropic_passthrough.go:234",
+        ".spike-inputs/upstream/backend/internal/service/gateway_anthropic_passthrough.go:555",
+        ".spike-inputs/upstream/backend/internal/pkg/logger/logger.go:471"
+      ],
+      "defect": "Broker санирует только non-2xx; HTTP200 SSE error проходит байтами. Native Anthropic passthrough выводит error line без key redaction, а HTTP401/403/429/5xx failover пишет raw Body до 1000 символов в LegacyPrintf и Message в ops. log_upstream_error_body=false не закрывает эти пути; строка upstream error получает ERROR уровень и остаётся при log.level=warn.",
+      "evidence": "Broker handler переслал синтетический credential sentinel в HTTP200 SSE error. Native redaction gap подтверждён source; настоящий engine sentinel/log test NOT RUN. Никакой фактической утечки настоящего ключа не утверждается.",
+      "minimal_fix": "На trusted engine sanitise provider credential values для всех API-key accounts до logs/ops/error responses, либо удалить произвольные upstream error messages на публичном SSE boundary. Broker не должен получать provider key для этого. Проверить sentinel в non-2xx, HTTP200 terminal error после output, ops/logs/runner artifacts."
+    },
+    {
+      "id": "R09",
+      "priority": "P2",
+      "scope": "Точность checkpoint и evidence handoff",
+      "locations": [
+        "sub2api-spike/operator/provenance.mjs:8",
+        "sub2api-spike/operator/provenance.mjs:9",
+        "sub2api-spike/receipts.mjs:6",
+        "sub2api-spike/build-report.mjs:35"
+      ],
+      "defect": "harnessDigest не включает BUSINESS_RULES.md и импортированные gateway-spike/oidc.mjs/evidence.mjs/fixture/wallet.mjs. normalizedReceipt проверяет harness_git_sha лишь по regex, не на равенство reviewed checkpoint. Поэтому digest/receipt сами не доказывают неизменность всех значимых inputs exact review.",
+      "evidence": "Validator принял произвольный SHA a*40 при заданном matching tree digest; исключённые зависимости установлены по алгоритму digest и import.",
+      "minimal_fix": "Проверять ожидаемый checkpoint SHA плюс полный manifest значимых транзитивных imports и fixture/rules. Использовать приложенный независимый manifest при integration; включить actual runner image/client measurements."
+    },
+    {
+      "id": "R10",
+      "priority": "P2",
+      "scope": "Ограничение production и неподтверждённый engine cancellation gate",
+      "locations": [
+        ".spike-inputs/upstream/backend/internal/service/gateway_usage_billing.go:573",
+        ".spike-inputs/upstream/backend/internal/service/gateway_usage_billing.go:583",
+        ".spike-inputs/upstream/backend/internal/service/openai_gateway_passthrough.go:369",
+        ".spike-inputs/upstream/backend/internal/service/gateway_anthropic_passthrough.go:558",
+        "sub2api-spike/broker.test.mjs:48"
+      ],
+      "defect": "Engine использует WithoutCancel и продолжает drain upstream для usage после client disconnect. Abort брокера по TTL/revoke/cancel не доказывает немедленную отмену provider inference или освобождение engine concurrency. Broker mock contract это различие не покрывает.",
+      "evidence": "Подтверждено source; actual engine duration/active connections после revoke NOT RUN.",
+      "minimal_fix": "Измерить revoke/expiry/disconnect на native engine для обоих протоколов. Явно документировать drain/billing и верхнюю границу; если требуется строгая upstream отмена, нужен отдельно проверенный engine change. Не повышать mock E06/B11 до engine PASS."
+    },
+    {
+      "id": "R11",
+      "priority": "P2",
+      "scope": "Production customer adapter; отдельный риск при management fault tests",
+      "locations": [
+        "sub2api-spike/customer.mjs:67",
+        "sub2api-spike/customer.mjs:70",
+        "sub2api-spike/customer.test.mjs:72",
+        ".spike-inputs/upstream/backend/internal/service/admin_account.go:434"
+      ],
+      "defect": "При ambiguous create метаданные уходят в recovery_required, но удалённый account уже создаётся active/schedulable и привязан к существующей group. Скрытие local binding не убирает его из scheduler существующего group-bound key. Тест C10 оставляет record и не доказывает отсутствие orphan authority.",
+      "evidence": "Source create выставляет active/schedulable; catch не делает quarantine/delete и может не знать upstreamID. Это source review, не реальный create fault.",
+      "minimal_fix": "Создавать account в отдельной exclusive quarantine group без любых access keys; публиковать рабочую group binding только после durable локальной записи. Проверять, что других groups у account нет; reconcile неоднозначные creates по server-generated id/name. Не объявлять C10 fully PASS на основании отсутствия account в UI list. Успешный sealed canary сам по себе этот production риск не закрывает."
+    }
+  ],
+  "confirmed_boundaries": [
+    "Grant выдаёт random 32-byte opaque capability, model/expires; provider/engine/admin key не включаются. Синтетический grant projection проверен.",
+    "resolveWorkspace использует server runBindings[runID:attempt]; caller grant разрешает только provider/protocol. group/key/URL взяты из private server scopes, не customer body.",
+    "Compose не публикует ports; runner network отделён от engine/state/control; customer listener должен bind approved control IP. Actual runner network reachability NOT RUN.",
+    "Upstream /api/v1/admin использует admin auth/audit/compliance middleware. Customer API отдаёт положительную metadata projection, raw export остаётся private.",
+    "Native account flags подтверждены source: extra.openai_responses_mode=force_responses, extra.openai_passthrough=true, extra.anthropic_passthrough=true; это не credentials flags. force_responses выбирает Responses до auto probe support flag, но не отменяет probe."
+  ],
+  "compatibility_and_limits": [
+    "MiMo client_metadata: broker передаёт его; OpenAI API-key passthrough не удаляет его автоматически, rejected-field retry helper не поддерживает client_metadata. Предыдущий Bifrost отказ — основание для точного synthetic/recorded-wire preflight, но не доказанный live MiMo FAIL этого engine. Если текущий MiMo действительно отказывает, минимальная явная provider-specific нормализация только этого поля либо honest unsupported результат; не менять originator/User-Agent/classifiers и не bridge Chat Completions.",
+    "max_account_switches=0 игнорируется: OpenAI constructor default=3, общий Messages handler default=10. Single account/private group/no fallback/pool_mode=false ограничивают ordinary повторные effects; source сам по себе не доказывает duplicate paid request. Synthetic pool_mode=true,retry_count=0 отличается от live setup.",
+    "При default API-key settings ShouldHandleErrorCode=true, поэтому shouldRetryUpstreamError=false: нельзя утверждать безусловные пять Anthropic retries. При custom error codes это может измениться; OpenAI имеет отдельные explicit-400 compatibility retries. Требуется измерение actual native fault effects.",
+    "Admin login/groups actual200, принятое owner authorization/operator commitment и effective standard mode приняты как факты координатора. Staged bootstrap/YAML всё ещё simple; не запускать их поверх уже установленного standard engine и не считать их доказательством effective config.",
+    "Sealed root fixture, версии клиента и существующий runner image сообщены координатором. run-client проверяет root ownership, отсутствие write bits, byte equality fixture и ожидаемую version; measured image/PID/network isolation остаётся operator evidence.",
+    "Claude разрешены Read/Glob/Grep, локальный executable numeric пример воспроизводит harness. Собственное выполнение примера агентом проверяется отдельно только для Codex. Если требуется own-tool execution также для Claude, текущая allowlist его не обеспечивает."
+  ],
+  "production_only": [
+    "ReviewRouter SSO/dynamic membership, OAuth lifecycle/test identities, credential-bearing JSONB/Redis/export/backup custody и upgrade/license operations не доказаны production-ready этим disposable spike. Они не требуют ожидания live receipts для завершения этого ограниченного review."
+  ],
+  "handoff": "Исправления reviewer не вносил. Рекомендации R01-R09 передать владельцу кода; trusted coordinator проверяет manifest и выполняет native synthetic/custody gates перед тремя платными canaries. Повторные реальные запуски после неопределённого результата не инициировались.",
+  "source_verification": {
+    "status": "PASS",
+    "reviewed_files": 4208,
+    "changed_files": [],
+    "before_sha256": "7b3d7da58d27949ddb6b45ef23d323618cdc5ffeb4c9ad3e5ea7fcd7be869829",
+    "after_sha256": "7b3d7da58d27949ddb6b45ef23d323618cdc5ffeb4c9ad3e5ea7fcd7be869829",
+    "reviewed_source_unchanged": true,
+    "git_commit_identity_verified": false,
+    "git_limitation": "Linked-worktree gitdir unavailable; coordinator must check checkpoint-to-manifest correspondence."
+  },
+  "verified_file_hashes": {
+    "sub2api-spike/broker.mjs": "56d519edd136bfb682ae6a54886727124114f8af9a67f81871b7d46380a16bcb",
+    "sub2api-spike/run-client.mjs": "20e0b0b909c841e14adef3de2c9aa84dc0c69b9b2078680898144a9eab026777",
+    "sub2api-spike/customer.mjs": "e98d0b9fbe98a3e502d44598b7ed1222a40b1a58ceb6c69fed317870d466034e",
+    ".github/workflows/sub2api-gateway-spike.yml": "37414d33d60e13d09070edaec0db7d2f294030a45e78abcbe87a1161091bd667"
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "interpretation": "All 66 staged comments for 48 requested issues inspected as untrusted reporter/contributor data. Associations NONE=56, CONTRIBUTOR=10; no OWNER/MEMBER/COLLABORATOR fix confirmation. Count agreement is snapshot reconciliation, not independent pagination proof. No raw comment bodies exported.",
+  "notes": [
+    {
+      "number": 7708,
+      "ids": [
+        5891056628
+      ],
+      "note": "Дополнительный репортёр видит ту же ошибку и на Astra; переключение Sol→Astra не является общим fix."
+    },
+    {
+      "number": 7700,
+      "ids": [
+        5884938013,
+        5885868290
+      ],
+      "note": "Комментарий об обходе через Astra и contributor о thinking не дают root-cause/fix proof; #7708 ограничивает применимость обхода."
+    },
+    {
+      "number": 7633,
+      "ids": [
+        5864591789
+      ],
+      "note": "Репортёр заявляет live OAuth A/B v0.2.8→v0.2.9, три модели и JSON schemas. Вместе с release/source это сильное scoped fix corroboration, но не наш normalized operator receipt и не maintainer confirmation."
+    },
+    {
+      "number": 7285,
+      "ids": [
+        5718786211,
+        5748964123,
+        5864884211
+      ],
+      "note": "Комментарии уточняют trigger: GPT alias заставляет Codex использовать Responses Lite, native DeepSeek name — top-level tools; другой репортёр воспроизводит на v0.2.7. Direct upstream nested-vs-flat tools даёт дополнительный semantic mismatch, отдельно от Sub2API E2E."
+    },
+    {
+      "number": 5542,
+      "ids": [
+        5261593013,
+        5288559219,
+        5288613054,
+        5288624028,
+        5351767369
+      ],
+      "note": "Follow-up приводит inference 401→502→subsequent 503; другие жалуются на частоту. IP-гипотеза не проверена, fleet frequency из комментариев не выводится."
+    },
+    {
+      "number": 1035,
+      "ids": [
+        4063204907
+      ],
+      "note": "Contributor пишет, что исправление в работе; обещание не доказывает merge или deployed fix. Unified API на supplied source — отдельное mitigation evidence."
+    },
+    {
+      "number": 3757,
+      "ids": [
+        4980981007,
+        5048566740,
+        5077635894,
+        5083809087
+      ],
+      "note": "Follow-up v0.1.145 показывает upstream /messages и Google token, контроль через иной gateway; suggested /antigravity/v1beta и fork — routing workaround, не maintainer pin fix. Позднее уточнение меняет attribution с неизвестного refresh на likely protocol/config routing interaction."
+    },
+    {
+      "number": 7000,
+      "ids": [
+        5629041756,
+        5629580082,
+        5630188143,
+        5630798439,
+        5632154268,
+        5633899226
+      ],
+      "note": "Мнения об эффективности fingerprint противоречат друг другу; нет измерений ban risk. Provider dependence остаётся unknown, не установленная gateway уязвимость."
+    },
+    {
+      "number": 7574,
+      "ids": [
+        5810527933
+      ],
+      "note": "Репортёр уточняет: два-три subsequent turns, потом восстановилось. Cache задержка вероятнее, чем только старый in-flight stream, но root cause по-прежнему не доказан."
+    },
+    {
+      "number": 7506,
+      "ids": [
+        5788247041
+      ],
+      "note": "Автор прямо уточняет: #7520 closed unmerged, локальный Codex с scripted fake upstream доказывает только plaintext self-message. Реальный encrypted cross-account/model lifecycle и recovery не проверены этим prototype."
+    },
+    {
+      "number": 7458,
+      "ids": [
+        5760836498
+      ],
+      "note": "Комментарий не содержит технического подтверждения или исправления."
+    },
+    {
+      "number": 6992,
+      "ids": [
+        5654946776
+      ],
+      "note": "Дополнительный reporter experiment v0.2.4: 50 non-sticky DeepSeek requests, высокая очередь при concurrency=5; fresh-load retry предложен. Числа относятся к чужому workload, не нашему soak; расширить тест и на general scheduler, не только OpenAI sticky."
+    },
+    {
+      "number": 3086,
+      "ids": [
+        4642060429
+      ],
+      "note": "Contributor подтверждает retained binding после public→private: ранее выбранная группа сохраняется у user. Это конкретная permission semantics, не доказанный arbitrary tenant exploit. Нужен revoke-old-key/group test."
+    },
+    {
+      "number": 6548,
+      "ids": [
+        5535973650
+      ],
+      "note": "Согласие с configurable message; нет fix/security evidence."
+    },
+    {
+      "number": 4469,
+      "ids": [
+        5001329779,
+        5005022807
+      ],
+      "note": "Комментарии спорят с обязательным 2FA export; не evidence дефекта. Наш private backend не открывает export UI."
+    },
+    {
+      "number": 4002,
+      "ids": [
+        4954097417,
+        4992884819,
+        5001013031,
+        5011656263,
+        5057040012
+      ],
+      "note": "Повторные reporter observations persistent secret loss и TOTP save workaround; последний комментатор заявляет исправление v0.1.164. Это historical reporter fix claim, без maintainer/source mapping; не делать current-critical без pin reproducer."
+    },
+    {
+      "number": 6610,
+      "ids": [
+        5547690483,
+        5549067751,
+        5564368532
+      ],
+      "note": "Комментарии предполагают login brute force и отдельно quota расход; компрометация/двойная тарификация не установлены. Закрытый admin edge — конкретная защита; alarming anecdotes не доказательство breach."
+    },
+    {
+      "number": 7205,
+      "ids": [
+        5709933445,
+        5714218242
+      ],
+      "note": "Contributor предлагает max_account_switches=1 как mitigation, не fix; общий негативный отзыв не используется для оценки failure rate. Проверять перенос cache accounting при failover."
+    },
+    {
+      "number": 6646,
+      "ids": [
+        5565092518
+      ],
+      "note": "Screenshot и quota anecdote не добавляют per-request usage/bill или version evidence."
+    },
+    {
+      "number": 6232,
+      "ids": [
+        5419907749
+      ],
+      "note": "Contributor обещает cross-instance notification; source теперь содержит pub/sub и service test. Обещание + source поддерживают partial fix, не гарантируют delivery при Redis outage."
+    },
+    {
+      "number": 6780,
+      "ids": [
+        5573950807
+      ],
+      "note": "Другой репортёр подтверждает проблему после upgrade и успешный DB-backup rollback. Отличается от первого автора, которому rollback не помог; disaster recovery зависит от совместимого DB snapshot."
+    },
+    {
+      "number": 7146,
+      "ids": [
+        5673026299,
+        5673899499,
+        5674330953,
+        5675114259
+      ],
+      "note": "Ответы указывают на Docker restart policy; likely deployment support, не engine regression. Следовать внешним инструкциям не требовалось и команды не исполнялись."
+    },
+    {
+      "number": 6877,
+      "ids": [
+        5595374342,
+        5596384300,
+        5602567417,
+        5610997050
+      ],
+      "note": "Комментарии направляют автора к другому проекту; автор соглашается. Этот кандидат исключён из активных Sub2API defect signals как likely off-project support."
+    },
+    {
+      "number": 1009,
+      "ids": [
+        4065665617,
+        4111697191,
+        4256143334,
+        4256889613,
+        4256899888,
+        4256976474,
+        4256982884
+      ],
+      "note": "Один комментатор считает исправленным v0.1.101; поздняя непроверенная AI-like рекомендация говорит v0.1.110 всё ещё без pg_dump. Противоречие и workaround не доказывают pin image contents; никаких shell snippets из комментариев не исполнялось."
+    }
+  ],
+  "interpreted_input_sha256": "5b5558138677203dabb12ee883c658510b119277cac8c3d94daff110ab9ad744",
+  "interpreted_issue_count": 48,
+  "interpreted_comment_count": 66
+}

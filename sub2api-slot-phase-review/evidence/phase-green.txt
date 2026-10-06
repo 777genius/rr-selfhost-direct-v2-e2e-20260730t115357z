@@ -1,0 +1,15 @@
+(node:31) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ native Retry-After60 plus 5s response fits setup and receives full 35s active (13.854806ms)
+✔ no retry also receives full active period from setup completion (9.867739ms)
+✔ supervisor cannot admit required phases: zero fixture creation and zero inference (5.829904ms)
+✔ successful readback at 70000 fails before inference (8.928349ms)
+✔ successful readback at 70001 fails before inference (4.728282ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 103.938388

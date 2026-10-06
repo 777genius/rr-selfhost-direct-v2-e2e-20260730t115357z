@@ -1,0 +1,39 @@
+{
+  "schema": "rr-sub2-native-merged-root-build/v1",
+  "kind": "actual-offline-reviewed-native-source-image-build",
+  "upstream_commit": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "source_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "merged_production_patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+  "merged_regression_patch_sha256": "f6909228e016be8817057f2f3c5bd5f460550d9139dff19810c8df59d22d466d",
+  "source_ledger_sha256": "38969ade3781252b1913ac435619d1cbe6c961fb08cc50f1bf711a1f09a657be",
+  "producer_manifest_sha256": "a5e265dbde32d70046e07863a4d3abeff15088673d6232768ff4eac913b50440",
+  "source_backend_sha256": "82662b8666b05b6a0a95c76c79bde630ba73a27e2ae89e72363908a1f2117c42",
+  "backend_files": 3332,
+  "source_hashes_match": true,
+  "binary_sha256": "5e28306e531eac0abea49811f116dbbddb233c4e52ce3f7d63f9c71d949632fd",
+  "tag": "rr-sub2-native-final:96f4-16bc1644-20261001",
+  "image_id": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+  "repo_digests": [
+    "rr-sub2-native-final@sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1"
+  ],
+  "image_config_sha256": "14d66af7a0273bbf1e48204ddecdb7d10de0b3f2b03e506b8a082aac786f733e",
+  "duration_s": 49.44,
+  "toolchain_image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+  "frontend_unchanged_from_base": true,
+  "credentials_mounted": false,
+  "components": [
+    {
+      "lane": "native",
+      "patch_sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5"
+    },
+    {
+      "lane": "probe",
+      "patch_sha256": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45"
+    },
+    {
+      "lane": "merged-native",
+      "patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5"
+    }
+  ],
+  "review_required_before_live_canary": true
+}

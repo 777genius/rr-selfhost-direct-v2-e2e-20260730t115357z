@@ -1,0 +1,175 @@
+--- a/sub2api-spike/evidence.mjs
++++ b/sub2api-spike/evidence.mjs
+@@ -3,6 +3,32 @@
+ export function parseFindingDocument(review) {
+   const parsed = JSON.parse(review.trim().replace(/^```(?:json)?\s*\n([\s\S]*)\n```$/, '$1'));
+   return Array.isArray(parsed) ? { findings: parsed } : parsed;
++}
++// Decode one literal POSIX word, not shell syntax. Two bounded calls cover
++// the known wrapper argument and the Node eval argument. Never evaluate input.
++function literalWord(source) {
++  if (!source || source.length > 65536 || /[\0\r]/.test(source)) return null;
++  let value = '', quote = '', quoted = false;
++  for (let i = 0; i < source.length; i++) {
++    const char = source[i];
++    if (quote === "'") {
++      if (char === "'") quote = ''; else value += char;
++    } else if (char === '\\') {
++      const next = source[++i];
++      if (next === undefined || next === '\n') return null;
++      // Inside double quotes POSIX preserves backslash before other characters.
++      value += quote === '"' && !'"\\$`'.includes(next) ? '\\' + next : next;
++    } else if (quote === '"') {
++      if (char === '"') quote = '';
++      else if (char === '$' || char === '`') return null;
++      else value += char;
++    } else if (char === "'" || char === '"') {
++      quote = char; quoted = true;
++    } else if (/^[a-zA-Z0-9_./:=+,\-]$/.test(char)) {
++      value += char;
++    } else return null; // whitespace, compound, expansion, glob, comment, redirect
++  }
++  return quote || !quoted ? null : value;
+ }
+ // Only completed Node wallet/withdraw commands can prove the reported example.
+ export function codexNumericEvidence(event, example) {
+@@ -10,11 +36,12 @@
+   if (event?.type !== 'item.completed' || item?.type !== 'command_execution' || item.exit_code !== 0 || item.status !== 'completed') return false;
+   if (typeof item.command !== 'string' || typeof item.aggregated_output !== 'string') return false;
+   let command = item.command.trim();
+-  const wrapped = /^\/(?:usr\/)?bin\/(?:bash|sh|zsh) -(?:lc|c) (['"])([\s\S]*)\1$/.exec(command);
+-  if (wrapped) command = wrapped[2];
+-  const evaluated = /^node[ \t]+(?:--input-type=module[ \t]+)?-e[ \t]+(['"])((?:\\[\s\S]|(?!\1)[^\\])*)\1$/.exec(command);
+-  if (!evaluated || !/withdraw/.test(evaluated[2]) || !/wallet\.mjs/.test(evaluated[2])) return false;
+-  if ((evaluated[1] === '"' || wrapped?.[1] === '"') && /(?:^|[^\\])(?:\\\\)*[$`]/.test(evaluated[2])) return false;
++  const wrapped = /^\/(?:usr\/)?bin\/(?:bash|sh|zsh) -(?:lc|c) ([\s\S]+)$/.exec(command);
++  if (wrapped) command = literalWord(wrapped[1]);
++  if (command === null) return false;
++  const evaluated = /^node[ \t]+(?:--input-type=module[ \t]+)?-e[ \t]+([\s\S]+)$/.exec(command);
++  const expression = evaluated && literalWord(evaluated[1]);
++  if (expression === null || !expression || !/withdraw/.test(expression) || !/wallet\.mjs/.test(expression)) return false;
+   const numericObject = candidate => candidate !== null && typeof candidate === 'object' && !Array.isArray(candidate)
+     && ['initial_balance', 'amount', 'final_balance'].every(key => Number.isFinite(candidate[key]));
+   const matches = candidate => numericObject(candidate)
+--- a/sub2api-spike/evidence.test.mjs
++++ b/sub2api-spike/evidence.test.mjs
+@@ -6,6 +6,9 @@
+ const negative = { initial_balance: 100, amount: -10, final_balance: 110 };
+ const fractional = { initial_balance: 100, amount: 0.5, final_balance: 99.5 };
+ const nodeCommand = 'node --input-type=module -e "import { withdraw } from \'./wallet.mjs\'; /* reproduction */"';
++const quoteWord = (value, quote = "'") => quote === "'"
++  ? "'" + value.replaceAll("'", "'\\''") + "'"
++  : '"' + value.replace(/["\\$`]/g, char => '\\' + char) + '"';
+ const numericEvent = (output, command = nodeCommand) => ({ type: 'item.completed', item: { type: 'command_execution', command, exit_code: 0, status: 'completed', aggregated_output: output } });
+ const actualProjection = JSON.parse(readFileSync(new URL('../sub2api-evidence-r2/numeric-jsonl-fixture.json', import.meta.url), 'utf8'));
+ const actualRows = actualProjection.observations[0].rows;
+@@ -63,23 +66,23 @@
+ });
+ test('numeric proof preserves existing direct and shell-wrapped Node command matching', () => {
+   for (const shell of ['bash', 'sh', 'zsh']) for (const flag of ['c', 'lc']) for (const quote of ["'", '"']) {
+-    assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), `/bin/${shell} -${flag} ${quote}${nodeCommand}${quote}`), negative), true);
++    assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), `/bin/${shell} -${flag} ${quoteWord(nodeCommand, quote)}`), negative), true);
+   }
+ });
+ test('numeric proof admits only supported shell prefixes, flags and one Node eval command', () => {
+   const output = JSON.stringify(negative);
+   for (const prefix of ['/bin', '/usr/bin']) for (const shell of ['bash', 'sh', 'zsh']) for (const flag of ['c', 'lc']) for (const quote of ["'", '"']) {
+-    assert.equal(codexNumericEvidence(numericEvent(output, `${prefix}/${shell} -${flag} ${quote}${nodeCommand}${quote}`), negative), true);
++    assert.equal(codexNumericEvidence(numericEvent(output, `${prefix}/${shell} -${flag} ${quoteWord(nodeCommand, quote)}`), negative), true);
+   }
+   const invalid = ['bash', '/usr/local/bin/bash', '/tmp/bin/bash', '/usr/bin/bash-evil', '/usr/bin/../bin/bash', '/usr/bin/env bash', '/bin/fish'];
+-  for (const path of invalid) assert.equal(codexNumericEvidence(numericEvent(output, `${path} -lc '${nodeCommand}'`), negative), false);
++  for (const path of invalid) assert.equal(codexNumericEvidence(numericEvent(output, `${path} -lc ${quoteWord(nodeCommand)}`), negative), false);
+   for (const flag of ['--login -c', '-lic', '-l -c', '-c -x', '-lc --']) assert.equal(codexNumericEvidence(numericEvent(output, `/usr/bin/bash ${flag} '${nodeCommand}'`), negative), false);
+   for (const command of [`${nodeCommand}; echo ok`, `${nodeCommand} && true`, `${nodeCommand} | cat`, `${nodeCommand} > output`, `node --require ./wallet.mjs -e 'withdraw()'`, 'node /tmp/wallet.mjs withdraw', `node --eval 'withdraw wallet.mjs'`, `node -e 'withdraw wallet.mjs' extra`, `node\n-e 'withdraw wallet.mjs'`, `node -e "withdraw wallet.mjs $(echo injected)"`, `node -e "withdraw wallet.mjs \\\\$(echo injected)"`, `node -e "withdraw wallet.mjs \u0060echo injected\u0060"`, 'echo node withdraw wallet.mjs']) {
+-    for (const wrapped of [command, `/usr/bin/bash -lc '${command}'`]) assert.equal(codexNumericEvidence(numericEvent(output, wrapped), negative), false, wrapped);
++    for (const wrapped of [command, `/usr/bin/bash -lc ${quoteWord(command)}`]) assert.equal(codexNumericEvidence(numericEvent(output, wrapped), negative), false, wrapped);
+   }
+ });
+ test('supported shell numeric proof still rejects incomplete, nonzero, mismatch and stdout prefixes', () => {
+-  const event = numericEvent(JSON.stringify(negative), `/usr/bin/bash -lc '${nodeCommand}'`);
++  const event = numericEvent(JSON.stringify(negative), `/usr/bin/bash -lc ${quoteWord(nodeCommand)}`);
+   for (const mutation of [{ exit_code: 1 }, { exit_code: '0' }, { status: 'in_progress' }, { status: 'failed' }, { type: 'reasoning' }, { aggregated_output: `stdout: ${JSON.stringify(negative)}` }, { aggregated_output: `log\n${JSON.stringify(negative)}` }]) {
+     assert.equal(codexNumericEvidence({ ...event, item: { ...event.item, ...mutation } }, negative), false);
+   }
+@@ -159,3 +162,51 @@
+   const response = new Response(stream, { headers: { 'content-type': 'text/event-stream' } }); assert.equal((await nativeEvents(response, 'responses'))[0].note, '金🙂');
+   for (const body of ['data: {broken\n\n', 'data: {"type":"response.created"}\n\n', 'data: {"type":"response.failed"}\n\n']) await assert.rejects(nativeEvents(new Response(body, { headers: { 'content-type': 'text/event-stream' } }), 'responses'));
+ });
++
++// Strings below are classifier input only, never shell execution.
++test('R8 all six known shell paths decode escaped and concatenated POSIX words', () => {
++  const expression = `import { withdraw } from './wallet.mjs'; const value = "a; b"; withdraw({balance:100}, -10);`;
++  const direct = `node --input-type=module -e ${quoteWord(expression)}`;
++  assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), direct), negative), true);
++  for (const prefix of ['/bin', '/usr/bin']) for (const shell of ['bash', 'sh', 'zsh']) for (const flag of ['c', 'lc']) {
++    for (const word of [quoteWord(direct), quoteWord(direct, '"'), `''${quoteWord(direct)}""`, quoteWord(direct).replace("'\\''", `'"'"'`)]) {
++      const command = `${prefix}/${shell} -${flag} ${word}`;
++      assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), command), negative), true, command);
++    }
++  }
++});
++test('R8 structural outer word rejects breakouts, extra argv and active syntax', () => {
++  const valid = `node -e 'withdraw wallet.mjs; const x = "nested;JS";'`;
++  for (const word of [quoteWord(valid) + ' extra', quoteWord(valid) + '; true', quoteWord(valid) + ' && true', quoteWord(valid) + '|cat', quoteWord(valid) + '>out', quoteWord(valid) + '\ntrue', '"' + valid, "'" + valid, `"${valid} $HOME"`, `"${valid} $(echo injected)"`, `"${valid} \u0060echo injected\u0060"`, quoteWord(valid) + '$HOME', quoteWord(valid) + '*', quoteWord(valid) + '#comment', quoteWord(valid) + '\\', quoteWord(valid) + '\0']) {
++    const command = `/usr/bin/bash -lc ${word}`;
++    assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), command), negative), false, command);
++  }
++});
++test('R8 inner eval has exactly one literal word and allows nested JS semicolons', () => {
++  const expression = `import { withdraw } from './wallet.mjs'; console.log("a;b"); withdraw({balance:100}, -10);`;
++  const known = [`node -e ${quoteWord(expression)}`, `node --input-type=module -e ${quoteWord(expression, '"')}`, `node -e 'withdraw '\"wallet.mjs\"`, `node -e 'withdraw '\\'wallet.mjs\\'`, `node -e 'withdraw wallet.mjs $literal \u0060literal\u0060'`];
++  for (const command of known) for (const input of [command, `/usr/bin/bash -lc ${quoteWord(command)}`, `/bin/sh -c ${quoteWord(command, '"')}`]) {
++    assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), input), negative), true, input);
++  }
++  const evalCommand = known[0];
++  for (const command of [evalCommand + '; echo injected', evalCommand + ' && true', evalCommand + ' | cat', evalCommand + ' extra', evalCommand + '\ntrue', `node -e 'withdraw wallet.mjs';'ignored'`, `node -e 'withdraw wallet.mjs' > out`, `node -e "withdraw wallet.mjs $HOME"`, `node -e "withdraw wallet.mjs $(true)"`, `node -e "withdraw wallet.mjs \u0060true\u0060"`, `node -e $'withdraw wallet.mjs'`, `node -e 'withdraw wallet.mjs'"`, 'node -e withdraw\\ wallet.mjs', '/usr/bin/node -e ' + quoteWord(expression), `node --input-type=module --eval ${quoteWord(expression)}`]) {
++    for (const input of [command, `/usr/bin/bash -lc ${quoteWord(command)}`]) assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), input), negative), false, input);
++  }
++});
++test('R8 observed argv rendering admits genuine projected wallet reproduction', () => {
++  const projection = JSON.parse(readFileSync(new URL('../sub2api-evidence-r2/shell-prefix-r7/actual-command-projection.json', import.meta.url), 'utf8'));
++  const observed = projection[2];
++  for (const quote of ["'", '"']) {
++    const command = `${observed.command[0]} ${observed.command[1]} ${quoteWord(observed.command[2], quote)}`;
++    assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(observed.numeric), command), observed.numeric), true);
++    for (const mutation of [{ exit_code: 1 }, { exit_code: '0' }, { status: 'in_progress' }, { aggregated_output: 'prefix ' + JSON.stringify(observed.numeric) }, { aggregated_output: JSON.stringify({ ...observed.numeric, final_balance: 1249 }) }]) {
++      const event = numericEvent(JSON.stringify(observed.numeric), command);
++      assert.equal(codexNumericEvidence({ ...event, item: { ...event.item, ...mutation } }, observed.numeric), false);
++    }
++  }
++});
++test('R8 heredoc compatibility boundary rejects even literal delimiter forms', () => {
++  for (const command of ["node --input-type=module <<'NODE'\nimport { withdraw } from './wallet.mjs';\nNODE", "node <<'NODE'\nwithdraw wallet.mjs\nNODE", "node <<'NODE'\nwithdraw wallet.mjs\nWRONG", "node <<NODE\nwithdraw wallet.mjs\nNODE", "node <<'NODE'\nwithdraw wallet.mjs\nNODE\necho injected"]) {
++    for (const input of [command, `/usr/bin/bash -lc ${quoteWord(command)}`]) assert.equal(codexNumericEvidence(numericEvent(JSON.stringify(negative), input), negative), false);
++  }
++});
+--- a/sub2api-evidence-r2/client-contract.test.mjs
++++ b/sub2api-evidence-r2/client-contract.test.mjs
+@@ -154,7 +154,7 @@
+   const expression = /^node --input-type=module -e "([\s\S]*)"$/.exec(observed.command[2])[1];
+   const { stdout } = await execute(process.execPath, ['--input-type=module', '-e', expression], { cwd: fixture, timeout: 5000 });
+   assert.equal(stdout, JSON.stringify(example) + '\n'); assert.equal(Buffer.byteLength(stdout), observed.output_bytes);
+-  const render = row => `${row.command[0]} ${row.command[1]} '${row.command[2]}'`;
++  const render = row => `${row.command[0]} ${row.command[1]} '${row.command[2].replaceAll("'", "'\\''")}'`;
+   const events = [command(render(projection[0]), await readFile(new URL('../sub2api-spike/fixture/wallet.mjs', import.meta.url), 'utf8')), command(render(projection[1]), await readFile(new URL('../sub2api-spike/fixture/BUSINESS_RULES.md', import.meta.url), 'utf8')), command(render(observed), stdout), { type: 'turn.completed' }];
+   const review = JSON.stringify({ findings: [{ file: 'wallet.mjs', function: 'withdraw', summary: 'negative withdrawal increases balance', example }] });
+   const result = await run({ events, review });
+--- /dev/null
++++ b/sub2api-evidence-r2/quote-aware-r8/quote-breakout.test.mjs
+@@ -0,0 +1,15 @@
++// Independent review regressions: classify strings only; never execute them.
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { codexNumericEvidence } from '../../sub2api-spike/evidence.mjs';
++const example = { initial_balance: 100, amount: -10, final_balance: 110 };
++const admit = command => codexNumericEvidence({ type: 'item.completed', item: {
++  type: 'command_execution', status: 'completed', exit_code: 0, command,
++  aggregated_output: JSON.stringify(example)
++} }, example);
++test('R8 independent double-outer-quote breakout must fail', () => {
++  assert.equal(admit(`/usr/bin/bash -lc "node -e 'withdraw wallet.mjs "; echo injected; "'"`), false);
++});
++test('R8 independent single-outer-quote breakout must fail', () => {
++  assert.equal(admit(`/usr/bin/bash -lc 'node -e "withdraw wallet.mjs '; echo injected; '"'`), false);
++});

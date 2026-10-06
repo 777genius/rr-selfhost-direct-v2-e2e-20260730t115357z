@@ -1,0 +1,118 @@
+{
+  "outer_inputs_verified": 287,
+  "frozen_package_hashes": {
+    "COORDINATOR-PACKAGING.md": "a4b82ba3261c52ba37abf5bbc6d90a962112d82b067e77b07f4636719bcb1de8",
+    "GOAL-REVIEW.md": "d6ac3cfd15de21731406b4c1188ea35ae7e53a79f2ccc8aa7904bf72be605cf0",
+    "REPORT.md": "23079a4bcde592b57c55ea72a142a30f0489b99177ea4c267cee2b9ebf2e833b",
+    "action-manifest.json": "5d794ae8006b807cd2fb0b9a6584468a02be1a5ce5b8683a9156f07518d168de",
+    "artifact-hashes.json": "73b13c71ec7f9078392a0a7295642b39a1ffe58c3ffa781bec421e043f63152c",
+    "audit-result.json": "20ba050381e61f1dcd8bb56df561401e368589adc57df9267ab542bb9e0229b0",
+    "audit.py": "ee6706e9079a7a3486672d223dccda7cd66a03af65287bb067070f40414c4a31",
+    "base-hashes.json": "207e5994d9723a90e33f838539ff2685468282fa3803c727c7197bada5042c5c",
+    "base-pin.json": "0f1207d67ea1430fc372d1df983de2517e58a7604841d46455f3cee3407d187c",
+    "base-to-prior.delta.json": "cddb6479c44021e92855c3d80a9b0cb1f9e77d97942731282c8455aae763a128",
+    "goal-canonical-tests.tap": "9708f2f3169dee301b050eb50222ec7768c34a3ddb0f06063566039ae3312065",
+    "goal-completion-audit.json": "10f8eafaa2ba595bd79666f07b26324c2110355a94d37becaa310d842a730157",
+    "goal-independent-green.tap": "b677bd8aaf74a3f5e29df2652b9a500a7c196cbe27bddbd0313e902e9232586c",
+    "goal-independent-red.tap": "1d9b37872d5ce8983fa98787661db26481bf2e15028d1cedde8a22bdd51d54f0",
+    "goal-independent.test.mjs": "6c0c16c394c35df12c54c2fe0fc8ae690cb2284a6d72694766a8765ec715abee",
+    "input-retention.json": "419d8522cd0e6fdb8a7e56857ee1951d57e89db6497b38b44f520c96d86e6ee1",
+    "node-tests.tap": "5cd8f0d976806ed9d15ae30d53d5068efc86a75fb048daea32910a9c054bcbaa",
+    "packaging.test.mjs": "6740aa6c78894d5ffe50d057ea867452d7af21f5a1d5bb8c8a3e6fb4f2949ac3",
+    "packaging_test.py": "6028afb14565b0896e989282f703e7a73032d1f49f118f1c4158176a3f00391c",
+    "prepare-standalone.py": "f17745f9210eb4d84e2ef20deb8697e6096bc688e8016d9c2157b51f8b152494",
+    "prior-hashes.json": "7f4fe27f76aac5fefae89e332065908809f68831d6ad89241e6f95af8fbcc33f",
+    "provenance-result.json": "64ef3bee1e4718063e68b823f5d1b5363ff68739e6a073d7738f368020746849",
+    "python-tests.txt": "ba397193e76c2e6d03967c1635e250e3a0521629cb974727836147d4f09adcc5",
+    "replacements/audit.py": "12e30da03e1c4b1028cc1b21257ed10adb2ff60ab51f14af3a390b2a7df3b641",
+    "replacements/prepare-standalone.py": "58b7500b9d68087ac8e4fa67f0dfe5e144e9f14f9f17887d85c93291d4c47ea4",
+    "replacements/verify-provenance.py": "7586480b1a05cc87df4db003cd86da68012e0975c59099d072f15a88412e8c1b",
+    "runtime-hashes.json": "82f2a032ded0fa64d05ff91314d07fef9af2b35600e53ef9955d40c29898147e",
+    "sha-loc.json": "9244fe1f43c02d5fb7aaad06ef85dca49badab23b4ef12f2a3774fbbd8a70b86",
+    "verify-provenance.py": "75b7d5742e00f8928799fa2206f86519b4ac1e1517bf3e429b7d950cb35148e1"
+  },
+  "preserved_reconstruction_files": true,
+  "base_files": 102,
+  "prior_files": 102,
+  "runtime_files": 103,
+  "delta_files": 8,
+  "public_base_sha": "3004a4b16e03588ee62c0ed7fe2751e0e53300e0",
+  "installed_wrappers": {
+    "sub2api-transport-r4/prepare-standalone.py": {
+      "sha256": "58b7500b9d68087ac8e4fa67f0dfe5e144e9f14f9f17887d85c93291d4c47ea4",
+      "unchanged": true,
+      "retained_original_sha256": "5d5fa7d9b248700f1642651453635dc15d7b93d8e9561c49ab045b98889de084"
+    },
+    "sub2api-transport-r4/verify-provenance.py": {
+      "sha256": "7586480b1a05cc87df4db003cd86da68012e0975c59099d072f15a88412e8c1b",
+      "unchanged": true,
+      "retained_original_sha256": "d4a8a876d180320c263d1f08ef1b1f2a1c5b1f17e4b7740fb1d1042e9703051c"
+    },
+    "sub2api-transport-r4/audit.py": {
+      "sha256": "12e30da03e1c4b1028cc1b21257ed10adb2ff60ab51f14af3a390b2a7df3b641",
+      "unchanged": true,
+      "retained_original_sha256": "71b9d5be1112b8792ca8846470251d7c224d6ae0f9ada43b39990019f7f486e7"
+    }
+  },
+  "python_packaging": {
+    "tests": 11,
+    "failures": 0,
+    "errors": 0
+  },
+  "node_packaging": {
+    "exit": 0,
+    "tests": 2
+  },
+  "disposable_assembly": [
+    {
+      "program": "verify-provenance.py",
+      "exit": 0,
+      "result": {
+        "integrity": "PASS",
+        "provided_files": 150,
+        "prior_files": 102,
+        "historical": {
+          "FAIL": 11,
+          "NOT RUN": 9
+        },
+        "effects": 686,
+        "history_reexecuted": false,
+        "original_verdict": "REQUESTCHANGES"
+      }
+    },
+    {
+      "program": "audit.py",
+      "exit": 0,
+      "result": {
+        "integrity": "PASS",
+        "original_output_hashes_verified": 294,
+        "runtime_files_verified": 103,
+        "historical": {
+          "integrity": "PASS",
+          "provided_files": 150,
+          "prior_files": 102,
+          "historical": {
+            "FAIL": 11,
+            "NOT RUN": 9
+          },
+          "effects": 686,
+          "history_reexecuted": false,
+          "original_verdict": "REQUESTCHANGES"
+        },
+        "new_engine_gates": "NOT RUN",
+        "physical_absolute_intersample_bound": "NOTPROVEN",
+        "normal_handoff_scanner": "controller MUST PASS; not executed by worker"
+      }
+    },
+    {
+      "program": "prepare-standalone.py",
+      "exit": 0,
+      "unchanged_plan": true,
+      "runtime_hashes_verified": 103
+    }
+  ],
+  "test_adaptations": "Historical Python tests rebound BASE/PACKAGE to a byte-verified disposable original-proposal fixture; Node test location constants adapted in a disposable copy. Helper and installed wrapper bytes are exercised unchanged. All generated trees removed.",
+  "current_helper_sha256": "cb2624819941057b9b3cb61399e9f8354080830c0a2048acc327c76c40293a04",
+  "historical_output_ledger_sha256": "640fa09a654115ddba443c8913152e44d6204c24401d3073ebb8855e0e68e0fd",
+  "historical_input_manifest_sha256": "d922b91cdaedae7f47dcf0e0d648e32143a7b2c5921b07500f169542b3c82bd2"
+}

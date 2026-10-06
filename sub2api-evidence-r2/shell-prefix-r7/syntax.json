@@ -1,0 +1,22 @@
+[
+  {
+    "file": "sub2api-spike/evidence.mjs",
+    "exit_code": 0
+  },
+  {
+    "file": "sub2api-spike/evidence.test.mjs",
+    "exit_code": 0
+  },
+  {
+    "file": "gateway-spike/evidence.mjs",
+    "exit_code": 0
+  },
+  {
+    "file": "gateway-spike/evidence.test.mjs",
+    "exit_code": 0
+  },
+  {
+    "file": "sub2api-evidence-r2/client-contract.test.mjs",
+    "exit_code": 0
+  }
+]

@@ -1,0 +1,25 @@
+✖ server import exposes boot without reading CLI config or opening listeners (4.525316ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 63.74204
+
+✖ failing tests:
+
+test at sub2api-spike/serve.test.mjs:4:1
+✖ server import exposes boot without reading CLI config or opening listeners (4.525316ms)
+  TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string or an instance of Buffer or URL. Received undefined
+      at open (node:internal/fs/promises:1342:10)
+      at readFile (node:internal/fs/promises:1996:20)
+      at file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/server-wiring-w1/sub2api-spike/serve.mjs:6:33
+      at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+      at async node:internal/modules/esm/loader:647:26
+      at async TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/server-wiring-w1/sub2api-spike/serve.test.mjs:5:20)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    code: 'ERR_INVALID_ARG_TYPE'
+  }

@@ -1,0 +1,21 @@
+{
+  "scope": "disposable diagnosis stack only",
+  "at_utc": "2026-10-01T05:16:06Z",
+  "containers_removed": 9,
+  "networks_removed": 3,
+  "operator_tree_deleted": true,
+  "operator_files_removed": 2313,
+  "legacy_synthetic_paths_removed": [
+    "workspace-a.key",
+    "workspace-b.key",
+    "adapter-state",
+    "roundtrip-workspaces.json"
+  ],
+  "remaining_owned_containers": 0,
+  "remaining_owned_networks": 0,
+  "original_provider_files_unchanged_inode_size_mtime": true,
+  "master_key_copies_exported": false,
+  "raw_requests_responses_reasoning_and_agent_homes_deleted": true,
+  "production_runtime_modified": false,
+  "logical_removal_only": true
+}

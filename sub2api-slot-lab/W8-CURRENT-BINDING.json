@@ -1,0 +1,43 @@
+{
+  "kind": "explicit-coordinator-evidence-correction",
+  "preserved_original": "W8-LEDGER.json",
+  "original_sha256": "d52520eec6781ebdc00038ac05ac4ffe2826dc67946d423b1c7fecafb2be516d",
+  "field": "prepared_runtime.prepared_files.sub2api-slot-lab/run.mjs",
+  "historical_reported_sha256": "4c151b3ab8eac917f437875515f99947165d75768edc4d43b0634b16ece7512d",
+  "actual_current_sha256": "e32258026ee0675635a216f1ba6578770fbc553bf72b11b17a716587c666ed35",
+  "independent_review_sha256": "8de5cbe1b08282c10cf381eab59021d2f0558f00a19b150b0063246374ced762",
+  "critical_source_bindings": {
+    "root-driver.py": "ba31a676fcc2d59a8d1077162dd7886c4f7fd244ad2ccc461806015986a0ecde",
+    "adapter.mjs": "7c5200d2f7d86ec11f2be6050ccfb35da55021ee1c34cf76de273a8c91b1e6be",
+    "prepare.py": "a24fc17e632ef578f289d7384b451d90fbe46ff6753c49d46cda17bf8a51116d",
+    "contracts.mjs": "adf4f64e2ae9d320a743c2657290bc72be0adb3919bfdca87657b292f7977245",
+    "redis.mjs": "b335a7d3eb3b062232ec71ac7132f48b11a89a00ec39e289011665fb6463634c",
+    "run.mjs": "e32258026ee0675635a216f1ba6578770fbc553bf72b11b17a716587c666ed35",
+    "native-sse.mjs": "a82680bbc8e62bed8ccb3fc39c6e4aad8e57431071f30d38c7cd295d594a8527",
+    "build-gate.py": "165e05a342d7f53e16122a9be1f27097251005bdd1516f6ab172ab64d4739b9a",
+    "build-manifest.json": "a1d9c2d8303aee2f6c748d52b57c0411bffe86c959628d5a5cd71c92056c4d9d",
+    "tls-server.ext": "50234c98fdeb8757d10c747e852ca78555b2123aaef9f1fda78e0f4b91b8dafc"
+  },
+  "native_image": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+  "actual_root_result_sha256": "221030d05c2506ca816e5459eb8dfc22e930fd29dc8fa446bb26200072cc4db5",
+  "matrix_summary": {
+    "status": "PASS",
+    "executed": 84,
+    "provider_requests": 168,
+    "effects": 168,
+    "active": 0,
+    "redis_owned_keys_checked": 420,
+    "cleanup_failures": 0
+  },
+  "expired_supervisor_recovery": {
+    "status": "PASS",
+    "kind": "independent-parent-compensation",
+    "elapsed_ms": 1673.34,
+    "original_harness_failure_preserved": true,
+    "not_automated_production_guarantee": true
+  },
+  "real_provider_calls": 0,
+  "production_GO": false,
+  "RSS_gate": "20/20 FAIL preserved",
+  "public_prepare_command": "python3 sub2api-slot-lab/prepare.py --output <fresh-output>"
+}

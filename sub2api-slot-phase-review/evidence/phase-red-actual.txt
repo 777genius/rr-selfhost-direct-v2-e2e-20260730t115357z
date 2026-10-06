@@ -1,0 +1,106 @@
+(node:12) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ native Retry-After60 plus 5s response fits setup and receives full 35s active (9.613417ms)
+✖ no retry also receives full active period from setup completion (5.678922ms)
+✖ supervisor cannot admit required phases: zero fixture creation and zero inference (4.071822ms)
+✖ successful readback at 70000 fails before inference (5.040671ms)
+✖ successful readback at 70001 fails before inference (3.756479ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 86.897529
+
+✖ failing tests:
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:42:1
+✖ native Retry-After60 plus 5s response fits setup and receives full 35s active (9.613417ms)
+  AssertionError [ERR_ASSERTION]: {"id":"offline.responses.account.default","protocol":"responses","lane":"account","optin":false,"status":"FAIL","evidence_kind":"actual-native-handler/private-real-Redis/synthetic-provider","started_ms":0,"phases":{},"ids":null,"requests":{},"live_provider":false,"reason":"BATCH_DEADLINE","cleanup":{"failures":0,"ambiguous_intent":false,"remaining":[]},"duration_ms":0}
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/phase-boundary.test.mjs:42:140)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:43:1
+✖ no retry also receives full active period from setup completion (5.678922ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  35000 !== 39321
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/phase-boundary.test.mjs:43:174)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 35000,
+    expected: 39321,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:44:1
+✖ supervisor cannot admit required phases: zero fixture creation and zero inference (4.071822ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/phase-boundary.test.mjs:44:151)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:45:35
+✖ successful readback at 70000 fails before inference (5.040671ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'BATCH_DEADLINE'
+  - 'FIXTURE_DEADLINE'
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/phase-boundary.test.mjs:45:173)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'BATCH_DEADLINE',
+    expected: 'FIXTURE_DEADLINE',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:45:35
+✖ successful readback at 70001 fails before inference (3.756479ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'BATCH_DEADLINE'
+  - 'FIXTURE_DEADLINE'
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/phase-boundary.test.mjs:45:173)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'BATCH_DEADLINE',
+    expected: 'FIXTURE_DEADLINE',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

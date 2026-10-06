@@ -1,0 +1,25 @@
+{
+  "status": "PASS_ARTIFACT_ONLY",
+  "patch_sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5",
+  "changed_lines": 1251,
+  "file_count": 17,
+  "production_file_count": 12,
+  "full_backend_tree_difference": "PASS: exactly manifest files",
+  "apply_reverse": "PASS: zero fuzz/offset with exact hashes",
+  "rejected_exact_patch_reconstruction": "432cffdf3b2a2659da76403242942b45177d69f60fda17efd14605d7798e7135",
+  "previous_authored_test_files_preserved": [
+    "backend/internal/handler/openai_compatible_reasoning_review_test.go",
+    "backend/internal/service/openai_compatible_reasoning_policy_test.go",
+    "backend/internal/service/openai_compatible_reasoning_repair_test.go",
+    "backend/internal/service/openai_compatible_reasoning_review_test.go"
+  ],
+  "previous_287_observed_records": "Preserved test bytes and focused selection; current execution NOT RUN",
+  "independent_test_sha256": "3ca97c2d50f0c3c498c51d1fb0af9b7fa5352089953f84d1224e6ea5e03887ce",
+  "independent_probe_files": "PASS: untouched and excluded",
+  "historical_preservation": "PASS",
+  "python_syntax": "PASS",
+  "go_compilation_behavior_formatting": "NOT RUN: unavailable locally",
+  "independent_reference_namespace_test_sha256": "5863f7d72bf5d31865f4a162c614895358fefdc042de9b6128f4d75021e9fa47",
+  "apply_output": "patching file backend/internal/handler/openai_compatible_reasoning_review_test.go\npatching file backend/internal/handler/openai_gateway_reasoning_failover.go\npatching file backend/internal/service/account.go\npatching file backend/internal/service/independent_reference_namespace_test.go\npatching file backend/internal/service/openai_compatible_reasoning_policy_test.go\npatching file backend/internal/service/openai_compatible_reasoning_repair_test.go\npatching file backend/internal/service/openai_compatible_reasoning_review_test.go\npatching file backend/internal/service/openai_gateway_forward.go\npatching file backend/internal/service/openai_gateway_passthrough.go\npatching file backend/internal/service/openai_gateway_request_body.go\npatching file backend/internal/service/openai_gateway_upstream_errors.go\npatching file backend/internal/service/openai_responses_item_id.go\npatching file backend/internal/service/openai_responses_namespace.go\npatching file backend/internal/service/openai_responses_rejected_field_retry.go\npatching file backend/internal/service/openai_ws_forwarder_ingress.go\npatching file backend/internal/service/openai_ws_forwarder_v2.go\npatching file backend/internal/service/openai_ws_http_bridge.go\n",
+  "reverse_output": "patching file backend/internal/handler/openai_compatible_reasoning_review_test.go\npatching file backend/internal/handler/openai_gateway_reasoning_failover.go\npatching file backend/internal/service/account.go\npatching file backend/internal/service/independent_reference_namespace_test.go\npatching file backend/internal/service/openai_compatible_reasoning_policy_test.go\npatching file backend/internal/service/openai_compatible_reasoning_repair_test.go\npatching file backend/internal/service/openai_compatible_reasoning_review_test.go\npatching file backend/internal/service/openai_gateway_forward.go\npatching file backend/internal/service/openai_gateway_passthrough.go\npatching file backend/internal/service/openai_gateway_request_body.go\npatching file backend/internal/service/openai_gateway_upstream_errors.go\npatching file backend/internal/service/openai_responses_item_id.go\npatching file backend/internal/service/openai_responses_namespace.go\npatching file backend/internal/service/openai_responses_rejected_field_retry.go\npatching file backend/internal/service/openai_ws_forwarder_ingress.go\npatching file backend/internal/service/openai_ws_forwarder_v2.go\npatching file backend/internal/service/openai_ws_http_bridge.go\n"
+}

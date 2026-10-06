@@ -1,0 +1,119 @@
+{
+  "native_patch_sha256": "432cffdf3b2a2659da76403242942b45177d69f60fda17efd14605d7798e7135",
+  "native_files": {
+    "backend/internal/handler/openai_compatible_reasoning_review_test.go": {
+      "original_sha256": null,
+      "patched_sha256": "1139abc487ff687fe42b2f8f10609c4395d776505b69ebf37976c89368a58b68"
+    },
+    "backend/internal/handler/openai_gateway_reasoning_failover.go": {
+      "original_sha256": "196e70d42432ff07f671f96b986be6a27b796fa24578b12e8afd73973c26550d",
+      "patched_sha256": "91b754a8824db9438af6db2b9fd9199c9652ec602e059852014d9a46d0dfa10e"
+    },
+    "backend/internal/service/account.go": {
+      "original_sha256": "d2c9c04d4acbb76d1c04ebb5628ea22efe620aae75ca97b319bb85fd5a17d083",
+      "patched_sha256": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587"
+    },
+    "backend/internal/service/openai_compatible_reasoning_policy_test.go": {
+      "original_sha256": null,
+      "patched_sha256": "30e59f3de298e9f1a82a0afe570f5207e82aafc3ab0aaf2f0cfefe191d35536d"
+    },
+    "backend/internal/service/openai_compatible_reasoning_repair_test.go": {
+      "original_sha256": null,
+      "patched_sha256": "6a9013541f2d9b893ee2193429ca2d88228c36b6f2121a3a3f5d4510675febff"
+    },
+    "backend/internal/service/openai_compatible_reasoning_review_test.go": {
+      "original_sha256": null,
+      "patched_sha256": "f9d388154edc0313c9265bcde71ee72ff7583e3ec3895e80ea4380fa0a16d976"
+    },
+    "backend/internal/service/openai_gateway_forward.go": {
+      "original_sha256": "a3a20c891f67ae6268a2cd4af8363aeba1e2c1853305746aa1a40f27d3bd898e",
+      "patched_sha256": "ae1542077e98c581d9f5ee0e4e6afc4fbeffce76cefef992f38d6aa1f9f4688f"
+    },
+    "backend/internal/service/openai_gateway_passthrough.go": {
+      "original_sha256": "89a29fb3957287342833e457be0e78a82ed015cb92f45e00e54dcf34aa99ce32",
+      "patched_sha256": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3"
+    },
+    "backend/internal/service/openai_gateway_request_body.go": {
+      "original_sha256": "b7cf920f1013a2cd0dbfdf9c0d306da7deeff94e2fb25f764b242f23fe4f6bcb",
+      "patched_sha256": "799e9e31bfc445ad482096fb515c80198cb9f9f6aff9f41de89c7231b5b8b746"
+    },
+    "backend/internal/service/openai_gateway_upstream_errors.go": {
+      "original_sha256": "4e3884e76971b55e6738716eeee2221fe007a1436dbd7af946ded2540d93516d",
+      "patched_sha256": "d38f5ff1f3ebf09bdd782cebf817cf3c25df5a70e10613a616d89f7b25d63355"
+    },
+    "backend/internal/service/openai_responses_item_id.go": {
+      "original_sha256": "1acf2e024ee351ec925c89b4259860ebfbb101872b0676770a0d57c2e3cbb065",
+      "patched_sha256": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2"
+    },
+    "backend/internal/service/openai_responses_namespace.go": {
+      "original_sha256": "70debcbecf35e7414ed72195125849b079749fbb2b3323746dd079b2ea61f120",
+      "patched_sha256": "164dd1169328da0abe98ed6b5b2b59fc8b0810a757a49a03e695f6d008d3c7cf"
+    },
+    "backend/internal/service/openai_responses_rejected_field_retry.go": {
+      "original_sha256": "bbbef34d428cdc6a6ad5f2cdc197f97d227c4be6c3a738fa9a96a3371e998011",
+      "patched_sha256": "f600f1df274c10ebc3200d6e1e2fbe72b59b2721f8814af015e531483900537f"
+    },
+    "backend/internal/service/openai_ws_forwarder_ingress.go": {
+      "original_sha256": "e60da641645da0358b8874e44c31827be14634bf1423ab56e7a06edf87ab5e12",
+      "patched_sha256": "b10e7e25e643f436ed871e7803a6c929a2677bc10b49f4c0e450f150c1fb315a"
+    },
+    "backend/internal/service/openai_ws_forwarder_v2.go": {
+      "original_sha256": "70680001a190509febb484b2dbea5fbae4edef32400bce2f9c06fa68de50517c",
+      "patched_sha256": "bdf33814241c22951c9ea9a4faa50b1c6d4b701f62584bf267cd5e0df9f0d43c"
+    },
+    "backend/internal/service/openai_ws_http_bridge.go": {
+      "original_sha256": "c59cd58fb8f4bfc1a138338ec7b37e5bfcc0049f1649fb5720a69cb668e58ba5",
+      "patched_sha256": "1dd995c6a362947ee5b0aef18f1fccd3ced6eb2fcb0a81914ffe012559c19a8f"
+    }
+  },
+  "consumer_files": {
+    "consumer/workflow.yml": "ae30109a82ac8f75c8c68967235293f755338a7416102198e19d15449525e566",
+    "consumer/sub2api-consumer/source-hashes.json": "4e54724ed9a2164f402c1a3481be4b865dc82e0a2ff484e21fb0b6ece48a0966",
+    "consumer/sub2api-consumer/retire-owned.mjs": "45d87264e8048ca13e81919aefba41c322ea11faa34ddb6e838faf00f856d6f2",
+    "consumer/sub2api-consumer/operator.test.mjs": "2ef1e26704852b2b2ae889aa2df3c4d18b273c021ef2983ff8e52b5a67ddf2ac",
+    "consumer/sub2api-spike/mock-upstream.mjs": "f9e7cc6ba77d50ebf67c804ae91190f10f63a09da1ea763edac117e289b7d090",
+    "consumer/sub2api-spike/native-errors.mjs": "6367e40dc016e95acef8a39632bec28cea81a090d2cf59ce318ae62c165a5a4e",
+    "consumer/sub2api-spike/run-client.mjs": "484d454a3aacf25c3ea2e21e9400bbaa1fbd5b1615b485c24e6088bc881d2599",
+    "consumer/sub2api-spike/evidence.mjs": "2f8b6d1d2adda68a97a28d3672617508da09bf3845d9d60e6df608505eb28856",
+    "consumer/sub2api-spike/granted-run.test.mjs": "e2a7bbd115b4a3588692a2f483ab44c24f738f10fd08822bce4e5ec2344444ed",
+    "consumer/sub2api-spike/broker.test.mjs": "d9320ab9e2e08c5381328723dfc03f79a73c34da0d64c84b0e84cb6512a75051",
+    "consumer/sub2api-spike/test-support.mjs": "a6d9d9e1b9445f481c7097bcf7cd5aad1d81f68485b10dcd8349b6422ad61ff5",
+    "consumer/sub2api-spike/customer.mjs": "b8bd9c31fe4de4a4fd8ba04b6c9d25161f07476a928f65228b2b716b22be7508",
+    "consumer/sub2api-spike/broker.mjs": "976def94620b9a01e9523c640c7134c6d930f06babe0612fc6aa06eb078a91dd",
+    "consumer/sub2api-spike/load.mjs": "405c8bfe3b3d00058093c201ffef13ed32879353034de2e4c0de0377828946c7",
+    "consumer/sub2api-spike/oidc.test.mjs": "f2854c96fc6a513f6af713f027f61b68cb738688a519d2910334a5844f0b9716",
+    "consumer/sub2api-spike/granted-run.mjs": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+    "consumer/sub2api-spike/oidc.mjs": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647",
+    "consumer/sub2api-spike/customer.test.mjs": "1d39fb49db0eb85853ab159e66f66d8a27d955418a400133c8b0f73414969eef",
+    "consumer/sub2api-spike/serve.mjs": "749cd722f800661c89cb73f0ada8566fd395495d9e14e3fc48f94a0a52105f24",
+    "consumer/sub2api-spike/build-report.mjs": "69160d35c709a72a5c5f680ad806f0f350cbce12333608d98e0555270ca63d31",
+    "consumer/sub2api-spike/runner-isolation.test.mjs": "fc6b661a869f848fdbe2197aa53f82d8e381bf87a0e7665afe9d0211f226dd7b",
+    "consumer/sub2api-spike/run-client.test.mjs": "68dbead2d26c2dd9154f5bde23d9c1cbbe9769ee4ed8692eb40615c443e17f45",
+    "consumer/sub2api-spike/evidence.test.mjs": "4d96adc8a1249c219594c4b6433d592f15f7a610c4a77ea27ccde9eb93a61686",
+    "consumer/sub2api-spike/runner-isolation.mjs": "3eb6a0844007d088609dccf959962d319cac93ea77c1cf9233a90993c4293d03",
+    "consumer/sub2api-spike/receipts.test.mjs": "ad130462748ebe2a4902c0a4799074a9a23ffab8f42a5048112e71d21f7a1268",
+    "consumer/sub2api-spike/receipts.mjs": "1d0a3b67fb24ea8d542208667eb47e8fd7b22b635294aec422059ae8660989cc",
+    "consumer/sub2api-spike/util.mjs": "1dc20fa471b4e2784ff45748bd0a517ff6fd5517aa5b325c8467430cbb22bed4",
+    "consumer/sub2api-spike/fixture/wallet.mjs": "c47fcdfb32c95bf1ede68c01a3705084a658ecbd2882ab21ca4e8cc5fc658f71",
+    "consumer/sub2api-spike/operator/admin-roundtrip.mjs": "3535ce99223d632c7e0ccce719ac9201f6fb883b4a436d0973f472b08a2380c8",
+    "consumer/sub2api-spike/operator/live-setup.mjs": "1aee77ea68df897fe01e5f9c661ff9543ddbba87cb1cd7ad0a6d999d53c3794e",
+    "consumer/sub2api-spike/operator/provenance.mjs": "c24a5b20e9b3fcf164393ced009e3a57594a2203d44b25d4a54fb8882bae652a",
+    "consumer/sub2api-spike/operator/sub2api.synthetic.yaml": "09f1be7959fdd8da4424b048cdd48987e832e5386b10ae5a3452a631e2a9903c",
+    "consumer/sub2api-spike/operator/diagnosis-validation.mjs": "d94e3edb5b634a6cd9868243022ab49951304c4581ffb9cd4b93c5a9fe4be70b",
+    "consumer/sub2api-spike/operator/diagnosis-tap.mjs": "164e1ffe9dfb58a5a5fd38e1859108bdb074497fb305e25a0a581dc69c3db1c6",
+    "consumer/sub2api-spike/operator/check-images.mjs": "5eaaec570c5ee8f35a94a95fb55f173af3e68f51264ea34b8fd005f7c015b62d",
+    "consumer/sub2api-spike/operator/container-native.mjs": "5fb1fd091688d64c381a46e5793994e18de83ef5d4f224f01bba9503dd396f27",
+    "consumer/sub2api-spike/operator/bootstrap.mjs": "172525a79aeaef487d73ed85a0513940a5bc49fca5cc5ce9742b23c8d371a12e",
+    "consumer/sub2api-spike/operator/scheduling.mjs": "2332f4b0a1c2a6da8e9a1d6afd8b91bc220f892dbca40f5af8639d2c7fd2fced",
+    "consumer/sub2api-spike/operator/compose.yaml": "2904dc94195728f51fb51495b3a15ace0c81ed471746a486ce355faf9ecaf18d",
+    "consumer/sub2api-spike/operator/diagnosis-paired-replay.mjs": "67570197f8e5e90fbe99960093c9c6e4ffdaa6f272f60063365733a8188835b2",
+    "consumer/sub2api-spike/operator/backup-restore.sh": "3c97520aecea7454909d5efed00d7b7309c0ceb286afd101d60e69a67430e603",
+    "consumer/sub2api-spike/operator/diagnosis-setup.mjs": "11bfba96e51c8d86d83af487ffa5e02d76b981cc9f0c7941f2463302e3f77fe6",
+    "consumer/sub2api-spike/operator/stack.mjs": "1774cad9fe6adc50d1e479da773695ae4f580ab49848d71d46ad378cda5b362d",
+    "consumer/sub2api-spike/operator/runner-containment.mjs": "d7206a76f2d33efba38c630cf0bb87697f0cfe8479f9eea7a8727c52080439d1",
+    "consumer/sub2api-spike/operator/scan-custody.mjs": "db9bdd0fcd23b459fff39a897b11a907a636146a71c82ebf45f2d76a19c2d41d",
+    "consumer/sub2api-spike/operator/diagnosis-client.mjs": "aa9abe9bf4b69f2a3bea95d465785984be950e58acb0a36f6b8f66147c624c19",
+    "consumer/sub2api-spike/operator/sub2api.live.yaml": "fc12f903eb9f5e5175610ea8409bded959e1e91f28e677d0d2214e755fae8f29",
+    "consumer/sub2api-spike/operator/runner-launcher.sh": "07f9d0eaee9136e86082a9d324dc5b7670a1db18151bd83649764fd105c1a477"
+  }
+}

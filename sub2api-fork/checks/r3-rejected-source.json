@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repository": "https://github.com/Wei-Shaw/sub2api",
+    "release": "v0.2.11",
+    "revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+    "source_path": ".spike-inputs/upstream",
+    "revision_evidence": "Coordinator-verified official 96f4 archive in .spike-inputs/upstream; frozen independent review confirms the original four touched hashes. All replacement originals recorded from that tree; no network refetch.",
+    "staged_server_version": "0.2.10"
+  },
+  "editable_source": {
+    "path": "build-source",
+    "ignored_by": "../.gitignore:sub2api-fork/build-source/",
+    "nested_git": false
+  },
+  "patch": {
+    "path": "patches/native-reasoning.patch",
+    "sha256": "432cffdf3b2a2659da76403242942b45177d69f60fda17efd14605d7798e7135",
+    "strip": 1,
+    "added_lines": 1153,
+    "removed_lines": 55,
+    "changed_lines": 1208
+  },
+  "files": [
+    {
+      "path": "backend/internal/handler/openai_compatible_reasoning_review_test.go",
+      "kind": "test",
+      "original_sha256": null,
+      "patched_sha256": "1139abc487ff687fe42b2f8f10609c4395d776505b69ebf37976c89368a58b68"
+    },
+    {
+      "path": "backend/internal/handler/openai_gateway_reasoning_failover.go",
+      "kind": "production",
+      "original_sha256": "196e70d42432ff07f671f96b986be6a27b796fa24578b12e8afd73973c26550d",
+      "patched_sha256": "91b754a8824db9438af6db2b9fd9199c9652ec602e059852014d9a46d0dfa10e"
+    },
+    {
+      "path": "backend/internal/service/account.go",
+      "kind": "production",
+      "original_sha256": "d2c9c04d4acbb76d1c04ebb5628ea22efe620aae75ca97b319bb85fd5a17d083",
+      "patched_sha256": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587"
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_policy_test.go",
+      "kind": "test",
+      "original_sha256": null,
+      "patched_sha256": "30e59f3de298e9f1a82a0afe570f5207e82aafc3ab0aaf2f0cfefe191d35536d"
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_repair_test.go",
+      "kind": "test",
+      "original_sha256": null,
+      "patched_sha256": "6a9013541f2d9b893ee2193429ca2d88228c36b6f2121a3a3f5d4510675febff"
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_review_test.go",
+      "kind": "test",
+      "original_sha256": null,
+      "patched_sha256": "f9d388154edc0313c9265bcde71ee72ff7583e3ec3895e80ea4380fa0a16d976"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "kind": "production",
+      "original_sha256": "a3a20c891f67ae6268a2cd4af8363aeba1e2c1853305746aa1a40f27d3bd898e",
+      "patched_sha256": "ae1542077e98c581d9f5ee0e4e6afc4fbeffce76cefef992f38d6aa1f9f4688f"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "kind": "production",
+      "original_sha256": "89a29fb3957287342833e457be0e78a82ed015cb92f45e00e54dcf34aa99ce32",
+      "patched_sha256": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_request_body.go",
+      "kind": "production",
+      "original_sha256": "b7cf920f1013a2cd0dbfdf9c0d306da7deeff94e2fb25f764b242f23fe4f6bcb",
+      "patched_sha256": "799e9e31bfc445ad482096fb515c80198cb9f9f6aff9f41de89c7231b5b8b746"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_upstream_errors.go",
+      "kind": "production",
+      "original_sha256": "4e3884e76971b55e6738716eeee2221fe007a1436dbd7af946ded2540d93516d",
+      "patched_sha256": "d38f5ff1f3ebf09bdd782cebf817cf3c25df5a70e10613a616d89f7b25d63355"
+    },
+    {
+      "path": "backend/internal/service/openai_responses_item_id.go",
+      "kind": "production",
+      "original_sha256": "1acf2e024ee351ec925c89b4259860ebfbb101872b0676770a0d57c2e3cbb065",
+      "patched_sha256": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2"
+    },
+    {
+      "path": "backend/internal/service/openai_responses_namespace.go",
+      "kind": "production",
+      "original_sha256": "70debcbecf35e7414ed72195125849b079749fbb2b3323746dd079b2ea61f120",
+      "patched_sha256": "164dd1169328da0abe98ed6b5b2b59fc8b0810a757a49a03e695f6d008d3c7cf"
+    },
+    {
+      "path": "backend/internal/service/openai_responses_rejected_field_retry.go",
+      "kind": "production",
+      "original_sha256": "bbbef34d428cdc6a6ad5f2cdc197f97d227c4be6c3a738fa9a96a3371e998011",
+      "patched_sha256": "f600f1df274c10ebc3200d6e1e2fbe72b59b2721f8814af015e531483900537f"
+    },
+    {
+      "path": "backend/internal/service/openai_ws_forwarder_ingress.go",
+      "kind": "production",
+      "original_sha256": "e60da641645da0358b8874e44c31827be14634bf1423ab56e7a06edf87ab5e12",
+      "patched_sha256": "b10e7e25e643f436ed871e7803a6c929a2677bc10b49f4c0e450f150c1fb315a"
+    },
+    {
+      "path": "backend/internal/service/openai_ws_forwarder_v2.go",
+      "kind": "production",
+      "original_sha256": "70680001a190509febb484b2dbea5fbae4edef32400bce2f9c06fa68de50517c",
+      "patched_sha256": "bdf33814241c22951c9ea9a4faa50b1c6d4b701f62584bf267cd5e0df9f0d43c"
+    },
+    {
+      "path": "backend/internal/service/openai_ws_http_bridge.go",
+      "kind": "production",
+      "original_sha256": "c59cd58fb8f4bfc1a138338ec7b37e5bfcc0049f1649fb5720a69cb668e58ba5",
+      "patched_sha256": "1dd995c6a362947ee5b0aef18f1fccd3ced6eb2fcb0a81914ffe012559c19a8f"
+    }
+  ],
+  "supersedes": {
+    "patch_sha256": "7dec93ec55da38f15e719f5b7b7769ad2ec874ae548e1125a8a028e12cc51bdf",
+    "repo_output_sha256_user_supplied": "1dc65bd37b004608a7a148d1cda298b1750fe30b9c5d8d7e4ac05e467f5d19ce",
+    "peer_decision": "NO_GO_R1_R2",
+    "review": "../sub2api-fork-review-v2/REPORT.md",
+    "old_validation_applies_to_replacement": false
+  },
+  "materialized_predecessor": {
+    "patch_sha256": "2f358949eae00de6ed681e86b0b1f57ee6afd8667d33b95cb81c86b36b8576aa",
+    "repo_output_sha256_user_supplied": "f67d768890e7323093c89e035fd52f158c7ee29562057f4be938ba26cf0a1f85",
+    "changed_lines": 793,
+    "patched_file_hashes": {
+      "backend/internal/handler/openai_compatible_reasoning_review_test.go": "1139abc487ff687fe42b2f8f10609c4395d776505b69ebf37976c89368a58b68",
+      "backend/internal/handler/openai_gateway_reasoning_failover.go": "91b754a8824db9438af6db2b9fd9199c9652ec602e059852014d9a46d0dfa10e",
+      "backend/internal/service/account.go": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587",
+      "backend/internal/service/openai_compatible_reasoning_policy_test.go": "30e59f3de298e9f1a82a0afe570f5207e82aafc3ab0aaf2f0cfefe191d35536d",
+      "backend/internal/service/openai_compatible_reasoning_review_test.go": "a3e7606d2f5864f6fd1787fa4b835a5b1cdf185681e64be20dbcc2784ec503f6",
+      "backend/internal/service/openai_gateway_forward.go": "4337b4820fbab26e622b583b3f363865536dc29b4bd58179ef2de46c957be0d4",
+      "backend/internal/service/openai_gateway_passthrough.go": "23ce879e0fea818625f3f3c5b8974b7d2f86bbefef88f4e616213406c7a0776d",
+      "backend/internal/service/openai_gateway_request_body.go": "4e49a06edf8fc5456fe5d0bf1e8664de37c34661608c5efd632b521f952e3d74",
+      "backend/internal/service/openai_gateway_upstream_errors.go": "c7e221bcf52b828302622b99474e2ac47c8c207395dcd796aa2887c0dfd4007b",
+      "backend/internal/service/openai_responses_item_id.go": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2",
+      "backend/internal/service/openai_responses_namespace.go": "164dd1169328da0abe98ed6b5b2b59fc8b0810a757a49a03e695f6d008d3c7cf",
+      "backend/internal/service/openai_ws_forwarder_ingress.go": "4afb6595e5dad1cbd05388aed4d3f8ceffcb9e8b9e7f43144772d30e33e2b64b",
+      "backend/internal/service/openai_ws_forwarder_v2.go": "bdf33814241c22951c9ea9a4faa50b1c6d4b701f62584bf267cd5e0df9f0d43c",
+      "backend/internal/service/openai_ws_http_bridge.go": "5076d1b0749d0e1d6feeb21e3a5cd25d9ffcf8376d53b9e25ea201d3f14ccd4b"
+    },
+    "repair_files": [
+      "backend/internal/service/openai_compatible_reasoning_review_test.go",
+      "backend/internal/service/openai_ws_http_bridge.go"
+    ],
+    "net_added_lines": 67,
+    "coordinator_red_green": "checks/coordinator-w2-red-green.json",
+    "coordinator_bridge_failure": "checks/coordinator-w2-bridge-failure.json",
+    "not_current_patch_validation": true
+  },
+  "remediation": {
+    "delta_path": "checks/r1-r2-repair.patch",
+    "delta_sha256": "5965424d6f49ddd91ddc509cf54956206a7e5144af8abd13bf473f89901a31ae",
+    "added_lines": 349,
+    "removed_lines": 27,
+    "rejected_manifest": "checks/r1-r2-rejected-source.json",
+    "local_go_compilation_behavior": "NOT RUN: coordinator-owned offline gate",
+    "authored_go_formatting": "NOT RUN: gofmt unavailable locally"
+  }
+}

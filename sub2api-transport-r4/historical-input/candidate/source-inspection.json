@@ -1,0 +1,13 @@
+{
+  "source": "sub2api-candidate-review/native-patched/backend/internal/service/openai_gateway_passthrough.go",
+  "sha256": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3",
+  "lines": [
+    1963,
+    2217
+  ],
+  "finding": "failed downstream write marks clientDisconnected; log says continue draining upstream for usage",
+  "scope": "available reviewed partial candidate; not full fresh-probe source",
+  "ops_stock_interval_source": "sub2api-telemetry-analysis/REPORT.md:13",
+  "ops_stock_interval_seconds": 60,
+  "kernel_source": "sub2api-telemetry-review/REPORT.md; primary citations not fetched by this lane"
+}

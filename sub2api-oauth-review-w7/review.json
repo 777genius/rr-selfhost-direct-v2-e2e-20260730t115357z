@@ -1,0 +1,140 @@
+{
+  "schema": "oauth-independent-review-w7/v1",
+  "task_id": "rr-gateway-spike-20260930-oauth-review-w7",
+  "decision": "APPROVE",
+  "review_status": "complete",
+  "scope": "Exact final composed W9 + actual RETURNING-ID bulk remediation + separate unused admin import removal; independent review of supplied actual PG/Redis runtime evidence",
+  "source_pin": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "source_pin_basis": "Supplied archive/controller provenance; no Git or network revalidation",
+  "actual_backend_sha256": "e65867224573204555df213b48521b45c8c93804b9fa76c6f2ebef9eb927946f",
+  "actual_backend_files": 3158,
+  "historical_w9_backend_sha256": "193fa7c81691585aabf9d9f7b9466c3772ef2fe426e9fe92b1b9715abb4cab3a",
+  "findings": [],
+  "closed_findings": [
+    {
+      "id": "W6-R1",
+      "priority": "P2",
+      "title": "Mixed bulk propagates excluded targets",
+      "status": "CLOSED",
+      "source_locations": [
+        "backend/internal/repository/account_repo.go:3316",
+        "backend/internal/repository/account_repo.go:3361",
+        "backend/internal/repository/account_repo.go:3383",
+        "backend/internal/repository/account_repo.go:3389",
+        "backend/internal/repository/account_repo.go:3402"
+      ],
+      "basis": "Actual RETURNING-ID intersection in first requested order, deduplication, outbox and immediate adapter boundary. Identical eight-leaf PG mixed fixture RED on old W9 and GREEN on current; sixteen RED propagation assertions and exact current effects."
+    },
+    {
+      "id": "RAW-IMPORT",
+      "status": "CLOSED",
+      "source_location": "backend/internal/handler/admin/openai_oauth_handler.go:11",
+      "basis": "Exactly one unused import removed; four-package raw compile PASS and separate TestOAuthForkW7ImportIdentityTypes PASS1. Retained controller diagnostic explains old unused-import compilation failure."
+    },
+    {
+      "id": "W5-R5",
+      "status": "REMAINS CLOSED",
+      "basis": "Original W9 atomic identity predicates unchanged; original16 singleton race fixture bytes and current terminal PASS preserved."
+    }
+  ],
+  "validation": {
+    "independent_command": "python3 sub2api-oauth-review-w7/reproductions/verify_review.py",
+    "independent_result": "PASS",
+    "input_hashes_verified": 3218,
+    "checks": 6578,
+    "green": {
+      "test_terminals": 211,
+      "receipts": 144,
+      "mixed_observations": 8,
+      "effects": 11,
+      "retained_terminals": 193,
+      "retained_receipt_identities": 133,
+      "retained_inventory": 160,
+      "retained_singleton_races": 16
+    },
+    "red": {
+      "failed_leaves": 8,
+      "failed_parent": 1,
+      "receipts": 8,
+      "observations": 8,
+      "effects": 8,
+      "propagation_assertion_failures": 16
+    },
+    "raw_structured_receipts": 171,
+    "canonical_public_receipts": 144,
+    "extra_raw_receipts_not_additional_acceptance": 27,
+    "compile_packages": [
+      "github.com/Wei-Shaw/sub2api/internal/handler",
+      "github.com/Wei-Shaw/sub2api/internal/handler/admin",
+      "github.com/Wei-Shaw/sub2api/internal/repository",
+      "github.com/Wei-Shaw/sub2api/internal/service"
+    ],
+    "raw_admin_import": "PASS1",
+    "bulk_unit_terminals": "PASS49",
+    "query_scan_iteration_close_rollback": "PASS4; no outbox/commit expected after failure",
+    "runtime_execution_by_reviewer": false
+  },
+  "preserved_contracts": [
+    "Native/platform/type scoped identity validation",
+    "Current-row atomic full replacement and whole merged-document predicate",
+    "Malformed scheduler CASE guards and strict individual22023",
+    "Shadow parent allowance inside type guards and own nonreusable consumption veto",
+    "Cross-ID canonical HMAC ownership and no uncertain replay",
+    "Full-document/revision/lifecycle/routing completion fences and lost-ACK reconciliation",
+    "Coherent bearer/identity/proxy tuple and distinct shadow scheduling identity",
+    "Unicode/default client aliases and exact refresh wire bytes",
+    "Neutral telemetry rotation with proxy/group/routing barriers",
+    "Caller-owned transaction and native bulk defaults"
+  ],
+  "production_scope": {
+    "bulk": [
+      {
+        "path": "backend/internal/repository/account_repo.go",
+        "added_lines": 29,
+        "removed_lines": 6
+      }
+    ],
+    "admin": [
+      {
+        "path": "backend/internal/handler/admin/openai_oauth_handler.go",
+        "added_lines": 0,
+        "removed_lines": 1
+      }
+    ],
+    "other_production_files": "Byte-identical to historical W9",
+    "old_unit_assertions": "unchanged; SQL transport recorder expectations adapted",
+    "original_w9_race_fixture": "byte-identical"
+  },
+  "cache_evidence_scope": "Real PostgreSQL outbox and immediate repository SetAccount observer after committed account/outbox visibility. New mixed-race tests do not mutate or verify the Redis scheduler implementation.",
+  "migrations": {
+    "241_242_243": "byte-identical to W9",
+    "243_populated_history": "refuses with55000",
+    "populated_history_upgrade_GO": false
+  },
+  "live_oauth": {
+    "status": "NOT RUN deliberately",
+    "production_GO": false
+  },
+  "blockers": [],
+  "limits": [
+    "Controller-supplied captures independently audited; no reviewer Go or service rerun",
+    "No live-provider, populated-history-upgrade, full-production-relay, load, role/key-custody, backup/retention approval"
+  ],
+  "evidence_file": "evidence.json",
+  "report_file": "REPORT.md",
+  "handoff": {
+    "changed_files": [
+      "sub2api-oauth-review-w7/REPORT.md",
+      "sub2api-oauth-review-w7/review.json",
+      "sub2api-oauth-review-w7/evidence.json",
+      "sub2api-oauth-review-w7/artifact-manifest.json",
+      "sub2api-oauth-review-w7/reproductions/verify_review.py"
+    ],
+    "production_edits": false,
+    "git_writes": false,
+    "Go_Docker_service_network_privilege_auth_keys_subagents": false,
+    "controller_owns": "Project Integration and any subsequent rollout; no additional remediation requested for this reviewed scope",
+    "bounded_review": "completed within8minutes",
+    "stop": true
+  }
+}

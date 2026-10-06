@@ -1,0 +1,6 @@
+{
+  "status": "FAIL",
+  "reason": "ACTUAL_NATIVE_BINARY_BINDING",
+  "cleanup": true,
+  "real_provider": false
+}

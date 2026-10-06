@@ -1,0 +1,13 @@
+{"strict_jsonl_invalid_numeric_cases":93,"actual_function":"load","engine":"NOT RUN"}
+✔ strict JSONL numeric evidence cannot pass or poison aggregation in actual load (44.4911ms)
+✔ exact upstream/downstream body volumes for all18 cells; protocol conversion mismatch stays FAIL (43.012523ms)
+✔ near-limit frame qualification has exact integer boundaries and no cap equality (1.80687ms)
+✔ protocol/effect/terminal/text/tool/comment gates and numeric soak boundary remain strict (16.188461ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 169.320238

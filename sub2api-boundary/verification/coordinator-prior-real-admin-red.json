@@ -1,0 +1,26 @@
+{
+  "kind": "real-stock-admin-quarantine",
+  "engine_pin": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "provider_credentials": "synthetic-only",
+  "deliberate_duplicate_requests": 0,
+  "real_provider_inference_calls": 0,
+  "results": [
+    {
+      "id": "template-real-get-quarantined",
+      "status": "FAIL",
+      "failure_code": "Cannot read properties of undefined (reading 'map')"
+    }
+  ],
+  "cleanup": [
+    {
+      "kind": "accounts",
+      "id": 6,
+      "status": "deleted"
+    },
+    {
+      "kind": "groups",
+      "id": 6,
+      "status": "deleted"
+    }
+  ]
+}

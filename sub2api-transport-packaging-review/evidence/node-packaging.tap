@@ -1,0 +1,10 @@
+✔ offline CLI reconstructs all 103 frozen hashes and unchanged --plan (268.444978ms)
+✔ wrong/missing base fails before creating runtime (94.673128ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 431.934154

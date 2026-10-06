@@ -1,0 +1,68 @@
+{
+  "blockers": [],
+  "classification": "progress",
+  "completion_proven": true,
+  "controller_integration_outside_scope": [
+    "native image/source binding and E2E",
+    "real Redis 80-cycle slot/waiter cleanup with actual faults/load",
+    "persisted billing",
+    "three live final canaries"
+  ],
+  "local_verification": "python3 sub2api-native-merged-review/audit.py: PASS",
+  "objective": "Independently approve or repair exact combined memory/cancellation/default-drain source after actual RED/GREEN and race.",
+  "requirements": [
+    {
+      "evidence": "3,424 supplied input hashes; 3,332 executed-source hashes; final/base/official tree ledgers; production/regression SHA-256",
+      "requirement": "Exact frozen source identity",
+      "status": "PASS"
+    },
+    {
+      "evidence": "Independent source review in REPORT.md; final raw normal/native/probe results and named race roots",
+      "requirement": "Combined memory/cancellation/default-drain correctness",
+      "status": "PASS"
+    },
+    {
+      "evidence": "Exact one-argument production fault, identical tests; two raw behavioral failed leaves; same leaves green in normal/race",
+      "requirement": "Actual default policy RED/GREEN",
+      "status": "PASS"
+    },
+    {
+      "evidence": "Exact replay Close/return fault, identical tests; exact actual held Read failure at line 135; unchanged physical-close/reader/socket/unknown-usage/one-effect green assertions",
+      "requirement": "Actual interaction RED/GREEN",
+      "status": "PASS"
+    },
+    {
+      "evidence": "Source review; complete unchanged 35 memory results included in supplied 129-result race",
+      "requirement": "Memory budgets/spool/queue/lifetimes",
+      "status": "PASS"
+    },
+    {
+      "evidence": "byte-identical to canonical combined base",
+      "requirement": "First-output timer preservation",
+      "status": "PASS"
+    },
+    {
+      "evidence": "Source helper and exhaustive production references; policy/admin/OAuth native preservation tests; immutable callback set before launch with generic nil",
+      "requirement": "Trusted bool/API-key scope and generic callback",
+      "status": "PASS"
+    },
+    {
+      "evidence": "Source review plus named uncertainty/compact/same-account/status controls in actual normal and race",
+      "requirement": "Uncertain HTTP-body no-retry with complete-EOF fences",
+      "status": "PASS"
+    },
+    {
+      "evidence": "Unchanged cancellation test SHA and actual downstream 17/2 observation; all pinned supplied historical inputs unchanged",
+      "requirement": "Wire partial usage and historical records preservation",
+      "status": "PASS"
+    },
+    {
+      "evidence": "APPROVE with no source changes/findings; review/report/evidence/audit/completion/artifact ledger",
+      "requirement": "Required concise review handoff only in owned namespace",
+      "status": "PASS"
+    }
+  ],
+  "source_repair_required": false,
+  "stop": true,
+  "verdict": "APPROVE"
+}

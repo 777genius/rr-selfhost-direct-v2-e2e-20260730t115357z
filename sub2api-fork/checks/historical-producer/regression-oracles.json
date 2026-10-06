@@ -1,0 +1,45 @@
+{
+  "status": "NOT RUN",
+  "reason": "Go and gofmt unavailable; no installation or live inference attempted",
+  "boundary": "Real gateway Forward with existing in-memory HTTP transport recorder; real WS compatibility and WS-to-HTTP preparation functions; no socket or mirrored normalization implementation",
+  "new_tests": [
+    {
+      "name": "TestCompatibleReasoningPolicyHTTP",
+      "observable_red": "Untouched original forwarding removes plain reasoning at store=false, strips content at store=true/missing and sanitizes provider reasoning IDs. Opt-in positive cases therefore fail exact outbound history assertions. Incorrect default activation, caller-controlled policy or global sanitizer bypass fails guard subcases.",
+      "coverage": "12 cases: passthrough true/false, three store states, missing/false/string policy, inbound policy spoof, two tool turns, plain/null-encrypted/encrypted items, opaque integer, references and independent message sanitation"
+    },
+    {
+      "name": "TestCompatibleReasoningPolicyWebSocketPreparation",
+      "observable_red": "Original WS preparation drops two plain reasoning items and rewrites encrypted history. Opt-in exact replay assertions fail before and after bridge preparation. Enabling preservation by default fails the legacy cases.",
+      "coverage": "Opt-in/missing/false at actual WS compatibility and bridge boundaries; same history and pairing oracle as HTTP"
+    },
+    {
+      "name": "TestCompatibleReasoningPolicyOAuthIgnored",
+      "observable_red": "Allowing OAuth or setup-token metadata to select compatible policy changes captured HTTP/WS input relative to the same account with the flag disabled; equality assertions fail.",
+      "coverage": "Both OAuth-like credential types, native Codex endpoint, no live OAuth claim"
+    },
+    {
+      "name": "TestCompatibleReasoningPolicyMalformedRejected",
+      "observable_red": "Skipping JSON validation while bypassing reasoning normalization admits truncated/trailing JSON or lets it reach the recorder; error and no-upstream assertions fail.",
+      "coverage": "Invalid/trailing JSON at both HTTP and WS preparation boundaries"
+    },
+    {
+      "name": "TestCompatibleReasoningPolicyRouteScope",
+      "observable_red": "Applying the opt-in on a probe-denied or forced-Chat-Completions OpenAI route changes prepared history relative to unflagged policy; exact equality fails. Applying OpenAI normalization to another platform likewise changes its history.",
+      "coverage": "Non-OpenAI account, negative Responses probe, explicit Chat Completions override"
+    }
+  ],
+  "existing_coverage_reused": [
+    "TestNormalizeOpenAIAPIKeyStoreFalseReasoningReplay and its existing explicit-store/compact/encrypted variants",
+    "TestNormalizeOpenAIResponsesReasoningContentReplayStripsCrossProviderArray",
+    "TestNormalizeOpenAIResponsesReasoningContentReplayKeepsPortableShapes",
+    "TestNormalizeOpenAIResponsesWebSocketCompatibilityBodyStripsReasoningContentOnlyForOpenAI",
+    "TestOpenAIGatewayService_APIKeyPassthrough_StripsInvalidInputItemIDs",
+    "TestOpenAIGatewayService_OAuthPassthrough_SanitizesNativeToolItemIDs"
+  ],
+  "baseline_command": "./sub2api-fork/checks/run-backend-tests.py --baseline",
+  "patched_command": "./sub2api-fork/checks/run-backend-tests.py",
+  "observed_baseline_exit": 77,
+  "observed_patched_exit": 77,
+  "not_proven": ["Go compilation", "behavioral red/green", "gofmt", "real WS socket behavior", "genuine native thinking-enabled final answer", "live regressions", "immutable engine image"]
+}

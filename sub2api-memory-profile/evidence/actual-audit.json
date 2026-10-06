@@ -1,0 +1,254 @@
+{
+  "schema": "rrsub2profile-actual-audit-v1",
+  "status": "DIAGNOSTIC_ONLY",
+  "current_input_entries_verified": 3487,
+  "protocols": {
+    "responses": {
+      "checkpoints": 11,
+      "runtime_samples": 1099,
+      "control_samples": 1109,
+      "postburst_natural_cycles": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "postburst_profile_cycle_eligible": false,
+      "stable_rss_process_identity": {
+        "instance": "rrsub2profile-responses-fixed-00000009",
+        "engine_pid": 3992255,
+        "pid_start_ticks": 95757092,
+        "cgroup_path": "/system.slice/docker-d67add17285024387097e72c1818f053a99a95ec44073faf530cb1fefaf8d073.scope",
+        "cgroup_device": 29,
+        "cgroup_inode": 3445702,
+        "container_id": "d67add17285024387097e72c1818f053a99a95ec44073faf530cb1fefaf8d073",
+        "exe_device": 1048661,
+        "exe_inode": 126932220
+      },
+      "max_within_burst_sample_gap_ms": 107.07529509067535,
+      "max_sample_duration_ms": 9.812290072441101,
+      "slopes_independently_recomputed": {
+        "all_checkpoints": {
+          "heap_alloc_allocator": -245316.16116485177,
+          "heap_objects_allocator": -301.42464640298215,
+          "heap_inuse": -239139.2345438023,
+          "heap_released": 635506.8893325228,
+          "total_alloc": 42354622.35593118,
+          "mallocs": 4237.877972980226,
+          "goroutines": -0.0018152276226467215,
+          "sampled_heap_inuse_space_per_second": 233007.75683334508,
+          "sampled_heap_inuse_objects_per_second": 131.39973508942933,
+          "sampled_heap_alloc_space_per_second": 42583964.605102584,
+          "sampled_heap_alloc_objects_per_second": 4569.4603819816775
+        },
+        "postwarmup_after_two_bursts": {
+          "heap_alloc_allocator": -483265.68226754095,
+          "heap_objects_allocator": -68.39320792955938,
+          "heap_inuse": -482424.2708724813,
+          "heap_released": 529042.1552169581,
+          "total_alloc": 42613801.210606664,
+          "mallocs": 4274.154002395525,
+          "goroutines": 0.001219874390367121,
+          "sampled_heap_inuse_space_per_second": -126748.26265106123,
+          "sampled_heap_inuse_objects_per_second": 33.91194378347121,
+          "sampled_heap_alloc_space_per_second": 43064128.56476026,
+          "sampled_heap_alloc_objects_per_second": 4784.051327658608,
+          "rss_bytes_per_second": -448526.59306899697
+        }
+      },
+      "checkpoint_10": {
+        "checkpoint": 10,
+        "elapsed_ms": 99958.83034300804,
+        "num_gc": 68,
+        "profile_gc_stable": true,
+        "profile_gc_brackets": [
+          {
+            "kind": 1,
+            "before_num_gc": 68,
+            "after_num_gc": 68
+          },
+          {
+            "kind": 2,
+            "before_num_gc": 68,
+            "after_num_gc": 68
+          },
+          {
+            "kind": 3,
+            "before_num_gc": 68,
+            "after_num_gc": 68
+          }
+        ],
+        "heap_alloc_allocator": 77103192,
+        "heap_objects_allocator": 48581,
+        "heap_inuse": 80797696,
+        "heap_idle": 135667712,
+        "heap_released": 59490304,
+        "total_alloc": 4285476624,
+        "mallocs": 667696,
+        "frees": 619115,
+        "goroutines": 165,
+        "profiles_sampled_weighted": {
+          "heap": {
+            "alloc_objects": 553645,
+            "alloc_space": 4212411714,
+            "inuse_objects": 65177,
+            "inuse_space": 94166985
+          },
+          "allocs": {
+            "alloc_objects": 553645,
+            "alloc_space": 4212411714,
+            "inuse_objects": 65177,
+            "inuse_space": 94166985
+          },
+          "goroutine": {
+            "goroutine": 165
+          }
+        },
+        "streams": 5,
+        "rss_bytes": 196870144,
+        "smaps_rss_bytes": 196870144,
+        "sockets": 31,
+        "empirical_return": "FAIL",
+        "natural_cycles_after_end": 0,
+        "postburst_profile_cycle_eligible": false
+      },
+      "static_moderation_top": "27.47MB 30.59% 30.59%    27.47MB 30.59%  github.com/Wei-Shaw/sub2api/internal/service.NewContentModerationService",
+      "comparison_sha256": "c7557b3b5f87f286d4d84364e84c9593b9561ef86b28d063f1ce9b1f39d12d94"
+    },
+    "messages": {
+      "checkpoints": 11,
+      "runtime_samples": 1258,
+      "control_samples": 1271,
+      "postburst_natural_cycles": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "postburst_profile_cycle_eligible": false,
+      "stable_rss_process_identity": {
+        "instance": "rrsub2profile-messages-fixed-00000010",
+        "engine_pid": 3992248,
+        "pid_start_ticks": 95757092,
+        "cgroup_path": "/system.slice/docker-8f35772fb99fc3d1994b0028bfd0b0e450e0b6af462f84e24f1b16b2161c6814.scope",
+        "cgroup_device": 29,
+        "cgroup_inode": 3445623,
+        "container_id": "8f35772fb99fc3d1994b0028bfd0b0e450e0b6af462f84e24f1b16b2161c6814",
+        "exe_device": 1048668,
+        "exe_inode": 126932220
+      },
+      "max_within_burst_sample_gap_ms": 110.47104203701019,
+      "max_sample_duration_ms": 13.856552958488464,
+      "slopes_independently_recomputed": {
+        "all_checkpoints": {
+          "heap_alloc_allocator": 189504.652753282,
+          "heap_objects_allocator": -279.1147488487399,
+          "heap_inuse": 193381.45119041283,
+          "heap_released": 63386.15406736978,
+          "total_alloc": 21460444.330335826,
+          "mallocs": 5360.302868937395,
+          "goroutines": -0.011284603431219497,
+          "sampled_heap_inuse_space_per_second": 175071.74758897594,
+          "sampled_heap_inuse_objects_per_second": 36.95949131144051,
+          "sampled_heap_alloc_space_per_second": 21532315.967529397,
+          "sampled_heap_alloc_objects_per_second": 5094.221820314395
+        },
+        "postwarmup_after_two_bursts": {
+          "heap_alloc_allocator": -47590.027487688196,
+          "heap_objects_allocator": -17.75696016618817,
+          "heap_inuse": -48108.55488670195,
+          "heap_released": -113696.92230241957,
+          "total_alloc": 21898643.437546056,
+          "mallocs": 5495.559785633496,
+          "goroutines": -0.0010322720610313803,
+          "sampled_heap_inuse_space_per_second": 38216.75447248471,
+          "sampled_heap_inuse_objects_per_second": -27.15460424554242,
+          "sampled_heap_alloc_space_per_second": 22309470.599699557,
+          "sampled_heap_alloc_objects_per_second": 4756.218619563834,
+          "rss_bytes_per_second": 123075.1597187736
+        }
+      },
+      "checkpoint_10": {
+        "checkpoint": 10,
+        "elapsed_ms": 115843.44176197052,
+        "num_gc": 64,
+        "profile_gc_stable": true,
+        "profile_gc_brackets": [
+          {
+            "kind": 1,
+            "before_num_gc": 64,
+            "after_num_gc": 64
+          },
+          {
+            "kind": 2,
+            "before_num_gc": 64,
+            "after_num_gc": 64
+          },
+          {
+            "kind": 3,
+            "before_num_gc": 64,
+            "after_num_gc": 64
+          }
+        ],
+        "heap_alloc_allocator": 94783008,
+        "heap_objects_allocator": 53293,
+        "heap_inuse": 98156544,
+        "heap_idle": 30392320,
+        "heap_released": 10690560,
+        "total_alloc": 2537506360,
+        "mallocs": 869377,
+        "frees": 816084,
+        "goroutines": 165,
+        "profiles_sampled_weighted": {
+          "heap": {
+            "alloc_objects": 816591,
+            "alloc_space": 2490269886,
+            "inuse_objects": 106888,
+            "inuse_space": 54356465
+          },
+          "allocs": {
+            "alloc_objects": 816591,
+            "alloc_space": 2490269886,
+            "inuse_objects": 106888,
+            "inuse_space": 54356465
+          },
+          "goroutine": {
+            "goroutine": 165
+          }
+        },
+        "streams": 5,
+        "rss_bytes": 157921280,
+        "smaps_rss_bytes": 157921280,
+        "sockets": 32,
+        "empirical_return": "PASS",
+        "natural_cycles_after_end": 0,
+        "postburst_profile_cycle_eligible": false
+      },
+      "static_moderation_top": "27.47MB 52.99% 52.99%    27.47MB 52.99%  github.com/Wei-Shaw/sub2api/internal/service.NewContentModerationService",
+      "comparison_sha256": "2d46bc5826e470799993f2c6d3f7e88cac8c89dc376fafd67f58da06af6d3319"
+    }
+  },
+  "root_reported_scope": "fixed N5: 10 bursts, 50 requests, 400MiB per protocol; matched idle controls; cleanup 0; same bdb8ef4-prefix native/probe binary; no W2 memory or W3 cancellation patches",
+  "independently_verified_scope": "supplied input custody; runtime scalar contracts; checkpoint allocator snapshots present; OLS slopes; stable RSS process/cgroup identity and within-burst timing; RSS endpoint values present; matched control allocator differences present; supplied pprof text attribution",
+  "missing_actual_evidence": [
+    "full run/build receipts and complete binary hash",
+    "checkpoint acknowledgements and binary profiles",
+    "burst case/READY/DONE receipts and root cleanup receipts",
+    "actual collector source and frozen matching stdlib"
+  ],
+  "limitations": "Numeric observations are consistent with root report, not independent proof of missing resource/effect/tail/cleanup gates. No two natural cycles after any burst; weighted pprof is historical and not equal to current ReadMemStats. No indefinite leak/plateau, orphan reader/slot, data-labeled leak or RSS fix verdict.",
+  "historical_20_rss_return": "FAIL (unchanged)",
+  "future_source_runtime_gates": "reviewed stream/cancel source patches, exact build/binary pin, native/HTTP/WS regression and fresh runtime receipts required; no existing receipt promotion"
+}

@@ -1,0 +1,19 @@
+{"strict_jsonl_invalid_numeric_cases":93,"actual_function":"load","engine":"NOT RUN"}
+✔ strict JSONL numeric evidence cannot pass or poison aggregation in actual load (77.226061ms)
+✔ exact upstream/downstream body volumes for all18 cells; protocol conversion mismatch stays FAIL (60.428058ms)
+✔ near-limit frame qualification has exact integer boundaries and no cap equality (3.019028ms)
+✔ protocol/effect/terminal/text/tool/comment gates and numeric soak boundary remain strict (11.430604ms)
+{"independent_single_corrupted_volume_checks":72}
+{"independent_mixed_numeric_checks":90}
+✔ all 18 matrix cells: one corrupted receipt rejects both signs and both wire sides (55.672507ms)
+✔ all numeric fields: JSON coercion canaries in a mixed five-stream batch fail closed (45.190633ms)
+✔ frame boundaries and actual protocol-conversion frame loss fail (4.251511ms)
+✔ fractional/unsafe counters reject, fractional finite durations pass, synthetic soak retains no physical green (14.475986ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 241.472731

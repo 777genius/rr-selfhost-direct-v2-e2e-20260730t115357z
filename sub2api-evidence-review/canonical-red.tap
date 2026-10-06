@@ -1,0 +1,47 @@
+✔ caller accepts object with real independent reproduction (52.202738ms)
+✖ caller accepts canary-shaped array with real independent reproduction (40.968577ms)
+✖ caller accepts actual local Node wallet execution emitting both numeric examples (78.956805ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 225.208897
+
+✖ failing tests:
+
+test at .spike-inputs/candidate/sub2api-evidence-r2/client-contract.test.mjs:54:3
+✖ caller accepts canary-shaped array with real independent reproduction (40.968577ms)
+  AssertionError [ERR_ASSERTION]: {"errors":["Spike failed at evidence; inspect effects privately before retry."],"effects":["codex","codex","node"]}
+  
+  1 !== undefined
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r1/.spike-inputs/candidate/sub2api-evidence-r2/client-contract.test.mjs:56:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: undefined,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at .spike-inputs/candidate/sub2api-evidence-r2/client-contract.test.mjs:64:1
+✖ caller accepts actual local Node wallet execution emitting both numeric examples (78.956805ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== undefined
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r1/.spike-inputs/candidate/sub2api-evidence-r2/client-contract.test.mjs:68:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: undefined,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

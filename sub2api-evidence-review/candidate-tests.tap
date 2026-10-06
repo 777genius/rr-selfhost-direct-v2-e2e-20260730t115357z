@@ -1,0 +1,30 @@
+✔ caller accepts object with real independent reproduction (44.167554ms)
+✔ caller accepts canary-shaped array with real independent reproduction (38.921083ms)
+✔ caller accepts actual local Node wallet execution emitting both numeric examples (85.015096ms)
+✔ caller denies bad own proof and independent reproduction mismatch (204.404077ms)
+✔ caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals (435.518097ms)
+✔ caller denies reasoning-only final, malformed final, agent failure and unsealed import (7.932663ms)
+✔ numeric proof accepts the existing complete JSON object (0.727949ms)
+✔ numeric proof accepts canary two-object JSON array matching either reported example (0.183347ms)
+✔ numeric proof preserves existing direct and shell-wrapped Node command matching (0.180823ms)
+✔ numeric proof requires exact finite numbers in all three actual fields (0.229046ms)
+✔ numeric proof parses the complete output and never scans fragments or nested objects (0.196187ms)
+✔ numeric proof rejects failed or incomplete tools, reasoning, and wrong commands (0.141356ms)
+✔ A06 successful separate shell-wrapped rules read validates actual source and finding (0.668235ms)
+✔ A06 malformed and fabricated financial success fail inherited validator (0.164449ms)
+✔ A10 E04 streamed UTF8 and missing native terminal rejected (12.537989ms)
+✔ BR04 integrated mismatches deny before any agent effects and receipt (17.760742ms)
+✔ BR04 integrated valid binding projects exact identity and preserves high reasoning (2.812823ms)
+✔ BR04 model metadata cannot authorize mismatched run (1.648813ms)
+✔ BR04 receipt still requires successful terminal and numeric financial finding (4.703732ms)
+✔ BR04 workflow rejects every mismatched receipt before publication (5.149338ms)
+✔ BR04 caller projects both other supported native mappings (3.744405ms)
+✔ BR04 unsealed import path aborts before agent effects and receipt (1.684637ms)
+ℹ tests 22
+ℹ suites 0
+ℹ pass 22
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 870.602421

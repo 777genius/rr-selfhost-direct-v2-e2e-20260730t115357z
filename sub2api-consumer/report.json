@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "status": "BOUNDED_CONSUMER_GLUE_COMPLETE",
+  "source_scope": [
+    "sub2api-spike/customer.mjs",
+    "sub2api-spike/customer.test.mjs",
+    "sub2api-spike/run-client.mjs",
+    "sub2api-spike/run-client.test.mjs",
+    "sub2api-spike/operator/admin-roundtrip.mjs",
+    "sub2api-spike/operator/live-setup.mjs",
+    ".github/workflows/sub2api-gateway-spike.yml",
+    "sub2api-consumer/"
+  ],
+  "real_e2e_verified": false,
+  "production_deployment": false,
+  "external_gates": "NOT_RUN; coordinator-owned limitations; no wait required",
+  "checks": {
+    "node": "v24.21.0",
+    "customer_socket_free": {
+      "pass": 19,
+      "fail": 0,
+      "receipt": "verification/customer-after.tap"
+    },
+    "consumer_socket_free": {
+      "pass": 19,
+      "fail": 0,
+      "receipt": "verification/consumer-offline.tap"
+    },
+    "syntax": {
+      "pass": 8,
+      "receipt": "verification/syntax.json"
+    },
+    "original_customer_test_names_retained": 36,
+    "supplied_76_http_suite": "NOT_RUN",
+    "red_receipts": [
+      "verification/br02-before.tap",
+      "verification/br04-before.tap",
+      "verification/workflow-before.tap",
+      "verification/br05-before.tap"
+    ]
+  },
+  "limitations": [
+    "Actual approved patched-image Go/admin/counting transport/DB-write/drained-work gate NOT_RUN",
+    "General serve.mjs requires separately owned trusted template/installation wiring; bootstrap requires observed standard mode",
+    "SQL seed/cleanup generated but not executed; independent observer must be installed by coordinator",
+    "Installed import manifest/image/UID/FD/lifecycle containment NOT_RUN",
+    "HTTP socket suite, Docker, providers and genuine Actions NOT_RUN",
+    "Linked Git metadata inaccessible after one lock preflight; no Git writes or bypass"
+  ],
+  "ownership": "Only listed paths changed; controller applies/commits/pushes",
+  "artifacts": {
+    "readme": "README.md",
+    "report": "REPORT.md",
+    "hash_manifest": "source-hashes.json",
+    "before_hashes": "before-hashes.json",
+    "operator_tests": "operator.test.mjs",
+    "owned_retirement": "retire-owned.mjs",
+    "verification": "verification/"
+  }
+}

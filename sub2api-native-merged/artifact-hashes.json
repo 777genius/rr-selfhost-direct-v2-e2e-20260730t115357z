@@ -1,0 +1,193 @@
+{
+  "file_count_including_inventory": 37,
+  "files": {
+    "REPORT.md": {
+      "LOC": 11,
+      "bytes": 4678,
+      "sha256": "bf00a84202e642d63f9684930bee2d43ab065131527136d28016cb585bfc5beb"
+    },
+    "RUNBOOK.md": {
+      "LOC": 48,
+      "bytes": 4606,
+      "sha256": "9b74abad5c3b99462f657e8bda47aa1e708a3de3122762e6fc24812d6772e750"
+    },
+    "W2-to-W3.patch": {
+      "LOC": 125,
+      "bytes": 5260,
+      "sha256": "f582207e622753a953d271197b1690a069a42777813f67c46a7d53da75596d1f"
+    },
+    "base-hashes.json": {
+      "LOC": 3324,
+      "bytes": 422975,
+      "sha256": "4047478e2f45d8f3f8cf59283887e3ac146f78c13308d324b40a5876fa8aa75b"
+    },
+    "build.py": {
+      "LOC": 359,
+      "bytes": 25321,
+      "sha256": "e4b297f368451aad0cba26fb336b79dcb529491cf4d91d59389c2ac9554723f8"
+    },
+    "canonical-native.patch": {
+      "LOC": 1623,
+      "bytes": 78765,
+      "sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5"
+    },
+    "canonical-probe.patch": {
+      "LOC": 301,
+      "bytes": 12643,
+      "sha256": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45"
+    },
+    "completion-audit.json": {
+      "LOC": 40,
+      "bytes": 3253,
+      "sha256": "2829d1390ef96dd85b69929f190f4c1158aa0450bb49be7878d31801d8767667"
+    },
+    "component-before-after.json": {
+      "LOC": 127,
+      "bytes": 6776,
+      "sha256": "d5f6dede0b66f043534dc5fb4a61379a9b90eb124f2458826c9170222ed5c01d"
+    },
+    "default-drain-control.json": {
+      "LOC": 22,
+      "bytes": 1004,
+      "sha256": "47ca37c1e6a60639d5ede3c6c92d68f39f9a1bd4bc2bb91caff5cb32fac582e3"
+    },
+    "default-drain-loss.RED-only.patch": {
+      "LOC": 11,
+      "bytes": 545,
+      "sha256": "19c6671cd32cc41f15133c5fe80d34f300a988809d39233174c0e4c5b0a798ba"
+    },
+    "evidence/actual-W2-diagnosis.json": {
+      "LOC": 33,
+      "bytes": 1903,
+      "sha256": "22132b635c8725b3f56e8b565829f581918dd1ef209492216c3a6544fb6d4573"
+    },
+    "evidence/full-preparation-check.json": {
+      "LOC": 67,
+      "bytes": 5054,
+      "sha256": "d9d68f5073635808958e5e8979645dbea26159ee17d64ef7fef4d4225e45bd4b"
+    },
+    "evidence/memory-W2-green.json": {
+      "LOC": 12,
+      "bytes": 376,
+      "sha256": "1172d99f56454a50f2f6a999ac39aa7262d515443d4ac12bcdf368d8579800fc"
+    },
+    "evidence/memory-W2-native.json": {
+      "LOC": 12,
+      "bytes": 378,
+      "sha256": "fb5afced439ae9933beca764d7b69bf1e698aacb628fc633936fb81634a40263"
+    },
+    "evidence/memory-W2-probe.json": {
+      "LOC": 12,
+      "bytes": 376,
+      "sha256": "45350d340d39462cb9585c0bad6db50b91f6ee0e7d4ac6fee0cf9daa035d1f31"
+    },
+    "evidence/memory-W2-red.json": {
+      "LOC": 18,
+      "bytes": 627,
+      "sha256": "958a8b0cc4beab8dddc664ddd586c7a68494d7be64532af5613d2747d395f6f9"
+    },
+    "evidence/memory-W2-review.json": {
+      "LOC": 91,
+      "bytes": 3939,
+      "sha256": "2c78b119c12ebc638ef58742ac02d7401e65e7beb7e5861926e93b8bdae1dbec"
+    },
+    "evidence/offline-checks.json": {
+      "LOC": 25,
+      "bytes": 1459,
+      "sha256": "038f73b28a6270fa03c6bbf358385a113de0cbf0088513d2f0172a9ecc9c4115"
+    },
+    "evidence/source-preservation.json": {
+      "LOC": 33,
+      "bytes": 1668,
+      "sha256": "4226c42f5b91beebbf8cec4fdd44ce48f18db3dc86fdfc1797b5e97c64933e73"
+    },
+    "input-references.json": {
+      "LOC": 487,
+      "bytes": 60147,
+      "sha256": "f734d33cb9bb92bb07fc589042890bf53b53b8839c4d3335fc8b42ada4d1268f"
+    },
+    "interaction-control.json": {
+      "LOC": 19,
+      "bytes": 843,
+      "sha256": "cca89dbb75432f56619639c4d3f87239381b1b66a7b16f38ddf0b6dbd25b899b"
+    },
+    "interaction-replay-loss.RED-only.patch": {
+      "LOC": 22,
+      "bytes": 754,
+      "sha256": "dd7a3c18361403fb3a835548bcf5bfde64a7d798a86886e5b786c1ac5338fc8c"
+    },
+    "manifest.json": {
+      "LOC": 340,
+      "bytes": 14514,
+      "sha256": "a5e265dbde32d70046e07863a4d3abeff15088673d6232768ff4eac913b50440"
+    },
+    "merge-hunks.json": {
+      "LOC": 622,
+      "bytes": 20768,
+      "sha256": "85736562cfd169c6177143147a9f54f62fb06e4f95f81e7f45db3d62ec36052d"
+    },
+    "merged-hashes.json": {
+      "LOC": 3334,
+      "bytes": 424290,
+      "sha256": "3db5c944cb09aaf2da4f9d9ebb409ea62897bbeccfed44c8e68f2da9f158ca15"
+    },
+    "native-patterns.json": {
+      "LOC": 28,
+      "bytes": 1495,
+      "sha256": "90be45eeea80dac7b740269a1fcfcd07c689fac4cfda0a386de656bee8d54dd2"
+    },
+    "native_stream_merged_interaction_test.go": {
+      "LOC": 150,
+      "bytes": 5467,
+      "sha256": "94ef8c31470dd8af1f1a23393ab0659d540fbfb0307663080bb399e3959fd6bc"
+    },
+    "official-hashes.json": {
+      "LOC": 3317,
+      "bytes": 421996,
+      "sha256": "41e90ed9d8fc070584f49d672ac67c251654f6794b1dfb3861a0c871da352a90"
+    },
+    "patchlib.py": {
+      "LOC": 106,
+      "bytes": 4202,
+      "sha256": "2c7e95196d6c11e922bed3a26ad347efac38506980cebd2ed7e3e38ce8ebf9a1"
+    },
+    "prepare.py": {
+      "LOC": 131,
+      "bytes": 5923,
+      "sha256": "952cbd8efae8802be0c6d8791073517d38ff49fd1488c067b5276ae97a88d7a6"
+    },
+    "production.patch": {
+      "LOC": 858,
+      "bytes": 34957,
+      "sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5"
+    },
+    "regression.patch": {
+      "LOC": 2168,
+      "bytes": 84821,
+      "sha256": "f6909228e016be8817057f2f3c5bd5f460550d9139dff19810c8df59d22d466d"
+    },
+    "run-controller.py": {
+      "LOC": 137,
+      "bytes": 8663,
+      "sha256": "c1af5376465df63cd4bed2fd482056bf26dc5b29c7775429748cb35e5ce9c155"
+    },
+    "seal.py": {
+      "LOC": 42,
+      "bytes": 1796,
+      "sha256": "029625076eae443acca177d8a6e150677d03476ea04b14f237b06efe98ec8d79"
+    },
+    "verify.py": {
+      "LOC": 239,
+      "bytes": 13168,
+      "sha256": "ba5189e591c2f9f4b088b835861d294bdcf7762fcb05c5d6c58adf2a4884ac9d"
+    }
+  },
+  "inventory_excludes_self": true,
+  "kind": "plain source/delta handoff",
+  "scanner": {
+    "integration_scanner_execution": "NOT RUN by worker; controller-owned",
+    "no_encoding_or_archives": true,
+    "normal_handoff_limit": 250,
+    "required": "ON"
+  }
+}

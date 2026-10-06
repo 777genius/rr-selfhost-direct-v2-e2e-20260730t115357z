@@ -1,0 +1,13 @@
+{"synthetic_mock_http_duplex":[{"protocol":"responses","mib":8,"wire_bytes":8388608,"max_frame_bytes":1975925},{"protocol":"responses","mib":32,"wire_bytes":33554432,"max_frame_bytes":1975925},{"protocol":"responses","mib":64,"wire_bytes":67108864,"max_frame_bytes":1975925},{"protocol":"messages","mib":8,"wire_bytes":8388608,"max_frame_bytes":1966224},{"protocol":"messages","mib":32,"wire_bytes":33554432,"max_frame_bytes":1966224},{"protocol":"messages","mib":64,"wire_bytes":67108864,"max_frame_bytes":1966224}],"attempts":6,"effects":6,"active":0}
+✔ actual adopted mock over HTTP/Duplex: exact8/32/64MiB and native bounded terminal/effects (315.42484ms)
+✔ actual adopted mock over HTTP/Duplex: paced1/5/20 streams preserve one effect and cleanup (12172.558392ms)
+{"paced_messages_http_duplex":[{"mib":32,"bytes":33554432,"duration_ms":16007.104645967484,"transport":null},{"mib":64,"bytes":67108864,"duration_ms":32006.29904806614,"transport":null}],"attempts":34,"effects":34,"active":0}
+✔ Messages32/64MiB slow discard completes within original65sec deadline over HTTP/Duplex (48017.548941ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 60570.969977

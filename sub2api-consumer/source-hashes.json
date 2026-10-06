@@ -1,0 +1,27 @@
+{
+  "algorithm": "SHA-256",
+  "files": {
+    ".github/workflows/sub2api-gateway-spike.yml": "ae30109a82ac8f75c8c68967235293f755338a7416102198e19d15449525e566",
+    "sub2api-consumer/README.md": "24a9e3b0f4d643fdfd44e80c6c1ad024a757845c916ec06d035886a75f041bbe",
+    "sub2api-consumer/REPORT.md": "853094cb3a83fbacfc9226366b439789470fd9af3b211c1aa43ef5b1c4a5a936",
+    "sub2api-consumer/before-hashes.json": "de29b4f9ed75a70a94499aac124eefe3c3708417ff2bfc0d57d4e79ccb968404",
+    "sub2api-consumer/operator.test.mjs": "2ef1e26704852b2b2ae889aa2df3c4d18b273c021ef2983ff8e52b5a67ddf2ac",
+    "sub2api-consumer/report.json": "cb716b714e59a64d959954882749fbb47f782946489af4f834cba03fff77a5e1",
+    "sub2api-consumer/retire-owned.mjs": "45d87264e8048ca13e81919aefba41c322ea11faa34ddb6e838faf00f856d6f2",
+    "sub2api-consumer/verification/br02-before.tap": "3c4172404d6d04097c9f6ec6cc312317438a55fbda2f59c10c1b798d9854e1b6",
+    "sub2api-consumer/verification/br04-before.tap": "5065d76d16a3e97975077b3f86c8dbe99a0fb885ba52e1e5c811414a3eea3f7c",
+    "sub2api-consumer/verification/br05-before.tap": "2cdc36da79a80958cbc50e8d6844364e4816906604a54fc296974fc5ce88f192",
+    "sub2api-consumer/verification/consumer-offline.tap": "e7ff335ed32407607d1731bd01ce2e0614b6fcefc46c533d8ff4df414cf36ae9",
+    "sub2api-consumer/verification/customer-after.tap": "83f82e0370a2149f7c53a016e21847980f72baf3877b6ad3830a3eaab4ebba82",
+    "sub2api-consumer/verification/preservation.json": "2d70c7fb1abde55694fae0338fd9c49690ae7c36e115cc834a9269e2d9d50770",
+    "sub2api-consumer/verification/syntax.json": "b56fa4d9af78a326431fcfacd9fd7de1025edc27dbbf9fdeece1e834d43710bc",
+    "sub2api-consumer/verification/workflow-before.tap": "4df64bdc6d5a6a666ff820f5daa8b9126fa7cfda629f0cd310363e63e04e57be",
+    "sub2api-spike/customer.mjs": "b8bd9c31fe4de4a4fd8ba04b6c9d25161f07476a928f65228b2b716b22be7508",
+    "sub2api-spike/customer.test.mjs": "1d39fb49db0eb85853ab159e66f66d8a27d955418a400133c8b0f73414969eef",
+    "sub2api-spike/operator/admin-roundtrip.mjs": "3535ce99223d632c7e0ccce719ac9201f6fb883b4a436d0973f472b08a2380c8",
+    "sub2api-spike/operator/live-setup.mjs": "1aee77ea68df897fe01e5f9c661ff9543ddbba87cb1cd7ad0a6d999d53c3794e",
+    "sub2api-spike/run-client.mjs": "484d454a3aacf25c3ea2e21e9400bbaa1fbd5b1615b485c24e6088bc881d2599",
+    "sub2api-spike/run-client.test.mjs": "68dbead2d26c2dd9154f5bde23d9c1cbbe9769ee4ed8692eb40615c443e17f45"
+  },
+  "self_excluded": "sub2api-consumer/source-hashes.json"
+}

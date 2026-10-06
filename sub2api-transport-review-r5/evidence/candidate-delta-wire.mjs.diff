@@ -1,0 +1,11 @@
+--- historical/wire.mjs
++++ repaired/wire.mjs
+@@ -21,7 +21,7 @@
+ // The terminal contains the actual text/tool data; no empty final answer shortcut.
+ export function fixture(protocol, { tool = false, near = false } = {}) {
+   const text = TEXT.repeat(300); // one independently valid >4 KiB text-delta frame
+-  const args = JSON.stringify({ text: near ? 'x'.repeat(1920 * 1024) : TEXT });
++  const args = JSON.stringify({ text: near ? 'x'.repeat(1952 * 1024) : TEXT });
+   const input = JSON.parse(args);
+   if (protocol === 'responses') {
+     let seq = 0;

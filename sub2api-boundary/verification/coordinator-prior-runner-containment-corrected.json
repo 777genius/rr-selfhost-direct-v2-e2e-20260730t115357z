@@ -1,0 +1,28 @@
+{
+  "kind": "real-kernel-uid-boundary",
+  "image": "sha256:db03c4e35b40b92a48217dc97c0c7ff38d73b01d83bfe14aaf22d390c8939f4a",
+  "exit": 0,
+  "live_provider_calls": 0,
+  "containment": {
+    "schema": 1,
+    "evidence_kind": "operator-uid-containment",
+    "status": "PASS",
+    "uid": 1002,
+    "gid": 1002,
+    "groups": [
+      1002
+    ],
+    "parent_environment_denied": true,
+    "sentinel_denied": true,
+    "tool_io": true,
+    "clean_env": [
+      "HOME",
+      "LANG",
+      "PATH",
+      "TMPDIR"
+    ],
+    "same_uid_negative_control_readable": true,
+    "fixture_pinned": true,
+    "hostile_output_symlink_rejected": true
+  }
+}

@@ -1,0 +1,154 @@
+--- a/sub2api-regression-lab/client.mjs
++++ b/sub2api-regression-lab/client.mjs
+@@ -1,23 +1,35 @@
+ import http from 'node:http';
+ import { Inspector, payload } from './wire.mjs';
+ import { mono } from './common.mjs';
+-// One request, streaming discard, no retry/redirect, bounded lifetime and frame size.
++export const slowBytesPerSecond = 2 * 1048576;
++// Streaming discard, one bounded frame, one outstanding pause timer, no retries.
+ export function request(base, key, protocol, id, { toolResult = false, slow = false, onAck, timeout = 65000, onClose } = {}) {
+-  let req, res, timer, done = false;
++  let req, res, timer, pauseTimer, finish, done = false, paceStart, received = 0;
+   const inspector = new Inspector(protocol, onAck);
+   const state = { started_ms: mono(), http_status: null, transport: null, client_cancel_ms: null, client_close_ms: null };
+   const promise = new Promise(resolve => {
+-    const finish = () => {
+-      if (done) return; done = true; clearTimeout(timer); state.client_close_ms = mono(); onClose?.(state.client_close_ms);
++    finish = () => {
++      if (done) return; done = true; clearTimeout(timer); clearTimeout(pauseTimer);
++      state.client_close_ms = mono(); onClose?.(state.client_close_ms);
+       resolve({ ...state, ...inspector.finish(), duration_ms: mono() - state.started_ms });
+     };
+     req = http.request(`${base}/v1/${protocol}`, { method: 'POST', headers: {
+       authorization: `Bearer ${key}`, 'content-type': 'application/json', 'anthropic-version': '2023-06-01' } }, response => {
+       res = response; state.http_status = res.statusCode;
+       res.on('data', chunk => {
++        if (done) return;
+         try { if (res.statusCode === 200) inspector.push(chunk); }
+         catch { inspector.summary.malformed = true; state.transport = 'invalid_stream'; res.destroy(); req.destroy(); finish(); }
+-        if (slow && !done) { res.pause(); setTimeout(() => res.resume(), 5); }
++        if (slow && !done) {
++          paceStart ??= mono(); received += chunk.length;
++          // Cumulative byte debt: TCP fragmentation never adds a fixed chunk penalty.
++          const due = paceStart + received * 1000 / slowBytesPerSecond;
++          const delay = due - mono();
++          if (delay > 0) {
++            res.pause(); clearTimeout(pauseTimer);
++            pauseTimer = setTimeout(() => { pauseTimer = undefined; if (!done && !res.destroyed) res.resume(); }, delay);
++          }
++        }
+       });
+       res.once('end', finish); res.once('aborted', () => { state.transport ??= 'aborted'; finish(); });
+       res.once('error', () => { state.transport ??= 'response_error'; finish(); });
+@@ -26,6 +38,6 @@
+     req.once('error', () => { state.transport ??= 'connection_error'; finish(); });
+     req.end(JSON.stringify(payload(protocol, id, toolResult)));
+   });
+-  return { promise, cancel() { state.client_cancel_ms ??= mono(); state.transport ??= 'client_cancel'; res?.destroy(); req.destroy(); }, state };
++  return { promise, cancel() { if (done) return; state.client_cancel_ms ??= mono(); state.transport ??= 'client_cancel'; res?.destroy(); req.destroy(); finish(); }, state };
+ }
+ export const success = r => r.http_status === 200 && !r.transport && !r.failed && !r.malformed && r.terminal_ms !== null;
+--- a/sub2api-regression-lab/common.mjs
++++ b/sub2api-regression-lab/common.mjs
+@@ -31,7 +31,7 @@
+   for (const key of ['source_sha', 'image', 'instance', 'variant', 'patch_sha256', 'source_manifest_sha256', 'cgroup_limit_bytes', 'container_id'])
+     must(expected[key] === observed[key], 'DEPLOYED_PIN_MISMATCH');
+   must(observed.inspected === true && Number.isSafeInteger(observed.engine_pid) && observed.engine_pid > 0 && observed.clock === 'linux-CLOCK_MONOTONIC', 'DEPLOYMENT_OBSERVATION_REQUIRED');
+-  must(/^[a-f0-9]{64}$/.test(observed.container_id), 'ROOT_CONTAINER_ID_REQUIRED'); return { ...expected, engine_pid: observed.engine_pid, clock: observed.clock, container_id: observed.container_id };
++  return { ...expected, engine_pid: observed.engine_pid, clock: observed.clock };
+ }
+ export async function loadConfig(path = '/private/lab.json') {
+   const c = validateConfig(await jsonFile(path));
+--- a/sub2api-regression-lab/compose.example.yaml
++++ b/sub2api-regression-lab/compose.example.yaml
+@@ -12,6 +12,7 @@
+   networks: [lab]
+   volumes:
+     - ./sub2api-regression-lab:/lab/sub2api-regression-lab:ro
++    - ./sub2api-transport-r2/adapter.mjs:/lab/sub2api-transport-r2/adapter.mjs:ro
+     - ./sub2api-spike/broker.mjs:/lab/sub2api-spike/broker.mjs:ro
+     - ./sub2api-spike/util.mjs:/lab/sub2api-spike/util.mjs:ro
+     - ./sub2api-spike/native-errors.mjs:/lab/sub2api-spike/native-errors.mjs:ro
+--- a/sub2api-regression-lab/mock.mjs
++++ b/sub2api-regression-lab/mock.mjs
+@@ -80,7 +80,7 @@
+         for (; index < f.early && !res.destroyed; index++) await write(f.frames[index]);
+         const comment = Buffer.from(`: ${'x'.repeat(16380)}\n\n`);
+         while (remaining > 0 && !res.destroyed) {
+-          const size = Math.min(remaining, comment.length);
++          const size = remaining <= comment.length + 4 ? remaining : comment.length;
+           if (size < 5) { await write(Buffer.from(': x\n\n')); remaining = 0; }
+           else { await write(size === comment.length ? comment : Buffer.from(`: ${'x'.repeat(size - 4)}\n\n`)); remaining -= size; }
+         }
+--- a/sub2api-regression-lab/run.mjs
++++ b/sub2api-regression-lab/run.mjs
+@@ -7,7 +7,7 @@
+ import { models, CALL, TOOL } from './wire.mjs';
+ import { cancellationVerdict, uncertaintyVerdict } from './receipts.mjs';
+ import { cases, budget } from './plan.mjs';
+-import { telemetryVerdict } from '../sub2api-telemetry-analysis/adapter-proposal.mjs';
++import { telemetryVerdict } from '../sub2api-transport-r2/adapter.mjs';
+ const out = '/evidence';
+ async function waitFor(c, id, predicate, ms = 6000) {
+   const end = Math.min(mono() + ms, c.deadline);
+@@ -161,12 +161,12 @@
+   } catch { return []; }
+ }
+ async function load(c, spec, tenant, row, clients) {
+-  // Coordinator must refresh deployment/config and inspect a new container per case.
++  row.functional_status = 'NOT RUN';
+   const ready = JSON.parse(await readFile(`/telemetry/${spec.id}.ready.json`, 'utf8'));
+-  must(ready.schema === 'fresh-lifetime-v1' && ready.fresh_container_inspected === true &&
++  must(ready.schema === 'raw-observation-v2' && ready.fresh_container_inspected === true &&
+     ready.engine_pid === c.observed.engine_pid && ready.instance === c.observed.instance &&
+     ready.container_id === c.observed.container_id, 'FRESH_ENGINE_HANDSHAKE_REQUIRED');
+-  const identity = Object.fromEntries(['pid_start_ticks', 'cgroup_path', 'cgroup_device', 'cgroup_inode', 'container_id'].map(k => [k, ready[k]]));
++  const identity = Object.fromEntries(['pid_start_ticks', 'cgroup_path', 'cgroup_device', 'cgroup_inode', 'container_id', 'exe_device', 'exe_inode'].map(k => [k, ready[k]]));
+   const meta = { id: spec.id, ...c.observed, ...identity, streams: spec.streams,
+     telemetry_ready: ready, started_ms: mono(), ended_ms: null };
+   await save(`${out}/${spec.id}.start.json`, { ...meta, run_id: c.run_id });
+@@ -184,10 +184,10 @@
+   try {
+     await control(c, 'rule', { id: spec.id, mode: spec.stage === 'memory' ? 'memory' : 'healthy', mib: spec.mib });
+     const count = spec.count ?? spec.streams;
+-    while (results.length < count && !stopping && mono() < c.deadline - 3000) {
++    while (results.length < count && !stopping && mono() < c.deadline - 8500) {
+       const n = Math.min(spec.streams, count - results.length);
+       const batch = Array.from({ length: n }, () => request(c.engine_url, tenant.key, spec.protocol, spec.id,
+-        { slow: spec.stage === 'memory', timeout: Math.max(1, Math.min(60000, c.deadline - mono() - 3000)) }));
++        { slow: spec.stage === 'memory', timeout: Math.max(1, Math.min(60000, c.deadline - mono() - 8500)) }));
+       clients.push(...batch); results.push(...await Promise.all(batch.map(p => p.promise)));
+       if (results.some(r => !success(r))) break;
+     }
+@@ -199,10 +199,17 @@
+     const valid = results.length === count && results.every(success) && row.upstream.length === count &&
+       row.upstream.every(r => r.effects === 1 && r.finished && r.identity === spec.protocol) &&
+       (spec.stage !== 'memory' || results.every(r => r.bytes >= spec.mib * MiB && r.text_delta_bytes > 4096 && r.tool_id !== null && r.comments > 0));
++    row.functional_status = valid ? 'PASS' : 'FAIL';
+     row.status = valid && !row.safety_stop ? 'PASS' : 'FAIL'; row.reason = valid ? 'FINITE_STREAM_PROTOCOL_AND_EFFECT_GATE' : 'LOAD_LOSS_DUPLICATE_OR_STUCK';
+     meta.ended_ms = mono(); await save(`${out}/${spec.id}.end.json`, meta);
+-    await sleep(2000);
+-    row.memory_envelope = telemetryVerdict(await telemetry(spec.id), meta, ready);
++    await sleep(5000);
++    let done;
++    const ackDeadline = Math.min(c.deadline, meta.ended_ms + 5500);
++    while (mono() < ackDeadline) {
++      try { done = JSON.parse(await readFile(`/telemetry/${spec.id}.done.json`, 'utf8')); break; } catch {}
++      await sleep(25);
++    }
++    row.memory_envelope = telemetryVerdict(await telemetry(spec.id), meta, ready, { done });
+     if (row.memory_envelope.status === 'FAIL') row.status = 'FAIL';
+     row.acceptance_status = row.status === 'PASS' && row.memory_envelope.status === 'NOT RUN' ? 'NOT RUN' : row.status;
+   } finally { clearInterval(watchdog); }
+--- a/sub2api-regression-lab/wire.mjs
++++ b/sub2api-regression-lab/wire.mjs
+@@ -21,7 +21,7 @@
+ // The terminal contains the actual text/tool data; no empty final answer shortcut.
+ export function fixture(protocol, { tool = false, near = false } = {}) {
+   const text = TEXT.repeat(300); // one independently valid >4 KiB text-delta frame
+-  const args = JSON.stringify({ text: near ? 'x'.repeat(960 * 1024) : TEXT });
++  const args = JSON.stringify({ text: near ? 'x'.repeat(1920 * 1024) : TEXT });
+   const input = JSON.parse(args);
+   if (protocol === 'responses') {
+     let seq = 0;

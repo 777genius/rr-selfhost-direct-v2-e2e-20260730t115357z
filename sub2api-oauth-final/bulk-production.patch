@@ -1,0 +1,69 @@
+--- a/backend/internal/repository/account_repo.go
++++ b/backend/internal/repository/account_repo.go
+@@ -3313,7 +3313,7 @@
+ 		// Validate the whole merged document, not only submitted keys.
+ 		whereClause += " AND " + oauthIdentityWritePredicate("(COALESCE(credentials, '{}'::jsonb) || "+credentialPlaceholder+"::jsonb)")
+ 	}
+-	query := "UPDATE accounts SET " + joinClauses(setClauses, ", ") + whereClause
++	query := "UPDATE accounts SET " + joinClauses(setClauses, ", ") + whereClause + " RETURNING id"
+ 
+ 	baseCtx := ctx
+ 	contextTx := dbent.TxFromContext(ctx)
+@@ -3334,13 +3334,36 @@
+ 		}
+ 	}
+ 
+-	result, err := exec.ExecContext(ctx, query, args...)
++	// RETURNING is the authoritative row boundary after PostgreSQL rechecks
++	// the current-row predicate. Preflight targets cannot authorize publication.
++	updatedRows, err := exec.QueryContext(ctx, query, args...)
+ 	if err != nil {
+ 		return 0, err
+ 	}
+-	rows, err := result.RowsAffected()
+-	if err != nil {
++	defer updatedRows.Close()
++	updatedSet := make(map[int64]struct{})
++	for updatedRows.Next() {
++		var id int64
++		if err := updatedRows.Scan(&id); err != nil {
++			return 0, err
++		}
++		updatedSet[id] = struct{}{}
++	}
++	if err := updatedRows.Err(); err != nil {
+ 		return 0, err
++	}
++	if err := updatedRows.Close(); err != nil {
++		return 0, err
++	}
++	rows := int64(len(updatedSet))
++	// Preserve requested order, once per actual updated ID, independently of
++	// PostgreSQL's unspecified RETURNING order and duplicate input targets.
++	updatedIDs := make([]int64, 0, len(updatedSet))
++	for _, id := range ids {
++		if _, updated := updatedSet[id]; updated {
++			updatedIDs = append(updatedIDs, id)
++			delete(updatedSet, id)
++		}
+ 	}
+ 	if updates.ProbeEnabled != nil {
+ 		expectedRows := int64(0)
+@@ -3357,7 +3380,7 @@
+ 		}
+ 	}
+ 	if rows > 0 {
+-		payload := map[string]any{"account_ids": ids}
++		payload := map[string]any{"account_ids": updatedIDs}
+ 		if err := enqueueSchedulerOutbox(ctx, exec, service.SchedulerOutboxEventAccountBulkChanged, nil, nil, payload); err != nil {
+ 			return 0, err
+ 		}
+@@ -3376,7 +3399,7 @@
+ 			shouldSync = true
+ 		}
+ 		if shouldSync {
+-			r.syncSchedulerAccountSnapshots(baseCtx, ids)
++			r.syncSchedulerAccountSnapshots(baseCtx, updatedIDs)
+ 		}
+ 	}
+ 	return rows, nil

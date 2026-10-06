@@ -1,0 +1,236 @@
+{
+  "blocking_condition": "Exact original diagnostic raw profiles/runtime/build custody and actual usage batch insertion bytes are unavailable in permitted current workspace.",
+  "current_turn_progress": [
+    "Independently corroborated all four pprof text totals/type/Build ID against exact supplied analysis totals at displayed precision.",
+    "Exhaustively checked non-test service source references to moderation health state and pinned missing batch source hash.",
+    "Produced requirement-by-requirement completion audit and minimal read-only missing-evidence manifest."
+  ],
+  "exhaustive_health_map_reference_evidence": [
+    {
+      "line": 544,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "keyHealthMu              sync.Mutex"
+    },
+    {
+      "line": 545,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "keyHealth                map[string]*contentModerationKeyHealth"
+    },
+    {
+      "line": 608,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "keyHealth:            make(map[string]*contentModerationKeyHealth),"
+    },
+    {
+      "line": 2344,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "s.keyHealthMu.Lock()"
+    },
+    {
+      "line": 2345,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "defer s.keyHealthMu.Unlock()"
+    },
+    {
+      "line": 2346,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "state := s.keyHealth[hash]"
+    },
+    {
+      "line": 2355,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "s.keyHealthMu.Lock()"
+    },
+    {
+      "line": 2356,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "defer s.keyHealthMu.Unlock()"
+    },
+    {
+      "line": 2369,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "s.keyHealthMu.Lock()"
+    },
+    {
+      "line": 2370,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "defer s.keyHealthMu.Unlock()"
+    },
+    {
+      "line": 2389,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "s.keyHealthMu.Lock()"
+    },
+    {
+      "line": 2390,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "defer s.keyHealthMu.Unlock()"
+    },
+    {
+      "line": 2407,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "s.keyHealthMu.Lock()"
+    },
+    {
+      "line": 2408,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "defer s.keyHealthMu.Unlock()"
+    },
+    {
+      "line": 2437,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "if s.keyHealth == nil {"
+    },
+    {
+      "line": 2438,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "s.keyHealth = make(map[string]*contentModerationKeyHealth)"
+    },
+    {
+      "line": 2440,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "state := s.keyHealth[hash]"
+    },
+    {
+      "line": 2443,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "s.keyHealth[hash] = state"
+    },
+    {
+      "line": 2555,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "s.keyHealthMu.Lock()"
+    },
+    {
+      "line": 2556,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "defer s.keyHealthMu.Unlock()"
+    },
+    {
+      "line": 2557,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "state := s.keyHealth[hash]"
+    },
+    {
+      "line": 2583,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "s.keyHealthMu.Lock()"
+    },
+    {
+      "line": 2584,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "defer s.keyHealthMu.Unlock()"
+    },
+    {
+      "line": 2585,
+      "path": ".spike-inputs/source/service/content_moderation.go",
+      "text": "state := s.keyHealth[hash]"
+    }
+  ],
+  "goal_complete": false,
+  "goal_status": "blocked",
+  "missing_evidence_manifest": "missing-evidence.json",
+  "moderation_raw_body_read_lines": [
+    921,
+    964,
+    972
+  ],
+  "previous_goal_turn_classification": "progress",
+  "required_evidence": [
+    {
+      "evidence": [
+        "source-verification.json",
+        "input-hash-ledger.json"
+      ],
+      "id": "R1",
+      "limit": "1377 files, not every backend/build byte; omitted batch insertion is separately R4.",
+      "requirement": "Pin current source to final production 16bc",
+      "state": "PROVEN_FOR_SUPPLIED_SOURCE_SCOPE"
+    },
+    {
+      "evidence": {
+        "messages-000": {
+          "build_id_text": "413566fd6e71ea2f3a464e9bcc8dc96d39738862",
+          "build_sha256_custody": "UNVERIFIED",
+          "displayed_total": 14136.12,
+          "displayed_unit": "kB",
+          "exact_summary_total_bytes": 14475385,
+          "rounding_consistent": true,
+          "sha256": "5560689e16934d19fada9b890e76314c0f1ddc347b73905e87a9a5c7ee0466dd"
+        },
+        "messages-010": {
+          "build_id_text": "413566fd6e71ea2f3a464e9bcc8dc96d39738862",
+          "build_sha256_custody": "UNVERIFIED",
+          "displayed_total": 60.23,
+          "displayed_unit": "MB",
+          "exact_summary_total_bytes": 63154616,
+          "rounding_consistent": true,
+          "sha256": "d47c55436dc5dcfae6b7f08f147fa4b2b673bbfbcd8c1a9b0a97ea5a6c638726"
+        },
+        "responses-000": {
+          "build_id_text": "413566fd6e71ea2f3a464e9bcc8dc96d39738862",
+          "build_sha256_custody": "UNVERIFIED",
+          "displayed_total": 13985.75,
+          "displayed_unit": "kB",
+          "exact_summary_total_bytes": 14321406,
+          "rounding_consistent": true,
+          "sha256": "3fdabfa6b440052c96a7d7b9fc8b6cebfddbd7173828b3e1eecf0f4c24bb5488"
+        },
+        "responses-010": {
+          "build_id_text": "413566fd6e71ea2f3a464e9bcc8dc96d39738862",
+          "build_sha256_custody": "UNVERIFIED",
+          "displayed_total": 66.39,
+          "displayed_unit": "MB",
+          "exact_summary_total_bytes": 69612209,
+          "rounding_consistent": true,
+          "sha256": "39f661f788284b22ce3b910327ac644a06f46514acd015fc8f98583638a0b48f"
+        }
+      },
+      "id": "R2",
+      "limit": "Totals/type/text Build ID corroborate analyses. Raw binary profiles, acknowledgements, runtime NDJSON and complete build pins absent.",
+      "requirement": "Use exact natural-GC profile data from the final-source diagnostic binary",
+      "state": "INCOMPLETE"
+    },
+    {
+      "evidence": [
+        "findings.json#fixed_allocation",
+        "findings.json#findings",
+        "findings.json#protocols"
+      ],
+      "id": "R3",
+      "limit": "Source reference risks are verified; no causal fraction or live sampled per-request ownership is claimed.",
+      "requirement": "Distinguish current retained references from static/runtime/allocator effects without unqualified live attribution",
+      "state": "PROVEN_AS_QUALIFIED_SOURCE_AND_SUMMARY_ASSESSMENT"
+    },
+    {
+      "expected_sha256": "5e10557e70be455a904bd40f3a695fd39d2aad5fe3b01eb1cb639d829ac11954",
+      "id": "R4",
+      "limit": "Supplied header, worker pool and sampled top do not include insertion/batcher implementation.",
+      "missing_source": "backend/internal/repository/usage_log_repo_insert.go",
+      "requirement": "Independently audit actual usage batch implementation",
+      "state": "INCOMPLETE"
+    },
+    {
+      "evidence": [
+        "REPORT.md",
+        "input-hash-ledger.json entries sub2api-transport-r4/adapter.mjs"
+      ],
+      "id": "R5",
+      "limit": "Exact final native twenty rows not present; diagnostics must not supersede that result. No plateau or universal leak verdict.",
+      "requirement": "Explain strict empirical RSS failure and practical stability implications",
+      "state": "PROVEN_CRITERION_AND_LIMITS;FINAL_ROWS_USER_REPORTED"
+    },
+    {
+      "evidence": [
+        "input-hash-ledger.json",
+        "artifact-hashes.json"
+      ],
+      "id": "R6",
+      "limit": "Only sub2api-memory-final-audit artifacts written; no Go/network/Docker/Git writes or subagents.",
+      "requirement": "Respect read-only production scope and provide reviewable artifacts with full input hash references",
+      "state": "PROVEN_FOR_THIS_WORK"
+    }
+  ],
+  "same_blocking_condition_observed_goal_turns": 3,
+  "schema": "memory-final-completion-audit-v1"
+}

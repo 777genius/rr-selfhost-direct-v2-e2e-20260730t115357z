@@ -1,0 +1,32 @@
+{
+  "copied_exact_before_edits": true,
+  "files": {
+    "prepare-go.py": "e059edcaabf7337ffc6333c08228e7f8baee3b3b425dfc64665395aafe35dbe0",
+    "verify.py": "ddb45da7f043776758548ce46532ed68f65e112bff3ec5c2c37c626b27d1a8dd",
+    "SOURCE.json": "ebc687cc92b8b9996078d3d15a502dcd72ac52e00a562714476b55dda8b166fc",
+    "REPORT.md": "af8a6beedec86958a7c67c1b1b15ad47c11694efd96086b94506d8eea3c3ce13",
+    "completion-audit.json": "6ecebe0d6d3c1792d7555eaab781cab1343ef7073eac1b72bbaa529a62d0b1e1",
+    "preservation-patterns.json": "90be45eeea80dac7b740269a1fcfcd07c689fac4cfda0a386de656bee8d54dd2",
+    "artifact-manifest.json": "fbdd2db179c363d17ea7e2646eabea296820ac1d82b2668047449efd6ae3c4fc",
+    "ROOT-COMMANDS.md": "38fad49366200ec73c188bd3ea6ca3c478ed58ccda1a765fcd86e3fb2f0e4e64",
+    "run-go.py": "ce1ac9d05401438bc19d774b56c2a1bc7e94fb61ea267c3978551fcfb407a572",
+    "package.py": "05fb7262e8b6cff88d274f0d84d8edcde22e6a34a9c8ef49be5bd6a4e9256aeb",
+    "patches/messages-read-ahead.production.patch": "15d321a803daf8d000abe5356b91b599f8ea014252f51c36940660b1ea3e69ff",
+    "patches/tests-stage.patch": "e82cf8dfa27deb84c8ca78466c3827c32e1442e2cc8b4eb77afd0bc798139cda",
+    "patches/responses-prefix.production.patch": "546cfbbef7ce802e49250197c022a7c1179fc1ea69212e3cb34a2a78eaa52bd2",
+    "patches/tests-behavior.patch": "f5f7813fa9c4694a30ee8cb2e3380091fc42211579ae8c2f9d3127f71c9922fb",
+    "patches/production.patch": "5f1e3abf6cc0fa8369f615a3e509eb9890915252dded83fda9b7e2f916313ccd",
+    "evidence/input-verification.json": "6d0f86dfb2fcdf58f8cedad8b338e4783de224d13b30f07ff5018383a9207dc8",
+    "evidence/verification-plan.json": "ca6301ef71d594f6d162619d89205f57cfa5fc77317316620da7cdacc652bf27",
+    "evidence/offline-verification.json": "5bf5129a83a545c2bea974e235b4707b0d4058b61fdcbda06672ebd47af1f1de",
+    "evidence/historical-verdicts.json": "1fcba97bccfe3d9f6cda6338471ad9ad247cbedaec34c14d65ed20e989c7b281",
+    "tests/backend/internal/service/stream_memory_lifecycle_test.go": "c626ffec30727787f053bd4f7b18a13412291572063553a0ed4ded75adcfe4c9",
+    "tests/backend/internal/service/stream_memory_stage_test.go": "d1be61e5e5547873d2635010e0807459af388226fbdfbe405860adb53f215858",
+    "tests/backend/internal/service/stream_memory_volume_test.go": "e75d15f5cb6096084fcd39ceaf1db4f790cf7a29b29b1f68c4ac956c6d110a73",
+    "tests/backend/internal/service/stream_memory_behavior_test.go": "ce8fc9ef475305ea10654e57099e6852d795506bae8bb139199712ce976ce0d2",
+    "production/backend/internal/service/openai_gateway_passthrough.go": "93baafd90df032bb5880ecf44037bcfb82e928ff7826324cd124edd46bf73c4b",
+    "production/backend/internal/service/gateway_anthropic_passthrough.go": "9ef4adbc7dc4c2567e6d8ca68a070725c51018639813c64798e465d120b00871",
+    "production/backend/internal/service/openai_first_output_timeout.go": "316e2fd01518ea636bb0ed08870542e0beca3872008957bd816acd2586496166",
+    "production/backend/internal/service/openai_gateway_messages_anthropic_native.go": "8820231ac3431a45ebba1303cb40e14920548f01e70a9e50eec6ee4a7b6b4035"
+  }
+}

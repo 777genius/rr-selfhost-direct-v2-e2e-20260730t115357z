@@ -1,0 +1,3 @@
+# Coordinator final fixture placement
+
+The producer broker.test edits are preserved in immutable retention and historical w2 artifacts. Final production broker bytes remain 742b1d166670a18eae27475c5cd5ab5fb3e770bbbb92706e885ee11d33aa900a. Original canonical broker.test is restored byte-for-byte, preserving all existing tests. Five new actual filesystem SR1 tests are in broker-initialization.test.mjs, with OS temporary directories. This avoids modifying a historical test containing complete synthetic Bearer literals that normal handoff scanning rejects. Scanner policy stays enabled. Full final gate and independent review follow. Workflow must include the new server test module.

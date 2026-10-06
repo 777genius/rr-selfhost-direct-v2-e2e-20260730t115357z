@@ -1,0 +1,7 @@
+{
+  "sub2api-spike/customer.mjs": "35f4c44a3a1a02e2c2d6c21f029abbfc4e5d0fb57ed643c9248850b3df3ce99d",
+  "sub2api-spike/customer.test.mjs": "d4f9f0fcb7d7899f4e05803f816b34ae7bae0a689c528945f22ea7c16c01abdf",
+  "sub2api-spike/run-client.mjs": "21637ea635aec5e9533c21c93c118c08ca028706ce7517038519f5f127e6bfcb",
+  "sub2api-spike/operator/admin-roundtrip.mjs": "64c13139293c5f6237aafc5b5759b8e986407d9b753568e64bc1daf6bb5498d2",
+  ".github/workflows/sub2api-gateway-spike.yml": "7b8b939bf734b9e31a878330c74a9ae33ba14eb4861e71bd4578497b35c269ab"
+}

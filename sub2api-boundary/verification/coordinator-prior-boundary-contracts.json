@@ -1,0 +1,10 @@
+{
+  "kind": "isolated-node-contract",
+  "worker_patch_sha256": "a292e147a7630c44d6592f2239a86120ca1d782ce5c8b611d944e095a8866805",
+  "exit": 0,
+  "duration_s": 3.41,
+  "node_image": "node:24.21.0-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1",
+  "network": "none-loopback-only",
+  "summary": [],
+  "failed_tests": []
+}

@@ -1,0 +1,158 @@
+{
+  "sub2api-fork/SOURCE.json": {
+    "manifest_sha256": "cdc4bb339ebbf8af66ec457214c08e28b6e231d2b813f299cee4392fc2fa2053",
+    "files": [
+      {
+        "path": "backend/internal/handler/openai_compatible_reasoning_review_test.go",
+        "expected": "1139abc487ff687fe42b2f8f10609c4395d776505b69ebf37976c89368a58b68",
+        "actual": "1139abc487ff687fe42b2f8f10609c4395d776505b69ebf37976c89368a58b68",
+        "match": true
+      },
+      {
+        "path": "backend/internal/handler/openai_gateway_reasoning_failover.go",
+        "expected": "91b754a8824db9438af6db2b9fd9199c9652ec602e059852014d9a46d0dfa10e",
+        "actual": "91b754a8824db9438af6db2b9fd9199c9652ec602e059852014d9a46d0dfa10e",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/account.go",
+        "expected": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587",
+        "actual": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/independent_reference_namespace_test.go",
+        "expected": "5863f7d72bf5d31865f4a162c614895358fefdc042de9b6128f4d75021e9fa47",
+        "actual": "5863f7d72bf5d31865f4a162c614895358fefdc042de9b6128f4d75021e9fa47",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_compatible_reasoning_policy_test.go",
+        "expected": "30e59f3de298e9f1a82a0afe570f5207e82aafc3ab0aaf2f0cfefe191d35536d",
+        "actual": "30e59f3de298e9f1a82a0afe570f5207e82aafc3ab0aaf2f0cfefe191d35536d",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_compatible_reasoning_repair_test.go",
+        "expected": "6a9013541f2d9b893ee2193429ca2d88228c36b6f2121a3a3f5d4510675febff",
+        "actual": "6a9013541f2d9b893ee2193429ca2d88228c36b6f2121a3a3f5d4510675febff",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_compatible_reasoning_review_test.go",
+        "expected": "f9d388154edc0313c9265bcde71ee72ff7583e3ec3895e80ea4380fa0a16d976",
+        "actual": "f9d388154edc0313c9265bcde71ee72ff7583e3ec3895e80ea4380fa0a16d976",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_gateway_forward.go",
+        "expected": "ae1542077e98c581d9f5ee0e4e6afc4fbeffce76cefef992f38d6aa1f9f4688f",
+        "actual": "ae1542077e98c581d9f5ee0e4e6afc4fbeffce76cefef992f38d6aa1f9f4688f",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_gateway_passthrough.go",
+        "expected": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3",
+        "actual": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_gateway_request_body.go",
+        "expected": "799e9e31bfc445ad482096fb515c80198cb9f9f6aff9f41de89c7231b5b8b746",
+        "actual": "799e9e31bfc445ad482096fb515c80198cb9f9f6aff9f41de89c7231b5b8b746",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_gateway_upstream_errors.go",
+        "expected": "d38f5ff1f3ebf09bdd782cebf817cf3c25df5a70e10613a616d89f7b25d63355",
+        "actual": "d38f5ff1f3ebf09bdd782cebf817cf3c25df5a70e10613a616d89f7b25d63355",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_responses_item_id.go",
+        "expected": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2",
+        "actual": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_responses_namespace.go",
+        "expected": "1b94667ececbd2c3721aafdd7c0f9ca90216f293090a9e0f69e4d31a564d2467",
+        "actual": "1b94667ececbd2c3721aafdd7c0f9ca90216f293090a9e0f69e4d31a564d2467",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_responses_rejected_field_retry.go",
+        "expected": "f600f1df274c10ebc3200d6e1e2fbe72b59b2721f8814af015e531483900537f",
+        "actual": "f600f1df274c10ebc3200d6e1e2fbe72b59b2721f8814af015e531483900537f",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_ws_forwarder_ingress.go",
+        "expected": "b10e7e25e643f436ed871e7803a6c929a2677bc10b49f4c0e450f150c1fb315a",
+        "actual": "b10e7e25e643f436ed871e7803a6c929a2677bc10b49f4c0e450f150c1fb315a",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_ws_forwarder_v2.go",
+        "expected": "bdf33814241c22951c9ea9a4faa50b1c6d4b701f62584bf267cd5e0df9f0d43c",
+        "actual": "bdf33814241c22951c9ea9a4faa50b1c6d4b701f62584bf267cd5e0df9f0d43c",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_ws_http_bridge.go",
+        "expected": "1dd995c6a362947ee5b0aef18f1fccd3ced6eb2fcb0a81914ffe012559c19a8f",
+        "actual": "1dd995c6a362947ee5b0aef18f1fccd3ced6eb2fcb0a81914ffe012559c19a8f",
+        "match": true
+      }
+    ],
+    "all_match": true
+  },
+  "sub2api-probe-fork/SOURCE.json": {
+    "manifest_sha256": "adb7d48a63a54be146c30c1b0042c43d94a0a13a043c4d19e4090a349692b882",
+    "files": [
+      {
+        "path": "backend/internal/handler/admin/account_capability_probe_test.go",
+        "expected": "02713e466cf95581cfe2b3d3c7df98cd76cb4aad0dde2070b3bc8bfa762bd7a4",
+        "actual": "02713e466cf95581cfe2b3d3c7df98cd76cb4aad0dde2070b3bc8bfa762bd7a4",
+        "match": true
+      },
+      {
+        "path": "backend/internal/handler/admin/account_handler.go",
+        "expected": "400339bed0a0d6f5c6ec3e9a781555b2c89e459ab0e0ce2a3a21860a5bf85044",
+        "actual": "400339bed0a0d6f5c6ec3e9a781555b2c89e459ab0e0ce2a3a21860a5bf85044",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_apikey_responses_probe.go",
+        "expected": "56a41272e23a13c8dcb3c0fde6ea0b1948ad5e1641367be0c2f9587ddd3b7bba",
+        "actual": "56a41272e23a13c8dcb3c0fde6ea0b1948ad5e1641367be0c2f9587ddd3b7bba",
+        "match": true
+      },
+      {
+        "path": "backend/internal/service/openai_capability_probe_duplicate_test.go",
+        "expected": "dc5b7cf0a37c9fffe4af8c1d8f649b86bd8439e547c777130587ffc55b0e6cdf",
+        "actual": "dc5b7cf0a37c9fffe4af8c1d8f649b86bd8439e547c777130587ffc55b0e6cdf",
+        "match": true
+      }
+    ],
+    "all_match": true
+  },
+  "release-prefix": {
+    "target": "backend/internal/service/openai_gateway_passthrough.go",
+    "input_sha256": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3",
+    "proposed_sha256": "e680929dc8ee1b24cd68c673ccacdc2be916ae01b682954f2a5d4eda3b46d8bf",
+    "added_lines": 1,
+    "removed_lines": 1,
+    "applied": false,
+    "Go_validation": "NOT RUN"
+  },
+  "messages-backpressure": {
+    "target": "backend/internal/service/gateway_anthropic_passthrough.go",
+    "input_sha256": "fd03d4dafdd8e2c82feace54fcba151f831d526944488a4454ab4926c4a9ece2",
+    "proposed_sha256": "8a4e6882778681fd1629f5442004a33962ac338d490d0c57580f1cce2634a565",
+    "added_lines": 1,
+    "removed_lines": 1,
+    "applied": false,
+    "Go_validation": "NOT RUN"
+  }
+}

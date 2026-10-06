@@ -1,0 +1,44 @@
+--- historical/run.mjs
++++ repaired/run.mjs
+@@ -7,7 +7,7 @@
+ import { models, CALL, TOOL } from './wire.mjs';
+ import { cancellationVerdict, uncertaintyVerdict } from './receipts.mjs';
+ import { cases, budget } from './plan.mjs';
+-import { telemetryVerdict } from '../sub2api-transport-r2/adapter.mjs';
++import { telemetryVerdict } from '../sub2api-transport-r4/adapter.mjs';
+ const out = '/evidence';
+ async function waitFor(c, id, predicate, ms = 6000) {
+   const end = Math.min(mono() + ms, c.deadline);
+@@ -192,13 +192,27 @@
+       if (results.some(r => !success(r))) break;
+     }
+     row.upstream = await waitFor(c, spec.id, x => x.length > 0 && x.every(r => r.close_ms !== null), 3000);
+-    const latencies = results.map(r => r.duration_ms).sort((a, b) => a - b);
++    // Validate JSON numeric scalars before comparisons, sorting or aggregation.
++    const finite = x => typeof x === 'number' && Number.isFinite(x) && x >= 0;
++    const countScalar = x => finite(x) && Number.isSafeInteger(x);
++    const downstreamNumeric = results.every(r =>
++      ['bytes', 'text_delta_bytes', 'max_frame_bytes', 'comments'].every(k => countScalar(r[k])) &&
++      finite(r.duration_ms) && finite(r.terminal_ms));
++    const upstreamNumeric = row.upstream.every(r => countScalar(r.bytes) && countScalar(r.effects) && finite(r.close_ms));
++    const totalBytes = downstreamNumeric ? results.reduce((n, r) =>
++      n !== null && n <= Number.MAX_SAFE_INTEGER - r.bytes ? n + r.bytes : null, 0) : null;
++    const latencies = downstreamNumeric ? results.map(r => r.duration_ms).sort((a, b) => a - b) : [];
+     row.downstream = { requests: results.length, successful: results.filter(success).length,
+-      bytes: results.reduce((n, r) => n + r.bytes, 0), p50_ms: latencies[Math.floor((latencies.length - 1) * .5)] ?? null,
+-      p95_ms: latencies[Math.floor((latencies.length - 1) * .95)] ?? null, max_frame_bytes: Math.max(0, ...results.map(r => r.max_frame_bytes)) };
+-    const valid = results.length === count && results.every(success) && row.upstream.length === count &&
++      bytes: totalBytes,
++      p50_ms: latencies[Math.floor((latencies.length - 1) * .5)] ?? null,
++      p95_ms: latencies[Math.floor((latencies.length - 1) * .95)] ?? null,
++      max_frame_bytes: downstreamNumeric ? Math.max(0, ...results.map(r => r.max_frame_bytes)) : null };
++    const valid = downstreamNumeric && totalBytes !== null && upstreamNumeric && results.length === count && results.every(success) && row.upstream.length === count &&
+       row.upstream.every(r => r.effects === 1 && r.finished && r.identity === spec.protocol) &&
+-      (spec.stage !== 'memory' || results.every(r => r.bytes >= spec.mib * MiB && r.text_delta_bytes > 4096 && r.tool_id !== null && r.comments > 0));
++      (spec.stage !== 'memory' || [8, 32, 64].includes(spec.mib) &&
++        row.upstream.every(r => r.bytes === spec.mib * MiB) &&
++        results.every(r => r.bytes === spec.mib * MiB && r.max_frame_bytes >= 1.9 * MiB && r.max_frame_bytes < 2 * MiB &&
++          r.text_delta_bytes > 4096 && r.tool_id !== null && r.comments > 0));
+     row.functional_status = valid ? 'PASS' : 'FAIL';
+     row.status = valid && !row.safety_stop ? 'PASS' : 'FAIL'; row.reason = valid ? 'FINITE_STREAM_PROTOCOL_AND_EFFECT_GATE' : 'LOAD_LOSS_DUPLICATE_OR_STUCK';
+     meta.ended_ms = mono(); await save(`${out}/${spec.id}.end.json`, meta);

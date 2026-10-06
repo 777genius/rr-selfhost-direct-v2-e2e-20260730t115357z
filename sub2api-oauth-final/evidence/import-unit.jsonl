@@ -1,0 +1,8 @@
+{"Time":"2026-10-01T17:12:32.011406571Z","Action":"start","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin"}
+{"Time":"2026-10-01T17:12:32.028344812Z","Action":"run","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin","Test":"TestOAuthForkW7ImportIdentityTypes"}
+{"Time":"2026-10-01T17:12:32.028425251Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin","Test":"TestOAuthForkW7ImportIdentityTypes","Output":"=== RUN   TestOAuthForkW7ImportIdentityTypes\n","OutputType":"frame"}
+{"Time":"2026-10-01T17:12:32.028467027Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin","Test":"TestOAuthForkW7ImportIdentityTypes","Output":"--- PASS: TestOAuthForkW7ImportIdentityTypes (0.00s)\n","OutputType":"frame"}
+{"Time":"2026-10-01T17:12:32.028471877Z","Action":"pass","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin","Test":"TestOAuthForkW7ImportIdentityTypes","Elapsed":0}
+{"Time":"2026-10-01T17:12:32.02851513Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin","Output":"PASS\n","OutputType":"frame"}
+{"Time":"2026-10-01T17:12:32.030589602Z","Action":"output","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin","Output":"ok  \tgithub.com/Wei-Shaw/sub2api/internal/handler/admin\t0.019s\n"}
+{"Time":"2026-10-01T17:12:32.030622889Z","Action":"pass","Package":"github.com/Wei-Shaw/sub2api/internal/handler/admin","Elapsed":0.019}

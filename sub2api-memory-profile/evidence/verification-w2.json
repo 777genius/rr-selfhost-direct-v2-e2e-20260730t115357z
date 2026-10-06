@@ -1,0 +1,103 @@
+{
+  "schema": "rrsub2profile-w2-handoff-v1",
+  "changes": [
+    {
+      "path": "sub2api-memory-profile/REPORT.md",
+      "change": "modified"
+    },
+    {
+      "path": "sub2api-memory-profile/RUNBOOK.md",
+      "change": "modified"
+    },
+    {
+      "path": "sub2api-memory-profile/analyze.py",
+      "change": "modified"
+    },
+    {
+      "path": "sub2api-memory-profile/audit_actual.py",
+      "change": "added"
+    },
+    {
+      "path": "sub2api-memory-profile/launch_contracts.py",
+      "change": "added"
+    },
+    {
+      "path": "sub2api-memory-profile/offline.test.mjs",
+      "change": "modified"
+    },
+    {
+      "path": "sub2api-memory-profile/operator_config.py",
+      "change": "added"
+    },
+    {
+      "path": "sub2api-memory-profile/prepare.py",
+      "change": "modified"
+    },
+    {
+      "path": "sub2api-memory-profile/reviewed_source.py",
+      "change": "added"
+    },
+    {
+      "path": "sub2api-memory-profile/root-config.example.json",
+      "change": "modified"
+    },
+    {
+      "path": "sub2api-memory-profile/root-driver.py",
+      "change": "modified"
+    },
+    {
+      "path": "sub2api-memory-profile/test_actual.py",
+      "change": "added"
+    },
+    {
+      "path": "sub2api-memory-profile/test_analyzer.py",
+      "change": "modified"
+    },
+    {
+      "path": "sub2api-memory-profile/test_producer.py",
+      "change": "added"
+    },
+    {
+      "path": "sub2api-memory-profile/test_reviewed_source.py",
+      "change": "added"
+    }
+  ],
+  "ownership": "sub2api-memory-profile/ only",
+  "producer_contract": "actual Driver build/launch executed against intercepted subprocess.run; Dockerfile hash matches successful root wrapper receipt",
+  "tests": {
+    "python_passed": 16,
+    "python_skipped_classes": 1,
+    "skip_reason": "complete W1 full analyzer fixture tree not supplied",
+    "node_passed": 7,
+    "python_ast": "PASS",
+    "node_syntax": "PASS"
+  },
+  "gates": {
+    "source": "verified supplied 3487 entries; full 3323 source hashes; 12 operator files; legacy manifest/profiling bytes unchanged",
+    "actual": "independent supplied numeric audit DIAGNOSTIC_ONLY; stable raw RSS process/cgroup identity and within-burst timing verified; full run/build/DONE/profiles/cleanup receipts missing",
+    "future": "externally reviewed source/binary pins accepted explicitly; new root execution and source/runtime/cancel regression gates outstanding"
+  },
+  "not_run": [
+    "Go",
+    "Docker",
+    "root",
+    "network",
+    "providers",
+    "keys/authentication",
+    "Git writes",
+    "subagents"
+  ],
+  "goal_complete": false,
+  "root_rerun": "RUNBOOK.md",
+  "risks": [
+    "exact root collector and original reviewed Go1.27.1 stdlib freeze required from controller",
+    "new reusable producer has not been rerun on root",
+    "finite window and fewer than two postburst cycles cannot prove leak/plateau/RSS repair"
+  ],
+  "worker_stop": true,
+  "previous_goal_turn_classification": "progress",
+  "continuation_changes": [
+    "reject unexpected PostgreSQL/Redis launch flags",
+    "verify stable RSS process/cgroup identity and unchanged sampling timing across supplied bursts"
+  ]
+}

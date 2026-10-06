@@ -1,0 +1,10 @@
+--- a/backend/internal/handler/admin/openai_oauth_handler.go
++++ b/backend/internal/handler/admin/openai_oauth_handler.go
+@@ -9,7 +9,6 @@
+ 	"time"
+ 
+ 	"github.com/Wei-Shaw/sub2api/internal/handler/dto"
+-	"github.com/Wei-Shaw/sub2api/internal/pkg/openai"
+ 	"github.com/Wei-Shaw/sub2api/internal/pkg/response"
+ 	"github.com/Wei-Shaw/sub2api/internal/service"
+ 

@@ -1,0 +1,9 @@
+{
+  "phase": "Спайк завершён: 45/45 контрактов, 2/3 сочетания агентов с успешным живым Actions. Codex + MiMo финальный canary FAIL. 58 PASS / 5 FAIL / 14 NOT RUN в 77-row coverage, с отдельным видом evidence. Это не процент готовности продукта.",
+  "legal": "Владелец разрешил isolated sandbox; commitment accepted HTTP200.",
+  "live": 2,
+  "contract_passed": 45,
+  "verdict": "NO-GO для универсального production/pool cutover. CONDITIONAL GO только для ограниченного native BYOK исследования с нашим UI/broker/error fence.",
+  "teardown": "9 containers /4 networks /23 private paths удалены; original keys сохранены; canary disabled.",
+  "diagnosis": "2026-10-01: потеря MiMo reasoning history воспроизведена, provider/client ответы равны байтами; reasoning.effort=none hosted financial PASS. Original Actions FAIL сохранён."
+}

@@ -1,0 +1,10 @@
+{
+  "original_inspection": "historical-input/candidate/source-inspection.json",
+  "current_source_evidence": "changed-loc.json",
+  "prior_code": "historical-input/prior-code",
+  "input_hashes": "input-hashes.json",
+  "provenance_verifier": "verify-provenance.py",
+  "candidate_job": "transport-r3 (user supplied)",
+  "inherited_directory": "sub2api-transport-r2",
+  "live_source_or_kernel_inspection": "NOT RUN"
+}

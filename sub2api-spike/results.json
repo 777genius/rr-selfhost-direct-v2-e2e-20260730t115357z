@@ -1,0 +1,469 @@
+{
+  "schema": "rr-sub2-coverage/v1",
+  "basis_sha": "f05e6a4f451a45681c0bbc7b4b0ced17199ff339",
+  "status_semantics": "PASS only for explicitly named evidence boundary; contract PASS is not production acceptance. NOT RUN includes partial full-scenario proof.",
+  "results": [
+    {
+      "id": "A01",
+      "status": "FAIL",
+      "kind": "Real Actions",
+      "detail": "Исходные Actions 36775047872 и 36778603368 остаются FAIL. Диагностика 2026-10-01: Sub2 удаляет unencrypted reasoning; одинаковый replay без него -> no message, с ним -> message. reasoning.effort=none прошёл strict financial contract в hosted container, не новом Actions. См. MIMO-DIAGNOSIS.md."
+    },
+    {
+      "id": "A02",
+      "status": "PASS",
+      "kind": "Real Actions",
+      "detail": "36775051456 @222c6d8, Codex 0.159.2 + OpenRouter GPT-4.1. Genuine reads/rules, найден отрицательный withdraw, независимое числовое воспроизведение. Новый f05 filter проверен контрактом, повторный live на нём NOT RUN."
+    },
+    {
+      "id": "A03",
+      "status": "PASS",
+      "kind": "Real Actions",
+      "detail": "36775055709 @222c6d8, Claude 2.1.285 + MiMo Messages. Genuine Read wallet/rules, корректный finding и successful terminal. Числа воспроизведены harness, не Bash Claude. Live f05 NOT RUN."
+    },
+    {
+      "id": "A04",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Native two-turn tool IDs, Unicode, Messages beta=true сохранены. Большой медленный поток 8.39 MB завершён за 29.15 s. Нет доказательства proprietary delegation/encrypted history."
+    },
+    {
+      "id": "A05",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Native two-turn tool IDs, Unicode, Messages beta=true сохранены. Большой медленный поток 8.39 MB завершён за 29.15 s. Нет доказательства proprietary delegation/encrypted history."
+    },
+    {
+      "id": "A06",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "Строгий JSON object/array parser и financial validator; неправильная модель/scope отклонены до effects. Array ошибка прошлого CI сохранена."
+    },
+    {
+      "id": "A07",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "Строгий JSON object/array parser и financial validator; неправильная модель/scope отклонены до effects. Array ошибка прошлого CI сохранена."
+    },
+    {
+      "id": "A08",
+      "status": "NOT RUN",
+      "kind": "Частичный контракт",
+      "detail": "Неизвестные routes/scopes отвергаются; proprietary Codex custom/tool_search/delegation и encrypted history не проверены реальным клиентом."
+    },
+    {
+      "id": "A09",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Native two-turn tool IDs, Unicode, Messages beta=true сохранены. Большой медленный поток 8.39 MB завершён за 29.15 s. Нет доказательства proprietary delegation/encrypted history."
+    },
+    {
+      "id": "A10",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Native two-turn tool IDs, Unicode, Messages beta=true сохранены. Большой медленный поток 8.39 MB завершён за 29.15 s. Нет доказательства proprietary delegation/encrypted history."
+    },
+    {
+      "id": "B01",
+      "status": "PASS",
+      "kind": "Signed contract + Real Actions",
+      "detail": "RSA GitHub claim contract и настоящий OIDC exchange на принятом точном workflow SHA."
+    },
+    {
+      "id": "B02",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "45/45 suite @f05e6a4: подпись/claims/time/replay/durable ledger/limits/pinning/expiry/revoke/route denial. B11 отменяет broker fetch; отмена реального provider через engine не доказана и E06 FAIL."
+    },
+    {
+      "id": "B03",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "45/45 suite @f05e6a4: подпись/claims/time/replay/durable ledger/limits/pinning/expiry/revoke/route denial. B11 отменяет broker fetch; отмена реального provider через engine не доказана и E06 FAIL."
+    },
+    {
+      "id": "B04",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "45/45 suite @f05e6a4: подпись/claims/time/replay/durable ledger/limits/pinning/expiry/revoke/route denial. B11 отменяет broker fetch; отмена реального provider через engine не доказана и E06 FAIL."
+    },
+    {
+      "id": "B05",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "45/45 suite @f05e6a4: подпись/claims/time/replay/durable ledger/limits/pinning/expiry/revoke/route denial. B11 отменяет broker fetch; отмена реального provider через engine не доказана и E06 FAIL."
+    },
+    {
+      "id": "B06",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "45/45 suite @f05e6a4: подпись/claims/time/replay/durable ledger/limits/pinning/expiry/revoke/route denial. B11 отменяет broker fetch; отмена реального provider через engine не доказана и E06 FAIL."
+    },
+    {
+      "id": "B07",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "45/45 suite @f05e6a4: подпись/claims/time/replay/durable ledger/limits/pinning/expiry/revoke/route denial. B11 отменяет broker fetch; отмена реального provider через engine не доказана и E06 FAIL."
+    },
+    {
+      "id": "B08",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "45/45 suite @f05e6a4: подпись/claims/time/replay/durable ledger/limits/pinning/expiry/revoke/route denial. B11 отменяет broker fetch; отмена реального provider через engine не доказана и E06 FAIL."
+    },
+    {
+      "id": "B09",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "45/45 suite @f05e6a4: подпись/claims/time/replay/durable ledger/limits/pinning/expiry/revoke/route denial. B11 отменяет broker fetch; отмена реального provider через engine не доказана и E06 FAIL."
+    },
+    {
+      "id": "B10",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "45/45 suite @f05e6a4: подпись/claims/time/replay/durable ledger/limits/pinning/expiry/revoke/route denial. B11 отменяет broker fetch; отмена реального provider через engine не доказана и E06 FAIL."
+    },
+    {
+      "id": "B11",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "45/45 suite @f05e6a4: подпись/claims/time/replay/durable ledger/limits/pinning/expiry/revoke/route denial. B11 отменяет broker fetch; отмена реального provider через engine не доказана и E06 FAIL."
+    },
+    {
+      "id": "B12",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "45/45 suite @f05e6a4: подпись/claims/time/replay/durable ledger/limits/pinning/expiry/revoke/route denial. B11 отменяет broker fetch; отмена реального provider через engine не доказана и E06 FAIL."
+    },
+    {
+      "id": "C01",
+      "status": "PASS",
+      "kind": "Настоящий private admin API",
+      "detail": "Два test workspace, CRUD/pause/export/delete; чужой ID 404, member 403, положительная metadata projection без credentials. Synthetic identity adapter; ReviewRouter SSO/UI не реализован."
+    },
+    {
+      "id": "C02",
+      "status": "PASS",
+      "kind": "Настоящий private admin API",
+      "detail": "Два test workspace, CRUD/pause/export/delete; чужой ID 404, member 403, положительная metadata projection без credentials. Synthetic identity adapter; ReviewRouter SSO/UI не реализован."
+    },
+    {
+      "id": "C03",
+      "status": "PASS",
+      "kind": "Настоящий private admin API",
+      "detail": "Два test workspace, CRUD/pause/export/delete; чужой ID 404, member 403, положительная metadata projection без credentials. Synthetic identity adapter; ReviewRouter SSO/UI не реализован."
+    },
+    {
+      "id": "C04",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "Прототип ownership ledger, membership/suspension, stale IDs, replacement/revocation и group drift. Production SSO, reconcile/orphan quarantine требуют реализации."
+    },
+    {
+      "id": "C05",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Exclusive groups A/B/M/S, наблюдаемые sentinel identities. Ключ A не планирует B; группы являются routing, не ownership."
+    },
+    {
+      "id": "C06",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "Прототип ownership ledger, membership/suspension, stale IDs, replacement/revocation и group drift. Production SSO, reconcile/orphan quarantine требуют реализации."
+    },
+    {
+      "id": "C07",
+      "status": "PASS",
+      "kind": "Настоящий private admin API",
+      "detail": "Два test workspace, CRUD/pause/export/delete; чужой ID 404, member 403, положительная metadata projection без credentials. Synthetic identity adapter; ReviewRouter SSO/UI не реализован."
+    },
+    {
+      "id": "C08",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "Прототип ownership ledger, membership/suspension, stale IDs, replacement/revocation и group drift. Production SSO, reconcile/orphan quarantine требуют реализации."
+    },
+    {
+      "id": "C09",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "Прототип ownership ledger, membership/suspension, stale IDs, replacement/revocation и group drift. Production SSO, reconcile/orphan quarantine требуют реализации."
+    },
+    {
+      "id": "C10",
+      "status": "FAIL",
+      "kind": "Независимый source review",
+      "detail": "Local recovery_required скрывает binding, но remote ambiguous create уже active/schedulable в рабочей группе. Нужна quarantine group без access keys и reconcile; текущий контракт не закрывает orphan authority."
+    },
+    {
+      "id": "D01",
+      "status": "PASS",
+      "kind": "Trusted custody scan",
+      "detail": "Четыре full residual runner exports + env/config/logs, mounted work и private captures: 9.93 GB, 99 052 файлов, zero master-key matches. Snapshot после terminal, не непрерывный memory dump."
+    },
+    {
+      "id": "D02",
+      "status": "FAIL",
+      "kind": "Настоящий sentinel engine + source review",
+      "detail": "Публичные failed SSE диагностические поля теперь удалены. Private Sub2API logs/ops при upstream error могут хранить raw body; запрет всех diagnostic secrets не доказан."
+    },
+    {
+      "id": "D03",
+      "status": "FAIL",
+      "kind": "Независимый synthetic process proof",
+      "detail": "Master keys/auth homes/socket не монтируются. Однако агент с тем же UID может прочитать parent OIDC request env через procfs; отдельная PID/control isolation не реализована."
+    },
+    {
+      "id": "D04",
+      "status": "PASS",
+      "kind": "Настоящий network probe",
+      "detail": "На runner bridge engine/PostgreSQL/Redis IP недоступны, broker доступен; ports не опубликованы. Probe с теми же сетью/UID, не повтор live agent command."
+    },
+    {
+      "id": "D05",
+      "status": "PASS",
+      "kind": "Настоящий private admin API",
+      "detail": "Два test workspace, CRUD/pause/export/delete; чужой ID 404, member 403, положительная metadata projection без credentials. Synthetic identity adapter; ReviewRouter SSO/UI не реализован."
+    },
+    {
+      "id": "D06",
+      "status": "PASS",
+      "kind": "Source + actual private DB restore",
+      "detail": "Credentials в JSONB, cache/export/backup являются custody surfaces. Нет заявления об application encryption. Root-only backup восстановлен в network=none, dump удалён."
+    },
+    {
+      "id": "D07",
+      "status": "PASS",
+      "kind": "Изолированный контракт",
+      "detail": "Customer принимает server allowlisted HTTPS profiles и pinned URLs; arbitrary URL/routing input отклонены. Engine lab private HTTP exception только для synthetic upstream."
+    },
+    {
+      "id": "D08",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "До фикса HTTP200 SSE содержал fake upstream key. После public native error filter повтор того же теста: failed terminal, upstream1, sentinel не достигает клиента. Оригинальный FAIL сохранён."
+    },
+    {
+      "id": "D09",
+      "status": "PASS",
+      "kind": "Actual operator teardown",
+      "detail": "Удалены только 9 labelled containers,4 networks,23 private paths; master key originals root-only сохранены. Canary workflow disabled. Физическое стирание storage snapshots не гарантируется."
+    },
+    {
+      "id": "E01",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Оба native протокола: ошибки HTTP400/401/403/404/429/500/502/503, failed/error, malformed/truncated/reset/slow не превращаются в успешную review evidence. Recovery/setup ошибки раннего harness сохранены."
+    },
+    {
+      "id": "E02",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Оба native протокола: ошибки HTTP400/401/403/404/429/500/502/503, failed/error, malformed/truncated/reset/slow не превращаются в успешную review evidence. Recovery/setup ошибки раннего harness сохранены."
+    },
+    {
+      "id": "E03",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Оба native протокола: ошибки HTTP400/401/403/404/429/500/502/503, failed/error, malformed/truncated/reset/slow не превращаются в успешную review evidence. Recovery/setup ошибки раннего harness сохранены."
+    },
+    {
+      "id": "E04",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Оба native протокола: ошибки HTTP400/401/403/404/429/500/502/503, failed/error, malformed/truncated/reset/slow не превращаются в успешную review evidence. Recovery/setup ошибки раннего harness сохранены."
+    },
+    {
+      "id": "E05",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Оба native протокола: ошибки HTTP400/401/403/404/429/500/502/503, failed/error, malformed/truncated/reset/slow не превращаются в успешную review evidence. Recovery/setup ошибки раннего harness сохранены."
+    },
+    {
+      "id": "E06",
+      "status": "FAIL",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Messages upstream не отменён за 1.2 s; Responses продолжил inference/drain до 6 s. Не считать broker AbortSignal гарантией остановки provider spend."
+    },
+    {
+      "id": "E07",
+      "status": "NOT RUN",
+      "kind": "Частичный real engine proof",
+      "detail": "8.39 MB slow-consumer поток PASS за29.15 s,1upstream. Client RSS +27.68MB. Engine peak RSS под этим прогоном не измерялся, поэтому полный bounded-memory gate NOT RUN."
+    },
+    {
+      "id": "E08",
+      "status": "NOT RUN",
+      "kind": "Частичный real engine proof",
+      "detail": "429 group isolation/cooldown rejection PASS. Recovery expectation2.3s не прошла, реальный cooldown deadline не измерен; это не объявляется доказанным engine bug."
+    },
+    {
+      "id": "E09",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Оба native протокола: ошибки HTTP400/401/403/404/429/500/502/503, failed/error, malformed/truncated/reset/slow не превращаются в успешную review evidence. Recovery/setup ошибки раннего harness сохранены."
+    },
+    {
+      "id": "E10",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "После первых5frames и150ms flush barrier: downstream partial+failed, ровно1upstream,0retry. Ранняя immediate-reset fixture давала2attempts до доказанного commit; её FAIL сохранён. Не доказательство exactly-once для всех OAuth/retry configurations."
+    },
+    {
+      "id": "E11",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "После первых5frames и150ms flush barrier: downstream partial+failed, ровно1upstream,0retry. Ранняя immediate-reset fixture давала2attempts до доказанного commit; её FAIL сохранён. Не доказательство exactly-once для всех OAuth/retry configurations."
+    },
+    {
+      "id": "E12",
+      "status": "NOT RUN",
+      "kind": "Частичный контракт/source risk",
+      "detail": "Broker public error projection проверена; отсутствие prompts/master keys во всех private engine ops/logs не доказано."
+    },
+    {
+      "id": "F01",
+      "status": "NOT RUN",
+      "kind": "Частичный engine proof",
+      "detail": "Two-account selection/unavailable/precommit failover наблюдались; полный timed cooldown recovery gate остаётся непроверенным."
+    },
+    {
+      "id": "F02",
+      "status": "PASS",
+      "kind": "Настоящий engine + synthetic upstream",
+      "detail": "Sticky synthetic session удерживает account across tool turns. OAuth encrypted-history portability NOT RUN."
+    },
+    {
+      "id": "F03",
+      "status": "NOT RUN",
+      "kind": "Частичный engine/contract",
+      "detail": "Per-account concurrency=1 и broker concurrency лимиты PASS. Engine crash/cancel capacity lifecycle не полностью доказан; cancel drain FAIL."
+    },
+    {
+      "id": "F04",
+      "status": "NOT RUN",
+      "kind": "Нет test OAuth identity",
+      "detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены."
+    },
+    {
+      "id": "F05",
+      "status": "NOT RUN",
+      "kind": "Нет test OAuth identity",
+      "detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены."
+    },
+    {
+      "id": "F06",
+      "status": "NOT RUN",
+      "kind": "Частичный контракт",
+      "detail": "Our workspace revoke закрывает authority в mock контракте; actual engine in-flight account removal/disable и reuse не проверены."
+    },
+    {
+      "id": "F07",
+      "status": "NOT RUN",
+      "kind": "Нет test OAuth identity",
+      "detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены."
+    },
+    {
+      "id": "F08",
+      "status": "NOT RUN",
+      "kind": "Нет test OAuth identity",
+      "detail": "Production auth.json/pool не импортировались. Distributed refresh/rotation/ban/revocation и live subscription sessions не проверены."
+    },
+    {
+      "id": "F09",
+      "status": "PASS",
+      "kind": "Изоляция эксперимента",
+      "detail": "Production Codex pool не импортирован/изменён. Это preservation evidence, не regression proof всего production pool."
+    },
+    {
+      "id": "G01",
+      "status": "PASS",
+      "kind": "Настоящий lifecycle + synthetic upstream",
+      "detail": "Owned engine restart прерывает активный stream безduplicate. PG+Redis остановлены:HTTP500,0upstream; после restart сохранены accounts/groups/keys, четыре native scopes снова работают."
+    },
+    {
+      "id": "G02",
+      "status": "PASS",
+      "kind": "Настоящий lifecycle + synthetic upstream",
+      "detail": "Owned engine restart прерывает активный stream безduplicate. PG+Redis остановлены:HTTP500,0upstream; после restart сохранены accounts/groups/keys, четыре native scopes снова работают."
+    },
+    {
+      "id": "G03",
+      "status": "PASS",
+      "kind": "Изолированный durable broker contract",
+      "detail": "Ledger restart сохраняет tombstones, stale capability/replay отказ. Restore DB не заменяет ledger."
+    },
+    {
+      "id": "G04",
+      "status": "NOT RUN",
+      "kind": "Частичный actual restore",
+      "detail": "Networkless PG restore: accounts10,groups10,keys9,users10,links8,migrations289 совпали; dump удалён. Admission с восстановленным engine + stale cap в одной цепочке NOT RUN."
+    },
+    {
+      "id": "G05",
+      "status": "NOT RUN",
+      "kind": "Частичный actual load proof",
+      "detail": "1/5/20 concurrency:0errors;20 p50=46ms,p95=231ms.30s soak485requests:0errors,0retries,0stuck,p50=10ms,p95=12ms. Peak engine RSS не измерялся; после load60.07MiB, не peak. Это synthetic local latency, не provider SLA."
+    },
+    {
+      "id": "G06",
+      "status": "PASS",
+      "kind": "Контракт + sentinel routing",
+      "detail": "Concurrent two-workspace broker test и real engine separate sentinel groups, без cross identity. Concurrent real paid providers не являются tenant adversarial proof."
+    },
+    {
+      "id": "G07",
+      "status": "PASS",
+      "kind": "Actual operator teardown",
+      "detail": "Удалены только 9 labelled containers,4 networks,23 private paths; master key originals root-only сохранены. Canary workflow disabled. Физическое стирание storage snapshots не гарантируется."
+    },
+    {
+      "id": "H01",
+      "status": "PASS",
+      "kind": "Issues/source audit + итоговый report",
+      "detail": "3935 issues,52 case studies;30release snapshot. Worker48threads66comments + coordinator4threads14comments. Merged fix не считается live regression PASS. Полные ссылки и рекомендации сохранены."
+    },
+    {
+      "id": "H02",
+      "status": "PASS",
+      "kind": "Issues/source audit + итоговый report",
+      "detail": "3935 issues,52 case studies;30release snapshot. Worker48threads66comments + coordinator4threads14comments. Merged fix не считается live regression PASS. Полные ссылки и рекомендации сохранены."
+    },
+    {
+      "id": "H03",
+      "status": "PASS",
+      "kind": "Issues/source audit + итоговый report",
+      "detail": "3935 issues,52 case studies;30release snapshot. Worker48threads66comments + coordinator4threads14comments. Merged fix не считается live regression PASS. Полные ссылки и рекомендации сохранены."
+    },
+    {
+      "id": "H04",
+      "status": "PASS",
+      "kind": "Issues/source audit + итоговый report",
+      "detail": "3935 issues,52 case studies;30release snapshot. Worker48threads66comments + coordinator4threads14comments. Merged fix не считается live regression PASS. Полные ссылки и рекомендации сохранены."
+    },
+    {
+      "id": "H05",
+      "status": "NOT RUN",
+      "kind": "Source audit",
+      "detail": "Budget reservation/final debit/fail-open accounting изучены; полный synthetic debit/refund/double-billing gate не реализован. Fake sandbox balance не production billing."
+    },
+    {
+      "id": "H06",
+      "status": "PASS",
+      "kind": "Issues/source audit + итоговый report",
+      "detail": "3935 issues,52 case studies;30release snapshot. Worker48threads66comments + coordinator4threads14comments. Merged fix не считается live regression PASS. Полные ссылки и рекомендации сохранены."
+    },
+    {
+      "id": "H07",
+      "status": "PASS",
+      "kind": "Issues/source audit + итоговый report",
+      "detail": "3935 issues,52 case studies;30release snapshot. Worker48threads66comments + coordinator4threads14comments. Merged fix не считается live regression PASS. Полные ссылки и рекомендации сохранены."
+    },
+    {
+      "id": "H08",
+      "status": "PASS",
+      "kind": "Issues/source audit + итоговый report",
+      "detail": "3935 issues,52 case studies;30release snapshot. Worker48threads66comments + coordinator4threads14comments. Merged fix не считается live regression PASS. Полные ссылки и рекомендации сохранены."
+    }
+  ]
+}

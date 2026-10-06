@@ -1,0 +1,43 @@
+test_expected_manifest_without_reviewed_receipt_accepts_unreviewed_source (__main__.Independent.test_expected_manifest_without_reviewed_receipt_accepts_unreviewed_source) ... FAIL
+test_preflight_toolchain_query_and_compile_have_different_environments (__main__.Independent.test_preflight_toolchain_query_and_compile_have_different_environments) ... FAIL
+test_private_config_is_created_world_readable_until_chmod (__main__.Independent.test_private_config_is_created_world_readable_until_chmod) ... FAIL
+
+======================================================================
+FAIL: test_expected_manifest_without_reviewed_receipt_accepts_unreviewed_source (__main__.Independent.test_expected_manifest_without_reviewed_receipt_accepts_unreviewed_source)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/profile-review-w3/sub2api-memory-profile-review/tmp5ky3f2b_/new/reproduce.py", line 40, in test_expected_manifest_without_reviewed_receipt_accepts_unreviewed_source
+    self.assertEqual(cp.returncode,0,cp.stderr);self.assertEqual(json.loads(output.read_text())['status'],'DIAGNOSTIC_ONLY')
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0 : ANALYSIS_REJECTED_INCOMPLETE_OR_INVALID_EVIDENCE
+
+
+======================================================================
+FAIL: test_preflight_toolchain_query_and_compile_have_different_environments (__main__.Independent.test_preflight_toolchain_query_and_compile_have_different_environments)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/profile-review-w3/sub2api-memory-profile-review/tmp5ky3f2b_/new/reproduce.py", line 82, in test_preflight_toolchain_query_and_compile_have_different_environments
+    query=next(kw for args,kw in calls if args==[c['go_binary'],'env','GOROOT']);self.assertIsNone(query['env'])
+                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'LANG': 'C.UTF-8', 'PATH': '/opt/nodejs/node-v24.21.0-linux-x64/lib/node_modules/@openai/codex/node_modules/@openai/codex-linux-x64/vendor/x86_64-unknown-linux-musl/codex-path:/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-profile-review-w3/state/codex-session-cache/codex-3cf498588dfe1cfb38466e8261d16e64/codex-home/tmp/arg0/codex-arg0I1IHcb:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin', 'GOENV': 'off', 'GOTOOLCHAIN': 'local', 'GOWORK': 'off', 'GOPROXY': 'off', 'GOSUMDB': 'off', 'CGO_ENABLED': '0', 'GOOS': 'linux', 'GOARCH': 'amd64', 'GOCACHE': '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/profile-review-w3/sub2api-memory-profile-review/tmp5ky3f2b_/new/tmpi2knck1e/cache', 'GOMODCACHE': '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/profile-review-w3/sub2api-memory-profile-review/tmp5ky3f2b_/new/tmpi2knck1e/modules', 'GOMAXPROCS': '2'} is not None
+
+======================================================================
+FAIL: test_private_config_is_created_world_readable_until_chmod (__main__.Independent.test_private_config_is_created_world_readable_until_chmod)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/profile-review-w3/sub2api-memory-profile-review/tmp5ky3f2b_/new/reproduce.py", line 55, in test_private_config_is_created_world_readable_until_chmod
+    self.assertEqual(observed,[0o644]);self.assertEqual(out.stat().st_mode&0o777,0o600)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [] != [420]
+
+Second list contains 1 additional elements.
+First extra element 0:
+420
+
+- []
++ [420]
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.102s
+
+FAILED (failures=3)

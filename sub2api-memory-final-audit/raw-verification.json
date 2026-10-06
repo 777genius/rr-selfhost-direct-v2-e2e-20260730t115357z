@@ -1,0 +1,2346 @@
+{
+  "binding_receipts": {
+    "actual_profile_binary_sha256": "798ccacaa5b3db92743ae1a1246c1ad73e21d4cff0151668c9c96167052cf67d",
+    "excluded": [
+      "private/",
+      "profiles/request/",
+      "auth/key files",
+      "large profile binary"
+    ],
+    "native": {
+      "backend_files": 3332,
+      "binary_sha256": "5e28306e531eac0abea49811f116dbbddb233c4e52ce3f7d63f9c71d949632fd",
+      "components": [
+        {
+          "lane": "native",
+          "patch_sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5"
+        },
+        {
+          "lane": "probe",
+          "patch_sha256": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45"
+        },
+        {
+          "lane": "merged-native",
+          "patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5"
+        }
+      ],
+      "credentials_mounted": false,
+      "duration_s": 49.44,
+      "frontend_unchanged_from_base": true,
+      "image_config_sha256": "14d66af7a0273bbf1e48204ddecdb7d10de0b3f2b03e506b8a082aac786f733e",
+      "image_id": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+      "kind": "actual-offline-reviewed-native-source-image-build",
+      "merged_production_patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+      "merged_regression_patch_sha256": "f6909228e016be8817057f2f3c5bd5f460550d9139dff19810c8df59d22d466d",
+      "producer_manifest_sha256": "a5e265dbde32d70046e07863a4d3abeff15088673d6232768ff4eac913b50440",
+      "repo_digests": [
+        "rr-sub2-native-final@sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1"
+      ],
+      "review_required_before_live_canary": true,
+      "schema": "rr-sub2-native-merged-root-build/v1",
+      "source_backend_sha256": "82662b8666b05b6a0a95c76c79bde630ba73a27e2ae89e72363908a1f2117c42",
+      "source_hashes_match": true,
+      "source_ledger_sha256": "38969ade3781252b1913ac435619d1cbe6c961fb08cc50f1bf711a1f09a657be",
+      "source_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+      "tag": "rr-sub2-native-final:96f4-16bc1644-20261001",
+      "toolchain_image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+      "upstream_commit": "96f4c115c9749078f90cbf210a01d39baf3f53b6"
+    },
+    "profile_result": {
+      "config": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/sub2-fork-operator/profile-native-final-w1-inputs/root-config.json",
+      "duration_s": 9.46,
+      "no_provider_effects": true,
+      "observed_profile_binary_sha256": "798ccacaa5b3db92743ae1a1246c1ad73e21d4cff0151668c9c96167052cf67d",
+      "observed_source_matches_verified_stage": true,
+      "producer_cli_actual_prepare_pass": true,
+      "production_patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+      "reviewed_source_sha256": "51173ae370d29c3bdf5f8126c91920b30be668a6513897720bf113e89c93e86c",
+      "status": "PASS"
+    }
+  },
+  "decoded_profiles": 132,
+  "native": {
+    "messages": {
+      "evidence_sha256": "c7c7f1e1975e9902a8b08e97c89d832da3028fed1c8c08f5bea6d8c01798df89",
+      "functional_PASS": 10,
+      "physical_interval": "NOTPROVEN",
+      "strict_RSS_FAIL": 10
+    },
+    "responses": {
+      "evidence_sha256": "a313cc04365d87771e70ca934bf476ff2a17a9ba8e30993a5f0a38a18b6c8a4a",
+      "functional_PASS": 10,
+      "physical_interval": "NOTPROVEN",
+      "strict_RSS_FAIL": 10
+    }
+  },
+  "runs": {
+    "messages": {
+      "build": {
+        "base_image_id": "sha256:6df1cc33771f1bc94028cc18440a13e7d31a3513331bbb8d7d686584d19b79e2",
+        "base_tag": "rr-sub2-profile-base:6df1cc3-20261001",
+        "binary_sha256": "798ccacaa5b3db92743ae1a1246c1ad73e21d4cff0151668c9c96167052cf67d",
+        "compilation_gomaxprocs": 2,
+        "dockerfile_sha256": "db5287d8c541469b0694bea3cb68bef7c15b79a65b5154e53d63d414d882351a",
+        "engine_env_file_sha256": "c0468163833be6d517c46bc76593461516efcfff74d5dbf54d7e26c4774a868b",
+        "fixture_attestation_sha256": "0e8f386d5ddcd90a489088a62c787d2e98c778488f40a76d49d7a3d28e5e707a",
+        "go_version": "go1.27.1",
+        "image_id": "sha256:8db7663605a96e502ac7a9991bc9dec2ae4ba46148cdc10198a5ef451a47b07a",
+        "logging": "stdout discarded by Docker log-driver none; file sink disabled; no environment values exported",
+        "tag": "rrsub2profile",
+        "toolchain_receipt_sha256": "92fab300e4e221605c41178d1537e2a9f2cd3744d728d4285e419458236685ce"
+      },
+      "checkpoints": [
+        {
+          "checkpoint": 0,
+          "elapsed_ms": 123.96921896934509,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 32318,
+              "alloc_space": 26365885,
+              "inuse_objects": 14112,
+              "inuse_space": 14475385
+            },
+            "goroutine": {
+              "goroutine": 167
+            },
+            "heap": {
+              "alloc_objects": 32318,
+              "alloc_space": 26365885,
+              "inuse_objects": 14112,
+              "inuse_space": 14475385
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.05673801898956299,
+            "end_ms": 964693330.206961,
+            "frees": 127614,
+            "goroutines": 167,
+            "heap_alloc": 50270864,
+            "heap_idle": 5357568,
+            "heap_inuse": 51789824,
+            "heap_objects": 111695,
+            "heap_released": 5128192,
+            "heap_sys": 57147392,
+            "last_gc_unix_ns": 1790877695332629049,
+            "mallocs": 239309,
+            "mem_profile_rate": 524288,
+            "next_gc": 82805754,
+            "num_forced_gc": 0,
+            "num_gc": 7,
+            "pause_total_ns": 1225470,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 32,
+            "stack_inuse": 1572864,
+            "stack_sys": 1572864,
+            "start_ms": 964693330.150223,
+            "sys": 65186072,
+            "total_alloc": 62586088
+          }
+        },
+        {
+          "checkpoint": 1,
+          "elapsed_ms": 13773.30249106884,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 70450,
+              "alloc_space": 267736226,
+              "inuse_objects": 22634,
+              "inuse_space": 71402235
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 70450,
+              "alloc_space": 267736226,
+              "inuse_objects": 22634,
+              "inuse_space": 71402235
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.019820094108581543,
+            "end_ms": 964706930.403853,
+            "frees": 263257,
+            "goroutines": 165,
+            "heap_alloc": 65164328,
+            "heap_idle": 63741952,
+            "heap_inuse": 68968448,
+            "heap_objects": 50970,
+            "heap_released": 5996544,
+            "heap_sys": 132710400,
+            "last_gc_unix_ns": 1790877701223960759,
+            "mallocs": 314227,
+            "mem_profile_rate": 524288,
+            "next_gc": 129108554,
+            "num_forced_gc": 0,
+            "num_gc": 13,
+            "pause_total_ns": 3078672,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 175,
+            "stack_inuse": 1507328,
+            "stack_sys": 1507328,
+            "start_ms": 964706930.384033,
+            "sys": 141474088,
+            "total_alloc": 310692248
+          }
+        },
+        {
+          "checkpoint": 2,
+          "elapsed_ms": 26324.073341012,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 89577,
+              "alloc_space": 502670687,
+              "inuse_objects": 26709,
+              "inuse_space": 73508373
+            },
+            "goroutine": {
+              "goroutine": 166
+            },
+            "heap": {
+              "alloc_objects": 89577,
+              "alloc_space": 502670687,
+              "inuse_objects": 26709,
+              "inuse_space": 73508373
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.010738015174865723,
+            "end_ms": 964719530.194959,
+            "frees": 325935,
+            "goroutines": 166,
+            "heap_alloc": 52527328,
+            "heap_idle": 76800000,
+            "heap_inuse": 55910400,
+            "heap_objects": 47635,
+            "heap_released": 16269312,
+            "heap_sys": 132710400,
+            "last_gc_unix_ns": 1790877714528519363,
+            "mallocs": 373570,
+            "mem_profile_rate": 524288,
+            "next_gc": 104332402,
+            "num_forced_gc": 0,
+            "num_gc": 18,
+            "pause_total_ns": 3584847,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 307,
+            "stack_inuse": 1507328,
+            "stack_sys": 1507328,
+            "start_ms": 964719530.184221,
+            "sys": 141474088,
+            "total_alloc": 557326384
+          }
+        },
+        {
+          "checkpoint": 3,
+          "elapsed_ms": 38407.368826031685,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 136233,
+              "alloc_space": 723705948,
+              "inuse_objects": 22759,
+              "inuse_space": 64934612
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 136233,
+              "alloc_space": 723705948,
+              "inuse_objects": 22759,
+              "inuse_space": 64934612
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.028500914573669434,
+            "end_ms": 964731630.840663,
+            "frees": 380181,
+            "goroutines": 165,
+            "heap_alloc": 84344176,
+            "heap_idle": 45260800,
+            "heap_inuse": 87416832,
+            "heap_objects": 53196,
+            "heap_released": 16343040,
+            "heap_sys": 132677632,
+            "last_gc_unix_ns": 1790877726360622110,
+            "mallocs": 433377,
+            "mem_profile_rate": 524288,
+            "next_gc": 129281354,
+            "num_forced_gc": 0,
+            "num_gc": 23,
+            "pause_total_ns": 3895935,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 434,
+            "stack_inuse": 1540096,
+            "stack_sys": 1540096,
+            "start_ms": 964731630.812162,
+            "sys": 141474088,
+            "total_alloc": 804056928
+          }
+        },
+        {
+          "checkpoint": 4,
+          "elapsed_ms": 50741.267317056656,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 169115,
+              "alloc_space": 956178683,
+              "inuse_objects": 23215,
+              "inuse_space": 59359640
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 169115,
+              "alloc_space": 956178683,
+              "inuse_objects": 23215,
+              "inuse_space": 59359640
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.012506961822509766,
+            "end_ms": 964743930.633966,
+            "frees": 438532,
+            "goroutines": 165,
+            "heap_alloc": 100300240,
+            "heap_idle": 29319168,
+            "heap_inuse": 103358464,
+            "heap_objects": 54513,
+            "heap_released": 12861440,
+            "heap_sys": 132677632,
+            "last_gc_unix_ns": 1790877737783955196,
+            "mallocs": 493045,
+            "mem_profile_rate": 524288,
+            "next_gc": 141286522,
+            "num_forced_gc": 0,
+            "num_gc": 28,
+            "pause_total_ns": 4390388,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 563,
+            "stack_inuse": 1540096,
+            "stack_sys": 1540096,
+            "start_ms": 964743930.621459,
+            "sys": 141474088,
+            "total_alloc": 1050830448
+          }
+        },
+        {
+          "checkpoint": 5,
+          "elapsed_ms": 63701.92067801952,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 254884,
+              "alloc_space": 1199614559,
+              "inuse_objects": 33553,
+              "inuse_space": 61574054
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 254884,
+              "alloc_space": 1199614559,
+              "inuse_objects": 33553,
+              "inuse_space": 61574054
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.007912993431091309,
+            "end_ms": 964756929.869287,
+            "frees": 500138,
+            "goroutines": 165,
+            "heap_alloc": 103828280,
+            "heap_idle": 25903104,
+            "heap_inuse": 106643456,
+            "heap_objects": 60450,
+            "heap_released": 8028160,
+            "heap_sys": 132546560,
+            "last_gc_unix_ns": 1790877750398585832,
+            "mallocs": 560588,
+            "mem_profile_rate": 524288,
+            "next_gc": 129070322,
+            "num_forced_gc": 0,
+            "num_gc": 33,
+            "pause_total_ns": 6041211,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 699,
+            "stack_inuse": 1671168,
+            "stack_sys": 1671168,
+            "start_ms": 964756929.861374,
+            "sys": 141474088,
+            "total_alloc": 1298073168
+          }
+        },
+        {
+          "checkpoint": 6,
+          "elapsed_ms": 76231.12069797516,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 387886,
+              "alloc_space": 1484503141,
+              "inuse_objects": 22792,
+              "inuse_space": 65848632
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 387886,
+              "alloc_space": 1484503141,
+              "inuse_objects": 22792,
+              "inuse_space": 65848632
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.01913297176361084,
+            "end_ms": 964769430.143973,
+            "frees": 572474,
+            "goroutines": 165,
+            "heap_alloc": 60752760,
+            "heap_idle": 81190912,
+            "heap_inuse": 64069632,
+            "heap_objects": 48700,
+            "heap_released": 22282240,
+            "heap_sys": 145260544,
+            "last_gc_unix_ns": 1790877764016754599,
+            "mallocs": 621174,
+            "mem_profile_rate": 524288,
+            "next_gc": 120645458,
+            "num_forced_gc": 0,
+            "num_gc": 39,
+            "pause_total_ns": 6487027,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 830,
+            "stack_inuse": 1540096,
+            "stack_sys": 1540096,
+            "start_ms": 964769430.12484,
+            "sys": 154057000,
+            "total_alloc": 1545053312
+          }
+        },
+        {
+          "checkpoint": 7,
+          "elapsed_ms": 90321.47454297543,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 413117,
+              "alloc_space": 1729255056,
+              "inuse_objects": 22758,
+              "inuse_space": 60200210
+            },
+            "goroutine": {
+              "goroutine": 166
+            },
+            "heap": {
+              "alloc_objects": 413117,
+              "alloc_space": 1729255056,
+              "inuse_objects": 22758,
+              "inuse_space": 60200210
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.009914040565490723,
+            "end_ms": 964783530.633198,
+            "frees": 634905,
+            "goroutines": 166,
+            "heap_alloc": 66415216,
+            "heap_idle": 83910656,
+            "heap_inuse": 69705728,
+            "heap_objects": 48520,
+            "heap_released": 53780480,
+            "heap_sys": 153616384,
+            "last_gc_unix_ns": 1790877777315015541,
+            "mallocs": 683425,
+            "mem_profile_rate": 524288,
+            "next_gc": 95426370,
+            "num_forced_gc": 0,
+            "num_gc": 43,
+            "pause_total_ns": 8216080,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 977,
+            "stack_inuse": 1572864,
+            "stack_sys": 1572864,
+            "start_ms": 964783530.623284,
+            "sys": 162707752,
+            "total_alloc": 1792394216
+          }
+        },
+        {
+          "checkpoint": 8,
+          "elapsed_ms": 102574.90585303307,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 458775,
+              "alloc_space": 1977528761,
+              "inuse_objects": 22620,
+              "inuse_space": 58449897
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 458775,
+              "alloc_space": 1977528761,
+              "inuse_objects": 22620,
+              "inuse_space": 58449897
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.028609037399291992,
+            "end_ms": 964795730.6917,
+            "frees": 693403,
+            "goroutines": 165,
+            "heap_alloc": 89211200,
+            "heap_idle": 61276160,
+            "heap_inuse": 92307456,
+            "heap_objects": 51666,
+            "heap_released": 42516480,
+            "heap_sys": 153583616,
+            "last_gc_unix_ns": 1790877790627005913,
+            "mallocs": 745069,
+            "mem_profile_rate": 524288,
+            "next_gc": 123096314,
+            "num_forced_gc": 0,
+            "num_gc": 49,
+            "pause_total_ns": 8649535,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 1105,
+            "stack_inuse": 1605632,
+            "stack_sys": 1605632,
+            "start_ms": 964795730.663091,
+            "sys": 162707752,
+            "total_alloc": 2039765776
+          }
+        },
+        {
+          "checkpoint": 9,
+          "elapsed_ms": 115447.75325000286,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 485289,
+              "alloc_space": 2226675126,
+              "inuse_objects": 22682,
+              "inuse_space": 53275335
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 485289,
+              "alloc_space": 2226675126,
+              "inuse_objects": 22682,
+              "inuse_space": 53275335
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.00745701789855957,
+            "end_ms": 964808630.709579,
+            "frees": 754564,
+            "goroutines": 165,
+            "heap_alloc": 90642992,
+            "heap_idle": 59899904,
+            "heap_inuse": 93716480,
+            "heap_objects": 52425,
+            "heap_released": 40091648,
+            "heap_sys": 153616384,
+            "last_gc_unix_ns": 1790877802858180008,
+            "mallocs": 806989,
+            "mem_profile_rate": 524288,
+            "next_gc": 112913458,
+            "num_forced_gc": 0,
+            "num_gc": 55,
+            "pause_total_ns": 9183448,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 1240,
+            "stack_inuse": 1572864,
+            "stack_sys": 1572864,
+            "start_ms": 964808630.702122,
+            "sys": 162707752,
+            "total_alloc": 2287088832
+          }
+        },
+        {
+          "checkpoint": 10,
+          "elapsed_ms": 128572.97111606598,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 505033,
+              "alloc_space": 2477359742,
+              "inuse_objects": 22784,
+              "inuse_space": 63154616
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 505033,
+              "alloc_space": 2477359742,
+              "inuse_objects": 22784,
+              "inuse_space": 63154616
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.05744600296020508,
+            "end_ms": 964821730.710009,
+            "frees": 814721,
+            "goroutines": 165,
+            "heap_alloc": 97240456,
+            "heap_idle": 53542912,
+            "heap_inuse": 99909632,
+            "heap_objects": 61917,
+            "heap_released": 25518080,
+            "heap_sys": 153452544,
+            "last_gc_unix_ns": 1790877814973808998,
+            "mallocs": 876638,
+            "mem_profile_rate": 524288,
+            "next_gc": 137298818,
+            "num_forced_gc": 0,
+            "num_gc": 60,
+            "pause_total_ns": 9550424,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 1376,
+            "stack_inuse": 1736704,
+            "stack_sys": 1736704,
+            "start_ms": 964821730.652563,
+            "sys": 162707752,
+            "total_alloc": 2534915592
+          }
+        }
+      ],
+      "identity": {
+        "cgroup_device": 29,
+        "cgroup_inode": 3518213,
+        "cgroup_path": "/system.slice/docker-73a5cbe147957c23685393f77f97e46be7e376972db5a9a114204a0a2e1cf869.scope",
+        "container_created_ms": 964690207.687197,
+        "container_id": "73a5cbe147957c23685393f77f97e46be7e376972db5a9a114204a0a2e1cf869",
+        "creation_time_evidence": {
+          "container_lower_ms": 964689651.574547,
+          "container_upper_ms": 964690207.687197,
+          "pid_created_ms_kind": "upper bound after dedicated start"
+        },
+        "engine_pid": 3462436,
+        "exe_device": 1048667,
+        "exe_inode": 131479891,
+        "fresh_container_inspected": true,
+        "instance": "rrsub2profile-messages-fixed-00000025",
+        "pid_created_ms": 964690207.690052,
+        "pid_start_ticks": 96469012
+      },
+      "raw_run_sha256": "fd8b5532345ae903b79a8046adff006726c4f7a2568c41242f13d13bda433907",
+      "runtime_samples": 1411
+    },
+    "messages-control": {
+      "build": {
+        "base_image_id": "sha256:6df1cc33771f1bc94028cc18440a13e7d31a3513331bbb8d7d686584d19b79e2",
+        "base_tag": "rr-sub2-profile-base:6df1cc3-20261001",
+        "binary_sha256": "798ccacaa5b3db92743ae1a1246c1ad73e21d4cff0151668c9c96167052cf67d",
+        "compilation_gomaxprocs": 2,
+        "dockerfile_sha256": "db5287d8c541469b0694bea3cb68bef7c15b79a65b5154e53d63d414d882351a",
+        "engine_env_file_sha256": "c0468163833be6d517c46bc76593461516efcfff74d5dbf54d7e26c4774a868b",
+        "fixture_attestation_sha256": "0e8f386d5ddcd90a489088a62c787d2e98c778488f40a76d49d7a3d28e5e707a",
+        "go_version": "go1.27.1",
+        "image_id": "sha256:16d10168975bae0ec9ea2224656309c910ea7cbf8f22045d9ef1d7f970df30b8",
+        "logging": "stdout discarded by Docker log-driver none; file sink disabled; no environment values exported",
+        "tag": "rrsub2profile",
+        "toolchain_receipt_sha256": "92fab300e4e221605c41178d1537e2a9f2cd3744d728d4285e419458236685ce"
+      },
+      "checkpoints": [
+        {
+          "checkpoint": 0,
+          "elapsed_ms": 142.8180080652237,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 111255,
+              "alloc_space": 18332097,
+              "inuse_objects": 20448,
+              "inuse_space": 11512673
+            },
+            "goroutine": {
+              "goroutine": 167
+            },
+            "heap": {
+              "alloc_objects": 111255,
+              "alloc_space": 18332097,
+              "inuse_objects": 20448,
+              "inuse_space": 11512673
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.07303500175476074,
+            "end_ms": 965160102.298094,
+            "frees": 122179,
+            "goroutines": 167,
+            "heap_alloc": 51814808,
+            "heap_idle": 3653632,
+            "heap_inuse": 53395456,
+            "heap_objects": 132428,
+            "heap_released": 3653632,
+            "heap_sys": 57049088,
+            "last_gc_unix_ns": 1790878160571261826,
+            "mallocs": 254607,
+            "mem_profile_rate": 524288,
+            "next_gc": 84656010,
+            "num_forced_gc": 0,
+            "num_gc": 7,
+            "pause_total_ns": 1253165,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 48,
+            "stack_inuse": 1671168,
+            "stack_sys": 1671168,
+            "start_ms": 965160102.225059,
+            "sys": 65378568,
+            "total_alloc": 63706152
+          }
+        },
+        {
+          "checkpoint": 1,
+          "elapsed_ms": 13906.672947049141,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 111255,
+              "alloc_space": 18332097,
+              "inuse_objects": 20448,
+              "inuse_space": 11512673
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 111255,
+              "alloc_space": 18332097,
+              "inuse_objects": 20448,
+              "inuse_space": 11512673
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.005631089210510254,
+            "end_ms": 965173901.882441,
+            "frees": 123910,
+            "goroutines": 165,
+            "heap_alloc": 56596304,
+            "heap_idle": 3170304,
+            "heap_inuse": 58105856,
+            "heap_objects": 145767,
+            "heap_released": 3170304,
+            "heap_sys": 61276160,
+            "last_gc_unix_ns": 1790878160571261826,
+            "mallocs": 269677,
+            "mem_profile_rate": 524288,
+            "next_gc": 84656010,
+            "num_forced_gc": 0,
+            "num_gc": 7,
+            "pause_total_ns": 1253165,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 193,
+            "stack_inuse": 1638400,
+            "stack_sys": 1638400,
+            "start_ms": 965173901.87681,
+            "sys": 69572872,
+            "total_alloc": 68487648
+          }
+        },
+        {
+          "checkpoint": 2,
+          "elapsed_ms": 26542.463526010513,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 111255,
+              "alloc_space": 18332097,
+              "inuse_objects": 20448,
+              "inuse_space": 11512673
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 111255,
+              "alloc_space": 18332097,
+              "inuse_objects": 20448,
+              "inuse_space": 11512673
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.00981593132019043,
+            "end_ms": 965186602.119396,
+            "frees": 125637,
+            "goroutines": 165,
+            "heap_alloc": 61275816,
+            "heap_idle": 6938624,
+            "heap_inuse": 62726144,
+            "heap_objects": 158477,
+            "heap_released": 6938624,
+            "heap_sys": 69664768,
+            "last_gc_unix_ns": 1790878160571261826,
+            "mallocs": 284114,
+            "mem_profile_rate": 524288,
+            "next_gc": 84656010,
+            "num_forced_gc": 0,
+            "num_gc": 7,
+            "pause_total_ns": 1253165,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 326,
+            "stack_inuse": 1638400,
+            "stack_sys": 1638400,
+            "start_ms": 965186602.10958,
+            "sys": 78031128,
+            "total_alloc": 73167160
+          }
+        },
+        {
+          "checkpoint": 3,
+          "elapsed_ms": 38576.49893498421,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 111255,
+              "alloc_space": 18332097,
+              "inuse_objects": 20448,
+              "inuse_space": 11512673
+            },
+            "goroutine": {
+              "goroutine": 166
+            },
+            "heap": {
+              "alloc_objects": 111255,
+              "alloc_space": 18332097,
+              "inuse_objects": 20448,
+              "inuse_space": 11512673
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.010403990745544434,
+            "end_ms": 965198601.443039,
+            "frees": 127392,
+            "goroutines": 166,
+            "heap_alloc": 66024312,
+            "heap_idle": 6266880,
+            "heap_inuse": 67592192,
+            "heap_objects": 170933,
+            "heap_released": 6266880,
+            "heap_sys": 73859072,
+            "last_gc_unix_ns": 1790878160571261826,
+            "mallocs": 298325,
+            "mem_profile_rate": 524288,
+            "next_gc": 84656010,
+            "num_forced_gc": 0,
+            "num_gc": 7,
+            "pause_total_ns": 1253165,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 452,
+            "stack_inuse": 1638400,
+            "stack_sys": 1638400,
+            "start_ms": 965198601.432635,
+            "sys": 82225432,
+            "total_alloc": 77915656
+          }
+        },
+        {
+          "checkpoint": 4,
+          "elapsed_ms": 50904.28014600277,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.01143193244934082,
+            "end_ms": 965210901.89781,
+            "frees": 265687,
+            "goroutines": 165,
+            "heap_alloc": 47270168,
+            "heap_idle": 26714112,
+            "heap_inuse": 51503104,
+            "heap_objects": 47797,
+            "heap_released": 6160384,
+            "heap_sys": 78217216,
+            "last_gc_unix_ns": 1790878203470257672,
+            "mallocs": 313484,
+            "mem_profile_rate": 524288,
+            "next_gc": 93521250,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 1296755,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 581,
+            "stack_inuse": 1474560,
+            "stack_sys": 1474560,
+            "start_ms": 965210901.886378,
+            "sys": 86419736,
+            "total_alloc": 82776080
+          }
+        },
+        {
+          "checkpoint": 5,
+          "elapsed_ms": 63852.94313502312,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.026080965995788574,
+            "end_ms": 965223901.881382,
+            "frees": 267945,
+            "goroutines": 165,
+            "heap_alloc": 52519768,
+            "heap_idle": 22413312,
+            "heap_inuse": 55738368,
+            "heap_objects": 67139,
+            "heap_released": 6053888,
+            "heap_sys": 78151680,
+            "last_gc_unix_ns": 1790878203470257672,
+            "mallocs": 335084,
+            "mem_profile_rate": 524288,
+            "next_gc": 93521250,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 1296755,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 717,
+            "stack_inuse": 1540096,
+            "stack_sys": 1540096,
+            "start_ms": 965223901.855301,
+            "sys": 86419736,
+            "total_alloc": 88025680
+          }
+        },
+        {
+          "checkpoint": 6,
+          "elapsed_ms": 76406.4537049532,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.015051007270812988,
+            "end_ms": 965236401.45139,
+            "frees": 269752,
+            "goroutines": 165,
+            "heap_alloc": 57313976,
+            "heap_idle": 17956864,
+            "heap_inuse": 60194816,
+            "heap_objects": 79972,
+            "heap_released": 6053888,
+            "heap_sys": 78151680,
+            "last_gc_unix_ns": 1790878203470257672,
+            "mallocs": 349724,
+            "mem_profile_rate": 524288,
+            "next_gc": 93521250,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 1296755,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 848,
+            "stack_inuse": 1540096,
+            "stack_sys": 1540096,
+            "start_ms": 965236401.436339,
+            "sys": 86681880,
+            "total_alloc": 92819888
+          }
+        },
+        {
+          "checkpoint": 7,
+          "elapsed_ms": 90437.24040305614,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.005109071731567383,
+            "end_ms": 965250501.883496,
+            "frees": 271621,
+            "goroutines": 165,
+            "heap_alloc": 62250464,
+            "heap_idle": 13279232,
+            "heap_inuse": 64872448,
+            "heap_objects": 93885,
+            "heap_released": 6053888,
+            "heap_sys": 78151680,
+            "last_gc_unix_ns": 1790878203470257672,
+            "mallocs": 365506,
+            "mem_profile_rate": 524288,
+            "next_gc": 93521250,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 1296755,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 995,
+            "stack_inuse": 1540096,
+            "stack_sys": 1540096,
+            "start_ms": 965250501.878387,
+            "sys": 86681880,
+            "total_alloc": 97756376
+          }
+        },
+        {
+          "checkpoint": 8,
+          "elapsed_ms": 102763.79086399078,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            },
+            "goroutine": {
+              "goroutine": 166
+            },
+            "heap": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.004906892776489258,
+            "end_ms": 965262802.104546,
+            "frees": 273473,
+            "goroutines": 166,
+            "heap_alloc": 67096504,
+            "heap_idle": 8626176,
+            "heap_inuse": 69525504,
+            "heap_objects": 107298,
+            "heap_released": 6053888,
+            "heap_sys": 78151680,
+            "last_gc_unix_ns": 1790878203470257672,
+            "mallocs": 380771,
+            "mem_profile_rate": 524288,
+            "next_gc": 93521250,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 1296755,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 1124,
+            "stack_inuse": 1540096,
+            "stack_sys": 1540096,
+            "start_ms": 965262802.099639,
+            "sys": 86681880,
+            "total_alloc": 102602416
+          }
+        },
+        {
+          "checkpoint": 9,
+          "elapsed_ms": 115590.63341701031,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 116278,
+              "alloc_space": 49807223,
+              "inuse_objects": 24266,
+              "inuse_space": 40774913
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.0063779354095458984,
+            "end_ms": 965275601.471373,
+            "frees": 275313,
+            "goroutines": 165,
+            "heap_alloc": 71934136,
+            "heap_idle": 3850240,
+            "heap_inuse": 74301440,
+            "heap_objects": 120277,
+            "heap_released": 3850240,
+            "heap_sys": 78151680,
+            "last_gc_unix_ns": 1790878203470257672,
+            "mallocs": 395590,
+            "mem_profile_rate": 524288,
+            "next_gc": 93521250,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 1296755,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 1258,
+            "stack_inuse": 1540096,
+            "stack_sys": 1540096,
+            "start_ms": 965275601.464995,
+            "sys": 86681880,
+            "total_alloc": 107440048
+          }
+        },
+        {
+          "checkpoint": 10,
+          "elapsed_ms": 128751.92328000069,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 197917,
+              "alloc_space": 73704555,
+              "inuse_objects": 18874,
+              "inuse_space": 43945051
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 197917,
+              "alloc_space": 73704555,
+              "inuse_objects": 18874,
+              "inuse_space": 43945051
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.021577000617980957,
+            "end_ms": 965288702.383,
+            "frees": 368699,
+            "goroutines": 165,
+            "heap_alloc": 46292424,
+            "heap_idle": 32481280,
+            "heap_inuse": 49963008,
+            "heap_objects": 49179,
+            "heap_released": 3760128,
+            "heap_sys": 82444288,
+            "last_gc_unix_ns": 1790878280763593588,
+            "mallocs": 417878,
+            "mem_profile_rate": 524288,
+            "next_gc": 91276122,
+            "num_forced_gc": 0,
+            "num_gc": 9,
+            "pause_total_ns": 1390802,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 1395,
+            "stack_inuse": 1441792,
+            "stack_sys": 1441792,
+            "start_ms": 965288702.361423,
+            "sys": 90876184,
+            "total_alloc": 112693344
+          }
+        }
+      ],
+      "identity": {
+        "cgroup_device": 29,
+        "cgroup_inode": 3523853,
+        "cgroup_path": "/system.slice/docker-00803cd161afa64ffb0bf8b8bc3620b91cdab72dc8427d8884df4e08a5097861.scope",
+        "container_created_ms": 965155356.137288,
+        "container_id": "00803cd161afa64ffb0bf8b8bc3620b91cdab72dc8427d8884df4e08a5097861",
+        "creation_time_evidence": {
+          "container_lower_ms": 965154161.919023,
+          "container_upper_ms": 965155356.137288,
+          "pid_created_ms_kind": "upper bound after dedicated start"
+        },
+        "engine_pid": 3963728,
+        "exe_device": 1048699,
+        "exe_inode": 131663975,
+        "fresh_container_inspected": true,
+        "instance": "rrsub2profile-messages-control-00000029",
+        "pid_created_ms": 965155356.142036,
+        "pid_start_ticks": 96515500
+      },
+      "raw_run_sha256": "fd6a3ec207c600db3710da57a995e10a00724b43b2e013e50cd35ec7c59e701e",
+      "runtime_samples": 1418
+    },
+    "responses": {
+      "build": {
+        "base_image_id": "sha256:6df1cc33771f1bc94028cc18440a13e7d31a3513331bbb8d7d686584d19b79e2",
+        "base_tag": "rr-sub2-profile-base:6df1cc3-20261001",
+        "binary_sha256": "798ccacaa5b3db92743ae1a1246c1ad73e21d4cff0151668c9c96167052cf67d",
+        "compilation_gomaxprocs": 2,
+        "dockerfile_sha256": "db5287d8c541469b0694bea3cb68bef7c15b79a65b5154e53d63d414d882351a",
+        "engine_env_file_sha256": "c0468163833be6d517c46bc76593461516efcfff74d5dbf54d7e26c4774a868b",
+        "fixture_attestation_sha256": "0e8f386d5ddcd90a489088a62c787d2e98c778488f40a76d49d7a3d28e5e707a",
+        "go_version": "go1.27.1",
+        "image_id": "sha256:a958cb713052b73c18ddc39224b5b70ab7d9e7e492331720d6c5c81ce88f53ef",
+        "logging": "stdout discarded by Docker log-driver none; file sink disabled; no environment values exported",
+        "tag": "rrsub2profile",
+        "toolchain_receipt_sha256": "92fab300e4e221605c41178d1537e2a9f2cd3744d728d4285e419458236685ce"
+      },
+      "checkpoints": [
+        {
+          "checkpoint": 0,
+          "elapsed_ms": 121.91209900379181,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 88537,
+              "alloc_space": 23818057,
+              "inuse_objects": 45928,
+              "inuse_space": 14321406
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 88537,
+              "alloc_space": 23818057,
+              "inuse_objects": 45928,
+              "inuse_space": 14321406
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.010496973991394043,
+            "end_ms": 964578601.300728,
+            "frees": 132538,
+            "goroutines": 165,
+            "heap_alloc": 51008776,
+            "heap_idle": 4489216,
+            "heap_inuse": 52756480,
+            "heap_objects": 111923,
+            "heap_released": 4358144,
+            "heap_sys": 57245696,
+            "last_gc_unix_ns": 1790877580622012715,
+            "mallocs": 244461,
+            "mem_profile_rate": 524288,
+            "next_gc": 85382418,
+            "num_forced_gc": 0,
+            "num_gc": 7,
+            "pause_total_ns": 1453117,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 33,
+            "stack_inuse": 1474560,
+            "stack_sys": 1474560,
+            "start_ms": 964578601.290231,
+            "sys": 65186072,
+            "total_alloc": 63559800
+          }
+        },
+        {
+          "checkpoint": 1,
+          "elapsed_ms": 11725.954712986946,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 197050,
+              "alloc_space": 384804216,
+              "inuse_objects": 50549,
+              "inuse_space": 86675538
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 197050,
+              "alloc_space": 384804216,
+              "inuse_objects": 50549,
+              "inuse_space": 86675538
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.0152740478515625,
+            "end_ms": 964590201.514057,
+            "frees": 248964,
+            "goroutines": 165,
+            "heap_alloc": 97447968,
+            "heap_idle": 97853440,
+            "heap_inuse": 101998592,
+            "heap_objects": 49393,
+            "heap_released": 45760512,
+            "heap_sys": 199852032,
+            "last_gc_unix_ns": 1790877585129619328,
+            "mallocs": 298357,
+            "mem_profile_rate": 524288,
+            "next_gc": 141599490,
+            "num_forced_gc": 0,
+            "num_gc": 13,
+            "pause_total_ns": 2933199,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 155,
+            "stack_inuse": 1474560,
+            "stack_sys": 1474560,
+            "start_ms": 964590201.498783,
+            "sys": 208455992,
+            "total_alloc": 487020800
+          }
+        },
+        {
+          "checkpoint": 2,
+          "elapsed_ms": 22131.40415608883,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 227017,
+              "alloc_space": 823822874,
+              "inuse_objects": 50548,
+              "inuse_space": 84631540
+            },
+            "goroutine": {
+              "goroutine": 166
+            },
+            "heap": {
+              "alloc_objects": 227017,
+              "alloc_space": 823822874,
+              "inuse_objects": 50548,
+              "inuse_space": 84631540
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.010722994804382324,
+            "end_ms": 964600600.84762,
+            "frees": 288001,
+            "goroutines": 166,
+            "heap_alloc": 97686736,
+            "heap_idle": 98156544,
+            "heap_inuse": 101695488,
+            "heap_objects": 50280,
+            "heap_released": 45391872,
+            "heap_sys": 199852032,
+            "last_gc_unix_ns": 1790877596775654892,
+            "mallocs": 338281,
+            "mem_profile_rate": 524288,
+            "next_gc": 158182538,
+            "num_forced_gc": 0,
+            "num_gc": 20,
+            "pause_total_ns": 4247001,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 265,
+            "stack_inuse": 1474560,
+            "stack_sys": 1474560,
+            "start_ms": 964600600.836897,
+            "sys": 208455992,
+            "total_alloc": 909440480
+          }
+        },
+        {
+          "checkpoint": 3,
+          "elapsed_ms": 32456.022952079773,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 272309,
+              "alloc_space": 1238814813,
+              "inuse_objects": 83897,
+              "inuse_space": 77450923
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 272309,
+              "alloc_space": 1238814813,
+              "inuse_objects": 83897,
+              "inuse_space": 77450923
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.04079294204711914,
+            "end_ms": 964610900.52886,
+            "frees": 328894,
+            "goroutines": 165,
+            "heap_alloc": 121890072,
+            "heap_idle": 74088448,
+            "heap_inuse": 125730816,
+            "heap_objects": 51015,
+            "heap_released": 41779200,
+            "heap_sys": 199819264,
+            "last_gc_unix_ns": 1790877607070346493,
+            "mallocs": 379909,
+            "mem_profile_rate": 524288,
+            "next_gc": 178242874,
+            "num_forced_gc": 0,
+            "num_gc": 26,
+            "pause_total_ns": 6299816,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 373,
+            "stack_inuse": 1507328,
+            "stack_sys": 1507328,
+            "start_ms": 964610900.488067,
+            "sys": 208455992,
+            "total_alloc": 1332021208
+          }
+        },
+        {
+          "checkpoint": 4,
+          "elapsed_ms": 42986.91069805622,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 316143,
+              "alloc_space": 1687761392,
+              "inuse_objects": 50536,
+              "inuse_space": 77934138
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 316143,
+              "alloc_space": 1687761392,
+              "inuse_objects": 50536,
+              "inuse_space": 77934138
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.008242964744567871,
+            "end_ms": 964621500.327508,
+            "frees": 374300,
+            "goroutines": 165,
+            "heap_alloc": 76948424,
+            "heap_idle": 118939648,
+            "heap_inuse": 80912384,
+            "heap_objects": 47138,
+            "heap_released": 59604992,
+            "heap_sys": 199852032,
+            "last_gc_unix_ns": 1790877618901548638,
+            "mallocs": 421438,
+            "mem_profile_rate": 524288,
+            "next_gc": 137327434,
+            "num_forced_gc": 0,
+            "num_gc": 33,
+            "pause_total_ns": 6874608,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 486,
+            "stack_inuse": 1474560,
+            "stack_sys": 1474560,
+            "start_ms": 964621500.319265,
+            "sys": 208455992,
+            "total_alloc": 1754571296
+          }
+        },
+        {
+          "checkpoint": 5,
+          "elapsed_ms": 53436.63593006134,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 378960,
+              "alloc_space": 2109235938,
+              "inuse_objects": 50530,
+              "inuse_space": 81479728
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 378960,
+              "alloc_space": 2109235938,
+              "inuse_objects": 50530,
+              "inuse_space": 81479728
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.0099869966506958,
+            "end_ms": 964631901.268538,
+            "frees": 412671,
+            "goroutines": 165,
+            "heap_alloc": 95717328,
+            "heap_idle": 112951296,
+            "heap_inuse": 99483648,
+            "heap_objects": 50891,
+            "heap_released": 35356672,
+            "heap_sys": 212434944,
+            "last_gc_unix_ns": 1790877628345678110,
+            "mallocs": 463562,
+            "mem_profile_rate": 524288,
+            "next_gc": 174256018,
+            "num_forced_gc": 0,
+            "num_gc": 39,
+            "pause_total_ns": 8448208,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 596,
+            "stack_inuse": 1474560,
+            "stack_sys": 1474560,
+            "start_ms": 964631901.258551,
+            "sys": 221108552,
+            "total_alloc": 2177291680
+          }
+        },
+        {
+          "checkpoint": 6,
+          "elapsed_ms": 63841.874801039696,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 414660,
+              "alloc_space": 2489081567,
+              "inuse_objects": 50530,
+              "inuse_space": 81464399
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 414660,
+              "alloc_space": 2489081567,
+              "inuse_objects": 50530,
+              "inuse_space": 81464399
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.00896608829498291,
+            "end_ms": 964642301.219938,
+            "frees": 455196,
+            "goroutines": 165,
+            "heap_alloc": 140364752,
+            "heap_idle": 68386816,
+            "heap_inuse": 143851520,
+            "heap_objects": 56922,
+            "heap_released": 25993216,
+            "heap_sys": 212238336,
+            "last_gc_unix_ns": 1790877638653927912,
+            "mallocs": 512118,
+            "mem_profile_rate": 524288,
+            "next_gc": 218479914,
+            "num_forced_gc": 0,
+            "num_gc": 44,
+            "pause_total_ns": 9590747,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 706,
+            "stack_inuse": 1671168,
+            "stack_sys": 1671168,
+            "start_ms": 964642301.210972,
+            "sys": 221108552,
+            "total_alloc": 2600220040
+          }
+        },
+        {
+          "checkpoint": 7,
+          "elapsed_ms": 74159.52264201641,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 482036,
+              "alloc_space": 2947452166,
+              "inuse_objects": 50529,
+              "inuse_space": 79412736
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 482036,
+              "alloc_space": 2947452166,
+              "inuse_objects": 50529,
+              "inuse_space": 79412736
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.014700055122375488,
+            "end_ms": 964652600.71041,
+            "frees": 504992,
+            "goroutines": 165,
+            "heap_alloc": 105732584,
+            "heap_idle": 102883328,
+            "heap_inuse": 109486080,
+            "heap_objects": 50373,
+            "heap_released": 56426496,
+            "heap_sys": 212369408,
+            "last_gc_unix_ns": 1790877648877398591,
+            "mallocs": 555365,
+            "mem_profile_rate": 524288,
+            "next_gc": 158164586,
+            "num_forced_gc": 0,
+            "num_gc": 50,
+            "pause_total_ns": 10567146,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 815,
+            "stack_inuse": 1540096,
+            "stack_sys": 1540096,
+            "start_ms": 964652600.69571,
+            "sys": 221108552,
+            "total_alloc": 3022940040
+          }
+        },
+        {
+          "checkpoint": 8,
+          "elapsed_ms": 84427.7723929882,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 495482,
+              "alloc_space": 3383869528,
+              "inuse_objects": 50525,
+              "inuse_space": 71106136
+            },
+            "goroutine": {
+              "goroutine": 166
+            },
+            "heap": {
+              "alloc_objects": 495482,
+              "alloc_space": 3383869528,
+              "inuse_objects": 50525,
+              "inuse_space": 71106136
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.010081052780151367,
+            "end_ms": 964662900.480075,
+            "frees": 548501,
+            "goroutines": 166,
+            "heap_alloc": 91426320,
+            "heap_idle": 117284864,
+            "heap_inuse": 95084544,
+            "heap_objects": 49827,
+            "heap_released": 60489728,
+            "heap_sys": 212369408,
+            "last_gc_unix_ns": 1790877659266713022,
+            "mallocs": 598328,
+            "mem_profile_rate": 524288,
+            "next_gc": 149817578,
+            "num_forced_gc": 0,
+            "num_gc": 56,
+            "pause_total_ns": 11115471,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 924,
+            "stack_inuse": 1540096,
+            "stack_sys": 1540096,
+            "start_ms": 964662900.469994,
+            "sys": 221108552,
+            "total_alloc": 3445652768
+          }
+        },
+        {
+          "checkpoint": 9,
+          "elapsed_ms": 94751.88554298878,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 528417,
+              "alloc_space": 3769236206,
+              "inuse_objects": 67424,
+              "inuse_space": 78394847
+            },
+            "goroutine": {
+              "goroutine": 166
+            },
+            "heap": {
+              "alloc_objects": 528417,
+              "alloc_space": 3769236206,
+              "inuse_objects": 67424,
+              "inuse_space": 78394847
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.020823001861572266,
+            "end_ms": 964673200.33715,
+            "frees": 590390,
+            "goroutines": 165,
+            "heap_alloc": 133973768,
+            "heap_idle": 74752000,
+            "heap_inuse": 137584640,
+            "heap_objects": 51085,
+            "heap_released": 52477952,
+            "heap_sys": 212336640,
+            "last_gc_unix_ns": 1790877669289086037,
+            "mallocs": 641475,
+            "mem_profile_rate": 524288,
+            "next_gc": 162186946,
+            "num_forced_gc": 0,
+            "num_gc": 62,
+            "pause_total_ns": 11511588,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 1033,
+            "stack_inuse": 1572864,
+            "stack_sys": 1572864,
+            "start_ms": 964673200.316327,
+            "sys": 221108552,
+            "total_alloc": 3868552928
+          }
+        },
+        {
+          "checkpoint": 10,
+          "elapsed_ms": 105465.17599999905,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 589112,
+              "alloc_space": 4225070213,
+              "inuse_objects": 50532,
+              "inuse_space": 69612209
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 589112,
+              "alloc_space": 4225070213,
+              "inuse_objects": 50532,
+              "inuse_space": 69612209
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.04183793067932129,
+            "end_ms": 964683901.130261,
+            "frees": 635369,
+            "goroutines": 165,
+            "heap_alloc": 93446064,
+            "heap_idle": 115294208,
+            "heap_inuse": 97042432,
+            "heap_objects": 49670,
+            "heap_released": 37601280,
+            "heap_sys": 212336640,
+            "last_gc_unix_ns": 1790877679987994868,
+            "mallocs": 685039,
+            "mem_profile_rate": 524288,
+            "next_gc": 165779546,
+            "num_forced_gc": 0,
+            "num_gc": 69,
+            "pause_total_ns": 13035398,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 1146,
+            "stack_inuse": 1572864,
+            "stack_sys": 1572864,
+            "start_ms": 964683901.088423,
+            "sys": 221108552,
+            "total_alloc": 4291547264
+          }
+        }
+      ],
+      "identity": {
+        "cgroup_device": 29,
+        "cgroup_inode": 3514950,
+        "cgroup_path": "/system.slice/docker-77ba20b923213253be374f8219090a69af84a6b3b3b59b93a4cde91bf12d7b4d.scope",
+        "container_created_ms": 964575481.631888,
+        "container_id": "77ba20b923213253be374f8219090a69af84a6b3b3b59b93a4cde91bf12d7b4d",
+        "creation_time_evidence": {
+          "container_lower_ms": 964574900.047328,
+          "container_upper_ms": 964575481.631888,
+          "pid_created_ms_kind": "upper bound after dedicated start"
+        },
+        "engine_pid": 3326675,
+        "exe_device": 1048699,
+        "exe_inode": 131479891,
+        "fresh_container_inspected": true,
+        "instance": "rrsub2profile-responses-fixed-00000021",
+        "pid_created_ms": 964575481.635718,
+        "pid_start_ticks": 96457537
+      },
+      "raw_run_sha256": "0ea2847e2cfb72e9d0e1e9d2bc46c330d4c02a99e9eb9f760a2f1df71882a270",
+      "runtime_samples": 1185
+    },
+    "responses-control": {
+      "build": {
+        "base_image_id": "sha256:6df1cc33771f1bc94028cc18440a13e7d31a3513331bbb8d7d686584d19b79e2",
+        "base_tag": "rr-sub2-profile-base:6df1cc3-20261001",
+        "binary_sha256": "798ccacaa5b3db92743ae1a1246c1ad73e21d4cff0151668c9c96167052cf67d",
+        "compilation_gomaxprocs": 2,
+        "dockerfile_sha256": "db5287d8c541469b0694bea3cb68bef7c15b79a65b5154e53d63d414d882351a",
+        "engine_env_file_sha256": "c0468163833be6d517c46bc76593461516efcfff74d5dbf54d7e26c4774a868b",
+        "fixture_attestation_sha256": "0e8f386d5ddcd90a489088a62c787d2e98c778488f40a76d49d7a3d28e5e707a",
+        "go_version": "go1.27.1",
+        "image_id": "sha256:112fc9f96bc21664c6a286e7918b87c7391c6dabf4a55346efa47b936abed9eb",
+        "logging": "stdout discarded by Docker log-driver none; file sink disabled; no environment values exported",
+        "tag": "rrsub2profile",
+        "toolchain_receipt_sha256": "92fab300e4e221605c41178d1537e2a9f2cd3744d728d4285e419458236685ce"
+      },
+      "checkpoints": [
+        {
+          "checkpoint": 0,
+          "elapsed_ms": 127.44687902927399,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 133071,
+              "alloc_space": 28752539,
+              "inuse_objects": 18927,
+              "inuse_space": 14120563
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 133071,
+              "alloc_space": 28752539,
+              "inuse_objects": 18927,
+              "inuse_space": 14120563
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.014901995658874512,
+            "end_ms": 965160851.14614,
+            "frees": 129022,
+            "goroutines": 165,
+            "heap_alloc": 52185384,
+            "heap_idle": 7430144,
+            "heap_inuse": 53747712,
+            "heap_objects": 129581,
+            "heap_released": 7430144,
+            "heap_sys": 61177856,
+            "last_gc_unix_ns": 1790878161328497429,
+            "mallocs": 258603,
+            "mem_profile_rate": 524288,
+            "next_gc": 84668938,
+            "num_forced_gc": 0,
+            "num_gc": 7,
+            "pause_total_ns": 3039118,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 49,
+            "stack_inuse": 1736704,
+            "stack_sys": 1736704,
+            "start_ms": 965160851.131238,
+            "sys": 69310728,
+            "total_alloc": 64492080
+          }
+        },
+        {
+          "checkpoint": 1,
+          "elapsed_ms": 11874.02298104763,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 133071,
+              "alloc_space": 28752539,
+              "inuse_objects": 18927,
+              "inuse_space": 14120563
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 133071,
+              "alloc_space": 28752539,
+              "inuse_objects": 18927,
+              "inuse_space": 14120563
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.013576984405517578,
+            "end_ms": 965172551.116154,
+            "frees": 130839,
+            "goroutines": 165,
+            "heap_alloc": 56916464,
+            "heap_idle": 6905856,
+            "heap_inuse": 58466304,
+            "heap_objects": 142564,
+            "heap_released": 6905856,
+            "heap_sys": 65372160,
+            "last_gc_unix_ns": 1790878161328497429,
+            "mallocs": 273403,
+            "mem_profile_rate": 524288,
+            "next_gc": 84668938,
+            "num_forced_gc": 0,
+            "num_gc": 7,
+            "pause_total_ns": 3039118,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 172,
+            "stack_inuse": 1736704,
+            "stack_sys": 1736704,
+            "start_ms": 965172551.102577,
+            "sys": 73767176,
+            "total_alloc": 69223160
+          }
+        },
+        {
+          "checkpoint": 2,
+          "elapsed_ms": 22302.456441044807,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 133071,
+              "alloc_space": 28752539,
+              "inuse_objects": 18927,
+              "inuse_space": 14120563
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 133071,
+              "alloc_space": 28752539,
+              "inuse_objects": 18927,
+              "inuse_space": 14120563
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.00801706314086914,
+            "end_ms": 965183051.463232,
+            "frees": 132637,
+            "goroutines": 165,
+            "heap_alloc": 61562936,
+            "heap_idle": 6438912,
+            "heap_inuse": 63127552,
+            "heap_objects": 154490,
+            "heap_released": 6438912,
+            "heap_sys": 69566464,
+            "last_gc_unix_ns": 1790878161328497429,
+            "mallocs": 287127,
+            "mem_profile_rate": 524288,
+            "next_gc": 84668938,
+            "num_forced_gc": 0,
+            "num_gc": 7,
+            "pause_total_ns": 3039118,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 283,
+            "stack_inuse": 1736704,
+            "stack_sys": 1736704,
+            "start_ms": 965183051.455215,
+            "sys": 78031128,
+            "total_alloc": 73869632
+          }
+        },
+        {
+          "checkpoint": 3,
+          "elapsed_ms": 32628.03943002224,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 133071,
+              "alloc_space": 28752539,
+              "inuse_objects": 18927,
+              "inuse_space": 14120563
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 133071,
+              "alloc_space": 28752539,
+              "inuse_objects": 18927,
+              "inuse_space": 14120563
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.025173068046569824,
+            "end_ms": 965193350.807468,
+            "frees": 134483,
+            "goroutines": 165,
+            "heap_alloc": 66222768,
+            "heap_idle": 5906432,
+            "heap_inuse": 67854336,
+            "heap_objects": 166699,
+            "heap_released": 5840896,
+            "heap_sys": 73760768,
+            "last_gc_unix_ns": 1790878161328497429,
+            "mallocs": 301182,
+            "mem_profile_rate": 524288,
+            "next_gc": 84668938,
+            "num_forced_gc": 0,
+            "num_gc": 7,
+            "pause_total_ns": 3039118,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 392,
+            "stack_inuse": 1736704,
+            "stack_sys": 1736704,
+            "start_ms": 965193350.782295,
+            "sys": 82225432,
+            "total_alloc": 78529464
+          }
+        },
+        {
+          "checkpoint": 4,
+          "elapsed_ms": 43157.750473976135,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            },
+            "goroutine": {
+              "goroutine": 166
+            },
+            "heap": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.007742047309875488,
+            "end_ms": 965203851.188822,
+            "frees": 269531,
+            "goroutines": 166,
+            "heap_alloc": 47045784,
+            "heap_idle": 26763264,
+            "heap_inuse": 51290112,
+            "heap_objects": 46104,
+            "heap_released": 5685248,
+            "heap_sys": 78053376,
+            "last_gc_unix_ns": 1790878198218649974,
+            "mallocs": 315635,
+            "mem_profile_rate": 524288,
+            "next_gc": 93398442,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 3114940,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 503,
+            "stack_inuse": 1638400,
+            "stack_sys": 1638400,
+            "start_ms": 965203851.18108,
+            "sys": 86419736,
+            "total_alloc": 83248952
+          }
+        },
+        {
+          "checkpoint": 5,
+          "elapsed_ms": 53590.913550019264,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.05845296382904053,
+            "end_ms": 965214250.564427,
+            "frees": 271419,
+            "goroutines": 165,
+            "heap_alloc": 51764912,
+            "heap_idle": 22708224,
+            "heap_inuse": 55345152,
+            "heap_objects": 58554,
+            "heap_released": 5586944,
+            "heap_sys": 78053376,
+            "last_gc_unix_ns": 1790878198218649974,
+            "mallocs": 329973,
+            "mem_profile_rate": 524288,
+            "next_gc": 93398442,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 3114940,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 613,
+            "stack_inuse": 1638400,
+            "stack_sys": 1638400,
+            "start_ms": 965214250.505974,
+            "sys": 86419736,
+            "total_alloc": 87968080
+          }
+        },
+        {
+          "checkpoint": 6,
+          "elapsed_ms": 64060.66889202595,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.020187020301818848,
+            "end_ms": 965224751.216914,
+            "frees": 273772,
+            "goroutines": 165,
+            "heap_alloc": 56914000,
+            "heap_idle": 18071552,
+            "heap_inuse": 59981824,
+            "heap_objects": 77476,
+            "heap_released": 5586944,
+            "heap_sys": 78053376,
+            "last_gc_unix_ns": 1790878198218649974,
+            "mallocs": 351248,
+            "mem_profile_rate": 524288,
+            "next_gc": 93398442,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 3114940,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 724,
+            "stack_inuse": 1638400,
+            "stack_sys": 1638400,
+            "start_ms": 965224751.196727,
+            "sys": 86419736,
+            "total_alloc": 93117168
+          }
+        },
+        {
+          "checkpoint": 7,
+          "elapsed_ms": 74285.69537901878,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.005716919898986816,
+            "end_ms": 965235050.871573,
+            "frees": 275648,
+            "goroutines": 165,
+            "heap_alloc": 61595968,
+            "heap_idle": 13615104,
+            "heap_inuse": 64438272,
+            "heap_objects": 89659,
+            "heap_released": 5586944,
+            "heap_sys": 78053376,
+            "last_gc_unix_ns": 1790878198218649974,
+            "mallocs": 365307,
+            "mem_profile_rate": 524288,
+            "next_gc": 93398442,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 3114940,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 833,
+            "stack_inuse": 1638400,
+            "stack_sys": 1638400,
+            "start_ms": 965235050.865856,
+            "sys": 86419736,
+            "total_alloc": 97799136
+          }
+        },
+        {
+          "checkpoint": 8,
+          "elapsed_ms": 84642.34143996239,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.03178906440734863,
+            "end_ms": 965245351.147595,
+            "frees": 277541,
+            "goroutines": 165,
+            "heap_alloc": 66310072,
+            "heap_idle": 9134080,
+            "heap_inuse": 68919296,
+            "heap_objects": 101922,
+            "heap_released": 5586944,
+            "heap_sys": 78053376,
+            "last_gc_unix_ns": 1790878198218649974,
+            "mallocs": 379463,
+            "mem_profile_rate": 524288,
+            "next_gc": 93398442,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 3114940,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 942,
+            "stack_inuse": 1638400,
+            "stack_sys": 1638400,
+            "start_ms": 965245351.115806,
+            "sys": 86419736,
+            "total_alloc": 102513240
+          }
+        },
+        {
+          "checkpoint": 9,
+          "elapsed_ms": 94870.2062189579,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            },
+            "goroutine": {
+              "goroutine": 166
+            },
+            "heap": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.01120901107788086,
+            "end_ms": 965255550.883355,
+            "frees": 279471,
+            "goroutines": 166,
+            "heap_alloc": 71088080,
+            "heap_idle": 4448256,
+            "heap_inuse": 73605120,
+            "heap_objects": 114726,
+            "heap_released": 4423680,
+            "heap_sys": 78053376,
+            "last_gc_unix_ns": 1790878198218649974,
+            "mallocs": 394197,
+            "mem_profile_rate": 524288,
+            "next_gc": 93398442,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 3114940,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 1050,
+            "stack_inuse": 1638400,
+            "stack_sys": 1638400,
+            "start_ms": 965255550.872146,
+            "sys": 86419736,
+            "total_alloc": 107291248
+          }
+        },
+        {
+          "checkpoint": 10,
+          "elapsed_ms": 105629.6961979866,
+          "profiles": {
+            "allocs": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            },
+            "goroutine": {
+              "goroutine": 165
+            },
+            "heap": {
+              "alloc_objects": 133072,
+              "alloc_space": 57555611,
+              "inuse_objects": 18928,
+              "inuse_space": 42923635
+            }
+          },
+          "runtime": {
+            "duration_ms": 0.039508938789367676,
+            "end_ms": 965266350.969291,
+            "frees": 281405,
+            "goroutines": 165,
+            "heap_alloc": 75873304,
+            "heap_idle": 8339456,
+            "heap_inuse": 78102528,
+            "heap_objects": 127369,
+            "heap_released": 8339456,
+            "heap_sys": 86441984,
+            "last_gc_unix_ns": 1790878198218649974,
+            "mallocs": 408774,
+            "mem_profile_rate": 524288,
+            "next_gc": 93398442,
+            "num_forced_gc": 0,
+            "num_gc": 8,
+            "pause_total_ns": 3114940,
+            "pid": 1,
+            "schema": 1,
+            "sequence": 1164,
+            "stack_inuse": 1638400,
+            "stack_sys": 1638400,
+            "start_ms": 965266350.929782,
+            "sys": 94808344,
+            "total_alloc": 112076472
+          }
+        }
+      ],
+      "identity": {
+        "cgroup_device": 29,
+        "cgroup_inode": 3523932,
+        "cgroup_path": "/system.slice/docker-95a278760b0f1838f6481f488ee6f60f2b0b9b324573f1b343e6bb9e697a8644.scope",
+        "container_created_ms": 965156132.828385,
+        "container_id": "95a278760b0f1838f6481f488ee6f60f2b0b9b324573f1b343e6bb9e697a8644",
+        "creation_time_evidence": {
+          "container_lower_ms": 965154211.841429,
+          "container_upper_ms": 965156132.828385,
+          "pid_created_ms_kind": "upper bound after dedicated start"
+        },
+        "engine_pid": 3963747,
+        "exe_device": 1048728,
+        "exe_inode": 131663975,
+        "fresh_container_inspected": true,
+        "instance": "rrsub2profile-responses-control-00000028",
+        "pid_created_ms": 965156132.831647,
+        "pid_start_ticks": 96515503
+      },
+      "raw_run_sha256": "6c6fb22d2d0b0c78d2d8623b2326aced845e085c66e2d8847c6907e6ac6400e0",
+      "runtime_samples": 1197
+    }
+  }
+}

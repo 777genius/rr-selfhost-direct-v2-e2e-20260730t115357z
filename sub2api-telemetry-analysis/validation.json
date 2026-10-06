@@ -1,0 +1,19 @@
+{
+  "kind": "worker-contract-validation-not-engine-receipt",
+  "node_contracts": {
+    "passed": 6,
+    "failed": 0
+  },
+  "python_filesystem_contracts": {
+    "passed": 3,
+    "failed": 0
+  },
+  "proposal_patch_exact_source_and_syntax": "PASS",
+  "collector_syntax": "PASS",
+  "canonical_memory_cells": 18,
+  "canonical_soak_requests": 500,
+  "actual_engine_memory": "NOT RUN",
+  "Docker_Go_kernel_integration": "NOT RUN",
+  "git_preflight": "linked git metadata unavailable; not retried",
+  "verification_note": "Initial ad hoc patch-snippet concatenation verifier failed due to joining separate hunks. Replaced with exact old-line/hunk application in memory; both proposed files match and parse."
+}

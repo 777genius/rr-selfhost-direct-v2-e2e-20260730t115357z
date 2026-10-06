@@ -1,0 +1,62 @@
+{
+  "sub2api-memory-audit-r3/PROFILING-PLAN.md": {
+    "sha256": "52eb94d700456b9a17ae27f45bab3a1f7d8fb3d44978065f6f1548f39d70dc38",
+    "lines": 27
+  },
+  "sub2api-memory-audit-r3/REPORT.md": {
+    "sha256": "7b8cbfcaae17c939dc74131503dd5d9c58d70736a7c9625285415f04dbcc1404",
+    "lines": 62
+  },
+  "sub2api-memory-audit-r3/audit-log.txt": {
+    "sha256": "afbd027105274f4e91217933bccafc32bdc63178e2cf86bb08d2e81265180b5b",
+    "lines": 1
+  },
+  "sub2api-memory-audit-r3/audit.py": {
+    "sha256": "f2511fcf257688dc23de0ad49715e899326c18b6ab71bd7498f14375f8114cd6",
+    "lines": 67
+  },
+  "sub2api-memory-audit-r3/collector-tests.txt": {
+    "sha256": "2ef54d6ffec840c0af5807a3ffc702484a086e8e5d39d9bd2773fd53841eaea3",
+    "lines": 11
+  },
+  "sub2api-memory-audit-r3/collector_test.py": {
+    "sha256": "be7c373436cb61c75577cab74f214fb240480f3a081482832e0ee5d101b749ac",
+    "lines": 80
+  },
+  "sub2api-memory-audit-r3/completion-audit.json": {
+    "sha256": "c9d47b34978ec0664e8b3b838fee86bfb7605ee761bfcd15a46447d0e447ab99",
+    "lines": 44
+  },
+  "sub2api-memory-audit-r3/input-hashes.json": {
+    "sha256": "d17cd03c53fcd51fe30bd6b86905d63578cf0ab3d9e1307a6e592e61d6ef941e",
+    "lines": 3597
+  },
+  "sub2api-memory-audit-r3/messages-backpressure.proposed.patch": {
+    "sha256": "2e097f6d93ce558ff437a7301b461833a93fac980f53dd692779874e500b23dd",
+    "lines": 11
+  },
+  "sub2api-memory-audit-r3/numeric-regression.tap": {
+    "sha256": "2598a5f7a362800e57de07fd5952d0721b160246c839023eeb7c4b6752b97222",
+    "lines": 38
+  },
+  "sub2api-memory-audit-r3/offline-tests.tap": {
+    "sha256": "8acb497692814f6a89d0425e2147610f3e19fc20d50398feaf8540a645890d50",
+    "lines": 33
+  },
+  "sub2api-memory-audit-r3/offline.test.mjs": {
+    "sha256": "7b3a13f42661271e359b52f84ed58b1e95a267e532f391acc42de21a5b8e1704",
+    "lines": 77
+  },
+  "sub2api-memory-audit-r3/release-prefix.proposed.patch": {
+    "sha256": "d7d02d1e2af3da85948b3c5fecbef000735fe5f8ae0b4d3653183f4286e1775c",
+    "lines": 11
+  },
+  "sub2api-memory-audit-r3/snapshot-analysis.json": {
+    "sha256": "a98b877f60c1af74c53f87404014d1f6ed06d3269ce5e5208651b033cb70846c",
+    "lines": 515
+  },
+  "sub2api-memory-audit-r3/source-verification.json": {
+    "sha256": "342cea745736015517ceb8f51740da4e2ba330b6e8019d9c083c711825c46d37",
+    "lines": 158
+  }
+}

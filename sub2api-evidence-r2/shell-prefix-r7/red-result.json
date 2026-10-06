@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "--test",
+    "--test-reporter=tap",
+    "sub2api-spike/evidence.test.mjs",
+    "gateway-spike/evidence.test.mjs",
+    "sub2api-spike/run-client.test.mjs",
+    "sub2api-evidence-r2/client-contract.test.mjs"
+  ],
+  "exit_code": 1,
+  "signal": null
+}

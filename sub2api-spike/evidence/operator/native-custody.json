@@ -1,0 +1,11 @@
+{
+  "id": "D05-SSE",
+  "evidence_kind": "synthetic-container",
+  "status": "FAIL",
+  "credential_kind": "test-only synthetic upstream API key",
+  "real_provider_keys_used": false,
+  "http_status": 200,
+  "upstream_requests": 1,
+  "provider_credential_reached_run_client": true,
+  "failed_terminal_observed": true
+}

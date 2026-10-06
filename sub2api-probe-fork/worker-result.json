@@ -1,0 +1,113 @@
+{
+  "schema": 1,
+  "task": "rr-gateway-spike-20260930-probe-fork-w1",
+  "status": "PREPARED_NOT_RUN",
+  "bounded_handoff_complete": true,
+  "runtime_zero_effect_verified": false,
+  "goal_progress": "Bounded patch/test handoff complete; current hash/scope audit passes. Goal marked blocked after unavailable pinned Go toolchain/cache recurred across three consecutive goal turns. No runtime PASS or executed-red claim; further verification requires coordinator toolchain/results.",
+  "upstream_commit": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "upstream_commit_authentication": "NOT_VERIFIED: staged source has no Git metadata; no network or Git operations performed",
+  "patch": "sub2api-probe-fork/patches/disable-capability-probe.patch",
+  "patch_sha256": "31ee1ff60fa957566513cbd124cfde6ec97bdf77c1012e7ba583c098d96fdd72",
+  "changed_loc": 266,
+  "added_loc": 266,
+  "removed_loc": 0,
+  "production_files": [
+    "backend/internal/handler/admin/account_handler.go",
+    "backend/internal/service/openai_apikey_responses_probe.go"
+  ],
+  "test_files": [
+    "backend/internal/handler/admin/account_capability_probe_test.go",
+    "backend/internal/service/openai_capability_probe_duplicate_test.go"
+  ],
+  "original_patched_file_hashes": {
+    "backend/internal/handler/admin/account_capability_probe_test.go": {
+      "original_sha256": null,
+      "patched_sha256": "90dbdf1dfc131cbf42ad85239fac413f371c0ded502ef915733a7c2bcd7be999"
+    },
+    "backend/internal/handler/admin/account_handler.go": {
+      "original_sha256": "88f14887c0c3d5bf6aaa953dadfc53d5043c81fe5036c33a30ebb8ea1c14edde",
+      "patched_sha256": "400339bed0a0d6f5c6ec3e9a781555b2c89e459ab0e0ce2a3a21860a5bf85044"
+    },
+    "backend/internal/service/openai_apikey_responses_probe.go": {
+      "original_sha256": "90a8b12cd496d7e34c6ecc865f353399d3c7e8c70806607010ef0167bb958ee6",
+      "patched_sha256": "56a41272e23a13c8dcb3c0fde6ea0b1948ad5e1641367be0c2f9587ddd3b7bba"
+    },
+    "backend/internal/service/openai_capability_probe_duplicate_test.go": {
+      "original_sha256": null,
+      "patched_sha256": "dc5b7cf0a37c9fffe4af8c1d8f649b86bd8439e547c777130587ffc55b0e6cdf"
+    }
+  },
+  "original_tree_sha256": "4e711add67e4bdcebf7511af6ab5cc69489ea1f1ac5c884d022a1823f35a3b70",
+  "patched_tree_sha256": "0298198254b519d2de07b3bdb7a346748958ee32affa086d7e9a98472b1f669c",
+  "requirements": {
+    "trusted_default_off_boolean": "Implemented in persisted Extra only; exact true and openai/apikey scope",
+    "before_goroutine": "Handler shared scheduling function checks trusted flag before spawning",
+    "fresh_service_guard": "Probe method checks newly loaded repository account before HTTP or UpdateExtra",
+    "default_and_other_types": "Existing branches retained; tests prepared for nil/missing/null/false/string/number/OAuth/other platform/all four CN providers",
+    "customer_request_body": "No forwarding/customer body changes; PUT test verifies credential/top-level fields do not control suppression",
+    "duplicate_boolean": "Inspected existing JSON deep copy and runtime discard list; actual duplicate-service test checks stored boolean and map independence",
+    "behavioral_tests": "Actual PUT and actual concrete service; counting in-memory HTTP handler checks generated paid-model request; positive controls, no-call assertions and deterministic actual queued-goroutine barrier prepared",
+    "runtime_verified": "NOT_RUN: unavailable Go toolchain/module cache; no green or executed-red claim"
+  },
+  "verification": {
+    "baseline_hashes": "PASS: six relevant originals match recorded before-hash manifest",
+    "standalone_patch": "PASS: dry-run and actual fuzz=0 application to fresh original paths in independent ignored source copy",
+    "hashes_and_scope": "PASS: applied files/tree match manifest; original input unchanged; only four upstream-relative paths differ; no nested Git/vendor",
+    "go_compile_tests": "NOT_RUN",
+    "gofmt": "NOT_RUN",
+    "original_red_controls": "NOT_RUN; identified expected failing tests below",
+    "race_tests": "NOT_RUN",
+    "details": "sub2api-probe-fork/verification.json",
+    "completion_and_blocked_audit": "sub2api-probe-fork/verification.json: completion_and_blocked_audit"
+  },
+  "original_expected_red": [
+    {
+      "case": "TestCapabilityProbeTrustedExtraPUT/true",
+      "original": "loads=1, HTTP/model calls=1, metadata writes=1",
+      "required": "all counts=0"
+    },
+    {
+      "case": "TestCapabilityProbeQueuedFreshAccount/newly_disabled",
+      "original": "after fresh-load barrier: HTTP/model calls=1, metadata writes=1",
+      "required": "both counts=0"
+    },
+    {
+      "case": "TestCapabilityProbeServiceNoEffects/disabled",
+      "original": "requests=1, metadata writes=1",
+      "required": "both counts=0"
+    }
+  ],
+  "blockers": [
+    "Go and gofmt are absent on PATH; coordinator-supplied pinned Go 1.27.1 and module cache were not available to this worker. Tests prepared per explicit fallback; no download attempted."
+  ],
+  "risks_and_limits": [
+    "Go compilation, formatting, runtime positive/negative controls and original red executions remain unverified.",
+    "In-memory HTTP dispatch exercises actual generated requests through an injected transport; it does not prove sockets, actual admin persistence or deployed DB behavior.",
+    "Suppression applies when the fresh repository load observes true; it cannot cancel already dispatched requests or synchronize a flag flip after that load.",
+    "Exact supplied source bytes are bound by hashes; upstream Git pin authenticity is not independently verified."
+  ],
+  "coordinator_next": [
+    "Run pinned offline Go formatting/unit/original-red/race checks per README and bind evidence to final patch hash.",
+    "Independently review the complete standalone patch.",
+    "Run actual handler counting synthetic server with real persistence and delayed-goroutine zero-effect gate before any live credentials or providers."
+  ],
+  "read_complete_boundary_review": "sub2api-boundary-review/REPORT.md, including full BR02 and delayed probe requirements",
+  "deliverables": [
+    "sub2api-probe-fork/patches/disable-capability-probe.patch",
+    "sub2api-probe-fork/SOURCE.json",
+    "sub2api-probe-fork/README.md",
+    "sub2api-probe-fork/worker-result.json",
+    "sub2api-probe-fork/verification.json"
+  ],
+  "scope": {
+    "owned_output": "sub2api-probe-fork/",
+    "editable_source": ".spike-inputs/probe-source/",
+    "account_go_and_reasoning": "Unchanged",
+    "external_e2e": "NOT_RUN; coordinator-owned",
+    "network_docker_root_live_providers": "Not used",
+    "credentials_auth_homes": "Not accessed",
+    "git_writes": "None"
+  },
+  "goal_status": "blocked"
+}

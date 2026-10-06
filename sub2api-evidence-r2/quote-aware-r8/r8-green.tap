@@ -1,0 +1,22 @@
+TAP version 13
+# Subtest: R8 independent double-outer-quote breakout must fail
+ok 1 - R8 independent double-outer-quote breakout must fail
+  ---
+  duration_ms: 0.927023
+  type: 'test'
+  ...
+# Subtest: R8 independent single-outer-quote breakout must fail
+ok 2 - R8 independent single-outer-quote breakout must fail
+  ---
+  duration_ms: 0.231775
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 69.997615

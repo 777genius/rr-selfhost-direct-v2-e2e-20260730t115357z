@@ -1,0 +1,312 @@
+{
+  "empirical_criterion": {
+    "implication": "Failure proves observed reclaim envelope not met, regardless of reachability or allocator explanation. It does not prove an indefinite leak or absolute RSS between samples.",
+    "meaning": "Last qualifying completed quiescent RSS and smaps sample near 5sec must both be <= burst pre-load baseline +32MiB; separate sampled peak and lifetime cgroup guards also apply.",
+    "production_risk": "Elevated resident high-water memory can reduce container headroom during repeated bursts, increase OOM risk and concurrency cost; unreachable heap/static costs still consume resident capacity until reclaimed.",
+    "stability": "FINITE_SCOPE_ONLY; counts and postwarmup sampled slopes do not establish a plateau. No production GO."
+  },
+  "findings": [
+    {
+      "bound": "Count bounded by physical 100000-slot channel; byte budget not enforced in enqueue. Not an unbounded queue or proof of indefinite leak.",
+      "classification": "SOURCE_CONFIRMED_UNNECESSARY_BODY_REFERENCE",
+      "evidence": "Both enqueue functions copy input including Body; worker consumes extracted content/log plus metadata; all input.Body reads are before enqueue helpers. No clearing assignment. Pending tasks therefore keep original body backing storage alive.",
+      "id": "M2",
+      "independent_red_green": "With worker held and no GC, enqueue large-body tasks through both modes. Red: stored Body nonnil. Green: stored Body nil, same extracted moderation content/metadata/log/action and queue/drop behavior; release/drain reaches zero. Do not use RSS or forced GC as this oracle.",
+      "measured_run_cause": "UNPROVEN; moderation state/queue occupancy not supplied",
+      "proposed_minimal_fix": "Clear Body in the local metadata copy before both enqueue task constructions.",
+      "source": "content_moderation.go:318-332,1178-1293"
+    },
+    {
+      "classification": "SOURCE_CONFIRMED_CHURN_DEPENDENT_MAP_RETENTION",
+      "evidence": "Per hash health entries are inserted; configuration removal/replacement does not prune map; no map deletion in supplied service source. Distinct used configurations accumulate state.",
+      "id": "M3",
+      "independent_red_green": "Offline fixture uses synthetic hash identifiers to exercise repeated insert/retire cycles. Red: inactive historical map grows with cycles. Green: bounded historical state while active accounting/freeze behavior remains correct and concurrent completion cannot resurrect unlimited retired state.",
+      "measured_run_cause": "UNPROVEN; fixed workload has no demonstrated configuration churn",
+      "proposed_minimal_fix": "Bound inactive historical health state or prune removed inactive entries with concurrency-safe handling of in-flight calls.",
+      "source": "content_moderation.go:545,2338-2449;content_moderation_engines.go:99-159"
+    },
+    {
+      "classification": "NO_PROVABLE_STREAM_REPLAY_OR_SPOOL_DEFECT_IN_INSPECTED_PATHS",
+      "evidence": "Messages uses one queued event, scanner-owned 64KiB pooled seed returned on reader exit, trusted cancellation body close and bounded reader join. Responses strict native stage 64KiB RAM/8MiB aggregate, anonymous spool, strict fail closed, deferred Close and commit release; scalar scan runs on forwarding goroutine. Expanded scanner buffer is not returned to seed pool.",
+      "id": "M4",
+      "limits": "Configured frame limits still permit large transient Scanner/Text copies; noncooperative bodies/default drain and exact owners require runtime evidence. No universal leak-free verdict.",
+      "source": "gateway_anthropic_passthrough.go:442-495;openai_gateway_passthrough.go:1938-1951,2000-2018;openai_first_output_timeout.go:24-29,145-260;sse_scanner_buffer_pool.go;native_api_key_cancellation.go:34-59"
+    },
+    {
+      "best_effort_queue_batch_window": [
+        32768,
+        256,
+        "20ms"
+      ],
+      "classification": "SOURCE_GAP_RESOLVED_NO_PROVEN_COMPLETED_BATCH_RETENTION_BUG",
+      "create_queue_batch_window": [
+        4096,
+        64,
+        "3ms"
+      ],
+      "fix": "No production batch-clearing fix justified",
+      "id": "M5",
+      "limits": "Pending channel/in-flight references persist; no byte bound or runtime release/driver cooperation proof",
+      "source_sha256": "5e10557e70be455a904bd40f3a695fd39d2aad5fe3b01eb1cb639d829ac11954",
+      "storage": "fresh local batch per iteration; no repository reusable batch; flush locals return; no explicit clear"
+    }
+  ],
+  "fixed_allocation": {
+    "allocation_time_relative_to_baseline": "UNPROVEN; sampled startup omission can reflect profile lag",
+    "cause_share_of_rss": "UNPROVEN",
+    "classification": "static_service_queue_capacity",
+    "derived_amd64_task_bytes": 288,
+    "derived_ring_bytes": 28800000,
+    "derived_ring_mib": 27.4658203125,
+    "id": "M1",
+    "queue_capacity": 100000,
+    "sampled_constructor_top_mib": 27.47,
+    "source": "content_moderation.go:586-614"
+  },
+  "goal_completion": "COMPLETE within bounded offline diagnostic scope; product NO-GO",
+  "goal_status": "bounded audit complete",
+  "historical_reference": "history/W4/findings.json",
+  "identity_receipts": {
+    "actual_profile_binary_sha256": "798ccacaa5b3db92743ae1a1246c1ad73e21d4cff0151668c9c96167052cf67d",
+    "excluded": [
+      "private/",
+      "profiles/request/",
+      "auth/key files",
+      "large profile binary"
+    ],
+    "native": {
+      "backend_files": 3332,
+      "binary_sha256": "5e28306e531eac0abea49811f116dbbddb233c4e52ce3f7d63f9c71d949632fd",
+      "components": [
+        {
+          "lane": "native",
+          "patch_sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5"
+        },
+        {
+          "lane": "probe",
+          "patch_sha256": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45"
+        },
+        {
+          "lane": "merged-native",
+          "patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5"
+        }
+      ],
+      "credentials_mounted": false,
+      "duration_s": 49.44,
+      "frontend_unchanged_from_base": true,
+      "image_config_sha256": "14d66af7a0273bbf1e48204ddecdb7d10de0b3f2b03e506b8a082aac786f733e",
+      "image_id": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+      "kind": "actual-offline-reviewed-native-source-image-build",
+      "merged_production_patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+      "merged_regression_patch_sha256": "f6909228e016be8817057f2f3c5bd5f460550d9139dff19810c8df59d22d466d",
+      "producer_manifest_sha256": "a5e265dbde32d70046e07863a4d3abeff15088673d6232768ff4eac913b50440",
+      "repo_digests": [
+        "rr-sub2-native-final@sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1"
+      ],
+      "review_required_before_live_canary": true,
+      "schema": "rr-sub2-native-merged-root-build/v1",
+      "source_backend_sha256": "82662b8666b05b6a0a95c76c79bde630ba73a27e2ae89e72363908a1f2117c42",
+      "source_hashes_match": true,
+      "source_ledger_sha256": "38969ade3781252b1913ac435619d1cbe6c961fb08cc50f1bf711a1f09a657be",
+      "source_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+      "tag": "rr-sub2-native-final:96f4-16bc1644-20261001",
+      "toolchain_image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+      "upstream_commit": "96f4c115c9749078f90cbf210a01d39baf3f53b6"
+    },
+    "profile_result": {
+      "config": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/sub2-fork-operator/profile-native-final-w1-inputs/root-config.json",
+      "duration_s": 9.46,
+      "no_provider_effects": true,
+      "observed_profile_binary_sha256": "798ccacaa5b3db92743ae1a1246c1ad73e21d4cff0151668c9c96167052cf67d",
+      "observed_source_matches_verified_stage": true,
+      "producer_cli_actual_prepare_pass": true,
+      "production_patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+      "reviewed_source_sha256": "51173ae370d29c3bdf5f8126c91920b30be668a6513897720bf113e89c93e86c",
+      "status": "PASS"
+    }
+  },
+  "input_hash_ledger": "input-hash-ledger.json",
+  "limitations": [
+    "Executable bytes and complete stage tree excluded: receipt cross-binding only; no rebuild.",
+    "Burst telemetry/READY/DONE/account receipts excluded: post-burst zero-GC and diagnostic RSS outcomes remain accepted canonical evidence; independent raw checkpoint counts/aggregates agree.",
+    "Sampling delay and 512KiB sampling prevent current root ownership/causal RSS attribution.",
+    "No indefinite leak, plateau or continuous physical interval proof.",
+    "Controller root84 and three genuine canaries pending."
+  ],
+  "production_patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+  "production_recommendation": "NO_PRODUCTION_GO",
+  "protocols": {
+    "messages": {
+      "allocation_churn_bytes": 2472329504,
+      "allocator_heap_alloc_baseline_end_bytes": [
+        50270864,
+        97240456
+      ],
+      "allocator_heap_inuse_baseline_end_bytes": [
+        51789824,
+        99909632
+      ],
+      "analysis_sha256": "7dbe90544101a279b8a1298990341f9b0c144c6b86ce3a29a4621bf0504518bd",
+      "cycles_after_each_burst_end": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "diagnostic_empirical_fail_count": 1,
+      "diagnostic_empirical_pass_count": 9,
+      "end_heap_idle_bytes": 53542912,
+      "end_heap_released_bytes": 25518080,
+      "end_rss_bytes": 196571136,
+      "end_unreleased_idle_span_bytes": 28024832,
+      "end_workload_minus_idle_control_rss_bytes": 85655552,
+      "goroutines_baseline_end": [
+        167,
+        165
+      ],
+      "live_attribution": "INCONCLUSIVE",
+      "natural_gc_baseline_end": [
+        7,
+        60
+      ],
+      "physical_interval_rss": "NOTPROVEN",
+      "profile_inuse_baseline_end_bytes": [
+        14475385,
+        63154616
+      ],
+      "recomputed_slopes": {
+        "all_checkpoints": {
+          "goroutines": -0.007773100808802913,
+          "heap_alloc_allocator": 262159.4288899358,
+          "heap_inuse": 264095.0019104018,
+          "heap_objects_allocator": -175.5587311871786,
+          "heap_released": 286419.3459379688,
+          "mallocs": 4904.110378573165,
+          "sampled_heap_alloc_objects_per_second": 4194.798970814786,
+          "sampled_heap_alloc_space_per_second": 19229069.601013504,
+          "sampled_heap_inuse_objects_per_second": 21.77441869616973,
+          "sampled_heap_inuse_space_per_second": 88087.85160651215,
+          "total_alloc": 19318704.86501572
+        },
+        "postwarmup_after_two_bursts": {
+          "goroutines": 0.0010083027752125818,
+          "heap_alloc_allocator": 2933.793294180807,
+          "heap_inuse": 1155.0204122684008,
+          "heap_objects_allocator": 22.06432359088037,
+          "heap_released": 311557.8586875869,
+          "mallocs": 4871.631262521011,
+          "rss_bytes_per_second": -1612.8794179725587,
+          "sampled_heap_alloc_objects_per_second": 4418.770980079964,
+          "sampled_heap_alloc_space_per_second": 19536096.057473723,
+          "sampled_heap_inuse_objects_per_second": -32.80796745598176,
+          "sampled_heap_inuse_space_per_second": -53378.64526987192,
+          "total_alloc": 19133047.05547073
+        }
+      },
+      "run_sha256_reference": "fd8b5532345ae903b79a8046adff006726c4f7a2568c41242f13d13bda433907"
+    },
+    "responses": {
+      "allocation_churn_bytes": 4227987464,
+      "allocator_heap_alloc_baseline_end_bytes": [
+        51008776,
+        93446064
+      ],
+      "allocator_heap_inuse_baseline_end_bytes": [
+        52756480,
+        97042432
+      ],
+      "analysis_sha256": "db899c2a69bd16294caa880bd22af125832fcd38733cc050447c23adb897dcd2",
+      "cycles_after_each_burst_end": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "diagnostic_empirical_fail_count": 3,
+      "diagnostic_empirical_pass_count": 7,
+      "end_heap_idle_bytes": 115294208,
+      "end_heap_released_bytes": 37601280,
+      "end_rss_bytes": 215191552,
+      "end_unreleased_idle_span_bytes": 77692928,
+      "end_workload_minus_idle_control_rss_bytes": 102232064,
+      "goroutines_baseline_end": [
+        165,
+        165
+      ],
+      "live_attribution": "INCONCLUSIVE",
+      "natural_gc_baseline_end": [
+        7,
+        69
+      ],
+      "physical_interval_rss": "NOTPROVEN",
+      "profile_inuse_baseline_end_bytes": [
+        14321406,
+        69612209
+      ],
+      "recomputed_slopes": {
+        "all_checkpoints": {
+          "goroutines": 8.625707186122355e-06,
+          "heap_alloc_allocator": 325149.3296135318,
+          "heap_inuse": 328609.3508891831,
+          "heap_objects_allocator": -262.8142986776377,
+          "heap_released": 205820.81063691684,
+          "mallocs": 4171.537309326611,
+          "sampled_heap_alloc_objects_per_second": 4483.991172376412,
+          "sampled_heap_alloc_space_per_second": 40378842.79783543,
+          "sampled_heap_inuse_objects_per_second": 20.90370129282228,
+          "sampled_heap_inuse_space_per_second": 187781.09872303353,
+          "total_alloc": 40433977.68632782
+        },
+        "postwarmup_after_two_bursts": {
+          "goroutines": 0.003412412661529177,
+          "heap_alloc_allocator": 42937.247761471896,
+          "heap_inuse": 38887.36593928417,
+          "heap_objects_allocator": 0.7400885867187478,
+          "heap_released": 45650.347610979115,
+          "mallocs": 4218.50410298892,
+          "rss_bytes_per_second": 132875.15869918873,
+          "sampled_heap_alloc_objects_per_second": 4233.895345666549,
+          "sampled_heap_alloc_space_per_second": 40762895.71937935,
+          "sampled_heap_inuse_objects_per_second": -172.19480162283008,
+          "sampled_heap_inuse_space_per_second": -98146.61129204152,
+          "total_alloc": 40671655.96102991
+        }
+      },
+      "run_sha256_reference": "0ea2847e2cfb72e9d0e1e9d2bc46c330d4c02a99e9eb9f760a2f1df71882a270"
+    }
+  },
+  "schema": "sub2api-memory-final-audit-w5",
+  "scope_user_reported": {
+    "bursts_per_protocol": 10,
+    "known_requests_total": 100,
+    "matched_idle_controls": true,
+    "response_payload_bytes_per_request": 8388608,
+    "streams": 5
+  },
+  "source_verification": "source-verification.json",
+  "status": "DIAGNOSTIC_ONLY",
+  "verification": {
+    "OLS": "PASS",
+    "binary_bytes_independently_hashed": false,
+    "canonical_full_replay": false,
+    "current_input_hashes": 1674,
+    "decoded_profiles": 132,
+    "historical_input_hashes": 1389,
+    "new_insert_files": 1,
+    "original_source_files": 1377,
+    "public_raw_files": 205,
+    "raw_runtime_checkpoint_profile_aggregate_comparison": "PASS"
+  }
+}

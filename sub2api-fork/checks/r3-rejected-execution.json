@@ -1,0 +1,11 @@
+{
+  "mode": "r3-rejected",
+  "patch_sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5",
+  "source_revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "independent_test_sha256": "3ca97c2d50f0c3c498c51d1fb0af9b7fa5352089953f84d1224e6ea5e03887ce",
+  "independent_reference_test_sha256": "5863f7d72bf5d31865f4a162c614895358fefdc042de9b6128f4d75021e9fa47",
+  "status": "NOT RUN",
+  "network": "disabled by offline Go configuration; coordinator owns OS containment",
+  "reason": "Go unavailable; actual-package compilation/behavior requires coordinator offline toolchain",
+  "exit_code": 77
+}

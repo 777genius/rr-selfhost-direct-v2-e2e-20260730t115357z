@@ -1,0 +1,10 @@
+test_expired_no_dispatch (__main__.Deadlines.test_expired_no_dispatch) ... ok
+test_late_success_actual_command_boundary (__main__.Deadlines.test_late_success_actual_command_boundary) ... ok
+test_on_time_success_is_accepted (__main__.Deadlines.test_on_time_success_is_accepted) ... ok
+test_remaining_supervisor_budget_not_raised (__main__.Deadlines.test_remaining_supervisor_budget_not_raised) ... ok
+test_requested_near_zero_timeout_not_raised (__main__.Deadlines.test_requested_near_zero_timeout_not_raised) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.085s
+
+OK

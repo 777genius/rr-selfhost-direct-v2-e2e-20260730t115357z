@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "kind": "offline packaging and frozen-source verification only",
+  "patch_file_applications_verified": 13,
+  "standalone_gofmt_files": 9,
+  "preservation_input_files": 21,
+  "actual_Go_execution": "NOT RUN per instruction",
+  "Go_compilation": "NOT RUN",
+  "new_binary_RSS": "NOT RUN"
+}

@@ -1,0 +1,24 @@
+{
+  "schema": 1,
+  "revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "source_root": ".spike-inputs/upstream",
+  "status": "SUPPLIED_FRESH_SOURCE_BYTES_IDENTIFIED_COORDINATOR_ARCHIVE_AUTHENTICATION_REQUIRED",
+  "pin_verified_by_worker": false,
+  "network_attempts_this_turn": 0,
+  "tree_sha256": "fd54c05fbf6d70a7afee06da78ac4c45df802505bdbddd7a60820f89a6de26c1",
+  "tree_files": 4168,
+  "tree_digest_algorithm": "sha256 over sorted relative path UTF-8 + NUL + lowercase file sha256 ASCII + LF; exclude .git path components",
+  "inspected_files": {
+    "backend/internal/handler/dto/types.go": "269915cd2c6047c7d03e39ffcf137456b80f124d0780e995e15135b767f49800",
+    "backend/internal/handler/dto/mappers.go": "ed70f616bb1bb79aac2edfc6b2b407fd7fff6c78ee2a39d3728f3997c58d489a",
+    "backend/internal/handler/dto/credentials_redact.go": "7c8e2566ab1333d63fb19351d5adcc2162c732e9078c3d97f128d2dde844d27d",
+    "backend/internal/handler/admin/account_handler.go": "88f14887c0c3d5bf6aaa953dadfc53d5043c81fe5036c33a30ebb8ea1c14edde",
+    "backend/internal/handler/admin/idempotency_helper.go": "c485855b843714a30bcccef2c483a14cde7494ca8f2058a4c36fe4e4e37e4304",
+    "backend/internal/server/routes/admin.go": "c179426009552691c53c614fc157f32bcc58811ba3033fcbb7f0aa5ae563bc8e",
+    "backend/internal/service/admin_account.go": "dbe1b688310bb7a93213dba61a825aeaa400cd8457282819629659c526a12c48",
+    "backend/internal/service/account.go": "d2c9c04d4acbb76d1c04ebb5628ea22efe620aae75ca97b319bb85fd5a17d083",
+    "backend/internal/repository/account_repo.go": "8548ce0689ce564e828e4e508e914892b302e649d5656e54b109e973c8730e2c",
+    "backend/internal/repository/account_repo_duplicate_integration_test.go": "af6f9b2c9d6cfdf19b6fa42949acede707d63e5c1beb5b55b815af05566eeaa7"
+  },
+  "coordinator_gate": "Authenticate and extract fresh archive at exact revision; run verify-handoff.py against fresh original base and fresh upstream archive; record pin verification receipt."
+}

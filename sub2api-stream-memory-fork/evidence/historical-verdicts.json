@@ -1,0 +1,163 @@
+{
+  "empirical_FAIL": 20,
+  "functional_PASS": 20,
+  "new_patch_runtime_result": "NOT RUN; old receipts cannot validate a new binary",
+  "profile_binary": {
+    "binary_sha256": "e331d5cc5713ab665cf7f94363a6c6b72191e3915b8173c079e53b2773cec1ee",
+    "components": [
+      {
+        "lane": "fork-code-w5",
+        "patch_sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5"
+      },
+      {
+        "lane": "canonical",
+        "patch_sha256": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45"
+      }
+    ],
+    "image_id": "sha256:6df1cc33771f1bc94028cc18440a13e7d31a3513331bbb8d7d686584d19b79e2",
+    "source_hashes_match": true,
+    "source_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6"
+  },
+  "receipts": [
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-responses-8-1",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "responses"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-responses-8-5",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "responses"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-responses-8-20",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "responses"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-responses-32-1",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "responses"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-responses-32-5",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "responses"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-responses-32-20",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "responses"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-responses-64-1",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "responses"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-responses-64-5",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "responses"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-responses-64-20",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "responses"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "soak-responses",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "responses"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-messages-8-1",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "messages"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-messages-8-5",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "messages"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-messages-8-20",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "messages"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-messages-32-1",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "messages"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-messages-32-5",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "messages"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-messages-32-20",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "messages"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-messages-64-1",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "messages"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-messages-64-5",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "messages"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "memory-messages-64-20",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "messages"
+    },
+    {
+      "empirical_status": "FAIL",
+      "functional_status": "PASS",
+      "id": "soak-messages",
+      "physical_interval_status": "NOTPROVEN",
+      "protocol": "messages"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "patch_sha256": "4d19a886a346e3d0dbf80b515d12d640a07fc36994f26d3dbddb9245e78f3357",
+  "files": [
+    {
+      "path": "backend/internal/service/account.go",
+      "original_sha256": "d2c9c04d4acbb76d1c04ebb5628ea22efe620aae75ca97b319bb85fd5a17d083",
+      "original_matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "original_sha256": "a3a20c891f67ae6268a2cd4af8363aeba1e2c1853305746aa1a40f27d3bd898e",
+      "original_matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_request_body.go",
+      "original_sha256": "b7cf920f1013a2cd0dbfdf9c0d306da7deeff94e2fb25f764b242f23fe4f6bcb",
+      "original_matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_responses_item_id.go",
+      "original_sha256": "1acf2e024ee351ec925c89b4259860ebfbb101872b0676770a0d57c2e3cbb065",
+      "original_matches": true
+    }
+  ],
+  "apply_exit": 0,
+  "apply_output": "patching file backend/internal/service/account.go\npatching file backend/internal/service/openai_gateway_forward.go\npatching file backend/internal/service/openai_gateway_request_body.go\npatching file backend/internal/service/openai_responses_item_id.go\npatching file backend/internal/service/openai_compatible_reasoning_policy_test.go\n",
+  "patched_files": [
+    {
+      "path": "backend/internal/service/account.go",
+      "sha256": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587",
+      "matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "sha256": "833b21426726e938c66370292bc6de30a789b6c30ba7f9484448a14a31a20623",
+      "matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_request_body.go",
+      "sha256": "16dd34bdd7f041f9bfd78a01a7d9525a1ee77dcb3e3b1906d636781ef07b810e",
+      "matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_responses_item_id.go",
+      "sha256": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2",
+      "matches": true
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_policy_test.go",
+      "sha256": "ee23210693b910cb56422f8b0bff322fa39ea38d749a477c2a928d04552487bc",
+      "matches": true
+    }
+  ],
+  "source_manifest_sha256": "8b62f28c630f5942bd5615e28c64ea8299886006a20727a527f9c0bcd6fe9b2c",
+  "upstream_revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "receipt_sha256": "771e262d486a0b4eab400958798987f6c1fbe88238d2dd1d891e534d73e0db33",
+  "receipt_validation": {
+    "status": "PASS_SUMMARY_CONSISTENCY",
+    "red_exit": 1,
+    "green_exit": 0,
+    "red_failure_records": 9,
+    "red_leaf_failure_records": 7,
+    "compile_failed": false,
+    "network": "none",
+    "locally_rerun": false,
+    "raw_logs_present": false,
+    "note": "Summary receipt accepted with task-supplied coordinator archive/toolchain attestation; not independent execution or live final-answer proof."
+  },
+  "reverse": {
+    "exit": 0,
+    "output": "patching file backend/internal/service/account.go\npatching file backend/internal/service/openai_gateway_forward.go\npatching file backend/internal/service/openai_gateway_request_body.go\npatching file backend/internal/service/openai_responses_item_id.go\npatching file backend/internal/service/openai_compatible_reasoning_policy_test.go\n",
+    "all_original_hashes_restored": true,
+    "added_test_removed": true
+  },
+  "sandbox_removed": true
+}

@@ -1,0 +1,56 @@
+{
+  "status": "COORDINATOR_VERIFIED_OFFICIAL_ARCHIVE_AND_LOCAL_HASHES_MATCH",
+  "revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "archive_path": ".spike-inputs/upstream",
+  "network_refetch": false,
+  "peer_original_hashes_match": true,
+  "replacement_original_files": [
+    {
+      "path": "backend/internal/handler/openai_gateway_reasoning_failover.go",
+      "sha256": "196e70d42432ff07f671f96b986be6a27b796fa24578b12e8afd73973c26550d"
+    },
+    {
+      "path": "backend/internal/service/account.go",
+      "sha256": "d2c9c04d4acbb76d1c04ebb5628ea22efe620aae75ca97b319bb85fd5a17d083"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "sha256": "a3a20c891f67ae6268a2cd4af8363aeba1e2c1853305746aa1a40f27d3bd898e"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "sha256": "89a29fb3957287342833e457be0e78a82ed015cb92f45e00e54dcf34aa99ce32"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_request_body.go",
+      "sha256": "b7cf920f1013a2cd0dbfdf9c0d306da7deeff94e2fb25f764b242f23fe4f6bcb"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_upstream_errors.go",
+      "sha256": "4e3884e76971b55e6738716eeee2221fe007a1436dbd7af946ded2540d93516d"
+    },
+    {
+      "path": "backend/internal/service/openai_responses_item_id.go",
+      "sha256": "1acf2e024ee351ec925c89b4259860ebfbb101872b0676770a0d57c2e3cbb065"
+    },
+    {
+      "path": "backend/internal/service/openai_responses_namespace.go",
+      "sha256": "70debcbecf35e7414ed72195125849b079749fbb2b3323746dd079b2ea61f120"
+    },
+    {
+      "path": "backend/internal/service/openai_ws_forwarder_ingress.go",
+      "sha256": "e60da641645da0358b8874e44c31827be14634bf1423ab56e7a06edf87ab5e12"
+    },
+    {
+      "path": "backend/internal/service/openai_ws_forwarder_v2.go",
+      "sha256": "70680001a190509febb484b2dbea5fbae4edef32400bce2f9c06fa68de50517c"
+    },
+    {
+      "path": "backend/internal/service/openai_ws_http_bridge.go",
+      "sha256": "c59cd58fb8f4bfc1a138338ec7b37e5bfcc0049f1649fb5720a69cb668e58ba5"
+    }
+  ],
+  "staged_server_version": "0.2.10",
+  "note": "Coordinator-verified official 96f4 archive: supplied exact-code receipt has source_pin_hashes_match=true. Local originals and frozen peer hashes match; worker did not refetch or independently authenticate the archive over the network.",
+  "coordinator_evidence": "checks/coordinator-w2-red-green.json"
+}

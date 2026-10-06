@@ -1,0 +1,14 @@
+{
+  "original_customer_test_names_retained": 36,
+  "original_financial_prompt_and_assertions_byte_preserved": true,
+  "protected_current_hashes": {
+    "sub2api-spike/broker.mjs": "976def94620b9a01e9523c640c7134c6d930f06babe0612fc6aa06eb078a91dd",
+    "sub2api-spike/granted-run.mjs": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+    "sub2api-spike/oidc.mjs": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647",
+    "sub2api-spike/runner-isolation.mjs": "3eb6a0844007d088609dccf959962d319cac93ea77c1cf9233a90993c4293d03",
+    "sub2api-spike/evidence.mjs": "2f8b6d1d2adda68a97a28d3672617508da09bf3845d9d60e6df608505eb28856",
+    "gateway-spike/evidence.mjs": "f21567866c5c3433809d60af26223d8a6341becc2cf7500e1be4f4b9b56c9755",
+    "sub2api-spike/operator/runner-launcher.sh": "07f9d0eaee9136e86082a9d324dc5b7670a1db18151bd83649764fd105c1a477"
+  },
+  "limitation": "Protected files were read-only in this lane. No linked Git repository baseline was accessible."
+}

@@ -1,0 +1,17 @@
+{
+  "ledgerPath": "/state/run-ledger.json",
+  "ttlMs": 900000,
+  "timeoutMs": 60000,
+  "maxRequests": 32,
+  "maxConcurrent": 2,
+  "globalConcurrent": 40,
+  "oidc": {"ownerID": "13103045", "workflowSHA": "REPLACE_WITH_REVIEWED_40_HEX_MAIN_SHA"},
+  "runBindings": {"REPLACE_RUN_ID:1": "workspace-a"},
+  "runUsers": {"workspace-a": "test-owner"},
+  "workspaces": {"workspace-a": {"suspended": false, "members": {"test-owner": "owner"}, "groups": {"mimo:responses": 1, "mimo:messages": 2, "openrouter:responses": 3}}},
+  "scopes": {
+    "mimo:responses": {"protocol": "responses", "model": "mimo-v2.6-pro", "baseURL": "http://sub2api:8080", "workspaces": {"workspace-a": {"groupID": 1, "keyFile": "/private/workspace-a-mimo-responses.key"}}},
+    "mimo:messages": {"protocol": "messages", "model": "mimo-v2.6-pro", "baseURL": "http://sub2api:8080", "workspaces": {"workspace-a": {"groupID": 2, "keyFile": "/private/workspace-a-mimo-messages.key"}}},
+    "openrouter:responses": {"protocol": "responses", "model": "openai/gpt-4.1", "baseURL": "http://sub2api:8080", "workspaces": {"workspace-a": {"groupID": 3, "keyFile": "/private/workspace-a-openrouter-responses.key"}}}
+  }
+}

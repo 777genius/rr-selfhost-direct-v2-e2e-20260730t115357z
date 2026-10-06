@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: caller accepts object with real independent reproduction
+ok 1 - caller accepts object with real independent reproduction
+  ---
+  duration_ms: 64.845063
+  type: 'test'
+  ...
+# Subtest: caller accepts canary-shaped array with real independent reproduction
+ok 2 - caller accepts canary-shaped array with real independent reproduction
+  ---
+  duration_ms: 45.943336
+  type: 'test'
+  ...
+# Subtest: caller accepts actual local Node wallet execution emitting both numeric examples
+ok 3 - caller accepts actual local Node wallet execution emitting both numeric examples
+  ---
+  duration_ms: 112.283536
+  type: 'test'
+  ...
+# Subtest: caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+ok 4 - caller accepts actual run36869316283 JSONL from local wallet plus independent reproduction
+  ---
+  duration_ms: 103.885616
+  type: 'test'
+  ...
+# Subtest: caller denies invalid JSONL lines and exact numeric mismatches
+ok 5 - caller denies invalid JSONL lines and exact numeric mismatches
+  ---
+  duration_ms: 433.759222
+  type: 'test'
+  ...
+# Subtest: caller retains reads, terminal, genuine final and successful tool requirements with JSONL
+ok 6 - caller retains reads, terminal, genuine final and successful tool requirements with JSONL
+  ---
+  duration_ms: 474.639358
+  type: 'test'
+  ...
+# Subtest: caller denies bad own proof and independent reproduction mismatch
+ok 7 - caller denies bad own proof and independent reproduction mismatch
+  ---
+  duration_ms: 247.651341
+  type: 'test'
+  ...
+# Subtest: caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals
+ok 8 - caller denies failed tools, wrong commands, missing separate reads and unsuccessful terminals
+  ---
+  duration_ms: 545.711121
+  type: 'test'
+  ...
+# Subtest: caller denies reasoning-only final, malformed final, agent failure and unsealed import
+ok 9 - caller denies reasoning-only final, malformed final, agent failure and unsealed import
+  ---
+  duration_ms: 10.421741
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts actual run36869316283 strict JSONL matching either exact example
+ok 10 - numeric proof accepts actual run36869316283 strict JSONL matching either exact example
+  ---
+  duration_ms: 1.151273
+  type: 'test'
+  ...
+# Subtest: strict JSONL consumes every nonblank line as a complete finite numeric object
+ok 11 - strict JSONL consumes every nonblank line as a complete finite numeric object
+  ---
+  duration_ms: 1.684927
+  type: 'test'
+  ...
+# Subtest: strict JSONL compares all three finite fields in one exact example
+ok 12 - strict JSONL compares all three finite fields in one exact example
+  ---
+  duration_ms: 1.054156
+  type: 'test'
+  ...
+# Subtest: strict JSONL retains completed command admission and successful exit gates
+ok 13 - strict JSONL retains completed command admission and successful exit gates
+  ---
+  duration_ms: 0.260369
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts the existing complete JSON object
+ok 14 - numeric proof accepts the existing complete JSON object
+  ---
+  duration_ms: 0.234199
+  type: 'test'
+  ...
+# Subtest: numeric proof accepts canary two-object JSON array matching either reported example
+ok 15 - numeric proof accepts canary two-object JSON array matching either reported example
+  ---
+  duration_ms: 0.281888
+  type: 'test'
+  ...
+# Subtest: numeric proof preserves existing direct and shell-wrapped Node command matching
+ok 16 - numeric proof preserves existing direct and shell-wrapped Node command matching
+  ---
+  duration_ms: 0.33318
+  type: 'test'
+  ...
+# Subtest: numeric proof requires exact finite numbers in all three actual fields
+ok 17 - numeric proof requires exact finite numbers in all three actual fields
+  ---
+  duration_ms: 0.30634
+  type: 'test'
+  ...
+# Subtest: numeric proof parses the complete output and never scans fragments or nested objects
+ok 18 - numeric proof parses the complete output and never scans fragments or nested objects
+  ---
+  duration_ms: 0.252575
+  type: 'test'
+  ...
+# Subtest: numeric proof rejects failed or incomplete tools, reasoning, and wrong commands
+ok 19 - numeric proof rejects failed or incomplete tools, reasoning, and wrong commands
+  ---
+  duration_ms: 0.408979
+  type: 'test'
+  ...
+# Subtest: A06 successful separate shell-wrapped rules read validates actual source and finding
+ok 20 - A06 successful separate shell-wrapped rules read validates actual source and finding
+  ---
+  duration_ms: 1.328131
+  type: 'test'
+  ...
+# Subtest: A06 malformed and fabricated financial success fail inherited validator
+ok 21 - A06 malformed and fabricated financial success fail inherited validator
+  ---
+  duration_ms: 0.207347
+  type: 'test'
+  ...
+# Subtest: A10 E04 streamed UTF8 and missing native terminal rejected
+ok 22 - A10 E04 streamed UTF8 and missing native terminal rejected
+  ---
+  duration_ms: 4.716866
+  type: 'test'
+  ...
+# Subtest: BR04 integrated mismatches deny before any agent effects and receipt
+ok 23 - BR04 integrated mismatches deny before any agent effects and receipt
+  ---
+  duration_ms: 29.925878
+  type: 'test'
+  ...
+# Subtest: BR04 integrated valid binding projects exact identity and preserves high reasoning
+ok 24 - BR04 integrated valid binding projects exact identity and preserves high reasoning
+  ---
+  duration_ms: 3.371631
+  type: 'test'
+  ...
+# Subtest: BR04 model metadata cannot authorize mismatched run
+ok 25 - BR04 model metadata cannot authorize mismatched run
+  ---
+  duration_ms: 1.730043
+  type: 'test'
+  ...
+# Subtest: BR04 receipt still requires successful terminal and numeric financial finding
+ok 26 - BR04 receipt still requires successful terminal and numeric financial finding
+  ---
+  duration_ms: 5.710038
+  type: 'test'
+  ...
+# Subtest: BR04 workflow rejects every mismatched receipt before publication
+ok 27 - BR04 workflow rejects every mismatched receipt before publication
+  ---
+  duration_ms: 7.171961
+  type: 'test'
+  ...
+# Subtest: BR04 caller projects both other supported native mappings
+ok 28 - BR04 caller projects both other supported native mappings
+  ---
+  duration_ms: 4.189989
+  type: 'test'
+  ...
+# Subtest: BR04 unsealed import path aborts before agent effects and receipt
+ok 29 - BR04 unsealed import path aborts before agent effects and receipt
+  ---
+  duration_ms: 2.087774
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2104.729317

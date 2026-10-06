@@ -1,0 +1,20 @@
+✔ uid1001 Actions service and agent cannot serve as control parent (0.81183ms)
+✔ clean child environment rejects control tokens and arbitrary overrides (0.70657ms)
+✔ fixed control contract validates selectors and token destination (4.886239ms)
+✔ fixed control input has a hard byte limit (0.669131ms)
+✔ A06 successful separate shell-wrapped rules read validates actual source and finding (2.172269ms)
+✔ A06 malformed and fabricated financial success fail inherited validator (0.37213ms)
+✔ A10 E04 streamed UTF8 and missing native terminal rejected (8.711589ms)
+✔ signed verified identity yields only a positive identity receipt (3.884254ms)
+✔ spoofed runtime and malformed grant deny before an agent can execute (1.388633ms)
+✔ B01 signed new workflow accepted; baseline verifier remains strict (4.945514ms)
+✔ B02 forged signature unknown key invalid algorithm denied (18.296752ms)
+✔ B03 B04 B05 immutable identity scope and time denial (13.450553ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 182.358223

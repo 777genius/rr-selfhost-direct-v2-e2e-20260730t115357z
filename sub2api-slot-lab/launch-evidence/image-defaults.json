@@ -1,0 +1,11 @@
+{
+  "provenance": "Operator-provided image inspection in task; not independently live-inspected by worker",
+  "Entrypoint": [
+    "/app/docker-entrypoint.sh"
+  ],
+  "Cmd": [
+    "/app/sub2api"
+  ],
+  "User": "",
+  "uid_zero_script_behavior": "exec su-exec sub2api \"$@\""
+}

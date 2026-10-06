@@ -1,0 +1,12 @@
+✔ real complete wallet stdout strict JSONL matches each exact example (1.207952ms)
+✔ whole object and immediate root-array members accepted (0.198743ms)
+✔ all JSONL lines required finite complete objects; no recursion or assembly (0.477411ms)
+✔ successful completed command and exact finite example remain mandatory (0.267345ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 117.846876

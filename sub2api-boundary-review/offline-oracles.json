@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "observations": {
+    "roundtrip_configuration_without_templates": {
+      "result": "quarantine_template_required",
+      "admin_calls": 0
+    },
+    "stock_omitempty": {
+      "get": {
+        "error": "quarantine_template_denied",
+        "duplicate_calls": 0,
+        "recovery_state": "recovery_required",
+        "upstream_id": null
+      },
+      "prepared": {
+        "error": "quarantine_template_drift",
+        "duplicate_calls": 0,
+        "recovery_state": "recovery_required",
+        "upstream_id": null
+      },
+      "duplicate": {
+        "error": "quarantine_invalid",
+        "duplicate_calls": 1,
+        "recovery_state": "recovery_required",
+        "upstream_id": null
+      },
+      "reconcile": {
+        "error": "recovery_quarantine_denied",
+        "duplicate_calls": 1
+      }
+    },
+    "routing_remap_during_promotion": {
+      "connect_status": "active",
+      "schedulable": true,
+      "engine_group_ids": [
+        11
+      ],
+      "current_workspace_group": 22,
+      "subsequent_read": "group_drift"
+    }
+  },
+  "limits": "Offline doubles observe adapter control flow only; no engine/DB/scheduler/kernel claim."
+}

@@ -1,0 +1,73 @@
+{
+  "node": "v24.21.0",
+  "generated_utc": "2026-10-01T15:14:22.709Z",
+  "files": [
+    {
+      "path": "sub2api-spike/evidence.mjs",
+      "added": 5,
+      "removed": 3,
+      "baseline_sha256": "44f17424b5057ab94693809d05bc33db6305f065ead928f95aa0b066137f2160",
+      "final_sha256": "64e3595a2f71c972e035b55215c1db0f156fc9d61e81ad11d119910864fa0833"
+    },
+    {
+      "path": "sub2api-spike/evidence.test.mjs",
+      "added": 42,
+      "removed": 0,
+      "baseline_sha256": "0b2a8eae3f3000598ddc868b0ee449c4c3ca12791343e6fb163fc6d74570bbb0",
+      "final_sha256": "c10cc3252fb4bec0673d81a477aaac7cf12f765ac4ba81783b76b4f05cfacef4"
+    },
+    {
+      "path": "gateway-spike/evidence.mjs",
+      "added": 1,
+      "removed": 1,
+      "baseline_sha256": "f21567866c5c3433809d60af26223d8a6341becc2cf7500e1be4f4b9b56c9755",
+      "final_sha256": "91970dd758b12be92181dc1ed6a15c5776048af4da5dd78b7d3fdf4396960a72"
+    },
+    {
+      "path": "gateway-spike/evidence.test.mjs",
+      "added": 10,
+      "removed": 0,
+      "baseline_sha256": "7f1dced2470eff4666fb2b3d139ba47c3b7f4f3e5c2163ac09aab7db2d9d92b7",
+      "final_sha256": "831db6a72319fcf8d57dac4ff47cc50820c0bb4ea505449aab9cc6ca5de31f98"
+    },
+    {
+      "path": "sub2api-evidence-r2/client-contract.test.mjs",
+      "added": 24,
+      "removed": 0,
+      "baseline_sha256": "629088ea085ea86707748155cdb2df439c28024a33e94285deef9f4cac382080",
+      "final_sha256": "af8da54be31e31e24f1486fd2482aa01f7d0e8aa787090bd27986adec5b70b93"
+    }
+  ],
+  "production_LOC": {
+    "added": 6,
+    "removed": 4
+  },
+  "test_LOC": {
+    "added": 76,
+    "removed": 0
+  },
+  "strict_numeric_parser_byte_identical": true,
+  "preserved_files_verified": {
+    "sub2api-spike/run-client.mjs": "3308b5cbaaf2b5be10d616ace4a1e47a24e013fa944514ae61054fd37d7fb490",
+    "sub2api-spike/granted-run.mjs": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+    "sub2api-spike/runner-isolation.mjs": "3eb6a0844007d088609dccf959962d319cac93ea77c1cf9233a90993c4293d03",
+    ".github/workflows/sub2api-gateway-spike.yml": "b32954d364424d91734d5d080abebd68d57c7ba7b5e9a08a3352aa2cff578c40",
+    "sub2api-spike/fixture/wallet.mjs": "c47fcdfb32c95bf1ede68c01a3705084a658ecbd2882ab21ca4e8cc5fc658f71",
+    "sub2api-spike/fixture/BUSINESS_RULES.md": "1a9837e5e95ee86f22eb171c7bc9ee1226c55ff859973ad573417feb6aae43a5",
+    "sub2api-spike/oidc.mjs": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647"
+  },
+  "artifacts_sha256": {
+    "red.tap": "77fb3264e238d0efd585472facb59d4cd3380735e9c3a5f9c8168c493f788646",
+    "green.tap": "bfb58f2062bef4e5a90aaa03aa5b4aa68e0bc5f29ead0ede28a7d5ce417bb86a",
+    "red-result.json": "ec25ca17b8f5edbade37b630f73da26295e79e304db3e2e479f0342a704da51e",
+    "green-result.json": "49440a2e7ed0bb8eff46ea2df0dd682cf9d6c73a46b90961b8bbd3a66bcd7fa6",
+    "preserved-gates.tap": "a6cc4001786458473b270e170aedc74973bacc2ad6c04b45ca114827c341a065",
+    "preserved-gates-result.json": "ffefc39cafc6eb26c4224ce3712d6045d3ab930ed0459ed055f918226f3e2384",
+    "syntax.json": "01836943567ef73557fc540952496265210e38781a6267b453a88013aba094ea",
+    "implementation.patch": "46313d8ff724881bd8e44018c760c258cccfeec7600770f29c1e07d53e3b61c3",
+    "actual-command-projection.json": "c0e9755421784d9d892c3f4c2034436d7d66ca3b1b0cdece90368e606a4def4b",
+    "actual-agent-projection.json": "46af8168849de783328f22e653debcee1feaa1197680737fce1712352e27affa",
+    "baseline.json": "7a92ca362ed14e54475f253c4cdeb79604d3b57343f40a26669e0df6b23ab8a9",
+    "preserved.json": "f7ffe20fc31c5dd258965ef1df022e12a1e00b267a6e4e57168a4f69cea2974e"
+  }
+}

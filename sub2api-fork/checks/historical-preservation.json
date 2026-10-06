@@ -1,0 +1,57 @@
+{
+  "status": "PASS",
+  "prior_decision": "CANARY_NO_GO",
+  "historical_evidence_only": true,
+  "producer_output_sha256_user_supplied": "12bfd0e5a7eebaf19d7ca52ca1df0d5a875ee7a44834baa792ead151fbb1debd",
+  "note": "Provided producer output digest is an external runtime output identifier, not claimed to equal materialized worker-result.json. Frozen artifacts are preserved byte-for-byte with separately observed hashes.",
+  "files": [
+    {
+      "path": "checks/historical-producer/README.md",
+      "sha256": "824ee275d060cde1e22eb66e1c5a3ca0b9c500990fdb924903cca0cdf210fbe6"
+    },
+    {
+      "path": "checks/historical-producer/REPORT.md",
+      "sha256": "a2d4f215700d2b440e6d94ae66d86f20e9ea13718d5f871d3ef87d458431b222"
+    },
+    {
+      "path": "checks/historical-producer/SOURCE.json",
+      "sha256": "8b62f28c630f5942bd5615e28c64ea8299886006a20727a527f9c0bcd6fe9b2c"
+    },
+    {
+      "path": "checks/historical-producer/artifact-verification.json",
+      "sha256": "bffeca82cac72dace3e59693b6b2bbf221688cbde9f9ee148de6ef36834cd335"
+    },
+    {
+      "path": "checks/historical-producer/coordinator-prior-red-green.json",
+      "sha256": "771e262d486a0b4eab400958798987f6c1fbe88238d2dd1d891e534d73e0db33"
+    },
+    {
+      "path": "checks/historical-producer/native-reasoning.patch",
+      "sha256": "4d19a886a346e3d0dbf80b515d12d640a07fc36994f26d3dbddb9245e78f3357"
+    },
+    {
+      "path": "checks/historical-producer/pinned-source-verification.json",
+      "sha256": "28850b010364682a99506b8538866137fcae8a513de84db9de2a636752e9a871"
+    },
+    {
+      "path": "checks/historical-producer/regression-oracles.json",
+      "sha256": "7351d7cfc39ac6ff728e09809784a05a060fc3b0d381365ea54aa0b2fdab6a0c"
+    },
+    {
+      "path": "checks/historical-producer/review.json",
+      "sha256": "c5d04f217d89f330d98a1cafadb8f3fb9e8c732807213c94e750dee2447a3dd2"
+    },
+    {
+      "path": "checks/historical-producer/run-backend-tests.py",
+      "sha256": "63f5d25997d228597a8830912ce8c305ab1544cd004c882f4ff4a7bc5ccee31f"
+    },
+    {
+      "path": "checks/historical-producer/verification.json",
+      "sha256": "dfb0897e89184bd42095ad0a98b5c36cb4d04b1b32b6f439ed2c3f81ecfefbce"
+    },
+    {
+      "path": "checks/historical-producer/worker-result.json",
+      "sha256": "05541193ccce1e66502e2b5c00c9443542d777afb1482cd88dc398b0cc3eef57"
+    }
+  ]
+}

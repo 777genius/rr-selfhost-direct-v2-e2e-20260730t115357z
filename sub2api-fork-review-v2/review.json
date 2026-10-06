@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "status": "BOUNDED_REVIEW_COMPLETE",
+  "source_revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "patch_sha256": "7dec93ec55da38f15e719f5b7b7769ad2ec874ae548e1125a8a028e12cc51bdf",
+  "source_manifest_sha256": "97ce040ac66cbda3d9f8b22773e00685034278cc9380adc7ad8eaea8afb9bbd3",
+  "changed_lines": 860,
+  "changed_files": 14,
+  "decisions": {
+    "sandbox_integration": "NO_GO",
+    "native_thinking_canary": "NO_GO_EXACT_CANDIDATE",
+    "production": "NO_GO",
+    "external_live_native_mimo_codex_final_answer_canary": "MANDATORY_AFTER_REPAIR_NOT_A_WAIT"
+  },
+  "findings": [
+    {
+      "id": "R1",
+      "priority": "P1",
+      "title": "Rejected-field recovery deletes opted-in reasoning and retries",
+      "locations": [
+        {
+          "file": "backend/internal/service/openai_gateway_forward.go",
+          "line": 1148
+        },
+        {
+          "file": "backend/internal/service/openai_gateway_passthrough.go",
+          "line": 395
+        },
+        {
+          "file": "backend/internal/service/openai_ws_http_bridge.go",
+          "line": 590
+        },
+        {
+          "file": "backend/internal/service/openai_ws_forwarder_ingress.go",
+          "line": 1050
+        },
+        {
+          "file": "backend/internal/service/openai_responses_rejected_field_retry.go",
+          "line": 380
+        }
+      ],
+      "trigger": "HTTP400 array_above_max_length naming input[0].content on an opted-in encrypted reasoning item with nonempty content; null/status repairs are also unguarded",
+      "evidence": "Actual retry call sites and inherited helper assertions inspected; closest independent real-Forward test supplied, unexecuted",
+      "remedy": "Gate proposed rejected-field transformations against opaque reasoning changes for opted-in accounts at every caller; return provider rejection without replay/failover, retaining other-field/default repairs",
+      "independent_test": "TestIndependentCompatibleReasoningRejectedContent"
+    },
+    {
+      "id": "R2",
+      "priority": "P2",
+      "title": "Passthrough empty-image cleanup rounds opaque integer",
+      "locations": [
+        {
+          "file": "backend/internal/service/openai_gateway_passthrough.go",
+          "line": 245
+        },
+        {
+          "file": "backend/internal/service/openai_gateway_request_body.go",
+          "line": 2371
+        }
+      ],
+      "trigger": "Opted-in reasoning opaque=9007199254740993 plus user message containing text and input_image image_url=data:image/png;base64,",
+      "evidence": "Whole-body float64 decode/reserialize proven by source and standard Go JSON semantics; closest independent real-Forward test supplied, unexecuted",
+      "remedy": "Use decodeOpenAIJSONUseNumber in raw empty-image cleanup and preserve opaque reasoning while cleaning ordinary message content",
+      "independent_test": "TestIndependentCompatibleReasoningEmptyImagePrecision"
+    }
+  ],
+  "closed_prior_findings": [
+    "Ciphertext-specific HTTP400/native WS recovery and HTTP/native/bridge ingress lineage/prestrip",
+    "Bridge SSE ciphertext response.failed no retry with original terminal; legacy false control retained",
+    "Image-generation-tool precision branch",
+    "Initial reasoning namespace loss",
+    "Full replay interleaving oracle"
+  ],
+  "policy_review": {
+    "authority": "trusted Account.Extra strict bool only",
+    "scope": "platform=openai type=apikey native Responses capability",
+    "client_can_enable": false,
+    "default_oauth_cn_cc_policy_unchanged": true
+  },
+  "tests": {
+    "independent_artifact_verification": "PASS",
+    "coordinator_receipt": ".spike-inputs/coordinator-red-green.json",
+    "coordinator_receipt_sha256": "ddb82a5979d424383e53d16414cbc6a94cdcb01eafba3c91ae7757ac9c96c004",
+    "baseline": {
+      "exit": 1,
+      "failed_records": 33,
+      "compile_error": false
+    },
+    "patched": {
+      "exit": 0,
+      "passed_records": 116,
+      "failed_records": 0
+    },
+    "toolchain": "Go1.27.1",
+    "network_none": "task attestation",
+    "local_go": "UNAVAILABLE",
+    "local_gofmt": "UNAVAILABLE",
+    "independent_behavior_tests": "NOT_RUN",
+    "new_expected_failures": [
+      "Rejected content ordinary and passthrough",
+      "Empty image precision passthrough"
+    ],
+    "new_expected_control": "Empty image precision ordinary HTTP passes",
+    "limitations": [
+      "Coordinator receipt contains no raw log or command",
+      "PASS/FAIL counts include parent records",
+      "Full higher handler selection loop inspected, not executed",
+      "No live final-answer proof"
+    ]
+  },
+  "sandbox": {
+    "owned_path": "sub2api-fork-review-v2/",
+    "other_paths": "READ_ONLY",
+    "production_source_edits": false,
+    "git_writes": false,
+    "elevated_actions": false,
+    "docker": false,
+    "network": false,
+    "live_provider": false,
+    "auth_homes_or_credentials": false,
+    "fixtures": "synthetic only"
+  },
+  "artifacts": [
+    "REPORT.md",
+    "review.json",
+    "verification.json",
+    "verify.py",
+    "independent_boundary_test.go.txt"
+  ],
+  "report_sha256": "8ec322f0c39631e4d054a4029a16d2ec664523bfbd11772c2aee7721f994cde9",
+  "independent_test_sha256": "3ca97c2d50f0c3c498c51d1fb0af9b7fa5352089953f84d1224e6ea5e03887ce",
+  "handoff": "Controller repairs and refreezes before integration. Bounded review finished without polling external gates."
+}

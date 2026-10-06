@@ -1,0 +1,67 @@
+{
+  "schema": "oauth-lab-w1-worker-verification/v1",
+  "runtime_status": "NOT RUN",
+  "behavioral_passes": 0,
+  "behavioral_failures": 0,
+  "scope": "sub2api-oauth-lab/ only",
+  "checks": [
+    {
+      "name": "patch dry run in empty owned scratch directory",
+      "status": "PASS",
+      "scope": "new-file patch syntax/applicability only"
+    },
+    {
+      "name": "patch application roundtrip",
+      "status": "PASS",
+      "scope": "three applied files byte-identical to authored files; scratch removed"
+    },
+    {
+      "name": "authored source/test/patch SHA256 consistency",
+      "status": "PASS",
+      "scope": "manifest matches current selected files and full staged backend fingerprint"
+    },
+    {
+      "name": "ledger consistency",
+      "status": "PASS",
+      "scope": "12 unique cases, all runtime results NOT RUN, no fabricated actual counts"
+    },
+    {
+      "name": "production patch scope",
+      "status": "PASS",
+      "scope": "patch contains three new *_test.go files only; no dependency/production change"
+    },
+    {
+      "name": "loopback bind probe",
+      "status": "AVAILABLE",
+      "scope": "one socket bound and closed, no HTTP lifecycle executed"
+    },
+    {
+      "name": "Go compile and Go test",
+      "status": "NOT RUN",
+      "reason": "Go executable unavailable"
+    },
+    {
+      "name": "gofmt",
+      "status": "NOT RUN",
+      "reason": "gofmt executable unavailable"
+    },
+    {
+      "name": "real PostgreSQL/Redis integration",
+      "status": "NOT RUN",
+      "reason": "no explicitly configured disposable services used"
+    },
+    {
+      "name": "linked Git metadata/lock visibility",
+      "status": "UNPROVEN",
+      "reason": ".git points to unavailable repository metadata; one lock-file inspection cannot prove unlocked state; no bypass or mutation"
+    }
+  ],
+  "coordinator_required": "Pinned Go1.27.1 compilation, isolated real PostgreSQL/Redis execution and positive receipts; preserve actual failures",
+  "no_claims": [
+    "live OAuth",
+    "production OAuth pool regression",
+    "full HTTP gateway Forward/SSE",
+    "compiled fixtures",
+    "source hypotheses experimentally reproduced"
+  ]
+}

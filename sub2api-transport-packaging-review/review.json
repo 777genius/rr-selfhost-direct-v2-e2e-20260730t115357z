@@ -1,0 +1,50 @@
+{
+  "verdict": "APPROVE",
+  "scope": "SOURCE ONLY, conditional on root obtaining actual current broker unmodified scanner PASS before adoption",
+  "source_findings": [],
+  "scanner_status": "PENDING actual broker capture; no scanner PASS or concrete denial supplied",
+  "required_before_adoption": "Root must capture and scan exact final 95-file proposal plus 37-file helper separately from original reports using actual current broker mark_reviewed; preserve all scanner findings. Fingerprints are insufficient.",
+  "assembly_binding": "assembly-hashes.json",
+  "frozen_input_binding": "frozen-input-hashes.json",
+  "input_manifest_sha256": "b37f241a449c7a795cc79214a4e2ef0b512e937da88dab933bf11caeba4473dc",
+  "inputs_verified": 295,
+  "proposal_files": 95,
+  "helper_files": 37,
+  "helper_sha256": "cb2624819941057b9b3cb61399e9f8354080830c0a2048acc327c76c40293a04",
+  "source_pin": "3004a4b16e03588ee62c0ed7fe2751e0e53300e0",
+  "tests": {
+    "independent_integrity": 4,
+    "actual_cli_symlink_rejections": 16,
+    "zero_history_read_assertions": 16,
+    "structural": 5,
+    "python_packaging": 11,
+    "node_packaging": 2,
+    "goal_independent": 4,
+    "goal_canonical": 45
+  },
+  "exact_reconstruction": {
+    "base": 102,
+    "delta_paths": 8,
+    "prior": 102,
+    "runtime": 103,
+    "historical_output_entries": 294,
+    "historical_inputs": 150,
+    "plan": "unchanged against both retained plans"
+  },
+  "history": {
+    "FAIL": 11,
+    "NOT RUN": 9,
+    "effects": 686,
+    "original_verdict": "REQUESTCHANGES",
+    "reexecuted": false
+  },
+  "limits": [
+    "Fixed-SHA Git execution only supplied root receipt; reviewer used extracted public base and mocked archive controls.",
+    "Public Git object authenticity and physical immutable archive bytes not independently authenticated.",
+    "No native engine, Go, Docker, network, providers, credentials, Git writes or subagents used.",
+    "User-supplied newer 20 memory FAIL and 12 cancel FAIL remain failures; raw newer native evidence not supplied here.",
+    "Future live engine gates NOT RUN; physical absolute intersample bound NOTPROVEN.",
+    "Historical retention hashes and receipt attribution preserved; stale receipt reference in input-retention.json is historical, not current scanner proof."
+  ],
+  "owned_changes": "sub2api-transport-packaging-review/ only; reports, scripts and evidence; production source unchanged"
+}

@@ -1,0 +1,2168 @@
+--- /dev/null
++++ b/backend/internal/service/independent_boundary_test.go
+@@ -0,0 +1,72 @@
++//go:build unit
++
++// Copy only into a disposable exact patched backend/internal/service tree.
++// These are independent contract assertions, not replacement normalization.
++package service
++
++import (
++    "context"
++    "fmt"
++    "io"
++    "net/http"
++    "strings"
++    "testing"
++
++    "github.com/stretchr/testify/require"
++    "github.com/tidwall/gjson"
++)
++
++const independentOpaqueReasoning = `{"type":"reasoning","id":"rs_independent","namespace":"provider.private","encrypted_content":"synthetic-opaque-cipher","summary":[],"content":[{"type":"reasoning_text","text":"keep provider history"}],"opaque":9007199254740993}`
++
++func independentReviewResponse(status int, raw string) *http.Response {
++    return &http.Response{StatusCode: status, Header: http.Header{"Content-Type": []string{"application/json"}}, Body: io.NopCloser(strings.NewReader(raw))}
++}
++
++func TestIndependentCompatibleReasoningRejectedContent(t *testing.T) {
++    for _, passthrough := range []bool{false, true} {
++        t.Run(fmt.Sprint(passthrough), func(t *testing.T) {
++            rejection := `{"error":{"code":"array_above_max_length","message":"Invalid 'input[0].content': array too long. Expected an array with maximum length 0, but got an array with length 1 instead.","param":"input[0].content","type":"invalid_request_error"}}`
++            upstream := &httpUpstreamSequenceRecorder{responses: []*http.Response{
++                independentReviewResponse(http.StatusBadRequest, rejection),
++                independentReviewResponse(http.StatusOK, `{"id":"resp_fixture","output":[],"usage":{"input_tokens":1,"output_tokens":1}}`),
++            }}
++            svc := newOpenAIImageGenerationControlTestService(nil)
++            svc.httpUpstream = upstream
++            account := newOpenAIImageGenerationControlTestAccount()
++            account.Extra = map[string]any{"openai_passthrough": passthrough, "openai_preserve_compatible_reasoning": true}
++            c, rec := newOpenAIImageGenerationControlTestContext(true, "unit-test-agent/1.0")
++            body := []byte(`{"model":"mimo-v2.6-pro","stream":false,"store":false,"input":[` + independentOpaqueReasoning + `,{"role":"user","content":"continue"}]}`)
++            _, err := svc.Forward(context.Background(), c, account, body)
++            require.Equal(t, 1, upstream.callCount, "opaque reasoning rejection must not trigger mutated replay")
++            require.Error(t, err)
++            require.Equal(t, http.StatusBadRequest, rec.Code)
++            for _, outbound := range upstream.bodies {
++                require.JSONEq(t, independentOpaqueReasoning, gjson.GetBytes(outbound, "input.0").Raw)
++                require.Equal(t, "9007199254740993", gjson.GetBytes(outbound, "input.0.opaque").Raw)
++            }
++        })
++    }
++}
++
++func TestIndependentCompatibleReasoningEmptyImagePrecision(t *testing.T) {
++    for _, passthrough := range []bool{false, true} {
++        t.Run(fmt.Sprint(passthrough), func(t *testing.T) {
++            upstream := &httpUpstreamSequenceRecorder{responses: []*http.Response{
++                independentReviewResponse(http.StatusOK, `{"id":"resp_fixture","output":[],"usage":{"input_tokens":1,"output_tokens":1}}`),
++            }}
++            svc := newOpenAIImageGenerationControlTestService(nil)
++            svc.httpUpstream = upstream
++            account := newOpenAIImageGenerationControlTestAccount()
++            account.Extra = map[string]any{"openai_passthrough": passthrough, "openai_preserve_compatible_reasoning": true}
++            c, _ := newOpenAIImageGenerationControlTestContext(true, "unit-test-agent/1.0")
++            body := []byte(`{"model":"mimo-v2.6-pro","stream":false,"store":false,"input":[` + independentOpaqueReasoning + `,{"type":"message","role":"user","content":[{"type":"input_text","text":"continue"},{"type":"input_image","image_url":"data:image/png;base64,"}]}]}`)
++            _, err := svc.Forward(context.Background(), c, account, body)
++            require.NoError(t, err)
++            require.Equal(t, 1, upstream.callCount)
++            outbound := upstream.bodies[0]
++            require.Equal(t, "9007199254740993", gjson.GetBytes(outbound, "input.0.opaque").Raw, "empty-image cleanup must retain opaque integer precision")
++            require.JSONEq(t, independentOpaqueReasoning, gjson.GetBytes(outbound, "input.0").Raw)
++            require.Equal(t, int64(1), gjson.GetBytes(outbound, "input.1.content.#").Int(), "image cleanup must actually run")
++        })
++    }
++}
+--- /dev/null
++++ b/backend/internal/service/native_api_key_cancellation_gaps_test.go
+@@ -0,0 +1,406 @@
++//go:build unit
++
++package service
++
++import (
++	"bytes"
++	"context"
++	"errors"
++	"fmt"
++	"io"
++	"net/http"
++	"net/http/httptest"
++	"net/url"
++	"strings"
++	"sync"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"github.com/Wei-Shaw/sub2api/internal/config"
++	"github.com/Wei-Shaw/sub2api/internal/pkg/tlsfingerprint"
++	"github.com/gin-gonic/gin"
++)
++
++// A one-shot barrier on a real transport body Read, not a synthetic response.
++type rrNativeGapReadBody struct {
++	io.ReadCloser
++	entered chan struct{}
++	once    *sync.Once
++}
++
++func (b *rrNativeGapReadBody) Read(p []byte) (int, error) {
++	b.once.Do(func() { close(b.entered) })
++	return b.ReadCloser.Read(p)
++}
++
++type rrNativeGapTransport struct {
++	*rrNativeTransport
++	entered chan struct{}
++	once    sync.Once
++}
++
++func (u *rrNativeGapTransport) Do(req *http.Request, proxy string, id int64, concurrency int) (*http.Response, error) {
++	resp, err := u.rrNativeTransport.Do(req, proxy, id, concurrency)
++	if err == nil {
++		resp.Body = &rrNativeGapReadBody{ReadCloser: resp.Body, entered: u.entered, once: &u.once}
++	}
++	return resp, err
++}
++
++func (u *rrNativeGapTransport) DoWithTLS(req *http.Request, proxy string, id int64, concurrency int, _ *tlsfingerprint.Profile) (*http.Response, error) {
++	return u.Do(req, proxy, id, concurrency)
++}
++
++type rrNativeHeartbeatFailureWriter struct {
++	gin.ResponseWriter
++	failed chan time.Time
++	once   sync.Once
++}
++
++func (w *rrNativeHeartbeatFailureWriter) Write(p []byte) (int, error) {
++	w.once.Do(func() { w.failed <- time.Now() })
++	return 0, io.ErrClosedPipe
++}
++func (w *rrNativeHeartbeatFailureWriter) WriteString(s string) (int, error) {
++	return w.Write([]byte(s))
++}
++
++func rrNativeGapResult(t *testing.T, result <-chan rrNativeResult, deadline time.Time) rrNativeResult {
++	t.Helper()
++	select {
++	case got := <-result:
++		return got
++	case <-time.After(time.Until(deadline)):
++		t.Fatal("native forward did not finish within the failure/cancellation oracle")
++		return rrNativeResult{}
++	}
++}
++
++func rrNativeGapClosed(t *testing.T, body *rrNativeBody, deadline time.Time) {
++	t.Helper()
++	rrNativeWait(t, body.closed, time.Until(deadline), "real body Close")
++	if body.active.Load() != 0 {
++		t.Fatal("real body Read remains active after forward returns")
++	}
++}
++
++func TestNativeAPIKeyCancellationKeepaliveWriterFailure(t *testing.T) {
++	for _, optIn := range []bool{false, true} {
++		t.Run(fmt.Sprintf("opt-in-%t", optIn), func(t *testing.T) {
++			request := rrNativeRequest("responses")
++			release, returned, canceled := make(chan struct{}), make(chan struct{}), make(chan struct{})
++			var once sync.Once
++			unblock := func() { once.Do(func() { close(release) }) }
++			var effects atomic.Int64
++			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++				defer close(returned)
++				wire, err := io.ReadAll(r.Body)
++				if err != nil || !bytes.Contains(wire, []byte("9007199254740993")) || !bytes.Contains(wire, []byte("rs_mimo")) {
++					t.Errorf("full protected request not received: %v", err)
++				}
++				effects.Add(1)
++				w.Header().Set("Content-Type", "text/event-stream")
++				w.WriteHeader(http.StatusOK)
++				w.(http.Flusher).Flush()
++				select {
++				case <-r.Context().Done():
++					close(canceled)
++				case <-release:
++					ack, terminal := rrNativeFrames("responses")
++					_, _ = io.WriteString(w, ack+terminal)
++				}
++			}))
++			t.Cleanup(server.Close)
++			t.Cleanup(unblock)
++			address, _ := url.Parse(server.URL)
++			base := &rrNativeTransport{client: server.Client(), target: address, body: make(chan *rrNativeBody, 2)}
++			u := &rrNativeGapTransport{rrNativeTransport: base, entered: make(chan struct{})}
++			ctx, cancel := context.WithCancel(context.Background())
++			t.Cleanup(cancel)
++			c, _ := gin.CreateTestContext(httptest.NewRecorder())
++			c.Request = httptest.NewRequest(http.MethodPost, "/v1/responses", bytes.NewReader(request)).WithContext(ctx)
++			writer := &rrNativeHeartbeatFailureWriter{ResponseWriter: c.Writer, failed: make(chan time.Time, 1)}
++			c.Writer = writer
++			cfg := &config.Config{}
++			cfg.Gateway.StreamKeepaliveInterval = 1
++			s := &OpenAIGatewayService{cfg: cfg, httpUpstream: u}
++			result := make(chan rrNativeResult, 1)
++			go func() {
++				res, err := s.forwardOpenAIPassthrough(ctx, c, rrNativeAccount("responses", optIn), request, request, "mimo-v2.6-pro", false, nil, true, time.Now())
++				if res == nil {
++					result <- rrNativeResult{err: err}
++					return
++				}
++				result <- rrNativeResult{true, res.Usage.InputTokens, res.Usage.OutputTokens, res.ClientDisconnect, err}
++			}()
++			rrNativeWait(t, u.entered, 3*time.Second, "held real body Read before heartbeat")
++			var body *rrNativeBody
++			select {
++			case body = <-base.body:
++			case <-time.After(time.Second):
++				t.Fatal("missing transport body")
++			}
++			var failedAt time.Time
++			select {
++			case failedAt = <-writer.failed:
++			case <-time.After(3 * time.Second):
++				t.Fatal("enabled heartbeat never attempted a write")
++			}
++			deadline := failedAt.Add(rrNativeCancelOracle)
++			if ctx.Err() != nil {
++				t.Fatal("independent request context canceled before writer failure")
++			}
++			if optIn {
++				got := rrNativeGapResult(t, result, deadline)
++				var retry *UpstreamFailoverError
++				if got.err == nil || errors.As(got.err, &retry) || got.known || got.input != 0 || got.output != 0 {
++					t.Fatalf("heartbeat failure lost incomplete/unknown outcome: %+v", got)
++				}
++				rrNativeGapClosed(t, body, deadline)
++				rrNativeWait(t, canceled, time.Until(deadline), "upstream canceled by writer failure")
++				rrNativeWait(t, returned, time.Until(deadline), "upstream returned")
++			} else {
++				select {
++				case got := <-result:
++					t.Fatalf("default drain exited before release: %+v", got)
++				case <-body.closed:
++					t.Fatal("default heartbeat failure closed the held body")
++				case <-canceled:
++					t.Fatal("default heartbeat failure canceled upstream")
++				case <-time.After(time.Until(deadline)):
++				}
++				if body.active.Load() == 0 {
++					t.Fatal("default no longer draining the held real Read")
++				}
++				unblock()
++				got := rrNativeGapResult(t, result, time.Now().Add(rrNativeCancelOracle))
++				if got.err != nil || !got.known || got.input != 17 || got.output != 9 {
++					t.Fatalf("default final drain changed: %+v", got)
++				}
++				rrNativeGapClosed(t, body, time.Now().Add(rrNativeCancelOracle))
++			}
++			if ctx.Err() != nil || effects.Load() != 1 || base.attempts.Load() != 1 {
++				t.Fatal("writer failure canceled independent context or caused another dispatch")
++			}
++		})
++	}
++}
++
++func TestNativeAPIKeyCancellationHTTPBodyUncertainty(t *testing.T) {
++	for _, route := range []string{"responses", "anthropic", "native-messages"} {
++		for _, mode := range []string{"truncated", "held-cancel", "complete-503", "complete-400", "over-limit", "over-limit-truncated", "over-limit-400"} {
++			for _, optIn := range []bool{false, true} {
++				t.Run(fmt.Sprintf("%s/%s/opt-in-%t", route, mode, optIn), func(t *testing.T) {
++					rrNativeHTTPBodyCase(t, route, mode, optIn, false)
++				})
++			}
++		}
++	}
++}
++
++func TestNativeAPIKeyCancellationAnthropicHTTPBodySameAccountRetry(t *testing.T) {
++	for _, mode := range []string{"truncated", "held-cancel", "complete-503"} {
++		for _, optIn := range []bool{false, true} {
++			t.Run(fmt.Sprintf("%s/opt-in-%t", mode, optIn), func(t *testing.T) {
++				rrNativeHTTPBodyCase(t, "anthropic", mode, optIn, true)
++			})
++		}
++	}
++}
++
++func rrNativeHTTPBodyCase(t *testing.T, route, mode string, optIn, sameAccountRetry bool) {
++	t.Helper()
++	request := rrNativeRequest(route)
++	payload := `{"error":{"type":"invalid_request_error","code":"invalid_encrypted_content","message":"opaque input rejected"}}`
++	if mode == "over-limit" || mode == "over-limit-truncated" || mode == "over-limit-400" {
++		payload += strings.Repeat(" ", max(int(gatewayUpstreamErrorBodyReadLimit), int(openAIUpstreamErrorBodyReadLimit))+1)
++	}
++	status := http.StatusServiceUnavailable
++	if mode == "complete-400" || mode == "over-limit-400" {
++		status = http.StatusBadRequest
++	}
++	release, returned, canceled := make(chan struct{}), make(chan struct{}), make(chan struct{})
++	var releaseOnce, returnOnce, cancelOnce sync.Once
++	unblock := func() { releaseOnce.Do(func() { close(release) }) }
++	var effects atomic.Int64
++	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++		defer returnOnce.Do(func() { close(returned) })
++		wire, err := io.ReadAll(r.Body)
++		if err != nil || !bytes.Contains(wire, []byte("9007199254740993")) || (route == "responses" && !bytes.Contains(wire, []byte("rs_mimo"))) {
++			t.Errorf("full protected request not received before effect: %v", err)
++		}
++		attempt := effects.Add(1)
++		if sameAccountRetry && attempt > 1 {
++			w.Header().Set("Content-Type", "text/event-stream")
++			ack, terminal := rrNativeFrames(route)
++			_, _ = io.WriteString(w, ack+terminal)
++			return
++		}
++		w.Header().Set("Content-Type", "application/json")
++		length := len(payload)
++		if mode == "over-limit-truncated" {
++			length += 64
++		}
++		w.Header().Set("Content-Length", fmt.Sprint(length))
++		w.WriteHeader(status)
++		if mode == "truncated" || mode == "held-cancel" {
++			_, _ = io.WriteString(w, payload[:12])
++			w.(http.Flusher).Flush()
++			if mode == "held-cancel" {
++				select {
++				case <-r.Context().Done():
++					cancelOnce.Do(func() { close(canceled) })
++					return
++				case <-release:
++					_, _ = io.WriteString(w, payload[12:])
++				}
++			}
++			return
++		}
++		_, _ = io.WriteString(w, payload)
++	}))
++	t.Cleanup(server.Close)
++	t.Cleanup(unblock)
++	address, _ := url.Parse(server.URL)
++	base := &rrNativeTransport{client: server.Client(), target: address, body: make(chan *rrNativeBody, 8)}
++	u := &rrNativeGapTransport{rrNativeTransport: base, entered: make(chan struct{})}
++	// The one-shot read barrier spans all responses, including a default retry.
++	ctx, cancel := context.WithCancel(context.Background())
++	t.Cleanup(cancel)
++	rec := httptest.NewRecorder()
++	c, _ := gin.CreateTestContext(rec)
++	c.Request = httptest.NewRequest(http.MethodPost, "/v1/"+route, bytes.NewReader(request)).WithContext(ctx)
++	a := rrNativeAccount(route, optIn)
++	if sameAccountRetry {
++		a.Credentials["custom_error_codes_enabled"] = true
++		a.Credentials["custom_error_codes"] = []any{float64(400)}
++	}
++	result := make(chan rrNativeResult, 1)
++	go func() { result <- rrNativeForward(ctx, c, route, a, u, request) }()
++	rrNativeWait(t, u.entered, 3*time.Second, "HTTP error body Read after whole-request effect")
++	var body *rrNativeBody
++	select {
++	case body = <-base.body:
++	case <-time.After(time.Second):
++		t.Fatal("missing HTTP error body")
++	}
++	deadline := time.Now().Add(rrNativeCancelOracle)
++	if mode == "held-cancel" {
++		cancel()
++		if !optIn {
++			select {
++			case got := <-result:
++				t.Fatalf("default held error read exited before release: %+v", got)
++			case <-body.closed:
++				t.Fatal("default held error body closed before release")
++			case <-canceled:
++				t.Fatal("default detached error body canceled")
++			case <-time.After(time.Until(deadline)):
++			}
++			if body.active.Load() == 0 {
++				t.Fatal("default held error Read is no longer active")
++			}
++			unblock()
++			deadline = time.Now().Add(rrNativeCancelOracle)
++		}
++	}
++	got := rrNativeGapResult(t, result, deadline)
++	var retry *UpstreamFailoverError
++	uncertain := mode == "truncated" || mode == "held-cancel" || mode == "over-limit-truncated"
++	if optIn && uncertain {
++		if got.err == nil || errors.As(got.err, &retry) || got.known || got.input != 0 || got.output != 0 || effects.Load() != 1 || base.attempts.Load() != 1 {
++			t.Fatalf("uncertain HTTP read retried or manufactured usage: %+v effects=%d attempts=%d", got, effects.Load(), base.attempts.Load())
++		}
++		cause := io.ErrUnexpectedEOF
++		if mode == "held-cancel" {
++			cause = context.Canceled
++		}
++		if !errors.Is(got.err, cause) {
++			t.Fatalf("actual HTTP read/cancellation cause lost: %v", got.err)
++		}
++		if strings.Contains(got.err.Error(), "opaque") || strings.Contains(rec.Body.String(), payload[:12]) {
++			t.Fatal("incomplete upstream body exposed publicly")
++		}
++	} else if sameAccountRetry && mode != "held-cancel" {
++		if got.err != nil || !got.known || got.input != 17 || got.output != 9 || effects.Load() != 2 || base.attempts.Load() != 2 {
++			t.Fatalf("complete/default same-account retry changed: %+v effects=%d", got, effects.Load())
++		}
++	} else if mode == "complete-400" || mode == "over-limit-400" {
++		if got.err == nil || errors.As(got.err, &retry) || got.known || rec.Code != http.StatusBadRequest || !strings.Contains(rec.Body.String(), "opaque input rejected") || effects.Load() != 1 {
++			t.Fatalf("complete rejection/fence changed: %+v status=%d", got, rec.Code)
++		}
++	} else if sameAccountRetry && mode == "held-cancel" {
++		// Legacy sleepWithContext observes the explicitly canceled context only
++		// after the detached body's complete rejection has been released.
++		if !errors.Is(got.err, context.Canceled) || effects.Load() != 1 {
++			t.Fatalf("default retry cancellation behavior changed: %+v", got)
++		}
++	} else if got.err == nil || !errors.As(got.err, &retry) || got.known || effects.Load() != 1 || base.attempts.Load() != 1 {
++		t.Fatalf("complete/default HTTP failover changed: %+v effects=%d", got, effects.Load())
++	}
++	rrNativeGapClosed(t, body, deadline)
++	if mode == "held-cancel" && optIn {
++		rrNativeWait(t, canceled, time.Until(deadline), "held HTTP body upstream canceled")
++		rrNativeWait(t, returned, time.Until(deadline), "held HTTP body upstream returned")
++	}
++}
++
++// A complete compact recovery trigger inside an incomplete HTTP envelope must
++// never authorize recovery. Complete/default controls execute the existing
++// configured fallback on exactly the same bytes and request boundary.
++func TestNativeAPIKeyCancellationHTTPBodyCompactRecovery(t *testing.T) {
++	for _, truncated := range []bool{false, true} {
++		for _, optIn := range []bool{false, true} {
++			t.Run(fmt.Sprintf("truncated-%t/opt-in-%t", truncated, optIn), func(t *testing.T) {
++				request := bytes.Replace(rrNativeRequest("responses"), []byte(`"input":[`), []byte(`"input":[{"type":"compaction_trigger"},`), 1)
++				payload := `{"error":{"code":"context_length_exceeded","message":"maximum context length exceeded"}}`
++				var effects atomic.Int64
++				server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++					wire, err := io.ReadAll(r.Body)
++					if err != nil || !bytes.Contains(wire, []byte("9007199254740993")) || !bytes.Contains(wire, []byte("rs_mimo")) {
++						t.Errorf("protected compact request changed: %v", err)
++					}
++					if effects.Add(1) == 1 {
++						w.Header().Set("Content-Type", "application/json")
++						length := len(payload)
++						if truncated {
++							length += 64
++						}
++						w.Header().Set("Content-Length", fmt.Sprint(length))
++						w.WriteHeader(http.StatusServiceUnavailable)
++						_, _ = io.WriteString(w, payload)
++						return
++					}
++					if !bytes.Contains(wire, []byte(`"model":"fallback-compact"`)) {
++						t.Errorf("configured compact fallback not used: %s", wire)
++					}
++					w.Header().Set("Content-Type", "text/event-stream")
++					ack, terminal := rrNativeFrames("responses")
++					_, _ = io.WriteString(w, ack+terminal)
++				}))
++				t.Cleanup(server.Close)
++				address, _ := url.Parse(server.URL)
++				u := &rrNativeTransport{client: server.Client(), target: address, body: make(chan *rrNativeBody, 4)}
++				c, _ := gin.CreateTestContext(httptest.NewRecorder())
++				c.Request = httptest.NewRequest(http.MethodPost, "/v1/responses", bytes.NewReader(request))
++				MarkOpenAINativeCompactionV2(c)
++				cfg := &config.Config{}
++				cfg.Gateway.OpenAICompactModel = "fallback-compact"
++				s := &OpenAIGatewayService{cfg: cfg, httpUpstream: u}
++				res, err := s.forwardOpenAIPassthrough(context.Background(), c, rrNativeAccount("responses", optIn), request, request, "mimo-v2.6-pro", false, nil, true, time.Now())
++				if optIn && truncated {
++					var retry *UpstreamFailoverError
++					if res != nil || !errors.Is(err, io.ErrUnexpectedEOF) || errors.As(err, &retry) || effects.Load() != 1 || u.attempts.Load() != 1 {
++						t.Fatalf("uncertain compact rejection authorized recovery: res=%+v err=%v effects=%d", res, err, effects.Load())
++					}
++				} else if err != nil || res == nil || res.Usage.InputTokens != 17 || res.Usage.OutputTokens != 9 || effects.Load() != 2 || u.attempts.Load() != 2 {
++					t.Fatalf("complete/default compact handling changed: res=%+v err=%v effects=%d", res, err, effects.Load())
++				}
++				for len(u.body) > 0 {
++					rrNativeGapClosed(t, <-u.body, time.Now().Add(rrNativeCancelOracle))
++				}
++			})
++		}
++	}
++}
+--- /dev/null
++++ b/backend/internal/service/native_api_key_cancellation_test.go
+@@ -0,0 +1,708 @@
++//go:build unit
++
++package service
++
++import (
++	"bytes"
++	"context"
++	"encoding/json"
++	"errors"
++	"fmt"
++	"io"
++	"net/http"
++	"net/http/httptest"
++	"net/http/httptrace"
++	"net/url"
++	"strings"
++	"sync"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"github.com/Wei-Shaw/sub2api/internal/config"
++	"github.com/Wei-Shaw/sub2api/internal/pkg/tlsfingerprint"
++	"github.com/gin-gonic/gin"
++)
++
++// Failure oracle, defined before executing scenarios: a held httptest upstream
++// must observe Request.Context cancellation and return within 1.25s of the
++// downstream cancel when trusted opt-in is true. A default account must remain
++// active throughout that SAME interval and finish only after explicit release.
++// Count real dispatched attempts, real body closes, and active real Reads.
++const rrNativeCancelOracle = 1250 * time.Millisecond
++
++type rrNativeBody struct {
++	io.ReadCloser
++	active atomic.Int64
++	closed chan struct{}
++	once   sync.Once
++}
++
++func (b *rrNativeBody) Read(p []byte) (int, error) {
++	b.active.Add(1)
++	defer b.active.Add(-1)
++	return b.ReadCloser.Read(p)
++}
++
++func (b *rrNativeBody) Close() error {
++	err := b.ReadCloser.Close()
++	b.once.Do(func() { close(b.closed) })
++	return err
++}
++
++// This is a real http.Client transport adapter, not a canned response double.
++// Only the destination is redirected to this test's actual httptest server.
++type rrNativeTransport struct {
++	client   *http.Client
++	target   *url.URL
++	attempts atomic.Int64
++	body     chan *rrNativeBody
++}
++
++func (u *rrNativeTransport) Do(req *http.Request, _ string, _ int64, _ int) (*http.Response, error) {
++	u.attempts.Add(1)
++	forward := req.Clone(req.Context())
++	destination := *req.URL
++	destination.Scheme, destination.Host = u.target.Scheme, u.target.Host
++	forward.URL, forward.Host = &destination, u.target.Host
++	resp, err := u.client.Do(forward)
++	if err == nil {
++		body := &rrNativeBody{ReadCloser: resp.Body, closed: make(chan struct{})}
++		resp.Body = body
++		u.body <- body
++	}
++	return resp, err
++}
++
++func (u *rrNativeTransport) DoWithTLS(req *http.Request, proxy string, id int64, concurrency int, _ *tlsfingerprint.Profile) (*http.Response, error) {
++	return u.Do(req, proxy, id, concurrency)
++}
++
++type rrNativeWriter struct {
++	gin.ResponseWriter
++	ack    chan struct{}
++	once   sync.Once
++	fail   bool
++	failAt atomic.Int64
++}
++
++func (w *rrNativeWriter) Flush() {
++	w.ResponseWriter.Flush()
++	w.once.Do(func() { close(w.ack) })
++}
++
++func (w *rrNativeWriter) Write(p []byte) (int, error) {
++	if w.fail {
++		w.failAt.CompareAndSwap(0, time.Now().UnixNano())
++		return 0, io.ErrClosedPipe
++	}
++	return w.ResponseWriter.Write(p)
++}
++
++func (w *rrNativeWriter) WriteString(p string) (int, error) { return w.Write([]byte(p)) }
++
++type rrNativeResult struct {
++	known      bool
++	input      int
++	output     int
++	disconnect bool
++	err        error
++}
++
++func rrNativeAccount(route string, enabled any) *Account {
++	a := &Account{ID: 919, Name: "native-cancel-test", Type: AccountTypeAPIKey,
++		Platform: PlatformOpenAI, Concurrency: 1, Credentials: map[string]any{"api_key": "synthetic"},
++		Extra: map[string]any{NativeAPIKeyCancelOnDisconnectExtraKey: enabled,
++			"openai_preserve_compatible_reasoning": true, "openai_responses_mode": "force_responses", "openai_passthrough": true}}
++	if route == "anthropic" {
++		a.Platform = PlatformAnthropic
++		a.Extra["anthropic_passthrough"] = true
++	}
++	if route == "native-messages" {
++		a.Platform = PlatformKimi
++		a.Credentials["api_protocol"] = APIProtocolAnthropic
++	}
++	return a
++}
++
++func rrNativeRequest(route string) []byte {
++	if route == "responses" {
++		return []byte(`{"model":"mimo-v2.6-pro","stream":true,"native_api_key_cancel_on_disconnect":true,"input":[{"type":"reasoning","id":"rs_mimo","content":[{"type":"reasoning_text","text":"opaque"}],"opaque":9007199254740993},{"type":"message","role":"user","content":"hi"}]}`)
++	}
++	return []byte(`{"model":"k3","max_tokens":32,"stream":true,"native_api_key_cancel_on_disconnect":true,"messages":[{"role":"user","content":"hi"}],"metadata":{"protected":9007199254740993}}`)
++}
++
++func rrNativeFrames(route string) (string, string) {
++	if route == "responses" {
++		return "data: {\"type\":\"response.output_text.delta\",\"delta\":\"ACK\",\"response\":{\"usage\":{\"input_tokens\":17,\"output_tokens\":2}}}\n\n",
++			"data: {\"type\":\"response.completed\",\"response\":{\"id\":\"resp_cancel\",\"status\":\"completed\",\"usage\":{\"input_tokens\":17,\"output_tokens\":9}}}\n\n"
++	}
++	return "event: message_start\ndata: {\"type\":\"message_start\",\"message\":{\"id\":\"msg_cancel\",\"usage\":{\"input_tokens\":17,\"output_tokens\":0}}}\n\nevent: message_delta\ndata: {\"type\":\"message_delta\",\"usage\":{\"output_tokens\":2}}\n\n",
++		"event: message_delta\ndata: {\"type\":\"message_delta\",\"usage\":{\"output_tokens\":9}}\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n"
++}
++
++// Decode received wire frames independently of the production accounting
++// parser. First-frame Flush, headers, and future final usage are insufficient.
++func rrNativeAssertWireUsage(frames string) error {
++	input, output := 0, 0
++	for _, line := range strings.Split(frames, "\n") {
++		if !strings.HasPrefix(line, "data: ") {
++			continue
++		}
++		var event struct {
++			Type  string `json:"type"`
++			Usage struct {
++				Output int `json:"output_tokens"`
++			} `json:"usage"`
++			Message struct {
++				Usage struct {
++					Input int `json:"input_tokens"`
++				} `json:"usage"`
++			} `json:"message"`
++			Response struct {
++				Usage struct {
++					Input  int `json:"input_tokens"`
++					Output int `json:"output_tokens"`
++				} `json:"usage"`
++			} `json:"response"`
++		}
++		if err := json.Unmarshal([]byte(strings.TrimPrefix(line, "data: ")), &event); err != nil {
++			return err
++		}
++		switch event.Type {
++		case "message_start":
++			input = event.Message.Usage.Input
++		case "message_delta":
++			output = event.Usage.Output
++		case "response.output_text.delta":
++			input, output = event.Response.Usage.Input, event.Response.Usage.Output
++		default:
++			return fmt.Errorf("unexpected/terminal event before cancel: %s", event.Type)
++		}
++	}
++	if input != 17 || output != 2 {
++		return fmt.Errorf("wire partial usage not observed: %d/%d", input, output)
++	}
++	return nil
++}
++
++func TestNativeAPIKeyCancellationUsageFixture(t *testing.T) {
++	// W1 put output=2 only in message_start. The unchanged shared production
++	// parser reads input/cache there and output only in message_delta. This
++	// reproduces the exact 17/0 root receipt without a scheduling assumption.
++	legacy := `{"type":"message_start","message":{"usage":{"input_tokens":17,"output_tokens":2}}}`
++	usage := &ClaudeUsage{}
++	parseSSEUsagePassthrough(legacy, usage)
++	if usage.InputTokens != 17 || usage.OutputTokens != 0 {
++		t.Fatalf("original message_start accounting changed: %+v", usage)
++	}
++	for _, route := range []string{"anthropic", "native-messages"} {
++		partial, terminal := rrNativeFrames(route)
++		if err := rrNativeAssertWireUsage(partial); err != nil {
++			t.Fatal(err)
++		}
++		usage := &ClaudeUsage{}
++		for _, line := range strings.Split(partial, "\n") {
++			if data, ok := extractAnthropicSSEDataLine(line); ok {
++				parseSSEUsagePassthrough(data, usage)
++			}
++		}
++		if usage.InputTokens != 17 || usage.OutputTokens != 2 {
++			t.Fatalf("partial fixture not actually parsed: %+v", usage)
++		}
++		startOnly := strings.SplitN(partial, "event: message_delta", 2)[0]
++		if rrNativeAssertWireUsage(startOnly) == nil || rrNativeAssertWireUsage(partial+terminal) == nil {
++			t.Fatal("wire observation admits early acknowledgement or final usage")
++		}
++	}
++}
++
++func rrNativeForward(ctx context.Context, c *gin.Context, route string, a *Account, u HTTPUpstream, body []byte) rrNativeResult {
++	cfg := &config.Config{}
++	if route == "anthropic" {
++		s := &GatewayService{cfg: cfg, httpUpstream: u}
++		res, err := s.forwardAnthropicAPIKeyPassthrough(ctx, c, a, body, "k3", "k3", true, time.Now())
++		if res == nil {
++			return rrNativeResult{err: err}
++		}
++		return rrNativeResult{true, res.Usage.InputTokens, res.Usage.OutputTokens, res.ClientDisconnect, err}
++	}
++	s := &OpenAIGatewayService{cfg: cfg, httpUpstream: u}
++	var res *OpenAIForwardResult
++	var err error
++	if route == "native-messages" {
++		res, err = s.forwardAnthropicViaNativeAnthropicEndpoint(ctx, c, a, body, "")
++	} else {
++		res, err = s.forwardOpenAIPassthrough(ctx, c, a, body, body, "mimo-v2.6-pro", false, nil, true, time.Now())
++	}
++	if res == nil {
++		return rrNativeResult{err: err}
++	}
++	return rrNativeResult{true, res.Usage.InputTokens, res.Usage.OutputTokens, res.ClientDisconnect, err}
++}
++
++func rrNativeWait(t *testing.T, ch <-chan struct{}, timeout time.Duration, label string) {
++	t.Helper()
++	select {
++	case <-ch:
++	case <-time.After(timeout):
++		t.Fatalf("%s was not observed within %s", label, timeout)
++	}
++}
++
++func TestNativeAPIKeyCancellationRealTransport(t *testing.T) {
++	gin.SetMode(gin.TestMode)
++	for _, route := range []string{"responses", "anthropic", "native-messages"} {
++		for _, phase := range []string{"before-headers", "before-ack", "after-ack"} {
++			for _, optIn := range []bool{false, true} {
++				t.Run(fmt.Sprintf("%s/%s/opt-in-%t", route, phase, optIn), func(t *testing.T) {
++					rrNativeTransportCase(t, route, phase, optIn, false)
++				})
++			}
++		}
++	}
++}
++
++func rrNativeTransportCase(t *testing.T, route, phase string, optIn, failedWriter bool) {
++	t.Helper()
++	started, canceled, returned, release := make(chan struct{}), make(chan struct{}), make(chan struct{}), make(chan struct{})
++	var releaseOnce sync.Once
++	var capacityRequests atomic.Int64
++	unblock := func() { releaseOnce.Do(func() { close(release) }) }
++	wire := make(chan []byte, 2)
++	ack, terminal := rrNativeFrames(route)
++	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++		if r.URL.Path == "/capacity" {
++			capacityRequests.Add(1)
++			_, _ = io.WriteString(w, "healthy")
++			return
++		}
++		defer close(returned)
++		body, err := io.ReadAll(r.Body)
++		if err != nil {
++			t.Errorf("read real forwarded request: %v", err)
++		}
++		wire <- body
++		close(started)
++		if phase != "before-headers" {
++			w.Header().Set("Content-Type", "text/event-stream")
++			w.WriteHeader(http.StatusOK)
++			if phase == "after-ack" {
++				_, _ = io.WriteString(w, ack)
++			}
++			w.(http.Flusher).Flush()
++		}
++		select {
++		case <-r.Context().Done():
++			close(canceled)
++			return
++		case <-release:
++			if phase == "before-headers" {
++				w.Header().Set("Content-Type", "text/event-stream")
++			}
++			if phase != "after-ack" {
++				_, _ = io.WriteString(w, ack)
++			}
++			_, _ = io.WriteString(w, terminal)
++		}
++	}))
++	t.Cleanup(server.Close)
++	t.Cleanup(unblock)
++	transport := &http.Transport{MaxConnsPerHost: 1}
++	t.Cleanup(transport.CloseIdleConnections)
++	address, _ := url.Parse(server.URL)
++	u := &rrNativeTransport{client: &http.Client{Transport: transport}, target: address, body: make(chan *rrNativeBody, 2)}
++	ctx, cancel := context.WithCancel(context.Background())
++	t.Cleanup(cancel)
++	request := rrNativeRequest(route)
++	c, _ := gin.CreateTestContext(httptest.NewRecorder())
++	c.Request = httptest.NewRequest(http.MethodPost, "/v1/"+route, bytes.NewReader(request)).WithContext(ctx)
++	writer := &rrNativeWriter{ResponseWriter: c.Writer, ack: make(chan struct{}), fail: failedWriter}
++	c.Writer = writer
++	result := make(chan rrNativeResult, 1)
++	// The first Flush acknowledges message_start only. For after-ack, use a
++	// second real HTTP connection to observe the subsequent usage delta too.
++	var downstreamResult chan *http.Response
++	var downstreamErrors chan error
++	if phase == "after-ack" && !failedWriter {
++		downstream := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++			wireContext, _ := gin.CreateTestContext(w)
++			wireContext.Request = r.WithContext(ctx)
++			wireContext.Writer = &rrNativeWriter{ResponseWriter: wireContext.Writer, ack: writer.ack}
++			result <- rrNativeForward(ctx, wireContext, route, rrNativeAccount(route, optIn), u, request)
++		}))
++		t.Cleanup(func() {
++			cancel()
++			unblock()
++			downstream.Close()
++		})
++		downstreamResult, downstreamErrors = make(chan *http.Response, 1), make(chan error, 1)
++		clientRequest, err := http.NewRequestWithContext(ctx, http.MethodPost, downstream.URL, bytes.NewReader(request))
++		if err != nil {
++			t.Fatal(err)
++		}
++		go func() {
++			resp, err := downstream.Client().Do(clientRequest)
++			if err != nil {
++				downstreamErrors <- err
++				return
++			}
++			downstreamResult <- resp
++		}()
++	} else {
++		go func() { result <- rrNativeForward(ctx, c, route, rrNativeAccount(route, optIn), u, request) }()
++	}
++	rrNativeWait(t, started, 3*time.Second, "real upstream request")
++	if body := <-wire; !bytes.Contains(body, []byte("9007199254740993")) || (route == "responses" && !bytes.Contains(body, []byte("rs_mimo"))) {
++		t.Fatalf("native protected fields changed: %s", body)
++	}
++	var acquiredBody *rrNativeBody
++	if phase != "before-headers" {
++		select {
++		case acquiredBody = <-u.body:
++		case <-time.After(3 * time.Second):
++			t.Fatal("real response headers/body not acquired before cancel")
++		}
++	}
++	if phase == "after-ack" && !failedWriter {
++		rrNativeWait(t, writer.ack, 3*time.Second, "first downstream frame acknowledgement")
++		var downstreamBody io.ReadCloser
++		select {
++		case resp := <-downstreamResult:
++			if resp.StatusCode != http.StatusOK {
++				t.Fatalf("downstream wire status: %d", resp.StatusCode)
++			}
++			downstreamBody = resp.Body
++		case err := <-downstreamErrors:
++			t.Fatalf("downstream wire request: %v", err)
++		case <-time.After(3 * time.Second):
++			t.Fatal("downstream wire headers not delivered")
++		}
++		t.Cleanup(func() { _ = downstreamBody.Close() })
++		wireAck := make(chan error, 1)
++		go func() {
++			observed := make([]byte, len(ack))
++			_, err := io.ReadFull(downstreamBody, observed)
++			if err == nil && string(observed) != ack {
++				err = fmt.Errorf("downstream usage frames differ: %q", observed)
++			}
++			if err == nil {
++				err = rrNativeAssertWireUsage(string(observed))
++			}
++			wireAck <- err
++		}()
++		select {
++		case err := <-wireAck:
++			if err != nil {
++				t.Fatal(err)
++			}
++		case <-time.After(3 * time.Second):
++			t.Fatal("partial usage 17/2 not delivered on real downstream wire")
++		}
++		// Parsing precedes downstream writes in both production readers.
++		// Only complete receipt of these usage frames admits cancellation.
++		select {
++		case got := <-result:
++			t.Fatalf("forward returned before cancellation/release: %+v", got)
++		case <-returned:
++			t.Fatal("held upstream returned before usage observation barrier")
++		default:
++		}
++	}
++	if optIn && !failedWriter {
++		// MaxConnsPerHost=1 puts this actual request behind the held real request.
++		// A canceled waiter must never dispatch, and must not consume later capacity.
++		queued, cancelQueued := context.WithCancel(context.Background())
++		getConn := make(chan struct{})
++		queued = httptrace.WithClientTrace(queued, &httptrace.ClientTrace{GetConn: func(string) { close(getConn) }})
++		probe, _ := http.NewRequestWithContext(queued, http.MethodGet, server.URL+"/capacity", nil)
++		queueResult := make(chan error, 1)
++		go func() {
++			res, err := u.client.Do(probe)
++			if res != nil {
++				_ = res.Body.Close()
++			}
++			queueResult <- err
++		}()
++		rrNativeWait(t, getConn, time.Second, "real queued transport waiter")
++		cancelQueued()
++		select {
++		case err := <-queueResult:
++			if !errors.Is(err, context.Canceled) || capacityRequests.Load() != 0 {
++				t.Fatalf("queued cancel dispatched or did not clean up: %v", err)
++			}
++		case <-time.After(rrNativeCancelOracle):
++			t.Fatal("canceled real transport waiter remains queued")
++		}
++	}
++	start := time.Now()
++	if !failedWriter {
++		cancel()
++	}
++	if optIn {
++		rrNativeWait(t, canceled, rrNativeCancelOracle, "upstream canceled")
++		rrNativeWait(t, returned, rrNativeCancelOracle-time.Since(start), "upstream handler returned")
++	} else {
++		select {
++		case <-canceled:
++			t.Fatal("default billing drain was canceled")
++		case got := <-result:
++			t.Fatalf("default completed before held upstream release: %+v", got)
++		case <-time.After(rrNativeCancelOracle):
++		}
++		unblock()
++	}
++	var got rrNativeResult
++	select {
++	case got = <-result:
++	case <-time.After(rrNativeCancelOracle):
++		t.Fatal("forward or real body reader did not exit")
++	}
++	if failedWriter && writer.failAt.Load() > 0 {
++		start = time.Unix(0, writer.failAt.Load())
++	}
++	if optIn && time.Since(start) > rrNativeCancelOracle {
++		t.Fatalf("forward/reader exceeded 1.25s immediate-abort oracle: %s", time.Since(start))
++	}
++	if u.attempts.Load() != 1 {
++		t.Fatalf("unexpected second attempt: %d", u.attempts.Load())
++	}
++	if optIn {
++		if got.err == nil {
++			t.Fatal("partial cancellation was reported as success")
++		}
++		var retry *UpstreamFailoverError
++		if errors.As(got.err, &retry) {
++			t.Fatal("canceled or uncertain attempt permits handler retry")
++		}
++		if phase == "after-ack" && !failedWriter {
++			if !got.known || got.input != 17 || got.output != 2 || !got.disconnect {
++				t.Fatalf("observed partial usage lost or final usage manufactured: %+v", got)
++			}
++		} else if failedWriter {
++			// Anthropic's leading event: line can fail before its data: usage is
++			// read; Responses parses usage before its first downstream write.
++			if got.known && (got.input != 17 || got.output != 2 || !got.disconnect) {
++				t.Fatalf("writer failure manufactured or lost observed partial usage: %+v", got)
++			}
++		} else if got.known && (got.input != 0 || got.output != 0) {
++			t.Fatalf("usage invented before upstream evidence: %+v", got)
++		}
++	} else if got.err != nil || !got.known || got.input != 17 || got.output != 9 {
++		t.Fatalf("default final billing drain changed: %+v", got)
++	}
++	if acquiredBody == nil {
++		select {
++		case acquiredBody = <-u.body:
++		default:
++		}
++	}
++	if acquiredBody != nil {
++		rrNativeWait(t, acquiredBody.closed, rrNativeCancelOracle, "real response body Close")
++		if acquiredBody.active.Load() != 0 {
++			t.Fatal("blocked real transport Read remains after forward return")
++		}
++	} else {
++		if phase != "before-headers" {
++			t.Fatal("real response body was not acquired")
++		}
++	}
++	if optIn {
++		probeCtx, stop := context.WithTimeout(context.Background(), rrNativeCancelOracle)
++		defer stop()
++		probe, _ := http.NewRequestWithContext(probeCtx, http.MethodGet, server.URL+"/capacity", nil)
++		res, err := u.client.Do(probe)
++		if err != nil {
++			t.Fatalf("real transport capacity not reclaimed: %v", err)
++		}
++		defer res.Body.Close()
++		body, err := io.ReadAll(res.Body)
++		if err != nil || string(body) != "healthy" || capacityRequests.Load() != 1 {
++			t.Fatalf("transport connection/waiter cleanup health failed: %v", err)
++		}
++	}
++}
++
++func TestNativeAPIKeyCancellationWriterFailure(t *testing.T) {
++	for _, route := range []string{"responses", "anthropic", "native-messages"} {
++		t.Run(route, func(t *testing.T) { rrNativeTransportCase(t, route, "after-ack", true, true) })
++	}
++}
++
++func TestNativeAPIKeyCancellationPolicy(t *testing.T) {
++	for _, value := range []any{nil, false, "true", 1, []any{true}, map[string]any{"enabled": true}} {
++		if rrNativeAccount("responses", value).CancelsNativeAPIKeyOnDisconnect() {
++			t.Fatalf("untrusted/coerced policy enabled: %#v", value)
++		}
++	}
++	for _, kind := range []string{AccountTypeOAuth, AccountTypeSetupToken, AccountTypeUpstream} {
++		a := rrNativeAccount("responses", true)
++		a.Type = kind
++		if a.CancelsNativeAPIKeyOnDisconnect() {
++			t.Fatalf("subscription/non-API-key type opted in: %s", kind)
++		}
++		ctx, cancel := context.WithCancel(context.Background())
++		detached, _ := nativeAPIKeyUpstreamContext(ctx, a, true)
++		cancel()
++		if detached.Err() != nil {
++			t.Fatalf("subscription default drain changed: %s", kind)
++		}
++	}
++	for _, route := range []string{"responses", "anthropic", "native-messages"} {
++		a := rrNativeAccount(route, true)
++		if !a.CancelsNativeAPIKeyOnDisconnect() {
++			t.Fatal("trusted native account opt-in lost")
++		}
++		if route == "responses" && !a.PreservesCompatibleResponsesReasoning() {
++			t.Fatal("existing trusted reasoning policy lost")
++		}
++		ctx, cancel := context.WithCancel(context.Background())
++		on, _ := nativeAPIKeyUpstreamContext(ctx, a, true)
++		a.Extra[NativeAPIKeyCancelOnDisconnectExtraKey] = false
++		off, _ := nativeAPIKeyUpstreamContext(ctx, a, true)
++		cancel()
++		if on.Err() != context.Canceled || off.Err() != nil {
++			t.Fatal("native opt-in/default contexts reversed")
++		}
++	}
++}
++
++func TestNativeAPIKeyCancellationUncertainTransportDoesNotRetry(t *testing.T) {
++	for _, route := range []string{"responses", "anthropic", "native-messages"} {
++		t.Run(route, func(t *testing.T) {
++			var attempts atomic.Int64
++			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++				attempts.Add(1)
++				_, _ = io.Copy(io.Discard, r.Body) // real request effects are now uncertain
++				conn, _, err := w.(http.Hijacker).Hijack()
++				if err != nil {
++					t.Error(err)
++					return
++				}
++				_ = conn.Close()
++			}))
++			defer server.Close()
++			address, _ := url.Parse(server.URL)
++			u := &rrNativeTransport{client: server.Client(), target: address, body: make(chan *rrNativeBody, 2)}
++			body := rrNativeRequest(route)
++			c, _ := gin.CreateTestContext(httptest.NewRecorder())
++			c.Request = httptest.NewRequest(http.MethodPost, "/v1/"+route, strings.NewReader(string(body)))
++			got := rrNativeForward(context.Background(), c, route, rrNativeAccount(route, true), u, body)
++			var retry *UpstreamFailoverError
++			if got.err == nil || errors.As(got.err, &retry) || got.known || attempts.Load() != 1 || u.attempts.Load() != 1 {
++				t.Fatalf("uncertain dispatched attempt retried or fabricated usage: %+v attempts=%d", got, attempts.Load())
++			}
++		})
++	}
++}
++
++func TestNativeAPIKeyCancellationDetachedRealBodyReader(t *testing.T) {
++	// Prove the reader itself closes a real body even when an independently
++	// opened transport request cannot inherit the downstream cancel context.
++	for _, route := range []string{"responses", "anthropic", "native-messages"} {
++		t.Run(route, func(t *testing.T) {
++			canceled := make(chan struct{})
++			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++				w.Header().Set("Content-Type", "text/event-stream")
++				w.WriteHeader(http.StatusOK)
++				w.(http.Flusher).Flush()
++				<-r.Context().Done()
++				close(canceled)
++			}))
++			defer server.Close()
++			resp, err := server.Client().Get(server.URL) // deliberately independent context
++			if err != nil {
++				t.Fatal(err)
++			}
++			defer resp.Body.Close()
++			body := &rrNativeBody{ReadCloser: resp.Body, closed: make(chan struct{})}
++			resp.Body = body
++			ctx, cancel := context.WithCancel(context.Background())
++			defer cancel()
++			c, _ := gin.CreateTestContext(httptest.NewRecorder())
++			c.Request = httptest.NewRequest(http.MethodPost, "/v1/"+route, nil).WithContext(ctx)
++			a := rrNativeAccount(route, true)
++			done := make(chan error, 1)
++			go func() {
++				var err error
++				s := &OpenAIGatewayService{cfg: &config.Config{}}
++				if route == "responses" {
++					_, err = s.handleStreamingResponsePassthrough(ctx, resp, c, a, time.Now(), "mimo-v2.6-pro", "")
++				} else if route == "native-messages" {
++					_, err = s.handleNativeAnthropicStreamingResponse(ctx, resp, c, a, "k3", "k3", "k3", nil, time.Now())
++				} else {
++					g := &GatewayService{cfg: &config.Config{}}
++					_, err = g.handleStreamingResponseAnthropicAPIKeyPassthrough(ctx, resp, c, a, time.Now(), "k3")
++				}
++				done <- err
++			}()
++			cancel()
++			rrNativeWait(t, canceled, rrNativeCancelOracle, "detached real upstream body canceled")
++			select {
++			case err := <-done:
++				if err == nil {
++					t.Fatal("reader cancellation reported success")
++				}
++			case <-time.After(rrNativeCancelOracle):
++				t.Fatal("detached real body reader leaked")
++			}
++			rrNativeWait(t, body.closed, rrNativeCancelOracle, "detached real body Close")
++			if body.active.Load() != 0 {
++				t.Fatal("detached real transport Read still active")
++			}
++		})
++	}
++}
++
++func TestNativeAPIKeyCancellationHTTPErrorFence(t *testing.T) {
++	var attempts atomic.Int64
++	rejection := `{"error":{"type":"invalid_request_error","code":"invalid_encrypted_content","message":"opaque input rejected"}}`
++	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++		attempts.Add(1)
++		body, err := io.ReadAll(r.Body)
++		if err != nil || !bytes.Contains(body, []byte("9007199254740993")) || !bytes.Contains(body, []byte("rs_mimo")) {
++			t.Errorf("protected numeric/opaque reasoning changed: %v", err)
++		}
++		w.Header().Set("Content-Type", "application/json")
++		w.WriteHeader(http.StatusBadRequest)
++		_, _ = io.WriteString(w, rejection)
++	}))
++	defer server.Close()
++	address, _ := url.Parse(server.URL)
++	u := &rrNativeTransport{client: server.Client(), target: address, body: make(chan *rrNativeBody, 2)}
++	rec := httptest.NewRecorder()
++	c, _ := gin.CreateTestContext(rec)
++	body := rrNativeRequest("responses")
++	c.Request = httptest.NewRequest(http.MethodPost, "/v1/responses", bytes.NewReader(body))
++	got := rrNativeForward(context.Background(), c, "responses", rrNativeAccount("responses", true), u, body)
++	var retry *UpstreamFailoverError
++	if got.err == nil || errors.As(got.err, &retry) || attempts.Load() != 1 || rec.Code != http.StatusBadRequest || !strings.Contains(rec.Body.String(), "invalid_encrypted_content") {
++		t.Fatalf("HTTP opaque-error fence weakened: result=%+v code=%d attempts=%d", got, rec.Code, attempts.Load())
++	}
++}
++
++func TestNativeAPIKeyCancellationAdminPolicyRoundTrip(t *testing.T) {
++	repo := &upstreamBillingProbeAccountRepo{}
++	svc := &adminServiceImpl{accountRepo: repo}
++	created, err := svc.CreateAccount(context.Background(), &CreateAccountInput{
++		Name: "native-opt-in", Platform: PlatformOpenAI, Type: AccountTypeAPIKey,
++		Credentials: map[string]any{"api_key": "synthetic"}, SkipDefaultGroupBind: true,
++		Extra: map[string]any{NativeAPIKeyCancelOnDisconnectExtraKey: true,
++			"openai_preserve_compatible_reasoning": true, "openai_responses_mode": "force_responses"},
++	})
++	if err != nil || !created.CancelsNativeAPIKeyOnDisconnect() || !created.PreservesCompatibleResponsesReasoning() {
++		t.Fatalf("admin create dropped policy: %v", err)
++	}
++	created.Status, created.Schedulable = StatusError, false
++	if err := repo.Update(context.Background(), created); err != nil {
++		t.Fatal(err)
++	}
++	err = svc.UpdateAccountExtra(context.Background(), created.ID, map[string]any{NativeAPIKeyCancelOnDisconnectExtraKey: false})
++	if err != nil {
++		t.Fatal(err)
++	}
++	stored, err := repo.GetByID(context.Background(), created.ID)
++	if err != nil || stored.CancelsNativeAPIKeyOnDisconnect() || !stored.PreservesCompatibleResponsesReasoning() || stored.Status != StatusError || stored.Schedulable {
++		t.Fatalf("admin merge damaged independent policy: %v", err)
++	}
++}
+--- /dev/null
++++ b/backend/internal/service/native_stream_merged_interaction_test.go
+@@ -0,0 +1,150 @@
++//go:build unit
++
++package service
++
++import (
++	"bytes"
++	"context"
++	"errors"
++	"io"
++	"net/http"
++	"net/http/httptest"
++	"net/url"
++	"strings"
++	"sync"
++	"sync/atomic"
++	"testing"
++	"time"
++
++	"github.com/Wei-Shaw/sub2api/internal/config"
++	"github.com/gin-gonic/gin"
++)
++
++// Fail only the first actual spilled-prefix replay write. Later writes succeed:
++// a mutant that continues after losing BOTH trusted replay actions must remain
++// blocked on the real held upstream. Withhold the SSE blank separator too:
++// otherwise a buffered blank line reaches the intact disconnect guard.
++type rrNativeMergedReplayFailure struct {
++	at      time.Time
++	spilled bool
++	prefix  bool
++}
++
++type rrNativeMergedReplayWriter struct {
++	gin.ResponseWriter
++	t      *testing.T
++	dir    string
++	failed chan rrNativeMergedReplayFailure
++	once   atomic.Bool
++}
++
++func (w *rrNativeMergedReplayWriter) Write(p []byte) (int, error) {
++	if w.once.CompareAndSwap(false, true) {
++		isPrefix := len(p) > 1 && p[0] == ':' && bytes.Equal(p[1:], bytes.Repeat([]byte("p"), len(p)-1))
++		w.failed <- rrNativeMergedReplayFailure{time.Now(), memorySpoolFDCount(w.t, w.dir) == 1, isPrefix}
++		return 0, io.ErrClosedPipe
++	}
++	return w.ResponseWriter.Write(p)
++}
++
++func (w *rrNativeMergedReplayWriter) WriteString(s string) (int, error) {
++	return w.Write([]byte(s))
++}
++
++func TestNativeMergedSpilledPrefixWriterFailure(t *testing.T) {
++	dir := t.TempDir()
++	t.Setenv("TMPDIR", dir)
++	request := rrNativeRequest("responses")
++	release, returned, canceled := make(chan struct{}), make(chan struct{}), make(chan struct{})
++	var once sync.Once
++	unblock := func() { once.Do(func() { close(release) }) }
++	var effects atomic.Int64
++	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++		defer close(returned)
++		wire, err := io.ReadAll(r.Body)
++		if err != nil || !bytes.Contains(wire, []byte("9007199254740993")) || !bytes.Contains(wire, []byte("rs_mimo")) {
++			t.Errorf("full protected request missing: %v", err)
++		}
++		effects.Add(1)
++		w.Header().Set("Content-Type", "text/event-stream")
++		_, _ = io.WriteString(w, ":"+strings.Repeat("p", 80000)+"\n")
++		// A complete JSON line triggers replay; hold the next scanner token.
++		_, _ = io.WriteString(w, "data: {\"type\":\"response.output_text.delta\",\"delta\":\"ready\"}\n")
++		w.(http.Flusher).Flush()
++		select {
++		case <-r.Context().Done():
++			close(canceled)
++		case <-release:
++			_, terminal := rrNativeFrames("responses")
++			_, _ = io.WriteString(w, "\n"+terminal)
++		}
++	}))
++	t.Cleanup(server.Close)
++	t.Cleanup(unblock)
++	address, _ := url.Parse(server.URL)
++	u := &rrNativeTransport{client: server.Client(), target: address, body: make(chan *rrNativeBody, 2)}
++	ctx, cancel := context.WithCancel(context.Background())
++	t.Cleanup(cancel)
++	c, _ := gin.CreateTestContext(httptest.NewRecorder())
++	c.Request = httptest.NewRequest(http.MethodPost, "/v1/responses", bytes.NewReader(request)).WithContext(ctx)
++	writer := &rrNativeMergedReplayWriter{ResponseWriter: c.Writer, t: t, dir: dir, failed: make(chan rrNativeMergedReplayFailure, 1)}
++	c.Writer = writer
++	s := &OpenAIGatewayService{cfg: &config.Config{}, httpUpstream: u}
++	result := make(chan rrNativeResult, 1)
++	go func() {
++		res, err := s.forwardOpenAIPassthrough(ctx, c, rrNativeAccount("responses", true), request, request, "mimo-v2.6-pro", false, nil, true, time.Now())
++		if res == nil {
++			result <- rrNativeResult{err: err}
++			return
++		}
++		result <- rrNativeResult{true, res.Usage.InputTokens, res.Usage.OutputTokens, res.ClientDisconnect, err}
++	}()
++	var body *rrNativeBody
++	select {
++	case body = <-u.body:
++		t.Cleanup(func() { _ = body.Close() })
++	case <-time.After(3 * time.Second):
++		t.Fatal("real upstream response missing")
++	}
++	var failure rrNativeMergedReplayFailure
++	select {
++	case failure = <-writer.failed:
++	case <-time.After(3 * time.Second):
++		t.Fatal("spilled prefix replay never reached writer")
++	}
++	if !failure.spilled || !failure.prefix {
++		t.Fatalf("failure did not occur during actual anonymous spool replay: %+v", failure)
++	}
++	deadline := failure.at.Add(rrNativeCancelOracle)
++	var got rrNativeResult
++	select {
++	case got = <-result:
++	case <-time.After(time.Until(deadline)):
++		// A held-forward timeout is behavioral RED only with an actual live
++		// body Read, live caller, held server and exactly one accepted effect.
++		if ctx.Err() != nil || body.active.Load() == 0 || effects.Load() != 1 || u.attempts.Load() != 1 {
++			t.Fatal("replay fault did not leave the real accepted attempt in held Read")
++		}
++		select {
++		case <-body.closed:
++			t.Fatal("replay fault timed out after real body was already closed")
++		case <-returned:
++			t.Fatal("replay fault timed out after held upstream already returned")
++		default:
++		}
++		t.Fatal("native forward did not finish within the failure/cancellation oracle: actual held Read after replay loss")
++	}
++	if ctx.Err() != nil {
++		t.Fatal("independent caller context was canceled")
++	}
++	var failover *UpstreamFailoverError
++	if got.err == nil || errors.As(got.err, &failover) || got.known || got.input != 0 || got.output != 0 {
++		t.Fatalf("accepted incomplete attempt exposed retry or known usage: %+v", got)
++	}
++	rrNativeGapClosed(t, body, deadline)
++	rrNativeWait(t, canceled, time.Until(deadline), "upstream cancellation after replay failure")
++	rrNativeWait(t, returned, time.Until(deadline), "real upstream returned")
++	if effects.Load() != 1 || u.attempts.Load() != 1 {
++		t.Fatalf("unexpected effects/attempts: %d/%d", effects.Load(), u.attempts.Load())
++	}
++}
+--- /dev/null
++++ b/backend/internal/service/stream_memory_behavior_test.go
+@@ -0,0 +1,282 @@
++package service
++
++import (
++	"context"
++	"errors"
++	"io"
++	"net/http"
++	"net/http/httptest"
++	"strings"
++	"sync"
++	"testing"
++	"time"
++
++	"github.com/Wei-Shaw/sub2api/internal/config"
++	"github.com/gin-gonic/gin"
++	"github.com/stretchr/testify/require"
++)
++
++// Every Read delivers at most one physical line. At the nominated line boundary
++// the reader reports entry and waits for permission; no production hooks needed.
++type memoryGatedBody struct {
++	lines                    []string
++	index, offset            int
++	gateAt                   int
++	reached, release, closed chan struct{}
++	once                     sync.Once
++	readLines                chan int
++	closeOnce                sync.Once
++}
++
++func newMemoryGatedBody(lines []string, gateAt int) *memoryGatedBody {
++	return &memoryGatedBody{lines: lines, gateAt: gateAt, reached: make(chan struct{}), release: make(chan struct{}), closed: make(chan struct{}), readLines: make(chan int, len(lines)+1)}
++}
++func (b *memoryGatedBody) Read(p []byte) (int, error) {
++	if b.index == b.gateAt && b.offset == 0 {
++		b.once.Do(func() { close(b.reached) })
++		select {
++		case <-b.release:
++		case <-b.closed:
++			return 0, context.Canceled
++		}
++	}
++	select {
++	case <-b.closed:
++		return 0, context.Canceled
++	default:
++	}
++	if b.index == len(b.lines) {
++		return 0, io.EOF
++	}
++	n := copy(p, b.lines[b.index][b.offset:])
++	b.offset += n
++	if b.offset == len(b.lines[b.index]) {
++		b.index++
++		b.offset = 0
++		b.readLines <- b.index
++	}
++	return n, nil
++}
++func (b *memoryGatedBody) Close() error {
++	b.closeOnce.Do(func() { close(b.closed) })
++	return nil
++}
++
++type memoryGatedWriter struct {
++	gin.ResponseWriter
++	entered, release chan struct{}
++	once             sync.Once
++	flushSizes       []int
++	rec              *httptest.ResponseRecorder
++}
++
++func (w *memoryGatedWriter) Write(p []byte) (int, error) {
++	w.once.Do(func() { close(w.entered); <-w.release })
++	return w.ResponseWriter.Write(p)
++}
++func (w *memoryGatedWriter) WriteString(s string) (int, error) { return w.Write([]byte(s)) }
++func (w *memoryGatedWriter) Flush() {
++	w.ResponseWriter.Flush()
++	w.flushSizes = append(w.flushSizes, w.rec.Body.Len())
++}
++
++func memoryAwait(t *testing.T, ch <-chan struct{}) {
++	t.Helper()
++	select {
++	case <-ch:
++	case <-time.After(5 * time.Second):
++		t.Fatal("channel barrier timed out")
++	}
++}
++func memoryContext() (*gin.Context, *httptest.ResponseRecorder) {
++	rec := httptest.NewRecorder()
++	c, _ := gin.CreateTestContext(rec)
++	c.Request = httptest.NewRequest(http.MethodPost, "/v1/messages", nil)
++	return c, rec
++}
++
++// This behavioral test compiles against the frozen source and must be RED there:
++// the 16-slot scanner requests physical line four while the writer is gated.
++func TestStreamMemoryMessagesReadAhead(t *testing.T) {
++	for _, native := range []bool{false, true} {
++		name := "passthrough"
++		if native {
++			name = "native"
++		}
++		t.Run(name, func(t *testing.T) {
++			// Near-2MiB physical lines retain their accepted size. No line cutoff.
++			comment := ":" + strings.Repeat("x", 1998900) + "\n"
++			lines := []string{`data: {"type":"message_start","message":{"usage":{"input_tokens":9}}}` + "\n", comment, comment, comment, "\n", `data: {"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"toolu_memory_9007199254740993","name":"lookup","input":{}}}` + "\n", "\n", `data: {"type":"message_delta","usage":{"output_tokens":7}}` + "\n", "\n", `data: {"type":"message_stop"}` + "\n", "\n"}
++			body := newMemoryGatedBody(lines, 3)
++			defer body.Close()
++			c, rec := memoryContext()
++			w := &memoryGatedWriter{ResponseWriter: c.Writer, entered: make(chan struct{}), release: make(chan struct{}), rec: rec}
++			c.Writer = w
++			// Cleanup unblocks both sides even when the expected old RED fires.
++			defer func() {
++				select {
++				case <-w.release:
++				default:
++					close(w.release)
++				}
++				select {
++				case <-body.release:
++				default:
++					close(body.release)
++				}
++			}()
++			cfg := &config.Config{Gateway: config.GatewayConfig{MaxLineSize: defaultMaxLineSize, StreamDataIntervalTimeout: 1}}
++			var gotIn, gotOut int
++			var gotErr error
++			done := make(chan struct{})
++			go func() {
++				defer close(done)
++				resp := &http.Response{StatusCode: 200, Header: http.Header{}, Body: body}
++				account := &Account{ID: 1, Platform: PlatformAnthropic}
++				if native {
++					r, e := (&OpenAIGatewayService{cfg: cfg}).handleNativeAnthropicStreamingResponse(context.Background(), resp, c, account, "m", "m", "m", nil, time.Now())
++					gotErr = e
++					if r != nil {
++						gotIn = r.Usage.InputTokens
++						gotOut = r.Usage.OutputTokens
++					}
++				} else {
++					r, e := (&GatewayService{cfg: cfg}).handleStreamingResponseAnthropicAPIKeyPassthrough(context.Background(), resp, c, account, time.Now(), "m")
++					gotErr = e
++					if r != nil {
++						gotIn = r.usage.InputTokens
++						gotOut = r.usage.OutputTokens
++					}
++				}
++			}()
++			memoryAwait(t, w.entered)
++			for i := 1; i <= 3; i++ {
++				select {
++				case n := <-body.readLines:
++					require.Equal(t, i, n)
++				case <-time.After(5 * time.Second):
++					t.Fatal("producer did not scan expected three lines")
++				}
++			}
++			// Hold downstream longer than the upstream interval. Read-ahead must remain
++			// bounded, and delivery backpressure must not be charged as upstream idle.
++			select {
++			case <-body.reached:
++				t.Error("read-ahead exceeded one queued line plus one in-flight line")
++			case <-time.After(1200 * time.Millisecond):
++			}
++			close(w.release)
++			close(body.release)
++			memoryAwait(t, done)
++			require.NoError(t, gotErr)
++			require.Equal(t, 9, gotIn)
++			require.Equal(t, 7, gotOut)
++			require.Equal(t, strings.Join(lines, ""), rec.Body.String())
++			require.Contains(t, rec.Body.String(), "toolu_memory_9007199254740993")
++			require.NotEmpty(t, w.flushSizes)
++		})
++	}
++}
++
++// Old RED: the unbounded prefix reaches the semantic read barrier; the patched
++// reader rejects byte 8MiB+1 without emitting or silently truncating the prefix.
++func TestStreamMemoryResponsesPrefixOverflow(t *testing.T) {
++	line := ":" + strings.Repeat("p", 65534) + "\n" // exactly 64KiB including delimiter
++	lines := make([]string, 0, 132)
++	for i := 0; i < 128; i++ {
++		lines = append(lines, line)
++	}
++	lines = append(lines, ": overflow\n", `data: {"type":"response.output_text.delta","delta":"ready"}`+"\n\n", `data: {"type":"response.completed","response":{"usage":{"input_tokens":5,"output_tokens":1}}}`+"\n\n")
++	body := newMemoryGatedBody(lines, 129)
++	defer body.Close()
++	var gotErr error
++	var output string
++	done := make(chan struct{})
++	go func() {
++		defer close(done)
++		_, rec, _, err := runPassthroughFlushTest(t, body, -1)
++		gotErr = err
++		output = rec.Body.String()
++	}()
++	select {
++	case <-done:
++	case <-body.reached:
++		t.Error("unbounded prefix reached semantic read barrier")
++		body.Close()
++	case <-time.After(5 * time.Second):
++		t.Error("prefix limit did not terminate promptly")
++		body.Close()
++	}
++	memoryAwait(t, done)
++	require.Error(t, gotErr)
++	require.ErrorIs(t, gotErr, errOpenAIFirstOutputStageLimit)
++	var replay *UpstreamFailoverError
++	require.False(t, errors.As(gotErr, &replay), "accepted upstream uncertainty must not cause replay")
++	require.Empty(t, output)
++	memoryAwait(t, body.closed)
++}
++
++func TestStreamMemoryResponsesSpilledPrefixPreservesBytesAndFlush(t *testing.T) {
++	prefix := strings.Repeat(": waiting with exact spacing\n\n", 3000) + "id: opaque-9007199254740993\nevent: response.created\ndata: {\"type\":\"response.created\",\"response\":{\"id\":\"r_memory\"}}\n\n"
++	first := `data: {"type":"response.output_text.delta","delta":"ready"}` + "\n\n"
++	last := `data: {"type":"response.completed","response":{"id":"r_memory","usage":{"input_tokens":5,"output_tokens":3}}}` + "\n\n"
++	result, rec, w, err := runPassthroughFlushTest(t, io.NopCloser(strings.NewReader(prefix+first+last)), -1)
++	require.NoError(t, err)
++	require.Equal(t, prefix+first+last, rec.Body.String())
++	require.Equal(t, []int{len(prefix) + len(first), len(prefix) + len(first) + len(last)}, w.flushBodyLengths)
++	require.Equal(t, 5, result.usage.InputTokens)
++	require.Equal(t, 3, result.usage.OutputTokens)
++}
++
++func TestStreamMemoryMessagesRealUpstreamIdle(t *testing.T) {
++	for _, native := range []bool{false, true} {
++		t.Run(map[bool]string{false: "passthrough", true: "native"}[native], func(t *testing.T) {
++			body := newMemoryGatedBody([]string{": never delivered\n"}, 0)
++			defer body.Close()
++			c, _ := memoryContext()
++			cfg := &config.Config{Gateway: config.GatewayConfig{StreamDataIntervalTimeout: 1, MaxLineSize: defaultMaxLineSize}}
++			done := make(chan struct{})
++			var gotErr error
++			go func() {
++				defer close(done)
++				resp := &http.Response{StatusCode: 200, Header: http.Header{}, Body: body}
++				a := &Account{ID: 1, Platform: PlatformAnthropic}
++				if native {
++					_, gotErr = (&OpenAIGatewayService{cfg: cfg}).handleNativeAnthropicStreamingResponse(context.Background(), resp, c, a, "m", "m", "m", nil, time.Now())
++				} else {
++					_, gotErr = (&GatewayService{cfg: cfg}).handleStreamingResponseAnthropicAPIKeyPassthrough(context.Background(), resp, c, a, time.Now(), "m")
++				}
++			}()
++			memoryAwait(t, body.reached)
++			memoryAwait(t, done)
++			require.ErrorContains(t, gotErr, "stream data interval timeout")
++		})
++	}
++}
++
++func TestStreamMemoryResponsesPrefixCancellationClosesReader(t *testing.T) {
++	body := newMemoryGatedBody([]string{": waiting\n", ": not yet\n"}, 1)
++	defer body.Close()
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	c, rec := memoryContext()
++	cfg := &config.Config{Gateway: config.GatewayConfig{MaxLineSize: defaultMaxLineSize}}
++	done := make(chan struct{})
++	var gotErr error
++	go func() {
++		defer close(done)
++		_, gotErr = (&OpenAIGatewayService{cfg: cfg}).handleStreamingResponsePassthrough(ctx, &http.Response{StatusCode: 200, Header: http.Header{}, Body: body}, c, &Account{ID: 1, Platform: PlatformOpenAI}, time.Now(), "", "")
++	}()
++	memoryAwait(t, body.reached)
++	cancel()
++	// Old RED must release its fake reader after reporting missing cancellation.
++	select {
++	case <-done:
++	case <-time.After(time.Second):
++		t.Error("prefix cancellation did not close the upstream reader")
++		body.Close()
++	}
++	memoryAwait(t, done)
++	require.ErrorIs(t, gotErr, context.Canceled)
++	require.Empty(t, rec.Body.String())
++}
+--- /dev/null
++++ b/backend/internal/service/stream_memory_lifecycle_test.go
+@@ -0,0 +1,206 @@
++package service
++
++import (
++	"context"
++	"io"
++	"net/http"
++	"os"
++	"runtime"
++	"strings"
++	"testing"
++	"time"
++
++	"github.com/Wei-Shaw/sub2api/internal/config"
++	"github.com/gin-gonic/gin"
++	"github.com/stretchr/testify/require"
++)
++
++func memorySpoolFDCount(t *testing.T, dir string) int {
++	t.Helper()
++	entries, err := os.ReadDir("/proc/self/fd")
++	require.NoError(t, err)
++	n := 0
++	for _, entry := range entries {
++		target, err := os.Readlink("/proc/self/fd/" + entry.Name())
++		if err == nil && strings.HasPrefix(target, dir+"/sub2api-openai-first-output-") {
++			n++
++		}
++	}
++	return n
++}
++
++func TestStreamMemoryResponsesSpoolCancelAndDeadline(t *testing.T) {
++	if runtime.GOOS != "linux" {
++		t.Skip("actual descriptor ownership regression uses procfs")
++	}
++	for _, deadline := range []bool{false, true} {
++		t.Run(map[bool]string{false: "cancel", true: "deadline"}[deadline], func(t *testing.T) {
++			dir := t.TempDir()
++			t.Setenv("TMPDIR", dir)
++			// Reaching the next read proves the previous >64KiB prefix was staged.
++			body := newMemoryGatedBody([]string{":" + strings.Repeat("p", 80000) + "\n", ": unread\n"}, 1)
++			defer body.Close()
++			ctx, cancel := context.WithCancel(context.Background())
++			if deadline {
++				cancel()
++				ctx, cancel = context.WithTimeout(context.Background(), time.Second)
++			}
++			defer cancel()
++			c, rec := memoryContext()
++			done := make(chan struct{})
++			var gotErr error
++			go func() {
++				defer close(done)
++				_, gotErr = (&OpenAIGatewayService{cfg: &config.Config{Gateway: config.GatewayConfig{MaxLineSize: defaultMaxLineSize}}}).handleStreamingResponsePassthrough(ctx, &http.Response{StatusCode: 200, Header: http.Header{}, Body: body}, c, &Account{ID: 1, Platform: PlatformOpenAI}, time.Now(), "", "")
++			}()
++			memoryAwait(t, body.reached)
++			require.Equal(t, 1, memorySpoolFDCount(t, dir), "actual handler must own one anonymous spool while prefix is pending")
++			if !deadline {
++				cancel()
++			}
++			select {
++			case <-done:
++			case <-time.After(3 * time.Second):
++				t.Error("prefix request deadline/cancel did not stop blocked read")
++				body.Close()
++			}
++			memoryAwait(t, done)
++			if deadline {
++				require.ErrorIs(t, gotErr, context.DeadlineExceeded)
++			} else {
++				require.ErrorIs(t, gotErr, context.Canceled)
++			}
++			require.Empty(t, rec.Body.String())
++			require.Zero(t, memorySpoolFDCount(t, dir), "handler exit must close the prefix descriptor")
++		})
++	}
++}
++
++type memoryJoinedBody struct {
++	io.Reader
++	parts []*memoryGatedBody
++}
++
++func (b *memoryJoinedBody) Close() error {
++	for _, part := range b.parts {
++		_ = part.Close()
++	}
++	return nil
++}
++
++func TestStreamMemoryResponsesSpoolReleasedBeforeTerminal(t *testing.T) {
++	if runtime.GOOS != "linux" {
++		t.Skip("actual descriptor ownership regression uses procfs")
++	}
++	dir := t.TempDir()
++	t.Setenv("TMPDIR", dir)
++	prefix := ":" + strings.Repeat("p", 80000) + "\n"
++	first := `data: {"type":"response.output_text.delta","delta":"ready"}` + "\n\n"
++	terminal := `data: {"type":"response.completed","response":{"usage":{"input_tokens":7,"output_tokens":5}}}` + "\n\n"
++	before := newMemoryGatedBody([]string{prefix, first}, 1)
++	after := newMemoryGatedBody([]string{terminal}, 0)
++	body := &memoryJoinedBody{Reader: io.MultiReader(before, after), parts: []*memoryGatedBody{before, after}}
++	defer body.Close()
++	defer func() {
++		select {
++		case <-before.release:
++		default:
++			close(before.release)
++		}
++		select {
++		case <-after.release:
++		default:
++			close(after.release)
++		}
++	}()
++	c, rec := memoryContext()
++	ctx, cancel := context.WithCancel(context.Background())
++	defer cancel()
++	done := make(chan struct{})
++	var result *openaiStreamingResultPassthrough
++	var gotErr error
++	go func() {
++		defer close(done)
++		result, gotErr = (&OpenAIGatewayService{cfg: &config.Config{Gateway: config.GatewayConfig{MaxLineSize: defaultMaxLineSize}}}).handleStreamingResponsePassthrough(ctx, &http.Response{StatusCode: 200, Header: http.Header{}, Body: body}, c, &Account{ID: 1, Platform: PlatformOpenAI}, time.Now(), "", "")
++	}()
++	memoryAwait(t, before.reached)
++	require.Equal(t, 1, memorySpoolFDCount(t, dir))
++	close(before.release)
++	memoryAwait(t, after.reached)
++	require.Zero(t, memorySpoolFDCount(t, dir), "flushed prefix must not retain descriptor through the rest of request")
++	// Once semantic output is committed the previous usage-drain policy remains.
++	cancel()
++	close(after.release)
++	memoryAwait(t, done)
++	require.NoError(t, gotErr)
++	require.Equal(t, prefix+first+terminal, rec.Body.String())
++	require.Equal(t, 7, result.usage.InputTokens)
++	require.Equal(t, 5, result.usage.OutputTokens)
++}
++
++type memoryKeepaliveWriter struct {
++	gin.ResponseWriter
++	beats chan struct{}
++}
++
++func (w *memoryKeepaliveWriter) Flush() {
++	w.ResponseWriter.Flush()
++	select {
++	case w.beats <- struct{}{}:
++	default:
++	}
++}
++
++func TestStreamMemoryResponsesPrefixKeepaliveDoesNotReplayPrefix(t *testing.T) {
++	prefix := strings.Repeat(": upstream prefix\n", 5000)
++	first := `data: {"type":"response.output_text.delta","delta":"ready"}` + "\n\n"
++	terminal := `data: {"type":"response.completed","response":{"usage":{"input_tokens":2,"output_tokens":1}}}` + "\n\n"
++	body := newMemoryGatedBody([]string{prefix, first, terminal}, 1)
++	defer body.Close()
++	defer func() {
++		select {
++		case <-body.release:
++		default:
++			close(body.release)
++		}
++	}()
++	c, rec := memoryContext()
++	w := &memoryKeepaliveWriter{ResponseWriter: c.Writer, beats: make(chan struct{}, 8)}
++	c.Writer = w
++	done := make(chan struct{})
++	var gotErr error
++	go func() {
++		defer close(done)
++		_, gotErr = (&OpenAIGatewayService{cfg: &config.Config{Gateway: config.GatewayConfig{MaxLineSize: defaultMaxLineSize, StreamKeepaliveInterval: 1}}}).handleStreamingResponsePassthrough(context.Background(), &http.Response{StatusCode: 200, Header: http.Header{}, Body: body}, c, &Account{ID: 1, Platform: PlatformOpenAI}, time.Now(), "", "")
++	}()
++	memoryAwait(t, body.reached)
++	memoryAwait(t, w.beats)
++	// The existing keepalive stop synchronizes access to the writer; no raceful
++	// reading of ResponseRecorder while the keepalive goroutine writes it.
++	require.True(t, StopOpenAICompactSSEKeepaliveCommitted(c))
++	beats := rec.Body.String()
++	require.NotEmpty(t, beats)
++	require.Equal(t, strings.Repeat(": keepalive\n\n", strings.Count(beats, ": keepalive\n\n")), beats)
++	require.False(t, openAIStreamClientOutputStarted(c, false))
++	close(body.release)
++	memoryAwait(t, done)
++	require.NoError(t, gotErr)
++	require.Equal(t, beats+prefix+first+terminal, rec.Body.String())
++}
++
++func TestStreamMemoryResponsesSpoolWriterErrorCleanupAndUsage(t *testing.T) {
++	if runtime.GOOS != "linux" {
++		t.Skip("actual descriptor ownership regression uses procfs")
++	}
++	dir := t.TempDir()
++	t.Setenv("TMPDIR", dir)
++	prefix := ":" + strings.Repeat("p", 80000) + "\n"
++	first := `data: {"type":"response.output_text.delta","delta":"ready"}` + "\n\n"
++	terminal := `data: {"type":"response.completed","response":{"usage":{"input_tokens":7,"output_tokens":5}}}` + "\n\n"
++	r, rec, _, err := runPassthroughFlushTest(t, io.NopCloser(strings.NewReader(prefix+first+terminal)), 0)
++	require.NoError(t, err)
++	require.Empty(t, rec.Body.String())
++	require.Equal(t, 7, r.usage.InputTokens)
++	require.Equal(t, 5, r.usage.OutputTokens)
++	require.Zero(t, memorySpoolFDCount(t, dir), "failed prefix replay must close spool while usage is drained")
++}
+--- /dev/null
++++ b/backend/internal/service/stream_memory_replay_handoff_test.go
+@@ -0,0 +1,67 @@
++// Controller-only proposed regression: copy into a disposable service test tree.
++// NOT EXECUTED by this reviewer. Uses the old service API and no production hooks.
++package service
++
++import (
++	"bytes"
++	"context"
++	"errors"
++	"io"
++	"net/http"
++	"net/http/httptest"
++	"strings"
++	"testing"
++	"time"
++
++	"github.com/Wei-Shaw/sub2api/internal/config"
++	"github.com/gin-gonic/gin"
++	"github.com/stretchr/testify/require"
++)
++
++type subreviewCancelErrorWriter struct {
++	gin.ResponseWriter
++	cancel         context.CancelFunc
++	failOnSemantic bool
++	failed         bool
++}
++
++func (w *subreviewCancelErrorWriter) Write(p []byte) (int, error) {
++	if !w.failed && (!w.failOnSemantic || bytes.Contains(p, []byte("response.output_text.delta"))) {
++		w.failed = true
++		w.cancel()
++		return 0, errors.New("downstream closed after prefix ownership handoff")
++	}
++	return w.ResponseWriter.Write(p)
++}
++func (w *subreviewCancelErrorWriter) WriteString(p string) (int, error) {
++	return w.Write([]byte(p))
++}
++
++func TestSubreviewCancellationAfterReplayHandoffPreservesUsageDrain(t *testing.T) {
++	for _, semantic := range []bool{false, true} {
++		t.Run(map[bool]string{false: "prefix_writer_error", true: "first_semantic_writer_error"}[semantic], func(t *testing.T) {
++			ctx, cancel := context.WithCancel(context.Background())
++			defer cancel()
++			rec := httptest.NewRecorder()
++			c, _ := gin.CreateTestContext(rec)
++			c.Request = httptest.NewRequest(http.MethodPost, "/v1/responses", nil)
++			w := &subreviewCancelErrorWriter{ResponseWriter: c.Writer, cancel: cancel, failOnSemantic: semantic}
++			c.Writer = w
++			prefix := ":" + strings.Repeat("p", 80000) + "\n"
++			first := `data: {"type":"response.output_text.delta","delta":"ready"}` + "\n\n"
++			terminal := `data: {"type":"response.completed","response":{"usage":{"input_tokens":7,"output_tokens":5}}}` + "\n\n"
++			resp := &http.Response{StatusCode: 200, Header: http.Header{}, Body: io.NopCloser(strings.NewReader(prefix + first + terminal))}
++			defer resp.Body.Close()
++			s := &OpenAIGatewayService{cfg: &config.Config{Gateway: config.GatewayConfig{MaxLineSize: defaultMaxLineSize}}}
++			r, err := s.handleStreamingResponsePassthrough(ctx, resp, c, &Account{ID: 1, Platform: PlatformOpenAI}, time.Now(), "", "")
++			require.True(t, w.failed)
++			require.ErrorIs(t, ctx.Err(), context.Canceled)
++			// The existing downstream-disconnect policy drains upstream terminal usage.
++			// Source predicts old PASS, frozen new FAIL at the added ctx.Err guards.
++			require.NoError(t, err)
++			require.NotNil(t, r)
++			require.Equal(t, 7, r.usage.InputTokens)
++			require.Equal(t, 5, r.usage.OutputTokens)
++		})
++	}
++}
+--- /dev/null
++++ b/backend/internal/service/stream_memory_stage_test.go
+@@ -0,0 +1,152 @@
++package service
++
++import (
++	"bytes"
++	"errors"
++	"io"
++	"os"
++	"runtime"
++	"strings"
++	"testing"
++
++	"github.com/stretchr/testify/require"
++)
++
++type memoryRejectWriter struct{}
++
++func (memoryRejectWriter) Write([]byte) (int, error) {
++	return 0, errors.New("downstream rejected prefix")
++}
++
++// Direct ownership assertions cover a separate resource invariant. They make no
++// promise about the runtime heap, GC cadence, scavenging, or RSS return timing.
++func TestStreamMemoryStrictStageOwnership(t *testing.T) {
++	for _, mode := range []string{"commit", "rollback", "writer_error"} {
++		t.Run(mode, func(t *testing.T) {
++			if runtime.GOOS == "windows" {
++				t.Skip("unlinked spool requires Unix")
++			}
++			s := newOpenAINativePrefixStage()
++			defer s.Close()
++			// Variable write sizes would otherwise allow a growing Buffer to overshoot
++			// 64KiB capacity even though its logical length stays below that limit.
++			for _, size := range []int{40000, 20000, 5536} {
++				_, err := s.WriteString(strings.Repeat("a", size))
++				require.NoError(t, err)
++				require.LessOrEqual(t, s.memory.Cap(), 64*1024)
++			}
++			require.EqualValues(t, 65536, s.Buffered())
++			_, err := s.WriteString("\n")
++			require.NoError(t, err)
++			fd, path := s.tempFile, s.tempPath
++			require.NotNil(t, fd)
++			require.Zero(t, s.memory.Cap(), "spill must release backing memory")
++			stat, err := fd.Stat()
++			require.NoError(t, err)
++			require.Equal(t, os.FileMode(0600), stat.Mode().Perm())
++			_, err = os.Stat(path)
++			require.ErrorIs(t, err, os.ErrNotExist, "spool must already be unlinked")
++			switch mode {
++			case "commit":
++				var out bytes.Buffer
++				require.NoError(t, s.CommitTo(&out))
++				require.Equal(t, strings.Repeat("a", 65536)+"\n", out.String())
++			case "writer_error":
++				require.Error(t, s.CommitTo(memoryRejectWriter{}))
++				require.NoError(t, s.Close())
++			case "rollback":
++				require.NoError(t, s.Close())
++			}
++			require.True(t, s.closed)
++			require.Zero(t, s.memory.Cap())
++			require.Zero(t, s.Buffered())
++			require.Nil(t, s.tempFile)
++			require.Empty(t, s.tempPath)
++			_, err = fd.Stat()
++			require.ErrorIs(t, err, os.ErrClosed)
++			require.NoError(t, s.Close())
++			_, err = s.WriteString("later")
++			require.ErrorIs(t, err, os.ErrClosed)
++		})
++	}
++}
++
++func TestStreamMemoryStrictStageExactLimitAndAtomicOverflow(t *testing.T) {
++	if runtime.GOOS == "windows" {
++		t.Skip("unlinked spool requires Unix")
++	}
++	s := newOpenAINativePrefixStage()
++	defer s.Close()
++	chunk := strings.Repeat("x", 65536)
++	for i := 0; i < 128; i++ {
++		_, err := s.WriteString(chunk)
++		require.NoError(t, err)
++	}
++	require.EqualValues(t, 8*1024*1024, s.Buffered())
++	require.Zero(t, s.memory.Cap())
++	n, err := s.WriteString("x")
++	require.Zero(t, n)
++	require.ErrorIs(t, err, errOpenAIFirstOutputStageLimit)
++	require.EqualValues(t, 8*1024*1024, s.Buffered())
++	require.NoError(t, s.CommitTo(io.Discard))
++	require.Zero(t, s.memory.Cap())
++}
++
++func TestStreamMemoryStrictStageMemoryCommitReleasesBacking(t *testing.T) {
++	s := newOpenAINativePrefixStage()
++	defer s.Close()
++	_, err := s.WriteString(": waiting\n")
++	require.NoError(t, err)
++	require.LessOrEqual(t, s.memory.Cap(), 65536)
++	require.NoError(t, s.CommitTo(io.Discard))
++	require.Zero(t, s.memory.Cap())
++	require.Nil(t, s.memory.Bytes())
++}
++
++// Exercise existing stage dependencies directly; no hooks added to production.
++// Unlike the legacy stage, a strict stage must not silently switch to 8MiB RAM.
++func TestStreamMemoryStrictStageSpoolFailures(t *testing.T) {
++	t.Run("create", func(t *testing.T) {
++		s := newOpenAINativePrefixStage()
++		s.memoryOnly = false
++		defer s.Close()
++		s.createTemp = func() (*os.File, error) { return nil, os.ErrPermission }
++		_, err := s.WriteString(strings.Repeat("x", 65537))
++		require.ErrorIs(t, err, os.ErrPermission)
++		require.Zero(t, s.Buffered())
++		require.Zero(t, s.memory.Cap())
++	})
++	t.Run("unlink", func(t *testing.T) {
++		s := newOpenAINativePrefixStage()
++		s.memoryOnly = false
++		dir := t.TempDir()
++		s.createTemp = func() (*os.File, error) { return os.CreateTemp(dir, "prefix-*") }
++		s.removeFile = func(string) error { return os.ErrPermission }
++		defer func() { s.removeFile = os.Remove; _ = s.Close() }()
++		_, err := s.WriteString(strings.Repeat("x", 65537))
++		require.Error(t, err)
++		require.Zero(t, s.Buffered())
++		require.Zero(t, s.memory.Cap())
++		require.Nil(t, s.tempFile)
++		st, err := os.Stat(s.tempPath)
++		require.NoError(t, err)
++		require.Zero(t, st.Size(), "never put plaintext in named spool")
++		path := s.tempPath
++		s.removeFile = os.Remove
++		require.Error(t, s.Close(), "original cleanup error remains observable")
++		_, err = os.Stat(path)
++		require.ErrorIs(t, err, os.ErrNotExist)
++		require.NoError(t, s.Close())
++	})
++	t.Run("memory_only_platform", func(t *testing.T) {
++		s := newOpenAINativePrefixStage()
++		s.memoryOnly = true
++		defer s.Close()
++		_, err := s.WriteString(strings.Repeat("x", 65536))
++		require.NoError(t, err)
++		_, err = s.WriteString("x")
++		require.Error(t, err)
++		require.EqualValues(t, 65536, s.Buffered())
++		require.LessOrEqual(t, s.memory.Cap(), 65536)
++	})
++}
+--- /dev/null
++++ b/backend/internal/service/stream_memory_volume_test.go
+@@ -0,0 +1,98 @@
++package service
++
++import (
++	"context"
++	"crypto/sha256"
++	"hash"
++	"io"
++	"net/http"
++	"strings"
++	"testing"
++	"time"
++
++	"github.com/Wei-Shaw/sub2api/internal/config"
++	"github.com/gin-gonic/gin"
++	"github.com/stretchr/testify/require"
++)
++
++// Hash all delivered bytes without retaining a transcript. Memory assertions in
++// stage tests remain independent of this functional whole-volume oracle.
++type memoryHashSink struct {
++	header     http.Header
++	digest     hash.Hash
++	bytes      int64
++	flushBytes []int64
++}
++
++func (s *memoryHashSink) Header() http.Header { return s.header }
++func (s *memoryHashSink) WriteHeader(int)     {}
++func (s *memoryHashSink) Write(p []byte) (int, error) {
++	n, err := s.digest.Write(p)
++	s.bytes += int64(n)
++	return n, err
++}
++func (s *memoryHashSink) Flush() { s.flushBytes = append(s.flushBytes, s.bytes) }
++
++func TestStreamMemoryMessagesFullVolumes(t *testing.T) {
++	for _, native := range []bool{false, true} {
++		for _, mib := range []int{8, 32, 64} {
++			label := "passthrough"
++			if native {
++				label = "native"
++			}
++			t.Run(label+"/"+map[int]string{8: "8MiB", 32: "32MiB", 64: "64MiB"}[mib], func(t *testing.T) {
++				start := `data: {"type":"message_start","message":{"usage":{"input_tokens":11}}}` + "\n\n"
++				// A large valid tool argument is a semantic near-2MiB frame, not just padding.
++				tool := `data: {"type":"content_block_start","index":0,"content_block":{"type":"tool_use","id":"toolu_9007199254740993","name":"lookup","input":{"payload":"` + strings.Repeat("z", 1998000) + `"}}}` + "\n\n"
++				terminal := `data: {"type":"message_delta","usage":{"output_tokens":17}}` + "\n\ndata: {\"type\":\"message_stop\"}\n\n"
++				total := mib * 1024 * 1024
++				remaining := total - len(start) - len(tool) - len(terminal)
++				comment := ":" + strings.Repeat("c", 65532) + "\n\n"
++				parts := []string{start, tool}
++				for remaining >= len(comment) {
++					parts = append(parts, comment)
++					remaining -= len(comment)
++				}
++				require.GreaterOrEqual(t, remaining, 3)
++				parts = append(parts, ":"+strings.Repeat("r", remaining-3)+"\n\n", terminal)
++				readers := make([]io.Reader, 0, len(parts))
++				want := sha256.New()
++				for _, p := range parts {
++					readers = append(readers, strings.NewReader(p))
++					_, _ = io.WriteString(want, p)
++				}
++				sink := &memoryHashSink{header: make(http.Header), digest: sha256.New()}
++				c, _ := gin.CreateTestContext(sink)
++				cfg := &config.Config{Gateway: config.GatewayConfig{MaxLineSize: defaultMaxLineSize}}
++				resp := &http.Response{StatusCode: 200, Header: http.Header{}, Body: io.NopCloser(io.MultiReader(readers...))}
++				a := &Account{ID: 1, Platform: PlatformAnthropic}
++				if native {
++					r, err := (&OpenAIGatewayService{cfg: cfg}).handleNativeAnthropicStreamingResponse(context.Background(), resp, c, a, "m", "m", "m", nil, time.Now())
++					require.NoError(t, err)
++					require.Equal(t, 11, r.Usage.InputTokens)
++					require.Equal(t, 17, r.Usage.OutputTokens)
++				} else {
++					r, err := (&GatewayService{cfg: cfg}).handleStreamingResponseAnthropicAPIKeyPassthrough(context.Background(), resp, c, a, time.Now(), "m")
++					require.NoError(t, err)
++					require.Equal(t, 11, r.usage.InputTokens)
++					require.Equal(t, 17, r.usage.OutputTokens)
++				}
++				require.EqualValues(t, total, sink.bytes)
++				require.Equal(t, want.Sum(nil), sink.digest.Sum(nil), "every byte, including opaque tool ID and terminal, must match")
++				// Same complete-event flush positions, including the existing EOF safety flush.
++				var expected []int64
++				var offset int64
++				for _, p := range parts {
++					for _, line := range strings.SplitAfter(p, "\n") {
++						offset += int64(len(line))
++						if line == "\n" {
++							expected = append(expected, offset)
++						}
++					}
++				}
++				expected = append(expected, int64(total))
++				require.Equal(t, expected, sink.flushBytes)
++			})
++		}
++	}
++}

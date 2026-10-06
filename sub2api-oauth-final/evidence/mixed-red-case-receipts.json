@@ -1,0 +1,552 @@
+{
+  "receipts": [
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 282,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 1,
+      "synthetic_identity_id": "49a8767e-a424-4309-aaf6-b2182e98cccf"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 188,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 4,
+      "synthetic_identity_id": "c6297609-49ee-489d-b772-6c81eed9e349"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 208,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 7,
+      "synthetic_identity_id": "c8672bd9-92d8-4f3b-9c3d-602351f91f5a"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 186,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 10,
+      "synthetic_identity_id": "e3b9d1ee-7711-4020-810a-5fa44357a093"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 221,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 13,
+      "synthetic_identity_id": "41fedfb3-facb-4cdf-9e8f-42ee53be6d9c"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 286,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 16,
+      "synthetic_identity_id": "cae0cb61-5e0e-4c52-b181-a08c015a449c"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 207,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 19,
+      "synthetic_identity_id": "c3ae4e7d-3a27-4da2-9e41-971f4513a941"
+    },
+    {
+      "barriers": [
+        "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock",
+        "actual_management_update_blocked_behind_admin_conversion"
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object",
+      "child_exits_ok": true,
+      "child_pids": [],
+      "counts": {
+        "effective_rotations": 0,
+        "gateway_bearer_requests": 0,
+        "issuer_requests": 0,
+        "malformed_token_requests": 0
+      },
+      "durable_state": {
+        "access_phase": "REAUTH",
+        "refresh_phase": "REAUTH_REFRESH",
+        "reread_ok": true,
+        "schedulable": true,
+        "status": "active"
+      },
+      "duration_ms": 193,
+      "events": [],
+      "evidence_kind": "synthetic-http-real-postgresql-redis-cache-contract",
+      "expected_child_terminations_ok": true,
+      "go_version": "go1.27.1",
+      "owned_cleanup_ok": true,
+      "postgres_version": "18.6",
+      "redis_version": "8.10.2",
+      "status": "FAIL",
+      "suite_issuer_requests": 0,
+      "synthetic_account_id": 22,
+      "synthetic_identity_id": "9c3d3970-6b1f-4484-ac04-b523df1d71da"
+    }
+  ],
+  "observations": [
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_1_a",
+      "application_b": "bulk_1_b",
+      "backend_a": 9081,
+      "backend_b": 9082,
+      "barrier_backend": 9076,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_4_a",
+      "application_b": "bulk_4_b",
+      "backend_a": 9086,
+      "backend_b": 9088,
+      "barrier_backend": 9076,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_7_a",
+      "application_b": "bulk_7_b",
+      "backend_a": 9089,
+      "backend_b": 9090,
+      "barrier_backend": 9076,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_10_a",
+      "application_b": "bulk_10_b",
+      "backend_a": 9093,
+      "backend_b": 9095,
+      "barrier_backend": 9076,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_13_a",
+      "application_b": "bulk_13_b",
+      "backend_a": 9097,
+      "backend_b": 9098,
+      "barrier_backend": 9076,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_16_a",
+      "application_b": "bulk_16_b",
+      "backend_a": 9102,
+      "backend_b": 9104,
+      "barrier_backend": 9076,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_19_a",
+      "application_b": "bulk_19_b",
+      "backend_a": 9106,
+      "backend_b": 9107,
+      "barrier_backend": 9076,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    },
+    {
+      "a_exactly_one_actual_native_update": true,
+      "a_rows": 1,
+      "application_a": "bulk_22_a",
+      "application_b": "bulk_22_b",
+      "backend_a": 9110,
+      "backend_b": 9111,
+      "barrier_backend": 9076,
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object",
+      "converted_document_unchanged": true,
+      "converted_revision_unchanged": true,
+      "converted_schedulable": true,
+      "observed_a_update_blocked_by_b": true,
+      "observed_b_blocked_by_barrier": true,
+      "sibling_schedulable": true
+    }
+  ],
+  "effects": [
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          1,
+          3,
+          1,
+          3
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        1,
+        3
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/numeric"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          4,
+          6,
+          4,
+          6
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        4,
+        6
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/boolean"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          7,
+          9,
+          7,
+          9
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        7,
+        9
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/array"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          10,
+          12,
+          10,
+          12
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        10,
+        12
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/client_id/object"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          13,
+          15,
+          13,
+          15
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        13,
+        15
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/numeric"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          16,
+          18,
+          16,
+          18
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        16,
+        18
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/boolean"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          19,
+          21,
+          19,
+          21
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        19,
+        21
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/array"
+    },
+    {
+      "b_own_account_changed_events": 2,
+      "bulk_event_ids": [
+        [
+          22,
+          24,
+          22,
+          24
+        ]
+      ],
+      "cache_after_commit": true,
+      "cache_boundary": "repository SetAccount observer; no Redis writes",
+      "cache_effect_ids": [
+        22,
+        24
+      ],
+      "case_id": "TestOAuthBulkAffectedIDsConversionConcurrency/BulkUpdate/refresh_token/object"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "status": "R3_REGRESSION_PREPARED_NOT_RUN",
+  "patch_sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5",
+  "prior_116_preservation": "Previous three authored test files byte-identical; entire previous focused regex set preserved verbatim as JSON",
+  "preserved_patterns": "checks/r1-r2-preserved-patterns.json",
+  "independent_prescription": "../sub2api-fork-review-v2/independent_boundary_test.go.txt",
+  "independent_sha256": "3ca97c2d50f0c3c498c51d1fb0af9b7fa5352089953f84d1224e6ea5e03887ce",
+  "actual_runner": "checks/run-backend-tests.py",
+  "red_mode": "Exact frozen rejected7dec patch plus same current tests; no extracted production implementation",
+  "expected_red_not_observed_locally": [
+    "Original independent R1 ordinary/passthrough and R2 passthrough",
+    "New protected content/null/status/cache/reference status at four actual Forward/ingress callers",
+    "Empty-image cleanup traversing opaque reasoning content in both HTTP modes"
+  ],
+  "passing_controls_required": [
+    "false null/status/cache/reference repairs",
+    "ordinary user null/status/truncation both policies and all callers",
+    "user blank image removal both policies and HTTP modes",
+    "existing field/schema/default/ciphertext/SSE/lineage tests"
+  ],
+  "compile_failure_is_behavioral_red": false,
+  "limitations": [
+    "Current actual Go compilation/behavior/socket tests NOT RUN: Go unavailable",
+    "Authored Go gofmt NOT RUN: gofmt unavailable",
+    "Coordinator Docker/image/independent review/live native final-answer gates NOT RUN; no worker wait",
+    "Higher handler scheduler not newly executed"
+  ],
+  "R3": {
+    "test": "TestIndependentCompatibleReferenceNamespaceHTTP",
+    "source_sha256": "5863f7d72bf5d31865f4a162c614895358fefdc042de9b6128f4d75021e9fa47",
+    "unchanged_copy": "backend/internal/service/independent_reference_namespace_test.go",
+    "observed_before_fix": "Coordinator exact432 exit1: both opted-in HTTP modes fail; both default controls pass.",
+    "assertions": "Actual Forward outbound whole reference equality using UseNumber; namespace present only when opted in; exact integer preserved; ordinary namespace always cleaned.",
+    "replacement_behavior": "NOT RUN"
+  },
+  "prior_287": {
+    "captured_patch": "432cffdf3b2a2659da76403242942b45177d69f60fda17efd14605d7798e7135",
+    "observed_records": 287,
+    "current_tests_and_selection_preserved": true,
+    "current_behavior": "NOT RUN"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "node": "v24.21.0",
+  "baseline": "entry evidence-r5 bytes",
+  "actual_run_id": "36876496665",
+  "actual_workflow_sha": "625946b532534acd0329d41bb096d54f6f16b351",
+  "actual_run_status": "FAILED generic evidence phase; raw transcript removed before diagnosis; actual output format and cause unproven",
+  "files": [
+    {
+      "file": "sub2api-spike/run-client.mjs",
+      "added": 9,
+      "removed": 5,
+      "baseline_sha256": "0cafcb8b3adf01f607b62786f7d95021deefddaba7b71a0c62b86ba0419f2565",
+      "sha256": "3308b5cbaaf2b5be10d616ace4a1e47a24e013fa944514ae61054fd37d7fb490"
+    },
+    {
+      "file": "sub2api-spike/evidence.test.mjs",
+      "added": 0,
+      "removed": 0,
+      "baseline_sha256": "0b2a8eae3f3000598ddc868b0ee449c4c3ca12791343e6fb163fc6d74570bbb0",
+      "sha256": "0b2a8eae3f3000598ddc868b0ee449c4c3ca12791343e6fb163fc6d74570bbb0"
+    },
+    {
+      "file": "sub2api-evidence-r2/client-contract.test.mjs",
+      "added": 97,
+      "removed": 9,
+      "baseline_sha256": "4c9d4eed62708962b86f396f69d00b9f582b34a0a331ea3753f012d95cfda3d8",
+      "sha256": "49bf6f90369b551e598fd79535dee389bc789b69d7f624b7b0f29ec04b802efa"
+    }
+  ],
+  "coordinator_paid_new_run": "NOT RUN",
+  "full_121": "Retained; NOT RUN this turn because network is prohibited",
+  "artifact_sha256": {
+    "REPORT.md": "2925e8e414bc1f0fe3db47f9cdb9924994023a4579537cc153357953f189a5a5",
+    "phase-baseline-29.tap": "43a6e3a7d513605d8df737c3f8c1c271e8245397c890b8cf450d769b24d275ad",
+    "phase-red.tap": "4fe1760726947c0b949d8a87ec2d7fcf89611261491461ca36a47f5a66801d24",
+    "phase-green.tap": "847732d8067a7655498f3f03350d74924e2ee3a0215cea3c874ff4ed271ab70a",
+    "selector-red.tap": "396e23a97ce3109f45cc83be00fc03dec4e410712e18f5d2fee44073446373dc",
+    "selector-green.tap": "156cdd9a4d84c97d3b20b64f120473e70d2063353d7309b13f20ab45093114ef",
+    "phase-implementation.patch": "7f55b7e8f3b7d9c2b442c9ae05d5df13bd9cd8039dd2c4d274db03834b3957d0",
+    "red.tap": "72f3bb9a882a2401fa3dec22613170fad5804f7d632f84348cb3adf9d4884777",
+    "caller-red.tap": "562f19d7e3c44c4ca4f021e218196b265742ebabdd407742ed395749477c610e",
+    "green.tap": "550c6fb140dd121dddbbd3d73c66a328595d0a4334953df53032fcfcb4af5905",
+    "implementation.patch": "a61fb8a6e83962cb0dcc6ba317fcf00b40fff21d11105c7b98ecade9fcf49758",
+    "jsonl-red.tap": "37b5a5ef4c42c631fb0546b30155299c7e8c0413d1006fe74bcb862ae0b61c2d",
+    "jsonl-green.tap": "cec152d7e4f66f7e03fc8d1eadfbe1d66eed13001dd24c2f6e07cf2123d87fe9",
+    "jsonl-implementation.patch": "05e5b40af9b1ed17bd44e30aba6d9b4562a9eae1df0fea91d84008f7e48485a1",
+    "change-metrics.json": "721b7d132f473bb36218a2339c509c1befe9ebc1b93f11ecc01311575b58c5f7",
+    "previous-change-metrics.json": "ab05fa6e705c601637fc582c32818c59cbb672723d8d8bd1c8d5277477a09162",
+    "numeric-jsonl-fixture.json": "13f41a252197709f3382adca88b3924132aa50fa3cb081e88ce83cc2790b5bbb"
+  },
+  "historical_report_sha256": "4b3cacaee2835547e75f0abc22b72fa0f544ccf582c5dcf68c698ee3c058694c",
+  "production": {
+    "added": 9,
+    "removed": 5
+  },
+  "tests_and_harness": {
+    "added": 97,
+    "removed": 9
+  },
+  "validation": {
+    "baseline": {
+      "passed": 29,
+      "failed": 0,
+      "exit": 0
+    },
+    "phase_red": {
+      "passed": 29,
+      "failed": 8,
+      "exit": 1
+    },
+    "phase_green": {
+      "passed": 37,
+      "failed": 0,
+      "exit": 0
+    },
+    "selector_red": {
+      "passed": 0,
+      "failed": 1,
+      "exit": 1
+    },
+    "selector_green": {
+      "passed": 1,
+      "failed": 0,
+      "exit": 0
+    },
+    "syntax_exit_codes": [
+      0,
+      0,
+      0
+    ]
+  }
+}

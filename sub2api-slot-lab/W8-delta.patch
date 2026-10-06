@@ -1,0 +1,105 @@
+--- W7/run.mjs
++++ W8/run.mjs
+@@ -8,11 +8,13 @@
+ 
+ async function cycle(c, spec, redis) {
+   const row = { ...spec, status: 'FAIL', evidence_kind: 'actual-native-handler/private-real-Redis/synthetic-provider',
+-    started_ms: mono(), phases: {}, ids: null, requests: {}, live_provider: false };
++    started_ms: mono(), supervisor_deadline_ms: c.supervisor_deadline, phases: {}, ids: null, requests: {}, live_provider: false };
+   const journal = { path: `/private/${spec.id}.journal.json`, resources: [], intent: null };
+   const clients = [], ids = [`${spec.id}.first`, `${spec.id}.pending`, `${spec.id}.third`];
+-  c.deadline = Math.min(c.supervisor_deadline, mono() + 35000);
+-  await save(journal.path, journal, true);
++  const fixtureStart = mono();
++  row.fixture = { start_ms: fixtureStart, budget_ms: 70000,
++    deadline_ms: Math.min(c.supervisor_deadline - 35000, fixtureStart + 70000) };
++  c.deadline = row.fixture.deadline_ms;
+   let tenant, baseline;
+   const examine = async (phase, deadline, expected) => {
+     const d = { ...c, deadline };
+@@ -34,13 +36,22 @@
+     }
+   };
+   const launch = id => {
++    requireFact(mono() < c.deadline && c.deadline <= c.supervisor_deadline, 'BATCH_DEADLINE');
+     const p = request(c.engine_url, tenant.key, spec.protocol, id, { timeout: Math.min(30000, c.deadline - mono()),
+       onAck: (ms, size) => { row.requests[id] = { ack_ms: ms, frame_bytes: size }; } });
+     clients.push(p); return p;
+   };
+   try {
++    requireFact(c.supervisor_deadline - fixtureStart >= 105000, 'SUPERVISOR_DEADLINE');
++    await save(journal.path, journal, true);
+     baseline = await control(c, 'state');
+     tenant = await setup(c, spec, journal); row.ids = tenant.ids; row.group_id = tenant.group;
++    row.fixture.end_ms = mono();
++    requireFact(row.fixture.end_ms < row.fixture.deadline_ms, 'FIXTURE_DEADLINE');
++    requireFact(c.supervisor_deadline - row.fixture.end_ms >= 35000, 'SUPERVISOR_DEADLINE');
++    row.native_cycle = { start_ms: row.fixture.end_ms, budget_ms: 35000,
++      deadline_ms: Math.min(c.supervisor_deadline, row.fixture.end_ms + 35000) };
++    c.deadline = row.native_cycle.deadline_ms;
+     const initial = await redis.snapshot(tenant.ids, c.deadline);
+     row.initial = initial; requireFact(counts(initial, 0, 0), 'NONEMPTY_OWNED_START');
+     for (const [id, mode] of [[ids[0], 'hold-after'], [ids[1], 'pending'], [ids[2], 'healthy']])
+@@ -64,18 +75,20 @@
+       });
+       row.queue_entered = queued.snapshot;
+       pending.cancel(); row.pending_cancel_ms = pending.state.client_cancel_ms;
++      row.pending_cancel_deadline_ms = Math.min(c.deadline, row.pending_cancel_ms + 1250);
+       const pendingEnd = await wait('pending_cancel', 1, x => {
+         requireFact(x.records[0].close_ms === null && retainsFirst(active.snapshot, x.snapshot), 'FIRST_LOST_ON_PENDING_CANCEL');
+         return counts(x.snapshot, 1, 1) && ['user', 'account', 'key'].every(k =>
+           x.snapshot[k].members[0] === active.snapshot[k].members[0]);
+-      }, Math.min(c.deadline, row.pending_cancel_ms + 1250));
++      }, row.pending_cancel_deadline_ms);
+       row.pending_cancel_observed_ms = mono();
+       requireFact(row.pending_cancel_observed_ms - row.pending_cancel_ms <= 1250, 'PENDING_CANCEL_OBSERVATION_OVER_BUDGET');
+       row.pending_downstream = await pending.promise;
+       requireFact(pending.state.transport === 'client_cancel', 'PENDING_CLIENT_NOT_CANCELED');
+       first.cancel(); row.active_cancel_ms = first.state.client_cancel_ms;
++      row.active_cancel_deadline_ms = Math.min(c.deadline, row.active_cancel_ms + 1250);
+       const canceled = await wait('active_cancel', 1, x => counts(x.snapshot, 0, 0) && x.records[0].close_ms !== null && x.records[0].socket_close_ms !== null,
+-        Math.min(c.deadline, row.active_cancel_ms + 1250));
++        row.active_cancel_deadline_ms);
+       row.active_cancel_observed_ms = mono();
+       cancelEvidence(canceled.records[0], canceled.snapshot, row.active_cancel_ms, row.active_cancel_observed_ms);
+     } else {
+@@ -112,14 +125,14 @@
+     } while (mono() < c.deadline);
+     requireFact(row.phases.quiet.at(-1).observed_ms >= quietUntil, 'QUIET_WINDOW_INCOMPLETE');
+     row.status = 'PASS';
+-  } catch (e) { row.reason = e.code ?? e.labCode ?? 'FIXTURE_OR_NATIVE_TRANSPORT_FAILURE'; }
++  } catch (e) { row.fixture.end_ms ??= mono(); row.reason = e.code ?? e.labCode ?? 'FIXTURE_OR_NATIVE_TRANSPORT_FAILURE'; }
+   finally {
+     for (const p of clients) p.cancel();
+     // Capture real failure state before forced fixture teardown; cleanup never
+     // supplies cancellation success evidence or deletes lease/wait keys.
+     if (tenant) {
+-      row.before_cleanup = await redis.snapshot(tenant.ids, mono() + 1000).catch(() => null);
+-      row.mock_before_cleanup = await control({ ...c, deadline: mono() + 1000 }, 'state').then(s => ({
++      row.before_cleanup = await redis.snapshot(tenant.ids, Math.min(c.supervisor_deadline, mono() + 1000)).catch(() => null);
++      row.mock_before_cleanup = await control({ ...c, deadline: Math.min(c.supervisor_deadline, mono() + 1000) }, 'state').then(s => ({
+         total: s.total, effects: s.effects, exceeded: s.exceeded, records: s.records.filter(r => ids.includes(r.id)), rejections: s.rejections
+       })).catch(() => null);
+       if (row.status === 'PASS' && (!finalZero(row.before_cleanup) ||
+@@ -127,9 +140,10 @@
+         row.status = 'FAIL'; row.reason = 'FINAL_OWNERSHIP_RECHECK';
+       }
+     }
+-    for (const id of ids) await control({ ...c, deadline: mono() + 1000 }, 'stop', { id }).catch(() => {});
+-    row.cleanup = await cleanup({ ...c, deadline: mono() + 6000 }, journal);
++    for (const id of ids) await control({ ...c, deadline: Math.min(c.supervisor_deadline, mono() + 1000) }, 'stop', { id }).catch(() => {});
++    row.cleanup = await cleanup({ ...c, deadline: Math.min(c.supervisor_deadline, mono() + 6000) }, journal);
+     if (row.cleanup.failures || row.cleanup.ambiguous_intent || row.cleanup.remaining.length) { row.status = 'FAIL'; row.reason ??= 'CLEANUP_INCOMPLETE'; }
++    row.fixture.end_ms ??= mono();
+     row.duration_ms = mono() - row.started_ms;
+     await save(`/evidence/${spec.id}.json`, row, true);
+   }
+@@ -153,7 +167,7 @@
+   const redis = new RedisObserver(c.redis_password), specs = plan(c.run_id), rows = [];
+   const allIDs = { user: new Set(), account: new Set(), key: new Set() };
+   for (const spec of specs) {
+-    requireFact(mono() + 35000 < c.supervisor_deadline, 'SUPERVISOR_DEADLINE');
++    requireFact(mono() + 105000 <= c.supervisor_deadline, 'SUPERVISOR_DEADLINE');
+     const row = await cycle(c, spec, redis); rows.push({ id: row.id, status: row.status, reason: row.reason });
+     if (row.ids) for (const k of Object.keys(allIDs)) {
+       requireFact(!allIDs[k].has(row.ids[k]), 'OWNED_ID_REUSED'); allIDs[k].add(row.ids[k]);

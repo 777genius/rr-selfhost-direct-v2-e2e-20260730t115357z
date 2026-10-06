@@ -1,0 +1,117 @@
+{
+  "node": "v24.21.0",
+  "results": [
+    {
+      "name": "r5-green",
+      "args": [
+        "--test",
+        "--test-reporter=tap",
+        ".spike-inputs/candidate/sub2api-spike/evidence.test.mjs",
+        ".spike-inputs/candidate/sub2api-spike/run-client.test.mjs",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r3/sub2api-evidence-review/r5-green-contract.test.mjs"
+      ],
+      "env": {
+        "CONSUMER_WORKFLOW_SOURCE": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r3/.github/workflows/sub2api-gateway-spike.yml"
+      },
+      "exit": 0,
+      "signal": null,
+      "summary": [
+        "# tests 37",
+        "# pass 37",
+        "# fail 0",
+        "# skipped 0"
+      ]
+    },
+    {
+      "name": "r5-red",
+      "args": [
+        "--test",
+        "--test-reporter=tap",
+        ".spike-inputs/candidate/sub2api-spike/evidence.test.mjs",
+        ".spike-inputs/candidate/sub2api-spike/run-client.test.mjs",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r3/sub2api-evidence-review/r5-red-contract.test.mjs"
+      ],
+      "env": {
+        "CONSUMER_WORKFLOW_SOURCE": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r3/.github/workflows/sub2api-gateway-spike.yml"
+      },
+      "exit": 1,
+      "signal": null,
+      "summary": [
+        "# tests 37",
+        "# pass 29",
+        "# fail 8",
+        "# skipped 0"
+      ]
+    },
+    {
+      "name": "r5-grant",
+      "args": [
+        "--test",
+        "--test-reporter=tap",
+        ".spike-inputs/candidate/sub2api-spike/granted-run.test.mjs"
+      ],
+      "env": {},
+      "exit": 0,
+      "signal": null,
+      "summary": [
+        "# tests 2",
+        "# pass 2",
+        "# fail 0",
+        "# skipped 0"
+      ]
+    },
+    {
+      "name": "r5-syntax-3",
+      "args": [
+        "--check",
+        ".spike-inputs/candidate/sub2api-spike/run-client.mjs"
+      ],
+      "env": {},
+      "exit": 0,
+      "signal": null,
+      "summary": []
+    },
+    {
+      "name": "r5-syntax-4",
+      "args": [
+        "--check",
+        ".spike-inputs/candidate/sub2api-evidence-r2/client-contract.test.mjs"
+      ],
+      "env": {},
+      "exit": 0,
+      "signal": null,
+      "summary": []
+    },
+    {
+      "name": "r5-syntax-5",
+      "args": [
+        "--check",
+        ".spike-inputs/candidate/sub2api-spike/evidence.mjs"
+      ],
+      "env": {},
+      "exit": 0,
+      "signal": null,
+      "summary": []
+    }
+  ],
+  "supplemental": [
+    {
+      "command": "node --test --test-reporter=tap sub2api-evidence-review/r5-independent.test.mjs",
+      "exit": 0,
+      "passed": 7,
+      "failed": 0
+    },
+    {
+      "command": "node --test --test-reporter=tap --test-name-pattern='independent review' sub2api-evidence-review/r5-extra-contract.test.mjs",
+      "exit": 0,
+      "passed": 3,
+      "failed": 0
+    },
+    {
+      "command": "node --test --test-reporter=tap --test-name-pattern='RUN_CLIENT_SOURCE binds' sub2api-evidence-review/r5-selector-old.test.mjs",
+      "exit": 1,
+      "passed": 0,
+      "failed": 1
+    }
+  ]
+}

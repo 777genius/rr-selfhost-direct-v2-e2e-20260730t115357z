@@ -1,0 +1,403 @@
+--- /dev/null
++++ b/backend/internal/repository/oauth_bulk_affected_ids_test.go
+@@ -0,0 +1,400 @@
++//go:build oauthlab
++
++package repository
++
++import (
++	"context"
++	"database/sql"
++	"encoding/json"
++	"fmt"
++	"reflect"
++	"sort"
++	"sync"
++	"testing"
++	"time"
++
++	"github.com/Wei-Shaw/sub2api/internal/service"
++	"github.com/lib/pq"
++)
++
++// Observe the real repository's immediate scheduler adapter boundary. No Redis
++// mutation is simulated or claimed; all mutation and outbox SQL is real.
++type oauthBulkCacheObserver struct {
++	service.SchedulerCache
++	db        *sql.DB
++	watermark int64
++	mu        sync.Mutex
++	ids       []int64
++	committed bool
++}
++
++func (c *oauthBulkCacheObserver) SetAccount(ctx context.Context, a *service.Account) error {
++	var committed bool
++	err := c.db.QueryRowContext(ctx, `SELECT EXISTS (
++ SELECT 1 FROM accounts a JOIN scheduler_outbox o ON
++ o.event_type=$2 AND o.id>$3 AND o.payload->'account_ids' @> jsonb_build_array(a.id)
++ WHERE a.id=$1 AND a.status=$4 AND a.credentials=$5::jsonb)`, a.ID,
++		service.SchedulerOutboxEventAccountBulkChanged, c.watermark, a.Status, mustOAuthBulkJSON(a.Credentials)).Scan(&committed)
++	c.mu.Lock()
++	defer c.mu.Unlock()
++	c.ids = append(c.ids, a.ID)
++	c.committed = c.committed && err == nil && committed
++	return err
++}
++
++func (c *oauthBulkCacheObserver) DeleteAccount(_ context.Context, id int64) error {
++	c.mu.Lock()
++	defer c.mu.Unlock()
++	c.ids = append(c.ids, id)
++	c.committed = false
++	return nil
++}
++
++func mustOAuthBulkJSON(v any) []byte {
++	b, err := json.Marshal(v)
++	if err != nil {
++		panic("synthetic JSON encode failed")
++	}
++	return b
++}
++
++const oauthBulkOwnedOutbox = `(account_id=ANY($1) OR EXISTS (
++ SELECT 1 FROM jsonb_array_elements_text(COALESCE(payload->'account_ids','[]'::jsonb)) AS target(id)
++ WHERE target.id::bigint=ANY($1)))`
++
++type oauthBulkEvent struct {
++	kind    string
++	account sql.NullInt64
++	ids     []int64
++}
++
++func oauthBulkEvents(t *testing.T, f *oauthLabFixture, targets []int64, watermark int64) []oauthBulkEvent {
++	t.Helper()
++	rows, err := f.suite.db.QueryContext(f.ctx, "SELECT event_type,account_id,payload FROM scheduler_outbox WHERE "+oauthBulkOwnedOutbox+" AND id>$2 ORDER BY id", pq.Array(targets), watermark)
++	oauthLabNeed(t, err == nil, "real outbox query failed")
++	defer rows.Close()
++	var events []oauthBulkEvent
++	for rows.Next() {
++		var e oauthBulkEvent
++		var payload []byte
++		oauthLabNeed(t, rows.Scan(&e.kind, &e.account, &payload) == nil, "real outbox scan failed")
++		if len(payload) > 0 {
++			var v struct {
++				IDs []int64 `json:"account_ids"`
++			}
++			oauthLabNeed(t, json.Unmarshal(payload, &v) == nil, "real outbox decode failed")
++			e.ids = v.IDs
++		}
++		events = append(events, e)
++	}
++	oauthLabNeed(t, rows.Err() == nil, "real outbox cursor failed")
++	oauthLabNeed(t, rows.Close() == nil, "real outbox cursor close failed")
++	return events
++}
++
++// Remove only events for this fixture's IDs; leave unrelated rows/services alone.
++// Purging setup dedup records also makes B's own admin publication observable.
++func oauthBulkObserve(t *testing.T, f *oauthLabFixture, targets []int64) *oauthBulkCacheObserver {
++	t.Helper()
++	_, err := f.suite.db.ExecContext(f.ctx, "DELETE FROM scheduler_outbox WHERE "+oauthBulkOwnedOutbox, pq.Array(targets))
++	oauthLabNeed(t, err == nil, "owned setup outbox purge failed")
++	var watermark int64
++	err = f.suite.db.QueryRowContext(f.ctx, "SELECT COALESCE(max(id),0) FROM scheduler_outbox").Scan(&watermark)
++	oauthLabNeed(t, err == nil, "outbox watermark failed")
++	t.Cleanup(func() {
++		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
++		defer cancel()
++		_, e := f.suite.db.ExecContext(ctx, "DELETE FROM scheduler_outbox WHERE "+oauthBulkOwnedOutbox, pq.Array(targets))
++		oauthLabNeed(t, e == nil, "owned bulk outbox cleanup failed")
++	})
++	return &oauthBulkCacheObserver{db: f.suite.db, watermark: watermark, committed: true}
++}
++
++func oauthBulkAssertEffects(t *testing.T, f *oauthLabFixture, observer *oauthBulkCacheObserver, targets, expected []int64, converted int64) {
++	t.Helper()
++	events := oauthBulkEvents(t, f, targets, observer.watermark)
++	var bulk [][]int64
++	admin := 0
++	for _, e := range events {
++		if e.kind == service.SchedulerOutboxEventAccountBulkChanged {
++			bulk = append(bulk, e.ids)
++		}
++		if e.kind == service.SchedulerOutboxEventAccountChanged && e.account.Valid && e.account.Int64 == converted {
++			admin++
++		}
++	}
++	if len(expected) == 0 {
++		f.check(len(bulk) == 0, "zero updated rows published a bulk event")
++	} else {
++		f.check(len(bulk) == 1 && reflect.DeepEqual(bulk[0], expected), "bulk event IDs differ from actual updated rows/order")
++	}
++	// B's conversion is independently entitled to its trigger + admin events.
++	// It must not be confused with A's bulk publication.
++	if converted != 0 {
++		f.check(admin == 2, "B conversion trigger/admin publications missing or duplicated")
++	}
++	observer.mu.Lock()
++	actual := append([]int64(nil), observer.ids...)
++	committed := observer.committed
++	observer.mu.Unlock()
++	want := append([]int64(nil), expected...)
++	sort.Slice(actual, func(i, j int) bool { return actual[i] < actual[j] })
++	sort.Slice(want, func(i, j int) bool { return want[i] < want[j] })
++	f.check(reflect.DeepEqual(actual, want), "immediate cache effect IDs differ from actual updated rows")
++	f.check(committed, "cache adapter ran before account/outbox commit or changed an excluded row")
++	evidence, _ := json.Marshal(map[string]any{"case_id": t.Name(), "bulk_event_ids": bulk, "cache_effect_ids": actual, "cache_boundary": "repository SetAccount observer; no Redis writes", "cache_after_commit": committed, "b_own_account_changed_events": admin})
++	t.Log("OAUTH_BULK_EFFECTS " + string(evidence))
++}
++func TestOAuthBulkAffectedIDsConversionConcurrency(t *testing.T) {
++	s := oauthLabSetup(t)
++	for _, operation := range []string{"BulkUpdate"} {
++		for _, key := range []string{"client_id", "refresh_token"} {
++			for _, tc := range oauthW7Types() {
++				t.Run(operation+"/"+key+"/"+tc.name, func(t *testing.T) {
++					f := s.fixture(t)
++					native := f.row()
++					native.Type = service.AccountTypeAPIKey
++					native.Credentials = map[string]any{"api_key": "synthetic-native"}
++					oauthLabNeed(t, s.repo.Update(f.ctx, native) == nil, "native target setup failed")
++					healthy := oauthForkAlias(f)
++					healthy.Credentials = f.issuer.credentials(true)
++					healthy.Credentials["refresh_token"] = f.issuer.token("REAUTH_REFRESH") + "-sibling"
++					oauthLabNeed(t, s.repo.Update(f.ctx, healthy) == nil, "healthy sibling setup failed")
++					healthyBefore, err := s.repo.GetByID(f.ctx, healthy.ID)
++					oauthLabNeed(t, err == nil, "sibling reread failed")
++					allowed := oauthForkAlias(f)
++					allowed.Type = service.AccountTypeAPIKey
++					allowed.Credentials = map[string]any{"api_key": "synthetic-allowed-native"}
++					oauthLabNeed(t, s.repo.Update(f.ctx, allowed) == nil, "allowed native setup failed")
++					allowedBefore, err := s.repo.GetByID(f.ctx, allowed.ID)
++					oauthLabNeed(t, err == nil, "allowed native reread failed")
++					targets := []int64{native.ID, allowed.ID, native.ID, allowed.ID}
++					observer := oauthBulkObserve(t, f, []int64{native.ID, allowed.ID, healthy.ID})
++					suffix := fmt.Sprintf("bulk_%d", native.ID)
++					appA, appB := suffix+"_a", suffix+"_b"
++					repoA, pidA := oauthW9Repository(t, f, appA)
++					repoB, pidB := oauthW9Repository(t, f, appB)
++					repoA.schedulerCache = observer
++					gate, err := s.db.Conn(f.ctx)
++					oauthLabNeed(t, err == nil, "barrier connection failed")
++					var gatePID int
++					// Negative account ID is a test-owned advisory domain; no shared lock names.
++					lockID := -native.ID
++					err = gate.QueryRowContext(f.ctx, "SELECT pg_backend_pid() FROM (SELECT pg_advisory_lock($1)) AS gate", lockID).Scan(&gatePID)
++					oauthLabNeed(t, err == nil, "advisory barrier acquisition failed")
++					unlocked := false
++					unlock := func() {
++						if unlocked {
++							return
++						}
++						unlocked = true
++						ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
++						defer cancel()
++						_, e := gate.ExecContext(ctx, "SELECT pg_advisory_unlock($1)", lockID)
++						oauthLabNeed(t, e == nil, "advisory barrier release failed")
++						oauthLabNeed(t, gate.Close() == nil, "barrier connection cleanup failed")
++					}
++					defer unlock()
++					// BEFORE UPDATE pauses the actual admin conversion while holding its row
++					// lock. AFTER UPDATE records B's exact credentials/revision in the same
++					// transaction, independently of A's later result and admin's final reread.
++					table, function := suffix+"_snapshot", suffix+"_barrier"
++					_, err = s.db.ExecContext(f.ctx, "CREATE TABLE "+table+" (credentials jsonb NOT NULL, revision bigint NOT NULL)")
++					oauthLabNeed(t, err == nil, "snapshot table setup failed")
++					t.Cleanup(func() {
++						ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
++						defer cancel()
++						for _, statement := range []string{"DROP TRIGGER IF EXISTS z_" + suffix + "_before ON accounts", "DROP TRIGGER IF EXISTS z_" + suffix + "_after ON accounts", "DROP FUNCTION IF EXISTS " + function + "()", "DROP TABLE IF EXISTS " + table} {
++							_, e := s.db.ExecContext(ctx, statement)
++							oauthLabNeed(t, e == nil, "test-owned barrier cleanup failed")
++						}
++					})
++					ddl := fmt.Sprintf(`CREATE FUNCTION %s() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN
++      IF OLD.id=%d AND OLD.type='apikey' AND NEW.type='oauth' THEN
++       IF TG_WHEN='BEFORE' THEN PERFORM pg_advisory_xact_lock(%d::bigint);
++       ELSE INSERT INTO %s VALUES (NEW.credentials,NEW.oauth_revision); END IF;
++      END IF; RETURN NEW; END $$`, function, native.ID, lockID, table)
++					_, err = s.db.ExecContext(f.ctx, ddl)
++					oauthLabNeed(t, err == nil, "barrier function setup failed")
++					for _, when := range []string{"BEFORE", "AFTER"} {
++						trigger := "z_" + suffix + "_before"
++						if when == "AFTER" {
++							trigger = "z_" + suffix + "_after"
++						}
++						_, err = s.db.ExecContext(f.ctx, "CREATE TRIGGER "+trigger+" "+when+" UPDATE ON accounts FOR EACH ROW EXECUTE FUNCTION "+function+"()")
++						oauthLabNeed(t, err == nil, "barrier trigger setup failed")
++					}
++					ctx, cancel := context.WithCancel(f.ctx)
++					defer cancel()
++					bResult := make(chan error, 1)
++					aResult := make(chan oauthW9WriteResult, 1)
++					bDone, aDone := make(chan struct{}), make(chan struct{})
++					aStarted := false
++					defer func() {
++						unlock()
++						cancel()
++						for _, done := range []struct {
++							ch      <-chan struct{}
++							started bool
++						}{{bDone, true}, {aDone, aStarted}} {
++							if done.started {
++								select {
++								case <-done.ch:
++								case <-time.After(3 * time.Second):
++									t.Error("repository goroutine did not terminate")
++								}
++							}
++						}
++					}()
++					admin := service.NewAdminService(nil, nil, nil, repoB, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil)
++					go func() {
++						defer close(bDone)
++						_, e := admin.UpdateAccount(ctx, native.ID, &service.UpdateAccountInput{Type: service.AccountTypeOAuth, Credentials: f.issuer.credentials(true)})
++						bResult <- e
++					}()
++					oauthW9Blocked(t, f, pidB, gatePID, appB, true)
++					f.barriers = append(f.barriers, "admin_conversion_holds_row_lock_and_waits_on_owned_advisory_lock")
++					visible := f.row()
++					oauthLabNeed(t, visible.Type == service.AccountTypeAPIKey, "MVCC must still expose native target before conversion commit")
++					invalid := map[string]any{key: tc.value, "access_token": f.issuer.token("REAUTH"), "expires_at": time.Now().Add(time.Hour).Format(time.RFC3339)}
++					// Explicitly no _oauth_revision: the old optional revision predicate must
++					// not accidentally be what protects this test.
++					aStarted = true
++					go func() {
++						defer close(aDone)
++						status := service.StatusDisabled
++						n, e := repoA.BulkUpdate(ctx, targets, service.AccountBulkUpdate{Credentials: invalid, Status: &status})
++						aResult <- oauthW9WriteResult{n, e}
++					}()
++					oauthW9Blocked(t, f, pidA, pidB, appA, true)
++					f.barriers = append(f.barriers, "actual_management_update_blocked_behind_admin_conversion")
++					unlock()
++					var result oauthW9WriteResult
++					select {
++					case e := <-bResult:
++						oauthLabNeed(t, e == nil, "valid admin conversion failed")
++					case <-f.ctx.Done():
++						t.Fatal("admin conversion did not finish")
++					}
++					select {
++					case result = <-aResult:
++					case <-f.ctx.Done():
++						t.Fatal("pending management update did not finish")
++					}
++					// Nonfatal so the RED run still records exact durable-state failures.
++					f.check(result.err == nil && result.rows == 1, "mixed bulk must update exactly the allowed native row")
++					after := f.row()
++					var committed []byte
++					var revision string
++					var count int
++					err = s.db.QueryRowContext(f.ctx, "SELECT count(*) FROM "+table).Scan(&count)
++					oauthLabNeed(t, err == nil && count == 1, "exactly one committed admin conversion snapshot required")
++					err = s.db.QueryRowContext(f.ctx, "SELECT credentials, revision::text FROM "+table).Scan(&committed, &revision)
++					oauthLabNeed(t, err == nil, "committed conversion snapshot reread failed")
++					var credentials map[string]any
++					oauthLabNeed(t, json.Unmarshal(committed, &credentials) == nil, "conversion snapshot decode failed")
++					oauthLabNeed(t, credentials["client_id"] == "oauth-lab-fabricated-client" && credentials["refresh_token"] == f.issuer.token("REAUTH_REFRESH") && credentials["access_token"] == f.issuer.token("REAUTH"), "B did not commit the valid conversion identity")
++					f.check(after.Type == service.AccountTypeOAuth && reflect.DeepEqual(after.Credentials, credentials) && service.OAuthRevision(after) == revision, "pending write changed converted credentials or revision")
++					f.check(service.ValidateOpenAIOAuthIdentityCredentials(after) == nil, "converted identity became malformed")
++					f.check(after.Status == service.StatusActive, "A changed excluded converted status")
++					allowedAfter, err := s.repo.GetByID(f.ctx, allowed.ID)
++					oauthLabNeed(t, err == nil, "allowed native final reread failed")
++					expectedNative := copyJSONMap(allowedBefore.Credentials)
++					for k, v := range invalid {
++						expectedNative[k] = v
++					}
++					f.check(allowedAfter.Type == service.AccountTypeAPIKey && allowedAfter.Status == service.StatusDisabled && reflect.DeepEqual(allowedAfter.Credentials, oauthW9JSONValue(t, expectedNative)), "allowed native document/status did not receive A's full malformed patch")
++					f.check(service.OAuthRevision(allowedAfter) == service.OAuthRevision(allowedBefore), "native-only change advanced OAuth revision")
++					oauthBulkAssertEffects(t, f, observer, []int64{native.ID, allowed.ID, healthy.ID}, []int64{allowed.ID}, native.ID)
++					for _, field := range []string{"client_id", "refresh_token"} {
++						_, ok := after.Credentials[field].(string)
++						f.check(ok, "converted identity field lost string type")
++					}
++					rows, err := s.repo.ListSchedulableByPlatform(f.ctx, service.PlatformOpenAI)
++					oauthLabNeed(t, err == nil, "sibling scheduler query failed")
++					siblingFound, convertedFound := false, false
++					for _, a := range rows {
++						siblingFound = siblingFound || a.ID == healthy.ID
++						convertedFound = convertedFound || a.ID == native.ID
++					}
++					f.check(siblingFound && convertedFound, "healthy sibling or converted account lost availability")
++					healthyAfter, err := s.repo.GetByID(f.ctx, healthy.ID)
++					oauthLabNeed(t, err == nil, "healthy sibling final reread failed")
++					f.check(reflect.DeepEqual(healthyBefore.Credentials, healthyAfter.Credentials) && service.OAuthRevision(healthyBefore) == service.OAuthRevision(healthyAfter), "healthy sibling changed")
++					evidence, _ := json.Marshal(map[string]any{
++						"case_id": t.Name(), "application_a": appA, "application_b": appB,
++						"backend_a": pidA, "backend_b": pidB, "barrier_backend": gatePID,
++						"observed_b_blocked_by_barrier": true, "observed_a_update_blocked_by_b": true,
++						"a_exactly_one_actual_native_update": result.err == nil && result.rows == 1,
++						"a_rows":                             result.rows, "converted_document_unchanged": reflect.DeepEqual(after.Credentials, credentials),
++						"converted_revision_unchanged": service.OAuthRevision(after) == revision,
++						"sibling_schedulable":          siblingFound, "converted_schedulable": convertedFound,
++					})
++					t.Log("OAUTH_BULK_RACE_OBSERVATION " + string(evidence))
++					f.counts(0, 0)
++				})
++			}
++		}
++	}
++}
++
++// Actual PostgreSQL RETURNING controls cover zero publication and deterministic
++// input ordering/deduplication even when every native document is permitted.
++func TestOAuthBulkAffectedIDsControls(t *testing.T) {
++	s := oauthLabSetup(t)
++	for _, mode := range []string{"zero", "all", "mixed_missing"} {
++		t.Run(mode, func(t *testing.T) {
++			f := s.fixture(t)
++			native := f.row()
++			native.Type = service.AccountTypeAPIKey
++			native.Credentials = map[string]any{"api_key": "synthetic-native"}
++			oauthLabNeed(t, s.repo.Update(f.ctx, native) == nil, "native control setup failed")
++			sibling := oauthForkAlias(f)
++			sibling.Type = service.AccountTypeAPIKey
++			sibling.Credentials = map[string]any{"api_key": "synthetic-sibling"}
++			oauthLabNeed(t, s.repo.Update(f.ctx, sibling) == nil, "sibling control setup failed")
++			beforeN := f.row()
++			beforeS, err := s.repo.GetByID(f.ctx, sibling.ID)
++			oauthLabNeed(t, err == nil, "control sibling reread failed")
++			targets := []int64{-native.ID, -sibling.ID, -native.ID}
++			var expected []int64
++			if mode == "all" {
++				targets = []int64{sibling.ID, native.ID, sibling.ID, native.ID}
++				expected = []int64{sibling.ID, native.ID}
++			}
++			if mode == "mixed_missing" {
++				targets = []int64{-sibling.ID, native.ID, -sibling.ID, native.ID}
++				expected = []int64{native.ID}
++			}
++			observer := oauthBulkObserve(t, f, []int64{native.ID, sibling.ID})
++			repo, _ := oauthW9Repository(t, f, fmt.Sprintf("bulk_control_%d", native.ID))
++			repo.schedulerCache = observer
++			status := service.StatusDisabled
++			credentials := map[string]any{"client_id": map[string]any{"native": "permitted"}, "business_field": true}
++			n, e := repo.BulkUpdate(f.ctx, targets, service.AccountBulkUpdate{Credentials: credentials, Status: &status})
++			f.check(e == nil && n == int64(len(expected)), "actual affected-row count failed")
++			oauthBulkAssertEffects(t, f, observer, []int64{native.ID, sibling.ID}, expected, 0)
++			for _, before := range []*service.Account{beforeN, beforeS} {
++				after, e := s.repo.GetByID(f.ctx, before.ID)
++				oauthLabNeed(t, e == nil, "control final reread failed")
++				updated := false
++				for _, id := range expected {
++					updated = updated || id == before.ID
++				}
++				want := copyJSONMap(before.Credentials)
++				if updated {
++					for k, v := range credentials {
++						want[k] = v
++					}
++				}
++				f.check(reflect.DeepEqual(after.Credentials, oauthW9JSONValue(t, want)) && service.OAuthRevision(after) == service.OAuthRevision(before), "control document/revision failed")
++				if updated {
++					f.check(after.Status == status, "updated native status unchanged")
++				} else {
++					f.check(after.Status == before.Status, "excluded native status changed")
++				}
++			}
++			f.counts(0, 0)
++		})
++	}
++}

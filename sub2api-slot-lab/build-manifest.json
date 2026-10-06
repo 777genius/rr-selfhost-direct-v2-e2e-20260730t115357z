@@ -1,0 +1,54 @@
+{
+  "schema": "slot-lab-required-build-v2",
+  "upstream_commit": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+  "upstream_release": "v0.2.11",
+  "supplied_native_probe_image_id": "sha256:6df1cc33771f1bc94028cc18440a13e7d31a3513331bbb8d7d686584d19b79e2",
+  "supplied_native_probe_binary_sha256": "e331d5cc5713ab665cf7f94363a6c6b72191e3915b8173c079e53b2773cec1ee",
+  "merged_image": "UNKNOWN_EXTERNAL_ROOT_INPUT",
+  "components": {
+    "native": {
+      "public_path": "sub2api-fork/patches/native-reasoning.patch",
+      "sha256": "30cb1d6b5060cbf41b822fa46fc996fafd91acbc470d89bf2882be90eb24b4d5"
+    },
+    "probe": {
+      "public_path": "sub2api-probe-fork/patches/disable-capability-probe.patch",
+      "sha256": "7d894dacf09a356992dfed1fb4b351c50b375a666b3e8625ae4fa2678748ff45"
+    },
+    "cancellation_w3": {
+      "sha256": "46b48c5ad31ebf6c1f1f524af4f7a62a8d5e886a7b3d1132a6bc3fb2e99b6baa",
+      "required_component_provenance_file": true
+    },
+    "memory_w2": {
+      "sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239",
+      "required_component_provenance_file": true
+    }
+  },
+  "actual_merged_image_tests": "NOT RUN",
+  "build_attestation_required_fields": [
+    "upstream_commit",
+    "image",
+    "components",
+    "source_manifest_sha256",
+    "binary_sha256",
+    "image_config_sha256",
+    "api_key_slots",
+    "trusted_cancel_flag",
+    "schema",
+    "status",
+    "trust_model",
+    "build_id",
+    "image_id",
+    "component_provenance",
+    "source_fingerprint_sha256",
+    "build_input_source_fingerprint_sha256",
+    "production_patch_sha256"
+  ],
+  "image_config_hash_algorithm": "SHA256 of Python json.dumps(docker_image_inspect[0].Config, sort_keys=True, separators=(comma,colon)).encode(UTF-8)",
+  "source_to_binary_authenticity": "External root trust: separately pinned reviewed producer manifest/final production patch and actual pipeline build receipt associate expected exact full source with the observed image/config/binary. Public file hashes alone do not establish private compilation or execution.",
+  "component_semantics": "Fixed provenance only; overlapping final production hunks may change. Root separately pins reviewed final merged patch and full source ledger.",
+  "root_config_external_pins": [
+    "reviewed_merged_manifest_sha256",
+    "production_patch_sha256",
+    "build_attestation_sha256"
+  ]
+}

@@ -1,0 +1,4 @@
+# Disposable inputs and builds; retain reviewed patches only.
+.spike-inputs/
+sub2api-fork/build-source/
+sub2api-fork/.build-cache/

@@ -1,0 +1,11 @@
+--- W2/root-driver.py
++++ W3/root-driver.py
+@@ -157,7 +157,7 @@
+         # Engine uses only trusted private native config; no broker or external
+         # ports/networks. No read-write mount of product source or auth homes.
+         self.engine=self.create('engine',self.c['engine_image'],['--network-alias','sub2api','--user','0:0','--memory','768m',
+-          '--cap-drop','ALL','--tmpfs','/app/data:rw,size=64m','--tmpfs','/tmp:rw,size=32m','--env-file',str(self.private/'engine.env'),
++          '--cap-drop','ALL','--entrypoint','/app/sub2api','--tmpfs','/app/data:rw,size=64m','--tmpfs','/tmp:rw,size=32m','--env-file',str(self.private/'engine.env'),
+           '--mount',f'type=bind,src={self.private}/config.yaml,dst=/private/config.yaml,readonly'])
+         obj=self.own(self.engine); image=json.loads(self.docker('image','inspect',self.c['engine_image']))[0]
+         config_hash=hashlib.sha256(json.dumps(image['Config'],sort_keys=True,separators=(',',':')).encode()).hexdigest()

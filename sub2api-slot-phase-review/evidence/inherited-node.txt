@@ -1,0 +1,119 @@
+✔ known native 429 waits exactly Retry-After once; request bytes, redirect and signal retained (4.615892ms)
+✔ invalid header null fails without retry (0.859527ms)
+✔ invalid header  fails without retry (0.567273ms)
+✔ invalid header 0 fails without retry (0.447698ms)
+✔ invalid header 01 fails without retry (0.488677ms)
+✔ invalid header -1 fails without retry (0.41825ms)
+✔ invalid header 1.0 fails without retry (1.433747ms)
+✔ invalid header 1e1 fails without retry (0.457654ms)
+✔ invalid header 61 fails without retry (0.505305ms)
+✔ invalid header 99999999999999999999999 fails without retry (0.529912ms)
+✔ invalid header Thu, 01 Oct 2026 18:00:00 GMT fails without retry (0.317333ms)
+✔ 401 exactly one dispatch (0.343841ms)
+✔ 403 exactly one dispatch (0.220159ms)
+✔ 500 exactly one dispatch (0.193898ms)
+✔ 503 exactly one dispatch (0.182135ms)
+✔ network exactly one dispatch (0.385036ms)
+✔ unknown 429 effect no retry (0.325577ms)
+✔ second native 429 no third dispatch (0.371046ms)
+✔ near zero admission budget no dispatch (0.297806ms)
+✔ wait plus normal response cannot fit no retry (0.358251ms)
+✔ 60 second header cannot extend original 35 second deadline (0.343917ms)
+✔ sleep deadline overrun no retry dispatch (0.361975ms)
+✔ body limit preserved (0.630489ms)
+✔ code rejection preserved (0.384881ms)
+✔ valid boundary 1 waits exactly once (0.473886ms)
+✔ valid boundary 60 waits exactly once (0.304524ms)
+✔ known 429 with rejected API code cannot retry (0.456388ms)
+✔ malformed response cannot retry (0.441109ms)
+✔ matrix is exactly 20 opt-in cycles per protocol/lane plus four default controls, unique requests (2.067133ms)
+✔ exact numeric owned Redis namespaces and rejection of non-owned IDs (0.401676ms)
+✔ real-handler queue shape requires correct lane, pending lease and original first members (0.654875ms)
+✔ RED mutations: waiter, pending lease, retained active lease, forced close, late close and duplicate effect all fail (0.703382ms)
+✔ deadline counts slow observation overhead and never restarts after timeout (0.507112ms)
+✔ deadline also counts assertion overhead after an otherwise timely observation (1.004718ms)
+✔ RESP parser handles arbitrary partial frames, null GET, arrays and redacted Redis errors offline (0.61826ms)
+✔ Redis snapshot requests only read-only exact keys and rejects malformed real-count replies (0.621182ms)
+✔ actual Redis leak cardinalities and near-expiry TTLs remain available for failure evidence (0.348452ms)
+✔ late invalid or expiring failure snapshots fail closed without throwing past resource cleanup (3.652716ms)
+✔ reused genuine SSE fixtures validate fragmented Responses and Messages healthy terminals (123.687582ms)
+✔ actual admin adapter persists trusted opt-in/default, limits and stable native key, journals create before transport (38.471457ms)
+✔ responses: actual existing healthy mock remains valid (10.309858ms)
+✔ responses: review malformed reproduction fails recovery (0.452376ms)
+✔ responses: reject start (0.974062ms)
+✔ responses: reject terminal (4.364522ms)
+✔ responses: reject usage (3.380595ms)
+✔ responses: reject usage-conflict (5.753435ms)
+✔ responses: reject id (0.993243ms)
+✔ responses: reject delta (1.128752ms)
+✔ responses: reject duplicate (2.579578ms)
+✔ responses: reject junk (1.828325ms)
+✔ responses: reject tool (0.452474ms)
+✔ messages: actual existing healthy mock remains valid (0.838283ms)
+✔ messages: review malformed reproduction fails recovery (0.135831ms)
+✔ messages: reject start (0.226186ms)
+✔ messages: reject terminal (0.433736ms)
+✔ messages: reject usage (0.553152ms)
+✔ messages: reject usage-conflict (0.499696ms)
+✔ messages: reject id (0.833814ms)
+✔ messages: reject delta (0.213442ms)
+✔ messages: reject duplicate (0.468989ms)
+✔ messages: reject junk (0.437671ms)
+✔ messages: reject tool (0.201732ms)
+✔ actual setup retries only native login and preserves default binding, private custody and cleanup (15.380654ms)
+✔ actual setup never retries /admin/groups POST429 (2.031648ms)
+✔ actual setup never retries /admin/accounts POST429 (3.970859ms)
+✔ actual setup never retries /admin/users POST429 (2.736363ms)
+✔ actual setup never retries /keys POST429 (3.851804ms)
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/prepare.py", line 85, in <module>
+    args=ap.parse_args(); result=assemble(args.output, args.base_root)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/prepare.py", line 19, in assemble
+    canonical = importlib.util.module_from_spec(modspec); modspec.loader.exec_module(canonical)
+                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1128, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1186, in get_data
+FileNotFoundError: [Errno 2] No such file or directory: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-transport-packaging/prepare-standalone.py'
+✖ generated mock creates one native HTTPS server with the existing handler, without a listening socket (114.20126ms)
+ℹ tests 68
+ℹ suites 0
+ℹ pass 67
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 260.949852
+
+✖ failing tests:
+
+test at sub2api-slot-lab/tls-factory.test.mjs:8:1
+✖ generated mock creates one native HTTPS server with the existing handler, without a listening socket (114.20126ms)
+  Error: Command failed: python3 sub2api-slot-lab/prepare.py --output /srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/build/tls-br7j1I/code
+  Traceback (most recent call last):
+    File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/prepare.py", line 85, in <module>
+      args=ap.parse_args(); result=assemble(args.output, args.base_root)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/prepare.py", line 19, in assemble
+      canonical = importlib.util.module_from_spec(modspec); modspec.loader.exec_module(canonical)
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+    File "<frozen importlib._bootstrap_external>", line 1128, in get_code
+    File "<frozen importlib._bootstrap_external>", line 1186, in get_data
+  FileNotFoundError: [Errno 2] No such file or directory: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-transport-packaging/prepare-standalone.py'
+  
+      at genericNodeError (node:internal/errors:986:15)
+      at wrappedFn (node:internal/errors:540:14)
+      at checkExecSyncError (node:child_process:942:11)
+      at execFileSync (node:child_process:978:15)
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-phase-review-w8/sub2api-slot-phase-review/runtime/sub2api-slot-lab/tls-factory.test.mjs:12:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    status: 1,
+    signal: null,
+    output: [ null, <Buffer >, <Buffer 54 72 61 63 65 62 61 63 6b 20 28 6d 6f 73 74 20 72 65 63 65 6e 74 20 63 61 6c 6c 20 6c 61 73 74 29 3a 0a 20 20 46 69 6c 65 20 22 2f 73 72 76 2f 77 6f ... 1138 more bytes> ],
+    pid: 94,
+    stdout: <Buffer >,
+    stderr: <Buffer 54 72 61 63 65 62 61 63 6b 20 28 6d 6f 73 74 20 72 65 63 65 6e 74 20 63 61 6c 6c 20 6c 61 73 74 29 3a 0a 20 20 46 69 6c 65 20 22 2f 73 72 76 2f 77 6f ... 1138 more bytes>
+  }

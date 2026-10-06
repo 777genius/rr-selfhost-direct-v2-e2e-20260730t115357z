@@ -1,0 +1,127 @@
+{
+  "approved_gap_test": "c43c8569d205da65679cacf975607dfbf20741a82d43929acbc9efc912caf9e5",
+  "files": [
+    {
+      "actual_merged_W2": "6c44a53b9947e4d463e8f9ab10c34746b6c561be0890603cf221575c51eb5730",
+      "cancel_W3": "9c0d5f4e7f50743b1f7f0844806018028499f36dfa9cce536c45114240563b20",
+      "memory_W2": "9ef4adbc7dc4c2567e6d8ca68a070725c51018639813c64798e465d120b00871",
+      "original_combined": "fd03d4dafdd8e2c82feace54fcba151f831d526944488a4454ab4926c4a9ece2",
+      "path": "backend/internal/service/gateway_anthropic_passthrough.go",
+      "repaired_merged_W3": "6c44a53b9947e4d463e8f9ab10c34746b6c561be0890603cf221575c51eb5730"
+    },
+    {
+      "actual_merged_W2": "3ca97c2d50f0c3c498c51d1fb0af9b7fa5352089953f84d1224e6ea5e03887ce",
+      "cancel_W3": null,
+      "memory_W2": null,
+      "original_combined": null,
+      "path": "backend/internal/service/independent_boundary_test.go",
+      "repaired_merged_W3": "3ca97c2d50f0c3c498c51d1fb0af9b7fa5352089953f84d1224e6ea5e03887ce"
+    },
+    {
+      "actual_merged_W2": "9a6c53df354c34af89302c3749b68c4e0b3d51ca75f5025c8bf6830507d445ad",
+      "cancel_W3": "9a6c53df354c34af89302c3749b68c4e0b3d51ca75f5025c8bf6830507d445ad",
+      "memory_W2": null,
+      "original_combined": null,
+      "path": "backend/internal/service/native_api_key_cancellation.go",
+      "repaired_merged_W3": "9a6c53df354c34af89302c3749b68c4e0b3d51ca75f5025c8bf6830507d445ad"
+    },
+    {
+      "actual_merged_W2": "c43c8569d205da65679cacf975607dfbf20741a82d43929acbc9efc912caf9e5",
+      "cancel_W3": "89807c417d2f62126088620014661588d2bd0fc29888056f8a4ff340c902ac0f",
+      "memory_W2": null,
+      "original_combined": null,
+      "path": "backend/internal/service/native_api_key_cancellation_gaps_test.go",
+      "repaired_merged_W3": "c43c8569d205da65679cacf975607dfbf20741a82d43929acbc9efc912caf9e5"
+    },
+    {
+      "actual_merged_W2": "a0de3ca78328cdff0a3d0a4ce8d10322e673ba1f67c8420462faeb95780e1d90",
+      "cancel_W3": "a0de3ca78328cdff0a3d0a4ce8d10322e673ba1f67c8420462faeb95780e1d90",
+      "memory_W2": null,
+      "original_combined": null,
+      "path": "backend/internal/service/native_api_key_cancellation_test.go",
+      "repaired_merged_W3": "a0de3ca78328cdff0a3d0a4ce8d10322e673ba1f67c8420462faeb95780e1d90"
+    },
+    {
+      "actual_merged_W2": "2c97f68725ebfd580b34bc59eebd316e1c20ab889b239895e333320cefba666e",
+      "cancel_W3": null,
+      "memory_W2": null,
+      "original_combined": null,
+      "path": "backend/internal/service/native_stream_merged_interaction_test.go",
+      "repaired_merged_W3": "94ef8c31470dd8af1f1a23393ab0659d540fbfb0307663080bb399e3959fd6bc"
+    },
+    {
+      "actual_merged_W2": "1064d22a4ae618515cf86f8180d778536e5109c57e3d0b8b50874b6b9a55b6b9",
+      "cancel_W3": "1064d22a4ae618515cf86f8180d778536e5109c57e3d0b8b50874b6b9a55b6b9",
+      "memory_W2": "57f68c88cc7cbd5847d228394faeac53a81900bb6195e0d0acc497f5316c5dcb",
+      "original_combined": "57f68c88cc7cbd5847d228394faeac53a81900bb6195e0d0acc497f5316c5dcb",
+      "path": "backend/internal/service/openai_compact_sse_keepalive.go",
+      "repaired_merged_W3": "1064d22a4ae618515cf86f8180d778536e5109c57e3d0b8b50874b6b9a55b6b9"
+    },
+    {
+      "actual_merged_W2": "316e2fd01518ea636bb0ed08870542e0beca3872008957bd816acd2586496166",
+      "cancel_W3": "cd12f076c8e8b8ce57059d5b46e7422d0e9ed3d1dab94cc83e0e3ac348ebd2b7",
+      "memory_W2": "316e2fd01518ea636bb0ed08870542e0beca3872008957bd816acd2586496166",
+      "original_combined": "cd12f076c8e8b8ce57059d5b46e7422d0e9ed3d1dab94cc83e0e3ac348ebd2b7",
+      "path": "backend/internal/service/openai_first_output_timeout.go",
+      "repaired_merged_W3": "316e2fd01518ea636bb0ed08870542e0beca3872008957bd816acd2586496166"
+    },
+    {
+      "actual_merged_W2": "a29e3616c9e63f25ca5552c3d2d624a62d6908fca3f8263dc2f7505e6b6c3813",
+      "cancel_W3": "31ae9f6cc0056f873a619d91283c35c8212f382fedbbac4f767bb788a360f6fc",
+      "memory_W2": "8820231ac3431a45ebba1303cb40e14920548f01e70a9e50eec6ee4a7b6b4035",
+      "original_combined": "88258388e24fa739150996c9bb39fb94448d0c421af5473af09b084126d28bf0",
+      "path": "backend/internal/service/openai_gateway_messages_anthropic_native.go",
+      "repaired_merged_W3": "a29e3616c9e63f25ca5552c3d2d624a62d6908fca3f8263dc2f7505e6b6c3813"
+    },
+    {
+      "actual_merged_W2": "f60a05cb9d0261227049a7d7eb33a31a1bce91f6f1a9a4e5ca80f91df88fdca4",
+      "cancel_W3": "39cd394baa2e1b89ed45bc7cc270a666542a94762912be569b4d19f299a03d91",
+      "memory_W2": "81a4de0bb2d3baac55e75e1202295b62852fb3242dc248ee099adc76b7973a79",
+      "original_combined": "ba179f940183f2bee703fce5fb03fa9d2d4df2b23deae42a5d47d1b4827ad4f3",
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "repaired_merged_W3": "23a326cb8213bc5b2c61c477f3863ed5c1a5b792a30965e7ef407661735ec6ff"
+    },
+    {
+      "actual_merged_W2": "ce8fc9ef475305ea10654e57099e6852d795506bae8bb139199712ce976ce0d2",
+      "cancel_W3": null,
+      "memory_W2": null,
+      "original_combined": null,
+      "path": "backend/internal/service/stream_memory_behavior_test.go",
+      "repaired_merged_W3": "ce8fc9ef475305ea10654e57099e6852d795506bae8bb139199712ce976ce0d2"
+    },
+    {
+      "actual_merged_W2": "c626ffec30727787f053bd4f7b18a13412291572063553a0ed4ded75adcfe4c9",
+      "cancel_W3": null,
+      "memory_W2": null,
+      "original_combined": null,
+      "path": "backend/internal/service/stream_memory_lifecycle_test.go",
+      "repaired_merged_W3": "c626ffec30727787f053bd4f7b18a13412291572063553a0ed4ded75adcfe4c9"
+    },
+    {
+      "actual_merged_W2": "933131f9371e3dd6f4f9ceb8dc4cbe0c432ebb6a68b69204ab3d2f73942c7b8e",
+      "cancel_W3": null,
+      "memory_W2": null,
+      "original_combined": null,
+      "path": "backend/internal/service/stream_memory_replay_handoff_test.go",
+      "repaired_merged_W3": "933131f9371e3dd6f4f9ceb8dc4cbe0c432ebb6a68b69204ab3d2f73942c7b8e"
+    },
+    {
+      "actual_merged_W2": "d1be61e5e5547873d2635010e0807459af388226fbdfbe405860adb53f215858",
+      "cancel_W3": null,
+      "memory_W2": null,
+      "original_combined": null,
+      "path": "backend/internal/service/stream_memory_stage_test.go",
+      "repaired_merged_W3": "d1be61e5e5547873d2635010e0807459af388226fbdfbe405860adb53f215858"
+    },
+    {
+      "actual_merged_W2": "e75d15f5cb6096084fcd39ceaf1db4f790cf7a29b29b1f68c4ac956c6d110a73",
+      "cancel_W3": null,
+      "memory_W2": null,
+      "original_combined": null,
+      "path": "backend/internal/service/stream_memory_volume_test.go",
+      "repaired_merged_W3": "e75d15f5cb6096084fcd39ceaf1db4f790cf7a29b29b1f68c4ac956c6d110a73"
+    }
+  ],
+  "original_gap_test": "89807c417d2f62126088620014661588d2bd0fc29888056f8a4ff340c902ac0f",
+  "scope": "Exact bytes, not runtime evidence"
+}

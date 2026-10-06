@@ -1,0 +1,14 @@
+test_collect_observes_full_5sec_tail_and_done_and_denies_reuse (collector_test.CollectorContracts.test_collect_observes_full_5sec_tail_and_done_and_denies_reuse) ... ok
+test_collection_rejects_real_sample_gap_and_cgroup_peak_regression_without_done (collector_test.CollectorContracts.test_collection_rejects_real_sample_gap_and_cgroup_peak_regression_without_done) ... ok
+test_comm_parentheses_do_not_corrupt_pid_creation_identity (collector_test.CollectorContracts.test_comm_parentheses_do_not_corrupt_pid_creation_identity) ... ok
+test_limit_cgroup_counter_executable_and_missing_smaps_stay_strict (collector_test.CollectorContracts.test_limit_cgroup_counter_executable_and_missing_smaps_stay_strict) ... ok
+test_malformed_units_and_maps_are_not_zero (collector_test.CollectorContracts.test_malformed_units_and_maps_are_not_zero) ... ok
+test_pid_reuse_or_shared_cgroup_or_missing_engine_cannot_be_zero_sample (collector_test.CollectorContracts.test_pid_reuse_or_shared_cgroup_or_missing_engine_cannot_be_zero_sample) ... ok
+test_raw_hwm_below_rss_is_observation_not_corruption (collector_test.CollectorContracts.test_raw_hwm_below_rss_is_observation_not_corruption) ... ok
+test_read_only_peak_and_native_hwm_without_zero_or_reset (collector_test.CollectorContracts.test_read_only_peak_and_native_hwm_without_zero_or_reset) ... ok
+test_two_filesystem_counter_reads_preserve_raw_linux_regression (collector_test.CollectorContracts.test_two_filesystem_counter_reads_preserve_raw_linux_regression) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.017s
+
+OK

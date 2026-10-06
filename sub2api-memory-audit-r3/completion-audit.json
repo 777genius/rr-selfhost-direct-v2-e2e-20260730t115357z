@@ -1,0 +1,44 @@
+{
+  "scope": "All new files are owned audit/report/proposal artifacts; no production source applied",
+  "inputs": "3587 manifest hashes reverified; 17 native + 4 probe files match exact supplied patched manifests",
+  "receipt_scope": "16 supplied completed cases only; 4 planned cases absent",
+  "memory_result": "Functional PASS / empirical return FAIL / physical interval NOTPROVEN; leak/plateau attribution unproven",
+  "tests": {
+    "offline_node": {
+      "pass": 25,
+      "fail": 0,
+      "exit": 0
+    },
+    "numeric_regression": {
+      "pass": 30,
+      "fail": 0,
+      "exit": 0
+    },
+    "actual_collector_python": {
+      "pass": 6,
+      "fail": 0,
+      "exit": 0
+    }
+  },
+  "proposed_production_changes": {
+    "applied": false,
+    "exact_total_added": 2,
+    "exact_total_removed": 2,
+    "files": 2,
+    "Go_execution": "NOT RUN per instruction"
+  },
+  "constraints": {
+    "root": false,
+    "docker": false,
+    "Go": false,
+    "network": false,
+    "provider_keys": false,
+    "auth": false,
+    "git_operations": false,
+    "subagents": false,
+    "forced_GC": false,
+    "threshold_changes": false
+  },
+  "completion": "Read-only review, exact pins, local regression tests, risk patches and bounded profiling/Go-test proposals delivered; STOP",
+  "source_runtime_semantics": "Go1.27.1 source/build-info unavailable; explicitly UNKNOWN"
+}

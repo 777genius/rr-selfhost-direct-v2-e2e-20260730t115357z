@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: real wallet Node stdout object array JSONL and preserved canonical JSONL acceptance
+ok 1 - real wallet Node stdout object array JSONL and preserved canonical JSONL acceptance
+  ---
+  duration_ms: 56.542643
+  type: 'test'
+  ...
+# Subtest: every JSONL line validated even after or before exact matching row
+ok 2 - every JSONL line validated even after or before exact matching row
+  ---
+  duration_ms: 1.014995
+  type: 'test'
+  ...
+# Subtest: no cross-row assembly recursion prose or numeric coercion
+ok 3 - no cross-row assembly recursion prose or numeric coercion
+  ---
+  duration_ms: 0.50812
+  type: 'test'
+  ...
+# Subtest: successful completed real command event type and original command classifier retained
+ok 4 - successful completed real command event type and original command classifier retained
+  ---
+  duration_ms: 0.433832
+  type: 'test'
+  ...
+# Subtest: fixed fixture bytes and projection fixture exact custody
+ok 5 - fixed fixture bytes and projection fixture exact custody
+  ---
+  duration_ms: 7.4109
+  type: 'test'
+  ...
+# Subtest: separate reads genuine terminal and final finding remain mandatory
+ok 6 - separate reads genuine terminal and final finding remain mandatory
+  ---
+  duration_ms: 2.238804
+  type: 'test'
+  ...
+# Subtest: supplied OpenRouter fractional-only final is numerically real but fails required negative finding
+ok 7 - supplied OpenRouter fractional-only final is numerically real but fails required negative finding
+  ---
+  duration_ms: 39.063127
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 196.176701

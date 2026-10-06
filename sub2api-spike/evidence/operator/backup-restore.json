@@ -1,0 +1,27 @@
+{
+  "id": "G04",
+  "status": "PASS",
+  "evidence_kind": "live-container",
+  "tables": {
+    "account_groups": 8,
+    "accounts": 10,
+    "api_keys": 9,
+    "groups": 10,
+    "schema_migrations": 289,
+    "users": 10
+  },
+  "restored_tables": {
+    "account_groups": 8,
+    "accounts": 10,
+    "api_keys": 9,
+    "groups": 10,
+    "schema_migrations": 289,
+    "users": 10
+  },
+  "restore_network": "none",
+  "public_ports": [],
+  "dump_custody": "root-only; contains credentials; removed after restore",
+  "stale_run_access": "Broker run ledger separately preserved; database restore does not erase run tombstones. Combined restored-engine admission NOT RUN.",
+  "ledger_entries": 2,
+  "at": 1790803794.6188674
+}

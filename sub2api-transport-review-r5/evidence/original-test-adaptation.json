@@ -1,0 +1,5 @@
+{
+  "source": "historical-input/independent-review/independent.test.mjs",
+  "historical": "path mapping only; all original assertions preserved",
+  "repaired": "path mapping plus valid control frame 1966224 -> 1992295 to satisfy 1.9MiB lower bound; all assertions preserved"
+}

@@ -1,0 +1,92 @@
+{
+  "old": {
+    "exit_code": 1,
+    "tests": 111,
+    "pass": 58,
+    "fail": 53,
+    "cancelled": 0,
+    "skipped": 0,
+    "syntax_checked": [
+      "sub2api-spike/broker.mjs",
+      "sub2api-regression-lab/run.mjs",
+      "sub2api-regression-lab/receipts.mjs"
+    ],
+    "test_sha256": {
+      "oracle.test.mjs": "744cad84a096d68145a405e6503537e9aaa99af5a03f6e6fd3055e95728e69ef",
+      "broker.test.mjs": "02bf8dc2987e8ae3bd6493d7ac715091fe6690e37b0a8b81a42cd957f6832efa",
+      "runner.test.mjs": "38a2c89db0ac45280c6ca83065f43d3928309e57a8cc7c4abe313ffae2c2dd67"
+    }
+  },
+  "new": {
+    "exit_code": 0,
+    "tests": 111,
+    "pass": 111,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "syntax_checked": [
+      "sub2api-spike/broker.mjs",
+      "sub2api-regression-lab/run.mjs",
+      "sub2api-regression-lab/receipts.mjs"
+    ],
+    "test_sha256": {
+      "oracle.test.mjs": "744cad84a096d68145a405e6503537e9aaa99af5a03f6e6fd3055e95728e69ef",
+      "broker.test.mjs": "02bf8dc2987e8ae3bd6493d7ac715091fe6690e37b0a8b81a42cd957f6832efa",
+      "runner.test.mjs": "38a2c89db0ac45280c6ca83065f43d3928309e57a8cc7c4abe313ffae2c2dd67"
+    }
+  },
+  "preservation": {
+    "uncertainty_verdict": "byte-identical",
+    "telemetry_verdict": "byte-identical",
+    "uncertainty_load_and_main_runner": "byte-identical",
+    "mock_client_wire_plan_adapter_and_all_other_runtime_inputs": "unchanged pinned inputs",
+    "fixture_policy_sha256": "6a70040c047f3e72005f6c1cec6b8404457e4de23b9ca36a5231023ccec4dc8a",
+    "production_source": "untouched",
+    "delta_modules": [
+      "sub2api-spike/broker.mjs",
+      "sub2api-regression-lab/run.mjs",
+      "sub2api-regression-lab/receipts.mjs"
+    ],
+    "actual_e2e": "NOT RUN"
+  },
+  "delta_sha256": "30a6f989b6454230e405775bc2602549ed07080fe67a4e06bfb922590ea3f4b3",
+  "node": "v24.21.0",
+  "w1_same_frozen_tests": {
+    "exit_code": 1,
+    "tests": 111,
+    "pass": 93,
+    "fail": 18,
+    "cancelled": 0,
+    "skipped": 0,
+    "test_sha256": {
+      "oracle.test.mjs": "744cad84a096d68145a405e6503537e9aaa99af5a03f6e6fd3055e95728e69ef",
+      "broker.test.mjs": "02bf8dc2987e8ae3bd6493d7ac715091fe6690e37b0a8b81a42cd957f6832efa",
+      "runner.test.mjs": "38a2c89db0ac45280c6ca83065f43d3928309e57a8cc7c4abe313ffae2c2dd67"
+    }
+  },
+  "w1_history_byte_exact": [
+    "verify.py",
+    "verification.json",
+    "source-ledger.json",
+    "REPORT.md",
+    "BUG.md",
+    "artifact-hashes.json",
+    "broker.test.mjs",
+    "oracle.test.mjs",
+    "cancel-oracle.patch",
+    "prepare.py",
+    "runner.test.mjs",
+    "actual-row-audit.json",
+    "evidence/old.tap",
+    "evidence/new.tap"
+  ],
+  "w2_only_runtime_delta": {
+    "module": "sub2api-regression-lab/receipts.mjs",
+    "changes": [
+      "physical close acceptance 1250 -> original 1200",
+      "PASS reason reflects 1200"
+    ],
+    "broker_runner_byte_identical_to_w1": true,
+    "restoration_patch_sha256": "f0e3a2c8a793db91c5fd2ce69c7abc7bf51e7eb643d545f3dfbcef4711275d59"
+  }
+}

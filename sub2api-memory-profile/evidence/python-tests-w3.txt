@@ -1,0 +1,32 @@
+test_actual_runtime_and_independent_slopes (test_actual.ActualNumericAudit.test_actual_runtime_and_independent_slopes) ... ok
+test_forged_point_trend_and_missing_runtime_scalar_rejected (test_actual.ActualNumericAudit.test_forged_point_trend_and_missing_runtime_scalar_rejected) ... ok
+setUpClass (test_analyzer.EndToEndAnalyzer) ... skipped 'W1 full raw run/collector/profile fixtures absent from supplied W2 package; no synthetic substitution'
+test_binary_profile_actual_field_layout_and_corruption (test_contracts.StrictContracts.test_binary_profile_actual_field_layout_and_corruption) ... ok
+test_burst_finite_fullframe_and_attempt_effect_contract (test_contracts.StrictContracts.test_burst_finite_fullframe_and_attempt_effect_contract) ... ok
+test_checkpoint_missing_identity_cycle_forgery_and_replay (test_contracts.StrictContracts.test_checkpoint_missing_identity_cycle_forgery_and_replay) ... ok
+test_jsonl_complete_duplicate_and_nonfinite (test_contracts.StrictContracts.test_jsonl_complete_duplicate_and_nonfinite) ... ok
+test_root_adapter_removes_only_verified_owned_container (test_contracts.StrictContracts.test_root_adapter_removes_only_verified_owned_container) ... ok
+test_runtime_fields_no_coercion_identity_cycles_gaps (test_contracts.StrictContracts.test_runtime_fields_no_coercion_identity_cycles_gaps) ... ok
+test_schedule_exact_requests_repetitions (test_contracts.StrictContracts.test_schedule_exact_requests_repetitions) ... ok
+test_slopes_known_observations_and_control_difference (test_contracts.StrictContracts.test_slopes_known_observations_and_control_difference) ... ok
+test_actual_build_subprocess_and_generated_dockerfile (test_producer.Producer.test_actual_build_subprocess_and_generated_dockerfile) ... ok
+test_actual_service_create_payloads_at_subprocess_boundary (test_producer.Producer.test_actual_service_create_payloads_at_subprocess_boundary) ... ok
+test_config_required_fields_types_and_toolchain_receipt (test_producer.Producer.test_config_required_fields_types_and_toolchain_receipt) ... ok
+test_wrong_local_tag_id_stops_before_image_build (test_producer.Producer.test_wrong_local_tag_id_stops_before_image_build) ... ok
+test_exact_reviewed_patch_and_new_go_file_without_git (test_reviewed_source.ReviewedSource.test_exact_reviewed_patch_and_new_go_file_without_git) ... ok
+test_explicit_merged_manifest_keeps_legacy_base_and_exact_source_list (test_reviewed_source.ReviewedSource.test_explicit_merged_manifest_keeps_legacy_base_and_exact_source_list) ... ok
+test_expected_manifest_without_reviewed_receipt_rejects_unreviewed_source (test_w3_regressions.Independent.test_expected_manifest_without_reviewed_receipt_rejects_unreviewed_source) ... ok
+test_preflight_toolchain_query_and_compile_share_sanitized_environment (test_w3_regressions.Independent.test_preflight_toolchain_query_and_compile_share_sanitized_environment) ... ok
+test_private_outputs_exclusive_0600_at_creation (test_w3_regressions.Independent.test_private_outputs_exclusive_0600_at_creation) ... ok
+test_reviewed_acceptance_and_binary_binding_before_source_evidence (test_w3_security.ManifestAuthorization.test_reviewed_acceptance_and_binary_binding_before_source_evidence) ... ok
+test_selection_before_run_evidence_and_byte_exact_legacy (test_w3_security.ManifestAuthorization.test_selection_before_run_evidence_and_byte_exact_legacy) ... ok
+test_all_config_validation_before_creation (test_w3_security.PrivatePublication.test_all_config_validation_before_creation) ... ok
+test_check_create_race_respects_competing_output (test_w3_security.PrivatePublication.test_check_create_race_respects_competing_output) ... ok
+test_existing_outputs_and_symlinks_never_overwritten (test_w3_security.PrivatePublication.test_existing_outputs_and_symlinks_never_overwritten) ... ok
+test_failed_write_rolls_back_owned_files (test_w3_security.PrivatePublication.test_failed_write_rolls_back_owned_files) ... ok
+test_private_parent_and_ancestor_symlink_cli (test_w3_security.PrivatePublication.test_private_parent_and_ancestor_symlink_cli) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 3.152s
+
+OK (skipped=1)

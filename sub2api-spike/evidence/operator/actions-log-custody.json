@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "files": [
+    {
+      "file": "rr-sub2-canary1-private.log",
+      "provider_master_hits": 0
+    },
+    {
+      "file": "rr-sub2-canary3-private.log",
+      "provider_master_hits": 0
+    },
+    {
+      "file": "rr-sub2-canary2-private.log",
+      "provider_master_hits": 0
+    },
+    {
+      "file": "canary4-private.log",
+      "provider_master_hits": 0
+    }
+  ],
+  "scope": "All four real Actions logs captured via gh after terminal; no bytes/hashes output."
+}

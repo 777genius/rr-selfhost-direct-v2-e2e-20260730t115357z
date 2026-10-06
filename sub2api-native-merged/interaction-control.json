@@ -1,0 +1,19 @@
+{
+  "actual_Go_RED": "NOT RUN",
+  "fault": "Lose trusted Body.Close AND early return after failed spilled-prefix replay; live caller leaves Scanner waiting on held terminal bytes",
+  "files": [
+    {
+      "added": 0,
+      "after_LOC": 2581,
+      "after_sha256": "a16a764cd85cd8e61539a52709a4a5d9461aa53df6bb950548d658275746c5c2",
+      "before_LOC": 2587,
+      "before_sha256": "23a326cb8213bc5b2c61c477f3863ed5c1a5b792a30965e7ef407661735ec6ff",
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "removed": 6
+    }
+  ],
+  "identical_test_sha256": "94ef8c31470dd8af1f1a23393ab0659d540fbfb0307663080bb399e3959fd6bc",
+  "kind": "RED-only explicit source fault, NEVER production",
+  "patch": "interaction-replay-loss.RED-only.patch",
+  "sha256": "dd7a3c18361403fb3a835548bcf5bfde64a7d798a86886e5b786c1ac5338fc8c"
+}

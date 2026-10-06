@@ -1,0 +1,15 @@
+{
+  "method": "Unchanged sub2api-slot-lab/prepare.py assembled exact public repository file bytes without archive, Git, credentials or network",
+  "command": "PYTHONDONTWRITEBYTECODE=1 python3 sub2api-slot-lab/prepare.py --output <fresh-output>",
+  "preparation_manifest": "preparation.json",
+  "matches_tested_assembly": true,
+  "opaque_archive_needed": false,
+  "existing_public_inputs": {
+    "sub2api-transport-packaging/prepare-standalone.py": "f17745f9210eb4d84e2ef20deb8697e6096bc688e8016d9c2157b51f8b152494",
+    "sub2api-transport-packaging/runtime-hashes.json": "82f2a032ded0fa64d05ff91314d07fef9af2b35600e53ef9955d40c29898147e",
+    "sub2api-transport-r4/overlay/sub2api-regression-lab/common.mjs": "c6b50fb270c95d5aff4b6fbf3b54d5b4c9fb95fb8d75b4e7d7122c237357de75",
+    "sub2api-transport-r4/overlay/sub2api-regression-lab/client.mjs": "c3a772ed23202367f87f1fcf19099b8d9d060843096b7acd8c288d1cde5cdd47",
+    "sub2api-transport-r4/overlay/sub2api-regression-lab/wire.mjs": "1e91fdbd45e9c8c4d4dc1aa8595f03c71642222b036a0db979e186ab5a2f392c",
+    "sub2api-transport-r4/overlay/sub2api-regression-lab/mock.mjs": "a253781f03a7cfaba12e46fde023e3d4af3572cc9e14e305f4e438fdc22bca38"
+  }
+}

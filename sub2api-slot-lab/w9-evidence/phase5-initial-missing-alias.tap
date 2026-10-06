@@ -1,0 +1,77 @@
+(node:11) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✖ native Retry-After60 plus 5s response fits setup and receives full 35s active (5.89444ms)
+✖ no retry also receives full active period from setup completion (4.437949ms)
+✖ supervisor cannot admit required phases: zero fixture creation and zero inference (6.110919ms)
+✖ successful readback at 70000 fails before inference (5.660165ms)
+✖ successful readback at 70001 fails before inference (4.421481ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 112.487324
+
+✖ failing tests:
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:42:1
+✖ native Retry-After60 plus 5s response fits setup and receives full 35s active (5.89444ms)
+  Error: ENOENT: no such file or directory, open '/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-regression-lab/common.mjs'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async load (file:///srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-slot-lab/phase-boundary.test.mjs:25:81) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-regression-lab/common.mjs'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:43:1
+✖ no retry also receives full active period from setup completion (4.437949ms)
+  Error: ENOENT: no such file or directory, open '/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-regression-lab/common.mjs'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async load (file:///srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-slot-lab/phase-boundary.test.mjs:25:81) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-regression-lab/common.mjs'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:44:1
+✖ supervisor cannot admit required phases: zero fixture creation and zero inference (6.110919ms)
+  Error: ENOENT: no such file or directory, open '/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-regression-lab/common.mjs'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async load (file:///srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-slot-lab/phase-boundary.test.mjs:25:81) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-regression-lab/common.mjs'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:45:35
+✖ successful readback at 70000 fails before inference (5.660165ms)
+  Error: ENOENT: no such file or directory, open '/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-regression-lab/common.mjs'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async load (file:///srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-slot-lab/phase-boundary.test.mjs:25:81) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-regression-lab/common.mjs'
+  }
+
+test at sub2api-slot-lab/phase-boundary.test.mjs:45:35
+✖ successful readback at 70001 fails before inference (4.421481ms)
+  Error: ENOENT: no such file or directory, open '/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-regression-lab/common.mjs'
+      at async open (node:internal/fs/promises:1345:25)
+      at async readFile (node:internal/fs/promises:1996:14)
+      at async load (file:///srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-slot-lab/phase-boundary.test.mjs:25:81) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-slot-handoff-repair-w9/tmp/agent/w9-offline-harness/sub2api-regression-lab/common.mjs'
+  }

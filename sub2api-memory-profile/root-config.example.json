@@ -1,0 +1,17 @@
+{
+  "machine_id": "d856d40da5ad4e23b4f67773e5942842",
+  "synthetic_only": true,
+  "base_image": "sha256:6df1cc33771f1bc94028cc18440a13e7d31a3513331bbb8d7d686584d19b79e2",
+  "node_image": "node:24.21.0-alpine@sha256:ebfe2f90462722a7a4de65e91990e97fe0d401c70e0e762c5b53302f905ec1c1",
+  "postgres_image": "REQUIRED_FROM_SYNTHETIC_FIXTURE_ATTESTATION@sha256:REQUIRED",
+  "redis_image": "REQUIRED_FROM_SYNTHETIC_FIXTURE_ATTESTATION@sha256:REQUIRED",
+  "fixture_dir": "/OWNED/transport-isolated-r4-snapshot",
+  "fixture_attestation_sha256": "REQUIRED_ACTUAL_HASH",
+  "go_binary": "/OWNED/go1.27.1/bin/go",
+  "go_binary_sha256": "REQUIRED_ACTUAL_HASH",
+  "modules_cache": "/OWNED/prepopulated-verified-go-module-cache",
+  "compilation_cache": "/OWNED/operator-verified-go1.27.1-compilation-cache",
+  "toolchain_receipt": "/OWNED/private/reviewed-toolchain.json",
+  "toolchain_receipt_sha256": "REQUIRED_ACTUAL_HASH",
+  "collector_source": "/OWNED/profile-responses-fixed-00000009/stage/code/sub2api-transport-r4/collector.py"
+}

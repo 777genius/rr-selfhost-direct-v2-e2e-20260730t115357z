@@ -1,0 +1,12 @@
+{
+  "containers_removed": 17,
+  "networks_removed": 5,
+  "remaining_containers": 0,
+  "remaining_networks": 0,
+  "virtual_keys_remaining": 0,
+  "admin_session_logged_out": true,
+  "own_secret_copies_removed": true,
+  "canonical_provider_key_files_preserved": true,
+  "source_evidence_archives_retained": true,
+  "completed_utc": "2026-09-30T17:05:13.846027+00:00"
+}

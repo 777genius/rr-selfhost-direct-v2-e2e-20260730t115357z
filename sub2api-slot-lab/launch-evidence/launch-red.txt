@@ -1,0 +1,24 @@
+F
+======================================================================
+FAIL: test_native_process_selection_and_all_other_transport_constraints (launch_transport_test.NativeLaunch.test_native_process_selection_and_all_other_transport_constraints)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/slot-root-launch-w3/sub2api-slot-lab/launch_transport_test.py", line 60, in test_native_process_selection_and_all_other_transport_constraints
+    self.assertEqual(new['process'], ['/app/sub2api'])
+AssertionError: Lists differ: ['/app/docker-entrypoint.sh', '/app/sub2api'] != ['/app/sub2api']
+
+First differing element 0:
+'/app/docker-entrypoint.sh'
+'/app/sub2api'
+
+First list contains 1 additional elements.
+First extra element 1:
+'/app/sub2api'
+
+- ['/app/docker-entrypoint.sh', '/app/sub2api']
++ ['/app/sub2api']
+
+----------------------------------------------------------------------
+Ran 1 test in 0.203s
+
+FAILED (failures=1)

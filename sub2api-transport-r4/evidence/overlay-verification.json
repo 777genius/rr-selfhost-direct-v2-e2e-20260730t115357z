@@ -1,0 +1,662 @@
+{
+  "canonical": {
+    "zero_fuzz": true,
+    "zero_offset": true,
+    "files": 6,
+    "result_hashes": "PASS",
+    "plan": {
+      "cases": [
+        {
+          "id": "cancel-responses-before-client",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "before",
+          "trigger": "client",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-responses-before-revoke",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "before",
+          "trigger": "revoke",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-responses-before-expiry",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "before",
+          "trigger": "expiry",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-responses-after-client",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "after",
+          "trigger": "client",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-responses-after-revoke",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "after",
+          "trigger": "revoke",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-responses-after-expiry",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "after",
+          "trigger": "expiry",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-before-client",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "before",
+          "trigger": "client",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-before-revoke",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "before",
+          "trigger": "revoke",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-before-expiry",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "before",
+          "trigger": "expiry",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-after-client",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "after",
+          "trigger": "client",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-after-revoke",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "after",
+          "trigger": "revoke",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-after-expiry",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "after",
+          "trigger": "expiry",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "uncertainty-responses-uncertain-before",
+          "stage": "uncertainty",
+          "protocol": "responses",
+          "mode": "uncertain-before",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-responses-uncertain-after",
+          "stage": "uncertainty",
+          "protocol": "responses",
+          "mode": "uncertain-after",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-responses-tool-accepted",
+          "stage": "uncertainty",
+          "protocol": "responses",
+          "mode": "tool-accepted",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-responses-pending",
+          "stage": "uncertainty",
+          "protocol": "responses",
+          "mode": "pending",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-messages-uncertain-before",
+          "stage": "uncertainty",
+          "protocol": "messages",
+          "mode": "uncertain-before",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-messages-uncertain-after",
+          "stage": "uncertainty",
+          "protocol": "messages",
+          "mode": "uncertain-after",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-messages-tool-accepted",
+          "stage": "uncertainty",
+          "protocol": "messages",
+          "mode": "tool-accepted",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-messages-pending",
+          "stage": "uncertainty",
+          "protocol": "messages",
+          "mode": "pending",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "memory-responses-8-1",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 8,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-8-5",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 8,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-8-20",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 8,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-32-1",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 32,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-32-5",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 32,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-32-20",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 32,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-64-1",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 64,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-64-5",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 64,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-64-20",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 64,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-8-1",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 8,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-8-5",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 8,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-8-20",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 8,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-32-1",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 32,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-32-5",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 32,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-32-20",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 32,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-64-1",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 64,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-64-5",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 64,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-64-20",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 64,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "soak-responses",
+          "stage": "soak",
+          "protocol": "responses",
+          "streams": 5,
+          "count": 250,
+          "red": "Bounded synthetic soak loses terminals, duplicates upstream effects, or leaves active sockets."
+        },
+        {
+          "id": "soak-messages",
+          "stage": "soak",
+          "protocol": "messages",
+          "streams": 5,
+          "count": 250,
+          "red": "Bounded synthetic soak loses terminals, duplicates upstream effects, or leaves active sockets."
+        }
+      ],
+      "budget": {
+        "max_actual_upstream_attempts": 2000,
+        "soak_total": 500,
+        "memory_requests": 156,
+        "max_batch_ms": 90000,
+        "note": "Automatic create probes and explicit healthy preparation requests count against the same global mock ceiling. No request retries in the client."
+      }
+    },
+    "actual_load_tests": "{\"strict_jsonl_invalid_numeric_cases\":93,\"actual_function\":\"load\",\"engine\":\"NOT RUN\"}\n\u2714 strict JSONL numeric evidence cannot pass or poison aggregation in actual load (45.314245ms)\n\u2714 exact upstream/downstream body volumes for all18 cells; protocol conversion mismatch stays FAIL (41.712553ms)\n\u2714 near-limit frame qualification has exact integer boundaries and no cap equality (1.717544ms)\n\u2714 protocol/effect/terminal/text/tool/comment gates and numeric soak boundary remain strict (11.277097ms)\n\u2139 tests 4\n\u2139 suites 0\n\u2139 pass 4\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 163.576584\n"
+  },
+  "frozen-root": {
+    "zero_fuzz": true,
+    "zero_offset": true,
+    "files": 6,
+    "result_hashes": "PASS",
+    "plan": {
+      "cases": [
+        {
+          "id": "cancel-responses-before-client",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "before",
+          "trigger": "client",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-responses-before-revoke",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "before",
+          "trigger": "revoke",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-responses-before-expiry",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "before",
+          "trigger": "expiry",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-responses-after-client",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "after",
+          "trigger": "client",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-responses-after-revoke",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "after",
+          "trigger": "revoke",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-responses-after-expiry",
+          "stage": "cancel",
+          "protocol": "responses",
+          "placement": "after",
+          "trigger": "expiry",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-before-client",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "before",
+          "trigger": "client",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-before-revoke",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "before",
+          "trigger": "revoke",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-before-expiry",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "before",
+          "trigger": "expiry",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-after-client",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "after",
+          "trigger": "client",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-after-revoke",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "after",
+          "trigger": "revoke",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "cancel-messages-after-expiry",
+          "stage": "cancel",
+          "protocol": "messages",
+          "placement": "after",
+          "trigger": "expiry",
+          "red": "Default Sub2 usage drain keeps the upstream socket active beyond the immediate-abort deadline; tiny buffered frames previously misattributed cancellation."
+        },
+        {
+          "id": "uncertainty-responses-uncertain-before",
+          "stage": "uncertainty",
+          "protocol": "responses",
+          "mode": "uncertain-before",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-responses-uncertain-after",
+          "stage": "uncertainty",
+          "protocol": "responses",
+          "mode": "uncertain-after",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-responses-tool-accepted",
+          "stage": "uncertainty",
+          "protocol": "responses",
+          "mode": "tool-accepted",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-responses-pending",
+          "stage": "uncertainty",
+          "protocol": "responses",
+          "mode": "pending",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-messages-uncertain-before",
+          "stage": "uncertainty",
+          "protocol": "messages",
+          "mode": "uncertain-before",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-messages-uncertain-after",
+          "stage": "uncertainty",
+          "protocol": "messages",
+          "mode": "uncertain-after",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-messages-tool-accepted",
+          "stage": "uncertainty",
+          "protocol": "messages",
+          "mode": "tool-accepted",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "uncertainty-messages-pending",
+          "stage": "uncertainty",
+          "protocol": "messages",
+          "mode": "pending",
+          "red": "An accepted/reset request is automatically retried, or a cooling account prevents the fault reaching upstream and is falsely green."
+        },
+        {
+          "id": "memory-responses-8-1",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 8,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-8-5",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 8,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-8-20",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 8,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-32-1",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 32,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-32-5",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 32,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-32-20",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 32,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-64-1",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 64,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-64-5",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 64,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-responses-64-20",
+          "stage": "memory",
+          "protocol": "responses",
+          "mib": 64,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-8-1",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 8,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-8-5",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 8,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-8-20",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 8,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-32-1",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 32,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-32-5",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 32,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-32-20",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 32,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-64-1",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 64,
+          "streams": 1,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-64-5",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 64,
+          "streams": 5,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "memory-messages-64-20",
+          "stage": "memory",
+          "protocol": "messages",
+          "mib": 64,
+          "streams": 20,
+          "red": "Engine buffers an entire slow-consumer stream, exceeds the measured RSS envelope, duplicates effects, or does not return to quiescence."
+        },
+        {
+          "id": "soak-responses",
+          "stage": "soak",
+          "protocol": "responses",
+          "streams": 5,
+          "count": 250,
+          "red": "Bounded synthetic soak loses terminals, duplicates upstream effects, or leaves active sockets."
+        },
+        {
+          "id": "soak-messages",
+          "stage": "soak",
+          "protocol": "messages",
+          "streams": 5,
+          "count": 250,
+          "red": "Bounded synthetic soak loses terminals, duplicates upstream effects, or leaves active sockets."
+        }
+      ],
+      "budget": {
+        "max_actual_upstream_attempts": 2000,
+        "soak_total": 500,
+        "memory_requests": 156,
+        "max_batch_ms": 90000,
+        "note": "Automatic create probes and explicit healthy preparation requests count against the same global mock ceiling. No request retries in the client."
+      }
+    },
+    "actual_load_tests": "{\"strict_jsonl_invalid_numeric_cases\":93,\"actual_function\":\"load\",\"engine\":\"NOT RUN\"}\n\u2714 strict JSONL numeric evidence cannot pass or poison aggregation in actual load (76.311026ms)\n\u2714 exact upstream/downstream body volumes for all18 cells; protocol conversion mismatch stays FAIL (45.479752ms)\n\u2714 near-limit frame qualification has exact integer boundaries and no cap equality (1.791505ms)\n\u2714 protocol/effect/terminal/text/tool/comment gates and numeric soak boundary remain strict (11.427517ms)\n\u2139 tests 4\n\u2139 suites 0\n\u2139 pass 4\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 240.195913\n"
+  }
+}

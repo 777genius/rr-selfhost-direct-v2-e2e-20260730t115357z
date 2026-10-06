@@ -1,0 +1,9 @@
+test_four_link_types_before_any_history_read_and_real_clis (__main__.Integrity.test_four_link_types_before_any_history_read_and_real_clis) ... ok
+test_regular_history_control (__main__.Integrity.test_regular_history_control) ... ok
+test_unchanged_leaf_and_corruption_controls (__main__.Integrity.test_unchanged_leaf_and_corruption_controls) ... ok
+test_unsafe_history_names_before_read (__main__.Integrity.test_unsafe_history_names_before_read) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 1.537s
+
+OK

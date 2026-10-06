@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "task_id": "rr-gateway-spike-20260930-fork-code-w1",
+  "attempt": 2,
+  "status": "HANDOFF_READY_WITH_EXTERNAL_CHECKS_NOT_RUN",
+  "workspace": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/fork-code-w1",
+  "scope": "Fork producer contribution only; sub2api-fork/",
+  "previous_attempt": "No partial deliverables or editable source existed on inspection; existing PLAN preserved. Prior account_unavailable is not a current blocker.",
+  "outputs": [
+    "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/fork-code-w1/sub2api-fork/patches/native-reasoning.patch",
+    "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/fork-code-w1/sub2api-fork/SOURCE.json",
+    "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/fork-code-w1/sub2api-fork/README.md",
+    "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/fork-code-w1/sub2api-fork/worker-result.json",
+    "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/fork-code-w1/sub2api-fork/checks/run-backend-tests.py",
+    "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/fork-code-w1/sub2api-fork/checks/artifact-verification.json",
+    "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/fork-code-w1/sub2api-fork/checks/regression-oracles.json",
+    "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/fork-code-w1/sub2api-fork/checks/pinned-source-verification.json"
+  ],
+  "editable_source": {
+    "path": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/fork-code-w1/sub2api-fork/build-source",
+    "ignored_rule": "sub2api-fork/build-source/ in existing root .gitignore",
+    "nested_git": false,
+    "include_in_handoff": false
+  },
+  "patch": {
+    "path": "patches/native-reasoning.patch",
+    "sha256": "4d19a886a346e3d0dbf80b515d12d640a07fc36994f26d3dbddb9245e78f3357",
+    "strip": 1,
+    "added_lines": 294,
+    "removed_lines": 31,
+    "changed_lines": 325
+  },
+  "upstream_pin": {
+    "repository": "https://github.com/Wei-Shaw/sub2api",
+    "release": "v0.2.11",
+    "revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+    "source_path": ".spike-inputs/upstream",
+    "revision_evidence": "Task-supplied pin; staged tree has no Git metadata. Original touched-file checksums recorded; coordinator must compare with the immutable pinned revision.",
+    "staged_server_version": "0.2.10"
+  },
+  "changed_upstream_files": [
+    "backend/internal/service/account.go",
+    "backend/internal/service/openai_gateway_forward.go",
+    "backend/internal/service/openai_gateway_request_body.go",
+    "backend/internal/service/openai_responses_item_id.go",
+    "backend/internal/service/openai_compatible_reasoning_policy_test.go"
+  ],
+  "behavior": [
+    "Trusted Extra boolean opt-in restricted to OpenAI API-key native Responses routing; missing/false/non-boolean and OAuth-like accounts retain legacy behavior.",
+    "HTTP and WS replay preserve provider reasoning items, visible content, IDs, references and extensions. Encrypted reasoning deliberately remains opaque and intact on the opt-in path.",
+    "Non-reasoning item sanitation, tool pairing, protocol routing, models, billing and response-stream handling remain unchanged.",
+    "Malformed JSON/non-object opt-in replay fails before forwarding; request body/header cannot opt in."
+  ],
+  "checks": [
+    {
+      "name": "Patch apply",
+      "status": "PASS",
+      "evidence": "sub2api-fork/checks/artifact-verification.json",
+      "details": "patch --batch --fuzz=0 -p1 against a fresh owned subset; all five patched file hashes match SOURCE.json"
+    },
+    {
+      "name": "Patch reverse / rollback",
+      "status": "PASS",
+      "evidence": "sub2api-fork/checks/artifact-verification.json",
+      "details": "patch -R restored all four exact original hashes and removed added test"
+    },
+    {
+      "name": "Bound / scope / source isolation",
+      "status": "PASS",
+      "details": "325 changed patch LOC; four production files and one test; no nested .git; build-source and .build-cache have pre-existing explicit ignore rules; writes only sub2api-fork/"
+    },
+    {
+      "name": "Test runner Python syntax",
+      "status": "PASS",
+      "details": "ast.parse; executable mode set"
+    },
+    {
+      "name": "Original baseline behavioral red",
+      "status": "NOT RUN",
+      "command": "./sub2api-fork/checks/run-backend-tests.py --baseline",
+      "exit_code": 77,
+      "reason": "Go unavailable"
+    },
+    {
+      "name": "Patched backend behavioral green",
+      "status": "NOT RUN",
+      "command": "./sub2api-fork/checks/run-backend-tests.py",
+      "exit_code": 77,
+      "reason": "Go unavailable"
+    },
+    {
+      "name": "Go compilation / gofmt",
+      "status": "NOT RUN",
+      "reason": "Go/gofmt unavailable; no tool or dependency installation"
+    },
+    {
+      "name": "Pinned public source comparison",
+      "status": "NOT VERIFIED",
+      "evidence": "sub2api-fork/checks/pinned-source-verification.json",
+      "reason": "raw.githubusercontent.com blocked by sandbox allowlist; no bypass"
+    },
+    {
+      "name": "Git lock preflight",
+      "status": "UNAVAILABLE",
+      "command": "git rev-parse --git-path index.lock",
+      "reason": "Linked .git target inaccessible; attempted once using supported Git method; no retry, index write, commit or push"
+    },
+    {
+      "name": "Native thinking-enabled E2E / immutable engine / live regression / independent review",
+      "status": "NOT RUN",
+      "reason": "Coordinator-owned external gates; worker prohibits live inference, Docker and GitHub writes"
+    }
+  ],
+  "blockers": [
+    "Local Go/gofmt unavailable; executable tests supplied as requested.",
+    "Linked Git metadata inaccessible.",
+    "Independent pin comparison denied by network allowlist; staged VERSION is 0.2.10 despite task-supplied v0.2.11 pin."
+  ],
+  "risks": [
+    "Backend tests have not been compiled or executed; red/green and formatting require coordinator verification.",
+    "Manifest proves exact application to staged touched files; it does not independently attest the requested Git revision.",
+    "Encrypted reasoning is deliberately preserved, not treated as an OpenAI ciphertext artifact, on explicitly opted-in compatible accounts.",
+    "Real native thinking-enabled final-answer success, socket transport, immutable image and live regression safety are unproven by this source contribution."
+  ],
+  "coordinator_next_steps": [
+    "Confirm original file hashes against pinned revision before integration.",
+    "Supply existing Go 1.27+ toolchain and dependency cache; run both offline baseline and patched commands; resolve any compilation/formatting/test findings before image build.",
+    "Review exact patch and account configuration, build one immutable engine image recording source/patch/image digests.",
+    "Run genuine thinking-enabled Codex+MiMo financial canary and required native regressions on the same image; retain failed attempts and do not substitute tool output for model final answer.",
+    "Controller applies, commits and pushes using iliya <iliyazelenkog@gmail.com> as both author and committer; worker performed no Git writes."
+  ]
+}

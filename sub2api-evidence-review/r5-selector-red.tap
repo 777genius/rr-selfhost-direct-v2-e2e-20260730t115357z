@@ -1,0 +1,33 @@
+TAP version 13
+# Subtest: RUN_CLIENT_SOURCE binds evidence and its transitive imports to selected source
+not ok 1 - RUN_CLIENT_SOURCE binds evidence and its transitive imports to selected source
+  ---
+  duration_ms: 50.136818
+  type: 'test'
+  location: '/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r3/sub2api-evidence-review/r5-selector-old.test.mjs:203:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    undefined !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  operator: 'strictEqual'
+  stack: |-
+    safeFailure (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r3/sub2api-evidence-review/r5-selector-old.test.mjs:141:10)
+    TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-review-r3/sub2api-evidence-review/r5-selector-old.test.mjs:213:33)
+    process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 108.420179

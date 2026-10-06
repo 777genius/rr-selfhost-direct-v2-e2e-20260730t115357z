@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "candidate_files": 11,
+  "exact_base_and_patch_apply": true,
+  "fresh_upstream_tree_matches": true,
+  "limits": "Bytes only. Coordinator must independently authenticate the original base and exact revision archive.",
+  "source_provenance": "Worker verified supplied source bytes only; coordinator fresh archive authentication remains pending."
+}

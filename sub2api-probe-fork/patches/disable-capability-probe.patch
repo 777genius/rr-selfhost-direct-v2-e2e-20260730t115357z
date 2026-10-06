@@ -1,0 +1,301 @@
+diff --git a/backend/internal/handler/admin/account_capability_probe_test.go b/backend/internal/handler/admin/account_capability_probe_test.go
+--- /dev/null
++++ b/backend/internal/handler/admin/account_capability_probe_test.go
+@@ -0,0 +1,184 @@
++//go:build unit
++
++package admin
++
++import (
++	"context"
++	"encoding/json"
++	"net/http"
++	"net/http/httptest"
++	"strings"
++	"testing"
++	"testing/synctest"
++
++	"github.com/Wei-Shaw/sub2api/internal/config"
++	"github.com/Wei-Shaw/sub2api/internal/pkg/tlsfingerprint"
++	"github.com/Wei-Shaw/sub2api/internal/service"
++	"github.com/gin-gonic/gin"
++	"github.com/stretchr/testify/require"
++)
++
++// Use the concrete AccountTestService and its existing repository/HTTP seams.
++// No sockets: dispatch the real generated HTTP request to a counting handler.
++type capabilityProbeRepo struct {
++	service.AccountRepository
++	account *service.Account
++	loads   int
++	writes  []map[string]any
++	release chan struct{}
++}
++
++func (r *capabilityProbeRepo) GetByID(context.Context, int64) (*service.Account, error) {
++	r.loads++
++	if r.release != nil {
++		<-r.release
++	}
++	return r.account, nil
++}
++
++func (r *capabilityProbeRepo) UpdateExtra(_ context.Context, _ int64, extra map[string]any) error {
++	r.writes = append(r.writes, extra)
++	return nil
++}
++
++type capabilityProbeHTTP struct {
++	t     *testing.T
++	calls int
++}
++
++func (u *capabilityProbeHTTP) DoWithTLS(req *http.Request, proxy string, id int64, concurrency int, _ *tlsfingerprint.Profile) (*http.Response, error) {
++	return u.Do(req, proxy, id, concurrency)
++}
++
++func (u *capabilityProbeHTTP) Do(req *http.Request, _ string, _ int64, _ int) (*http.Response, error) {
++	w := httptest.NewRecorder()
++	http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++		u.calls++
++		require.Equal(u.t, http.MethodPost, r.Method)
++		require.Equal(u.t, "/v1/responses", r.URL.Path)
++		require.Equal(u.t, "Bearer inert-test-key", r.Header.Get("Authorization"))
++		var body map[string]any
++		require.NoError(u.t, json.NewDecoder(r.Body).Decode(&body))
++		require.Equal(u.t, "synthetic-model", body["model"])
++		require.Equal(u.t, "required", body["tool_choice"])
++		_, _ = w.Write([]byte(`{"output":[{"type":"function_call","name":"probe_ping"}]}`))
++	}).ServeHTTP(w, req)
++	return w.Result(), nil
++}
++
++type capabilityProbeAdmin struct {
++	service.AdminService
++	account *service.Account
++}
++
++func (s *capabilityProbeAdmin) UpdateAccount(_ context.Context, _ int64, in *service.UpdateAccountInput) (*service.Account, error) {
++	s.account.Credentials = in.Credentials
++	return s.account, nil
++}
++
++func newCapabilityProbeFixture(t *testing.T) (*AccountHandler, *capabilityProbeRepo, *capabilityProbeHTTP) {
++	account := &service.Account{
++		ID: 96, Platform: service.PlatformOpenAI, Type: service.AccountTypeAPIKey,
++		Status: service.StatusDisabled, Schedulable: false, Concurrency: 1,
++		Credentials: map[string]any{
++			"api_key": "inert-test-key", "base_url": "https://synthetic.invalid/v1",
++			"model_mapping": map[string]any{"client-model": "synthetic-model"},
++		},
++		Extra: map[string]any{"openai_responses_mode": "force_responses", "upstream_billing_probe_enabled": false},
++	}
++	repo := &capabilityProbeRepo{account: account}
++	upstream := &capabilityProbeHTTP{t: t}
++	prober := service.NewAccountTestService(repo, nil, nil, nil, nil, upstream, &config.Config{}, nil)
++	return &AccountHandler{adminService: &capabilityProbeAdmin{account: account}, accountTestService: prober}, repo, upstream
++}
++
++func TestCapabilityProbeTrustedExtraPUT(t *testing.T) {
++	gin.SetMode(gin.TestMode)
++	for _, tc := range []struct {
++		name, platform, accountType string
++		flag                        any
++		loads, calls, writes        int
++	}{
++		{"missing", service.PlatformOpenAI, service.AccountTypeAPIKey, nil, 1, 1, 1},
++		{"nil extra", service.PlatformOpenAI, service.AccountTypeAPIKey, nil, 1, 1, 1},
++		{"null", service.PlatformOpenAI, service.AccountTypeAPIKey, nil, 1, 1, 1},
++		{"false", service.PlatformOpenAI, service.AccountTypeAPIKey, false, 1, 1, 1},
++		{"string", service.PlatformOpenAI, service.AccountTypeAPIKey, "true", 1, 1, 1},
++		{"number", service.PlatformOpenAI, service.AccountTypeAPIKey, 1, 1, 1, 1},
++		{"true", service.PlatformOpenAI, service.AccountTypeAPIKey, true, 0, 0, 0},
++		{"oauth", service.PlatformOpenAI, service.AccountTypeOAuth, true, 0, 0, 0},
++		{"other platform", service.PlatformAnthropic, service.AccountTypeAPIKey, true, 0, 0, 0},
++		{"CN chat", service.PlatformZhipu, service.AccountTypeAPIKey, true, 1, 0, 1},
++		{"CN responses", service.PlatformDeepseek, service.AccountTypeAPIKey, true, 1, 0, 1},
++		{"CN kimi", service.PlatformKimi, service.AccountTypeAPIKey, true, 1, 0, 1},
++		{"CN minimax", service.PlatformMiniMax, service.AccountTypeAPIKey, true, 1, 0, 1},
++	} {
++		t.Run(tc.name, func(t *testing.T) {
++			synctest.Test(t, func(t *testing.T) {
++				h, repo, upstream := newCapabilityProbeFixture(t)
++				repo.account.Platform, repo.account.Type = tc.platform, tc.accountType
++				if tc.name == "nil extra" {
++					repo.account.Extra = nil
++				} else if tc.flag != nil || tc.name == "null" {
++					repo.account.Extra["openai_disable_capability_probe"] = tc.flag
++				}
++				credentials := repo.account.Credentials
++				credentials["api_protocol"] = service.APIProtocolResponses
++				// Neither a credential field nor an unrecognized request-body field is trusted Extra.
++				credentials["openai_disable_capability_probe"] = true
++				body, err := json.Marshal(map[string]any{"credentials": credentials, "openai_disable_capability_probe": true})
++				require.NoError(t, err)
++				router := gin.New()
++				router.PUT("/accounts/:id", h.Update)
++				w := httptest.NewRecorder()
++				req := httptest.NewRequest(http.MethodPut, "/accounts/96", strings.NewReader(string(body)))
++				req.Header.Set("Content-Type", "application/json")
++				router.ServeHTTP(w, req)
++				require.Equal(t, http.StatusOK, w.Code)
++				// Wait for the actual handler goroutine to finish; no timing-based negative assertion.
++				synctest.Wait()
++				require.Equal(t, tc.loads, repo.loads)
++				require.Equal(t, tc.calls, upstream.calls)
++				require.Len(t, repo.writes, tc.writes)
++				if tc.writes == 1 {
++					wantSupported := tc.platform != service.PlatformZhipu
++					require.Equal(t, wantSupported, repo.writes[0]["openai_responses_supported"])
++					if service.IsCNProvider(tc.platform) {
++						wantMode := "auto"
++						if wantSupported {
++							wantMode = "force_responses"
++						}
++						require.Equal(t, wantMode, repo.writes[0]["openai_responses_mode"])
++					}
++				}
++			})
++		})
++	}
++}
++
++func TestCapabilityProbeQueuedFreshAccount(t *testing.T) {
++	for _, disabled := range []bool{false, true} {
++		t.Run(map[bool]string{false: "default positive control", true: "newly disabled"}[disabled], func(t *testing.T) {
++			synctest.Test(t, func(t *testing.T) {
++				h, repo, upstream := newCapabilityProbeFixture(t)
++				stale := *repo.account
++				repo.release = make(chan struct{})
++				h.scheduleOpenAIResponsesProbe(&stale)
++				synctest.Wait() // Actual queued goroutine is blocked at the fresh repository load.
++				require.Equal(t, 1, repo.loads)
++				require.Zero(t, upstream.calls)
++				require.Empty(t, repo.writes)
++				repo.account.Extra = map[string]any{"openai_disable_capability_probe": disabled}
++				close(repo.release)
++				synctest.Wait()
++				want := 1
++				if disabled {
++					want = 0
++				}
++				require.Equal(t, want, upstream.calls)
++				require.Len(t, repo.writes, want)
++				require.Equal(t, map[string]any{"openai_disable_capability_probe": disabled}, repo.account.Extra)
++			})
++		})
++	}
++}
+diff --git a/backend/internal/handler/admin/account_handler.go b/backend/internal/handler/admin/account_handler.go
+--- a/backend/internal/handler/admin/account_handler.go
++++ b/backend/internal/handler/admin/account_handler.go
+@@ -1224,6 +1224,9 @@
+ // 当前请求。探测错误仅记录日志，不向上下文传播：探测失败时标记保持缺失，
+ // 网关会按"现状即证据"默认走 Responses。
+ func (h *AccountHandler) scheduleOpenAIResponsesProbe(account *service.Account) {
++	if service.OpenAICapabilityProbeDisabled(account) {
++		return
++	}
+ 	if account == nil || account.Type != service.AccountTypeAPIKey ||
+ 		(account.Platform != service.PlatformOpenAI && !service.IsCNProvider(account.Platform)) {
+ 		return
+diff --git a/backend/internal/service/openai_apikey_responses_probe.go b/backend/internal/service/openai_apikey_responses_probe.go
+--- a/backend/internal/service/openai_apikey_responses_probe.go
++++ b/backend/internal/service/openai_apikey_responses_probe.go
+@@ -104,6 +104,16 @@
+ 	return candidates[0]
+ }
+ 
++// OpenAICapabilityProbeDisabled reads trusted account configuration only.
++// A missing, false or non-boolean value keeps the existing probe behavior.
++func OpenAICapabilityProbeDisabled(account *Account) bool {
++	if account == nil || account.Platform != PlatformOpenAI || account.Type != AccountTypeAPIKey {
++		return false
++	}
++	disabled, _ := account.Extra["openai_disable_capability_probe"].(bool)
++	return disabled
++}
++
+ // ProbeOpenAIAPIKeyResponsesSupport 探测 OpenAI APIKey 账号上游是否支持
+ // /v1/responses 端点，并将结果持久化到 accounts.extra.openai_responses_supported。
+ //
+@@ -125,6 +135,10 @@
+ 	account, err := s.accountRepo.GetByID(ctx, accountID)
+ 	if err != nil {
+ 		logger.LegacyPrintf("service.openai_probe", "probe_load_account_failed: account_id=%d err=%v", accountID, err)
++		return
++	}
++	// Recheck the freshly loaded account before HTTP or capability metadata writes.
++	if OpenAICapabilityProbeDisabled(account) {
+ 		return
+ 	}
+ 	if account.Type != AccountTypeAPIKey {
+diff --git a/backend/internal/service/openai_capability_probe_duplicate_test.go b/backend/internal/service/openai_capability_probe_duplicate_test.go
+--- /dev/null
++++ b/backend/internal/service/openai_capability_probe_duplicate_test.go
+@@ -0,0 +1,65 @@
++//go:build unit
++
++package service
++
++import (
++	"context"
++	"io"
++	"net/http"
++	"strings"
++	"testing"
++
++	"github.com/Wei-Shaw/sub2api/internal/config"
++	"github.com/stretchr/testify/require"
++)
++
++func TestCapabilityProbeServiceNoEffects(t *testing.T) {
++	for _, disabled := range []bool{false, true} {
++		t.Run(map[bool]string{false: "default positive control", true: "disabled"}[disabled], func(t *testing.T) {
++			account := Account{
++				ID: 96, Platform: PlatformOpenAI, Type: AccountTypeAPIKey,
++				Status: StatusDisabled, Schedulable: false,
++				Credentials: map[string]any{"api_key": "inert-test-key", "base_url": "https://synthetic.invalid/v1"},
++				Extra:       map[string]any{"openai_disable_capability_probe": disabled},
++			}
++			updates := make(chan map[string]any, 2)
++			repo := &snapshotUpdateAccountRepo{
++				stubOpenAIAccountRepo: stubOpenAIAccountRepo{accounts: []Account{account}},
++				updateExtraCalls:      updates,
++			}
++			upstream := &httpUpstreamRecorder{resp: &http.Response{
++				StatusCode: http.StatusOK, Header: make(http.Header),
++				Body: io.NopCloser(strings.NewReader(`{"output":[{"type":"function_call","name":"probe_ping"}]}`)),
++			}}
++			svc := NewAccountTestService(repo, nil, nil, nil, nil, upstream, &config.Config{}, nil)
++			svc.ProbeOpenAIAPIKeyResponsesSupport(context.Background(), account.ID)
++			want := 1
++			if disabled {
++				want = 0
++			}
++			require.Len(t, upstream.requests, want)
++			require.Len(t, updates, want)
++			require.Equal(t, map[string]any{"openai_disable_capability_probe": disabled}, repo.accounts[0].Extra)
++		})
++	}
++}
++
++func TestDuplicateAccountPreservesTrustedCapabilityProbeDisable(t *testing.T) {
++	repo := newDuplicateAccountRepoStub()
++	svc := &adminServiceImpl{accountRepo: repo, accountDuplicateRepo: repo}
++	source := &Account{
++		Name: "template", Platform: PlatformOpenAI, Type: AccountTypeAPIKey,
++		Credentials: map[string]any{"api_key": "inert-test-key"},
++		Extra:       map[string]any{"openai_disable_capability_probe": true},
++	}
++	require.NoError(t, repo.Create(context.Background(), source))
++	duplicate, err := svc.DuplicateAccount(context.Background(), source.ID, "admin:96", "copy-template")
++	require.NoError(t, err)
++	require.Equal(t, true, duplicate.Extra["openai_disable_capability_probe"])
++	stored, err := repo.GetByID(context.Background(), duplicate.ID)
++	require.NoError(t, err)
++	require.Equal(t, true, stored.Extra["openai_disable_capability_probe"])
++	require.False(t, duplicate.Schedulable)
++	duplicate.Extra["openai_disable_capability_probe"] = false
++	require.Equal(t, true, source.Extra["openai_disable_capability_probe"], "copy must not alias source Extra")
++}

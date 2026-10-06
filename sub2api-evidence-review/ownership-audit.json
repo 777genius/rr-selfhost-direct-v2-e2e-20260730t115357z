@@ -1,0 +1,16 @@
+{
+  "changedExisting": [
+    "sub2api-spike/run-client.mjs",
+    "sub2api-spike/evidence.mjs",
+    "sub2api-spike/evidence.test.mjs"
+  ],
+  "newRelativeToCanonical": [
+    "sub2api-evidence-r2/REPORT.md",
+    "sub2api-evidence-r2/implementation.patch",
+    "sub2api-evidence-r2/change-metrics.json",
+    "sub2api-evidence-r2/caller-red.tap",
+    "sub2api-evidence-r2/red.tap",
+    "sub2api-evidence-r2/client-contract.test.mjs",
+    "sub2api-evidence-r2/green.tap"
+  ]
+}

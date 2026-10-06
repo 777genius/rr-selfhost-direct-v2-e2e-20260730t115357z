@@ -1,0 +1,288 @@
+--- a/backend/internal/service/gateway_anthropic_passthrough.go
++++ b/backend/internal/service/gateway_anthropic_passthrough.go
+@@ -427,17 +427,22 @@
+ 		line string
+ 		err  error
+ 	}
+-	events := make(chan scanEvent, 16)
++	// One queued line plus the producer's current line; no frame-size reduction.
++	events := make(chan scanEvent, 1)
++	var deliveryPending atomic.Bool
++	var lastReadAt int64
+ 	done := make(chan struct{})
+ 	sendEvent := func(ev scanEvent) bool {
++		deliveryPending.Store(true)
++		defer deliveryPending.Store(false)
+ 		select {
+ 		case events <- ev:
++			atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 			return true
+ 		case <-done:
+ 			return false
+ 		}
+ 	}
+-	var lastReadAt int64
+ 	atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 	go func(scanBuf *sseScannerBuf64K) {
+ 		defer putSSEScannerBuf64K(scanBuf)
+@@ -571,6 +576,10 @@
+ 			}
+ 
+ 		case <-intervalCh:
++			// Producer backpressure and queued work are downstream delay, not upstream idle.
++			if deliveryPending.Load() || len(events) > 0 {
++				continue
++			}
+ 			lastRead := time.Unix(0, atomic.LoadInt64(&lastReadAt))
+ 			if time.Since(lastRead) < streamInterval {
+ 				continue
+--- a/backend/internal/service/openai_first_output_timeout.go
++++ b/backend/internal/service/openai_first_output_timeout.go
+@@ -33,16 +33,17 @@
+ )
+ 
+ type openAIFirstOutputStage struct {
+-	limit      int64
+-	size       int64
+-	memory     bytes.Buffer
+-	tempFile   *os.File
+-	tempPath   string
+-	createTemp func() (*os.File, error)
+-	removeFile func(string) error
+-	memoryOnly bool
+-	cleanupErr error
+-	closed     bool
++	limit       int64
++	size        int64
++	memory      bytes.Buffer
++	tempFile    *os.File
++	tempPath    string
++	createTemp  func() (*os.File, error)
++	removeFile  func(string) error
++	strictSpool bool
++	memoryOnly  bool
++	cleanupErr  error
++	closed      bool
+ }
+ 
+ func newOpenAIFirstOutputStage(limit int64) *openAIFirstOutputStage {
+@@ -59,6 +60,14 @@
+ 
+ func newDefaultOpenAIFirstOutputStage() *openAIFirstOutputStage {
+ 	return newOpenAIFirstOutputStage(openAIFirstOutputStageMaxBytes)
++}
++
++// Native passthrough must keep at most 64KiB in memory even when spooling fails.
++// Other callers retain their existing memory-only fallback policy.
++func newOpenAINativePrefixStage() *openAIFirstOutputStage {
++	s := newDefaultOpenAIFirstOutputStage()
++	s.strictSpool = true
++	return s
+ }
+ 
+ func openAIFirstOutputEventQueueSize(guardFirstOutput bool) int {
+@@ -139,6 +148,15 @@
+ 	}
+ 	if int64(incoming) > s.limit-s.size {
+ 		return fmt.Errorf("%w: buffered=%d incoming=%d limit=%d", errOpenAIFirstOutputStageLimit, s.size, incoming, s.limit)
++	}
++	if s.strictSpool {
++		if s.memoryOnly && s.size+int64(incoming) > openAIFirstOutputStageMemoryLimit {
++			return errors.New("native prefix requires a spool beyond 64KiB")
++		}
++		// Reserve once so Buffer growth cannot retain capacity beyond this budget.
++		if s.tempFile == nil && s.memory.Cap() == 0 && s.size+int64(incoming) <= openAIFirstOutputStageMemoryLimit {
++			s.memory = *bytes.NewBuffer(make([]byte, 0, openAIFirstOutputStageMemoryLimit))
++		}
+ 	}
+ 	if s.tempFile != nil || s.memoryOnly || s.size+int64(incoming) <= openAIFirstOutputStageMemoryLimit {
+ 		return nil
+@@ -166,6 +184,9 @@
+ 			closeErr,
+ 			removeErr,
+ 		)
++		if s.strictSpool {
++			return fmt.Errorf("native prefix spool unavailable: %w", s.cleanupErr)
++		}
+ 		return nil
+ 	}
+ 	if _, err := file.Write(s.memory.Bytes()); err != nil {
+@@ -174,7 +195,11 @@
+ 	}
+ 	s.tempFile = file
+ 	s.tempPath = path
+-	s.memory.Reset()
++	if s.strictSpool {
++		s.memory = bytes.Buffer{}
++	} else {
++		s.memory.Reset()
++	}
+ 	return nil
+ }
+ 
+@@ -211,7 +236,11 @@
+ 	}
+ 	s.closed = true
+ 	s.size = 0
+-	s.memory.Reset()
++	if s.strictSpool {
++		s.memory = bytes.Buffer{}
++	} else {
++		s.memory.Reset()
++	}
+ 	closeErr := s.cleanupErr
+ 	s.cleanupErr = nil
+ 	if s.tempFile != nil {
+--- a/backend/internal/service/openai_gateway_messages_anthropic_native.go
++++ b/backend/internal/service/openai_gateway_messages_anthropic_native.go
+@@ -346,17 +346,22 @@
+ 		line string
+ 		err  error
+ 	}
+-	events := make(chan scanEvent, 16)
++	// One queued line plus the producer's current line; no frame-size reduction.
++	events := make(chan scanEvent, 1)
++	var deliveryPending atomic.Bool
++	var lastReadAt int64
+ 	done := make(chan struct{})
+ 	sendEvent := func(ev scanEvent) bool {
++		deliveryPending.Store(true)
++		defer deliveryPending.Store(false)
+ 		select {
+ 		case events <- ev:
++			atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 			return true
+ 		case <-done:
+ 			return false
+ 		}
+ 	}
+-	var lastReadAt int64
+ 	atomic.StoreInt64(&lastReadAt, time.Now().UnixNano())
+ 	go func(scanBuf *sseScannerBuf64K) {
+ 		defer putSSEScannerBuf64K(scanBuf)
+@@ -487,6 +492,10 @@
+ 			}
+ 
+ 		case <-intervalCh:
++			// Producer backpressure and queued work are downstream delay, not upstream idle.
++			if deliveryPending.Load() || len(events) > 0 {
++				continue
++			}
+ 			lastRead := time.Unix(0, atomic.LoadInt64(&lastReadAt))
+ 			if time.Since(lastRead) < streamInterval {
+ 				continue
+--- a/backend/internal/service/openai_gateway_passthrough.go
++++ b/backend/internal/service/openai_gateway_passthrough.go
+@@ -1905,8 +1905,20 @@
+ 	var bareErrorPayload []byte
+ 	bareErrorAccountSideEffectsPending := false
+ 	upstreamRequestID := strings.TrimSpace(resp.Header.Get("x-request-id"))
+-	// pendingLines 在首个可见输出前保留前导事件，确保无输出失败仍可安全 failover。
+-	pendingLines := make([]string, 0, 8)
++	// Preserve pre-output lines under the existing 64KiB/8MiB stage budgets.
++	prefix := newOpenAINativePrefixStage()
++	defer func() {
++		if err := prefix.Close(); err != nil {
++			logger.LegacyPrintf("service.openai_gateway", "[OpenAI passthrough] Prefix cleanup: %v", err)
++		}
++	}()
++	// The caller's deadline/cancellation bounds prefix reads until replay handoff.
++	// Ownership is separate from successful semantic output: a failed prefix or
++	// first semantic write must retain the existing upstream usage-drain policy.
++	// Closing Body interrupts Scanner.Read.
++	prefixOwnsCancellation := true
++	stopPrefixCancel := context.AfterFunc(ctx, func() { _ = resp.Body.Close() })
++	defer stopPrefixCancel()
+ 
+ 	// ── 首个可见输出之前的下游 keepalive ──────────────────────────────────
+ 	//
+@@ -1917,7 +1929,7 @@
+ 	//    failover can buffer response.created / response.in_progress, so
+ 	//    keepalive must be based on downstream idle time."
+ 	//
+-	// 上面的 pendingLines 正是同一种缓冲：首个可见输出到来之前，下游【一个字节
++	// 上面的 prefix stage 正是同一种缓冲：首个可见输出到来之前，下游【一个字节
+ 	// 都收不到】—— 连 HTTP 响应头都不会提交（gin 的 ResponseWriter 直到首次写入
+ 	// 才发送 header）。Forward 路径为此加了心跳，透传路径漏了。
+ 	//
+@@ -1930,7 +1942,7 @@
+ 	//   1. 提交 HTTP 响应头，让下游知道连接活着；
+ 	//   2. 刷新中间层的空闲超时（proxy_read_timeout 衡量的是两次读之间的间隔，
+ 	//      不是请求总时长），长推理因此不再被误杀；
+-	//   3. 不写出任何 pendingLines、不泄露账号相关的头，
++	//   3. 不写出任何 prefix stage、不泄露账号相关的头，
+ 	//      且心跳字节已由 OpenAICompactKeepaliveAdjustedWrittenSize 排除，
+ 	//      所以 pre-output failover 的能力完全不受影响（#3887 的记账在此复用）。
+ 	//
+@@ -1957,14 +1969,19 @@
+ 	}
+ 	defer flushPendingOutput()
+ 	writePendingLines := func() bool {
+-		for _, pending := range pendingLines {
+-			if _, err := fmt.Fprintln(w, pending); err != nil {
+-				clientDisconnected = true
+-				logger.LegacyPrintf("service.openai_gateway", "[OpenAI passthrough] Client disconnected during streaming, continue draining upstream for usage: account=%d", account.ID)
+-				return false
+-			}
+-		}
+-		pendingLines = pendingLines[:0]
++		if prefix.closed {
++			return true
++		}
++		stopPrefixCancel()
++		prefixOwnsCancellation = false
++		stopKeepalive()
++		// CommitTo closes the spool and releases strict-stage backing storage.
++		if err := prefix.CommitTo(w); err != nil {
++			_ = prefix.Close()
++			clientDisconnected = true
++			logger.LegacyPrintf("service.openai_gateway", "[OpenAI passthrough] Client disconnected during prefix replay: account=%d", account.ID)
++			return false
++		}
+ 		return true
+ 	}
+ 	ensureResponseFailedTerminal := func() {
+@@ -2010,6 +2027,9 @@
+ 	}
+ 
+ 	for documentScanner.Scan() {
++		if prefixOwnsCancellation && ctx.Err() != nil {
++			return resultWithUsage(), fmt.Errorf("stream usage incomplete before output: %w", ctx.Err())
++		}
+ 		line := documentScanner.Text()
+ 		if eventType, ok := extractOpenAISSEEventLine(line); ok {
+ 			pendingSSEEventType = eventType
+@@ -2199,7 +2219,13 @@
+ 
+ 		if !clientDisconnected && !failureDelivered && !suppressCurrentEvent {
+ 			if !clientOutputStarted && !lineStartsClientOutput {
+-				pendingLines = append(pendingLines, line)
++				if _, err := prefix.WriteString(line + "\n"); err != nil {
++					// HTTP acceptance does not prove zero upstream effects or zero billing.
++					// A plain error cannot enter the handler's UpstreamFailoverError replay path.
++					s.recordOpenAIStreamUpstreamError(c, account, true, upstreamRequestID, "stream_prefix_rejected", nil, "Native pre-output retention rejected; upstream billing unknown")
++					_ = resp.Body.Close()
++					return resultWithUsage(), fmt.Errorf("stream usage incomplete: native pre-output prefix rejected (upstream billing unknown): %w", err)
++				}
+ 				continue
+ 			}
+ 			// 真实输出开始，心跳的使命结束。停拍是幂等的，且会与心跳 goroutine
+@@ -2207,7 +2233,7 @@
+ 			if !clientOutputStarted {
+ 				stopKeepalive()
+ 			}
+-			if !clientOutputStarted && len(pendingLines) > 0 {
++			if !clientOutputStarted {
+ 				if !writePendingLines() {
+ 					continue
+ 				}
+@@ -2235,6 +2261,9 @@
+ 		if (sawDone || sawTerminalEvent) && line == "" && (!codexFailureTerminal || !sawBareError) {
+ 			break
+ 		}
++	}
++	if prefixOwnsCancellation && ctx.Err() != nil {
++		return resultWithUsage(), fmt.Errorf("stream usage incomplete before output: %w", ctx.Err())
+ 	}
+ 	ensureResponseFailedTerminal()
+ 	if err := documentScanner.Err(); err != nil {

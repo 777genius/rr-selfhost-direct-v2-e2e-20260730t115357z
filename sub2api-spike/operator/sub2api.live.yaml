@@ -1,0 +1,29 @@
+# Trusted coordinator must verify effective settings against exact immutable engine.
+server:
+  host: 0.0.0.0
+  port: 8080
+  mode: release
+  max_request_body_size: 2097152
+  trusted_proxies: []
+run_mode: simple
+simple_mode:
+  auto_create_default_groups: false
+security:
+  trust_forwarded_ip_for_api_key_acl: false
+  url_allowlist:
+    enabled: true
+    allow_insecure_http: false
+    allow_private_hosts: false
+    upstream_hosts: [token-plan-sgp.xiaomimimo.com, openrouter.ai]
+gateway:
+  max_body_size: 2097152
+  response_header_timeout: 60
+  openai_response_header_timeout: 60
+  max_account_switches: 0
+  max_account_switches_gemini: 0
+  failover_on_400: false
+  log_upstream_error_body: false
+  openai_ws:
+    payload_log_sample_rate: 0
+log:
+  level: warn

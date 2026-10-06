@@ -1,0 +1,134 @@
+{
+  "helper_root": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging",
+  "tests": 9,
+  "failures": 4,
+  "errors": 0,
+  "receipts": [
+    {
+      "test": "__main__.HistoryIntegrityTests.test_ancestor_symlink",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py",
+        "--package-root",
+        "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-transport-package-w2/tmp/agent/tmp_v9qa3po/alias",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/public-base"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"integrity\": \"PASS\",\n  \"provided_files\": 150,\n  \"prior_files\": 102,\n  \"historical\": {\n    \"FAIL\": 11,\n    \"NOT RUN\": 9\n  },\n  \"effects\": 686,\n  \"history_reexecuted\": false,\n  \"original_verdict\": \"REQUESTCHANGES\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "test": "__main__.HistoryIntegrityTests.test_appended_component_symlink_control",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py",
+        "--package-root",
+        "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-transport-package-w2/tmp/agent/tmp8xpfh5qe/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 44, in <module>\n    a=p.parse_args(); print(json.dumps(verify(a.package_root,a.base_root,a.repo),indent=2))\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 16, in verify\n    if m.digest(payload(name)) != expected: raise ValueError('historical input hash: '+name)\n                ^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 13, in payload\n    return prior[name[len(prefix):]] if name.startswith(prefix) else checked_read(frozen,name)\n                                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 39, in checked_read\n    if target.is_symlink(): raise ValueError('historical symlink')\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: historical symlink\n"
+    },
+    {
+      "test": "__main__.HistoryIntegrityTests.test_audit_regular_history_control",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-r4",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/public-base"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"integrity\": \"PASS\",\n  \"original_output_hashes_verified\": 294,\n  \"runtime_files_verified\": 103,\n  \"historical\": {\n    \"integrity\": \"PASS\",\n    \"provided_files\": 150,\n    \"prior_files\": 102,\n    \"historical\": {\n      \"FAIL\": 11,\n      \"NOT RUN\": 9\n    },\n    \"effects\": 686,\n    \"history_reexecuted\": false,\n    \"original_verdict\": \"REQUESTCHANGES\"\n  },\n  \"new_engine_gates\": \"NOT RUN\",\n  \"physical_absolute_intersample_bound\": \"NOTPROVEN\",\n  \"normal_handoff_scanner\": \"controller MUST PASS; not executed by worker\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "test": "__main__.HistoryIntegrityTests.test_audit_root_symlink_control",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py",
+        "--package-root",
+        "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-transport-package-w2/tmp/agent/tmpetlajqha/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py\", line 27, in <module>\n    else: payload=v.checked_read(package,name)\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 39, in checked_read\n    if target.is_symlink(): raise ValueError('historical symlink')\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: historical symlink\n"
+    },
+    {
+      "test": "__main__.HistoryIntegrityTests.test_corrupted_history_control",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py",
+        "--package-root",
+        "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-transport-package-w2/tmp/agent/tmpgr1ku696/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 44, in <module>\n    a=p.parse_args(); print(json.dumps(verify(a.package_root,a.base_root,a.repo),indent=2))\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 16, in verify\n    if m.digest(payload(name)) != expected: raise ValueError('historical input hash: '+name)\n                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: historical input hash: execution.json\n"
+    },
+    {
+      "test": "__main__.HistoryIntegrityTests.test_higher_ancestor_symlink",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py",
+        "--package-root",
+        "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-transport-package-w2/tmp/agent/tmpfa158uua/alias/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/public-base"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"integrity\": \"PASS\",\n  \"provided_files\": 150,\n  \"prior_files\": 102,\n  \"historical\": {\n    \"FAIL\": 11,\n    \"NOT RUN\": 9\n  },\n  \"effects\": 686,\n  \"history_reexecuted\": false,\n  \"original_verdict\": \"REQUESTCHANGES\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "test": "__main__.HistoryIntegrityTests.test_historical_root_symlink",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py",
+        "--package-root",
+        "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-transport-package-w2/tmp/agent/tmpkikf8ugl/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/public-base"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"integrity\": \"PASS\",\n  \"provided_files\": 150,\n  \"prior_files\": 102,\n  \"historical\": {\n    \"FAIL\": 11,\n    \"NOT RUN\": 9\n  },\n  \"effects\": 686,\n  \"history_reexecuted\": false,\n  \"original_verdict\": \"REQUESTCHANGES\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "test": "__main__.HistoryIntegrityTests.test_input_hashes_symlink",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py",
+        "--package-root",
+        "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-transport-package-w2/tmp/agent/tmpqqh6tat6/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/public-base"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"integrity\": \"PASS\",\n  \"provided_files\": 150,\n  \"prior_files\": 102,\n  \"historical\": {\n    \"FAIL\": 11,\n    \"NOT RUN\": 9\n  },\n  \"effects\": 686,\n  \"history_reexecuted\": false,\n  \"original_verdict\": \"REQUESTCHANGES\"\n}\n",
+      "stderr": ""
+    },
+    {
+      "test": "__main__.HistoryIntegrityTests.test_regular_history_control",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/candidate/sub2api-transport-r4",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-package-w2/.spike-inputs/public-base"
+      ],
+      "exit": 0,
+      "stdout": "{\n  \"integrity\": \"PASS\",\n  \"provided_files\": 150,\n  \"prior_files\": 102,\n  \"historical\": {\n    \"FAIL\": 11,\n    \"NOT RUN\": 9\n  },\n  \"effects\": 686,\n  \"history_reexecuted\": false,\n  \"original_verdict\": \"REQUESTCHANGES\"\n}\n",
+      "stderr": ""
+    }
+  ]
+}

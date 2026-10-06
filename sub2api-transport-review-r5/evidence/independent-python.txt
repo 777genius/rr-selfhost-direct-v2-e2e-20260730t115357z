@@ -1,0 +1,8 @@
+test_duplicate_resident_fields_and_missing_metrics_cannot_be_zero (__main__.IndependentCollector.test_duplicate_resident_fields_and_missing_metrics_cannot_be_zero) ... ok
+test_identity_race_during_smaps_read_cannot_emit_valid_observation (__main__.IndependentCollector.test_identity_race_during_smaps_read_cannot_emit_valid_observation) ... ok
+test_virtual_aliases_remain_extent_observations_without_physical_bound (__main__.IndependentCollector.test_virtual_aliases_remain_extent_observations_without_physical_bound) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.006s
+
+OK

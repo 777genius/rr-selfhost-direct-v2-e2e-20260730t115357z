@@ -1,0 +1,22 @@
+{
+  "recorded_at_utc": "2026-10-01T13:03:24.127210+00:00",
+  "regression_before_tests": {
+    "cells": 20,
+    "memory": 18,
+    "soak": 2,
+    "statuses": {
+      "FAIL": 11,
+      "NOT RUN": 9
+    },
+    "synthetic_attempts": 686,
+    "cleanup_failures": 0,
+    "remaining_resources": 0,
+    "historical_receipts_unchanged": true,
+    "defects": [
+      "5ms delay per arbitrary TCP chunk",
+      "2sec collector tail versus documented5sec",
+      "raw Linux6.8 VmHWM falsely treated as monotonic physical upper bound"
+    ]
+  },
+  "engine_execution_this_lane": "NOT RUN"
+}

@@ -1,0 +1,19 @@
+TAP version 13
+# Subtest: server import exposes boot without reading CLI config or opening listeners
+ok 1 - server import exposes boot without reading CLI config or opening listeners
+  ---
+  duration_ms: 2.430822
+  type: 'test'
+  ...
+# Subtest: invalid installation denies before any listener, customer state or broker ledger effect
+ok 2 - invalid installation denies before any listener, customer state or broker ledger effect
+  ---
+  duration_ms: 7.510063
+  type: 'test'
+  ...
+# Subtest: malformed templates and failed complete customer initialization precede broker effects
+ok 3 - malformed templates and failed complete customer initialization precede broker effects
+  ---
+  duration_ms: 78.908858
+  type: 'test'
+  ...

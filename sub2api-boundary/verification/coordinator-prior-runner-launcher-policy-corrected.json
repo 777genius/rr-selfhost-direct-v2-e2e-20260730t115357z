@@ -1,0 +1,27 @@
+{
+  "kind": "installed-sudo-launcher-boundary",
+  "image": "sha256:db03c4e35b40b92a48217dc97c0c7ff38d73b01d83bfe14aaf22d390c8939f4a",
+  "live_provider_calls": 0,
+  "cases": {
+    "fixed_command_only": {
+      "exit": 0,
+      "PASS": true
+    },
+    "trusted_files_immutable": {
+      "exit": 0,
+      "PASS": true
+    },
+    "no_privileged_groups": {
+      "exit": 0,
+      "PASS": true
+    },
+    "fixed_launcher_reaches_validation": {
+      "exit": 0,
+      "PASS": true
+    },
+    "workflow_sha_mismatch_denied_before_network": {
+      "exit": 0,
+      "PASS": true
+    }
+  }
+}

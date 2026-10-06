@@ -1,0 +1,8 @@
+test_expected_manifest_without_reviewed_receipt_accepts_unreviewed_source (__main__.Independent.test_expected_manifest_without_reviewed_receipt_accepts_unreviewed_source) ... ok
+test_preflight_toolchain_query_and_compile_have_different_environments (__main__.Independent.test_preflight_toolchain_query_and_compile_have_different_environments) ... ok
+test_private_config_is_created_world_readable_until_chmod (__main__.Independent.test_private_config_is_created_world_readable_until_chmod) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.113s
+
+OK

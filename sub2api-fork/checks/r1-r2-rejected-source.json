@@ -1,0 +1,132 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "repository": "https://github.com/Wei-Shaw/sub2api",
+    "release": "v0.2.11",
+    "revision": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+    "source_path": ".spike-inputs/upstream",
+    "revision_evidence": "Coordinator-verified official 96f4 archive in .spike-inputs/upstream; frozen independent review confirms the original four touched hashes. All replacement originals recorded from that tree; no network refetch.",
+    "staged_server_version": "0.2.10"
+  },
+  "editable_source": {
+    "path": "build-source",
+    "ignored_by": "../.gitignore:sub2api-fork/build-source/",
+    "nested_git": false
+  },
+  "patch": {
+    "path": "patches/native-reasoning.patch",
+    "sha256": "7dec93ec55da38f15e719f5b7b7769ad2ec874ae548e1125a8a028e12cc51bdf",
+    "strip": 1,
+    "added_lines": 818,
+    "removed_lines": 42,
+    "changed_lines": 860
+  },
+  "files": [
+    {
+      "path": "backend/internal/handler/openai_compatible_reasoning_review_test.go",
+      "original_sha256": null,
+      "patched_sha256": "1139abc487ff687fe42b2f8f10609c4395d776505b69ebf37976c89368a58b68"
+    },
+    {
+      "path": "backend/internal/handler/openai_gateway_reasoning_failover.go",
+      "original_sha256": "196e70d42432ff07f671f96b986be6a27b796fa24578b12e8afd73973c26550d",
+      "patched_sha256": "91b754a8824db9438af6db2b9fd9199c9652ec602e059852014d9a46d0dfa10e"
+    },
+    {
+      "path": "backend/internal/service/account.go",
+      "original_sha256": "d2c9c04d4acbb76d1c04ebb5628ea22efe620aae75ca97b319bb85fd5a17d083",
+      "patched_sha256": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587"
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_policy_test.go",
+      "original_sha256": null,
+      "patched_sha256": "30e59f3de298e9f1a82a0afe570f5207e82aafc3ab0aaf2f0cfefe191d35536d"
+    },
+    {
+      "path": "backend/internal/service/openai_compatible_reasoning_review_test.go",
+      "original_sha256": null,
+      "patched_sha256": "f9d388154edc0313c9265bcde71ee72ff7583e3ec3895e80ea4380fa0a16d976"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_forward.go",
+      "original_sha256": "a3a20c891f67ae6268a2cd4af8363aeba1e2c1853305746aa1a40f27d3bd898e",
+      "patched_sha256": "4337b4820fbab26e622b583b3f363865536dc29b4bd58179ef2de46c957be0d4"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "original_sha256": "89a29fb3957287342833e457be0e78a82ed015cb92f45e00e54dcf34aa99ce32",
+      "patched_sha256": "23ce879e0fea818625f3f3c5b8974b7d2f86bbefef88f4e616213406c7a0776d"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_request_body.go",
+      "original_sha256": "b7cf920f1013a2cd0dbfdf9c0d306da7deeff94e2fb25f764b242f23fe4f6bcb",
+      "patched_sha256": "4e49a06edf8fc5456fe5d0bf1e8664de37c34661608c5efd632b521f952e3d74"
+    },
+    {
+      "path": "backend/internal/service/openai_gateway_upstream_errors.go",
+      "original_sha256": "4e3884e76971b55e6738716eeee2221fe007a1436dbd7af946ded2540d93516d",
+      "patched_sha256": "c7e221bcf52b828302622b99474e2ac47c8c207395dcd796aa2887c0dfd4007b"
+    },
+    {
+      "path": "backend/internal/service/openai_responses_item_id.go",
+      "original_sha256": "1acf2e024ee351ec925c89b4259860ebfbb101872b0676770a0d57c2e3cbb065",
+      "patched_sha256": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2"
+    },
+    {
+      "path": "backend/internal/service/openai_responses_namespace.go",
+      "original_sha256": "70debcbecf35e7414ed72195125849b079749fbb2b3323746dd079b2ea61f120",
+      "patched_sha256": "164dd1169328da0abe98ed6b5b2b59fc8b0810a757a49a03e695f6d008d3c7cf"
+    },
+    {
+      "path": "backend/internal/service/openai_ws_forwarder_ingress.go",
+      "original_sha256": "e60da641645da0358b8874e44c31827be14634bf1423ab56e7a06edf87ab5e12",
+      "patched_sha256": "4afb6595e5dad1cbd05388aed4d3f8ceffcb9e8b9e7f43144772d30e33e2b64b"
+    },
+    {
+      "path": "backend/internal/service/openai_ws_forwarder_v2.go",
+      "original_sha256": "70680001a190509febb484b2dbea5fbae4edef32400bce2f9c06fa68de50517c",
+      "patched_sha256": "bdf33814241c22951c9ea9a4faa50b1c6d4b701f62584bf267cd5e0df9f0d43c"
+    },
+    {
+      "path": "backend/internal/service/openai_ws_http_bridge.go",
+      "original_sha256": "c59cd58fb8f4bfc1a138338ec7b37e5bfcc0049f1649fb5720a69cb668e58ba5",
+      "patched_sha256": "bde2e5df105932dfb7bd3314dc84d86ac053a452ef7f9899168fb7cea00d657d"
+    }
+  ],
+  "supersedes": {
+    "patch_sha256": "4d19a886a346e3d0dbf80b515d12d640a07fc36994f26d3dbddb9245e78f3357",
+    "producer_output_sha256_user_supplied": "12bfd0e5a7eebaf19d7ca52ca1df0d5a875ee7a44834baa792ead151fbb1debd",
+    "peer_decision": "CANARY_NO_GO",
+    "historical_artifacts": "checks/historical-producer/",
+    "prior_red_green_applies_to_replacement": false
+  },
+  "materialized_predecessor": {
+    "patch_sha256": "2f358949eae00de6ed681e86b0b1f57ee6afd8667d33b95cb81c86b36b8576aa",
+    "repo_output_sha256_user_supplied": "f67d768890e7323093c89e035fd52f158c7ee29562057f4be938ba26cf0a1f85",
+    "changed_lines": 793,
+    "patched_file_hashes": {
+      "backend/internal/handler/openai_compatible_reasoning_review_test.go": "1139abc487ff687fe42b2f8f10609c4395d776505b69ebf37976c89368a58b68",
+      "backend/internal/handler/openai_gateway_reasoning_failover.go": "91b754a8824db9438af6db2b9fd9199c9652ec602e059852014d9a46d0dfa10e",
+      "backend/internal/service/account.go": "f4465eae54b7da08cb02ba6701549cdd69a793fe6a42f7bdb2729aaeb3ba3587",
+      "backend/internal/service/openai_compatible_reasoning_policy_test.go": "30e59f3de298e9f1a82a0afe570f5207e82aafc3ab0aaf2f0cfefe191d35536d",
+      "backend/internal/service/openai_compatible_reasoning_review_test.go": "a3e7606d2f5864f6fd1787fa4b835a5b1cdf185681e64be20dbcc2784ec503f6",
+      "backend/internal/service/openai_gateway_forward.go": "4337b4820fbab26e622b583b3f363865536dc29b4bd58179ef2de46c957be0d4",
+      "backend/internal/service/openai_gateway_passthrough.go": "23ce879e0fea818625f3f3c5b8974b7d2f86bbefef88f4e616213406c7a0776d",
+      "backend/internal/service/openai_gateway_request_body.go": "4e49a06edf8fc5456fe5d0bf1e8664de37c34661608c5efd632b521f952e3d74",
+      "backend/internal/service/openai_gateway_upstream_errors.go": "c7e221bcf52b828302622b99474e2ac47c8c207395dcd796aa2887c0dfd4007b",
+      "backend/internal/service/openai_responses_item_id.go": "6f55e669348ae18851b43ecf744ae182d916e705e58cc7ed1055b98f003b86a2",
+      "backend/internal/service/openai_responses_namespace.go": "164dd1169328da0abe98ed6b5b2b59fc8b0810a757a49a03e695f6d008d3c7cf",
+      "backend/internal/service/openai_ws_forwarder_ingress.go": "4afb6595e5dad1cbd05388aed4d3f8ceffcb9e8b9e7f43144772d30e33e2b64b",
+      "backend/internal/service/openai_ws_forwarder_v2.go": "bdf33814241c22951c9ea9a4faa50b1c6d4b701f62584bf267cd5e0df9f0d43c",
+      "backend/internal/service/openai_ws_http_bridge.go": "5076d1b0749d0e1d6feeb21e3a5cd25d9ffcf8376d53b9e25ea201d3f14ccd4b"
+    },
+    "repair_files": [
+      "backend/internal/service/openai_compatible_reasoning_review_test.go",
+      "backend/internal/service/openai_ws_http_bridge.go"
+    ],
+    "net_added_lines": 67,
+    "coordinator_red_green": "checks/coordinator-w2-red-green.json",
+    "coordinator_bridge_failure": "checks/coordinator-w2-bridge-failure.json",
+    "not_current_patch_validation": true
+  }
+}

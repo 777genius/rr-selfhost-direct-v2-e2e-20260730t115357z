@@ -1,0 +1,69 @@
+[
+  {
+    "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/evidence.mjs",
+    "frozen_r7_sha256": "64e3595a2f71c972e035b55215c1db0f156fc9d61e81ad11d119910864fa0833",
+    "r8_sha256": "69eb8801bf3adf3cbee8761cb497016322ad6eddb8418170b0d26ac72fd84a3e",
+    "r8_added": 32,
+    "r8_removed": 5,
+    "entry_sha256": "44f17424b5057ab94693809d05bc33db6305f065ead928f95aa0b066137f2160",
+    "entry_added": 33,
+    "entry_removed": 4
+  },
+  {
+    "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-spike/evidence.test.mjs",
+    "frozen_r7_sha256": "c10cc3252fb4bec0673d81a477aaac7cf12f765ac4ba81783b76b4f05cfacef4",
+    "r8_sha256": "746d60dbdb0e93fe8c501fd4d5fc0fa4e0bfb5921ab2bd9e04895b898b382945",
+    "r8_added": 56,
+    "r8_removed": 5,
+    "entry_sha256": "0b2a8eae3f3000598ddc868b0ee449c4c3ca12791343e6fb163fc6d74570bbb0",
+    "entry_added": 94,
+    "entry_removed": 1,
+    "old_tests_retained_in_order": true,
+    "old_assert_calls": 50,
+    "final_assert_calls": 58
+  },
+  {
+    "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/gateway-spike/evidence.mjs",
+    "frozen_r7_sha256": "91970dd758b12be92181dc1ed6a15c5776048af4da5dd78b7d3fdf4396960a72",
+    "r8_sha256": "91970dd758b12be92181dc1ed6a15c5776048af4da5dd78b7d3fdf4396960a72",
+    "r8_added": 0,
+    "r8_removed": 0,
+    "entry_sha256": "f21567866c5c3433809d60af26223d8a6341becc2cf7500e1be4f4b9b56c9755",
+    "entry_added": 1,
+    "entry_removed": 1
+  },
+  {
+    "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/gateway-spike/evidence.test.mjs",
+    "frozen_r7_sha256": "831db6a72319fcf8d57dac4ff47cc50820c0bb4ea505449aab9cc6ca5de31f98",
+    "r8_sha256": "831db6a72319fcf8d57dac4ff47cc50820c0bb4ea505449aab9cc6ca5de31f98",
+    "r8_added": 0,
+    "r8_removed": 0,
+    "entry_sha256": "7f1dced2470eff4666fb2b3d139ba47c3b7f4f3e5c2163ac09aab7db2d9d92b7",
+    "entry_added": 10,
+    "entry_removed": 0,
+    "old_tests_retained_in_order": true,
+    "old_assert_calls": 13,
+    "final_assert_calls": 13
+  },
+  {
+    "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/client-contract.test.mjs",
+    "frozen_r7_sha256": "af8da54be31e31e24f1486fd2482aa01f7d0e8aa787090bd27986adec5b70b93",
+    "r8_sha256": "4d18b17f345d77c2378aa30054705b8907be3228aa76164e7eecbf2f339a46e8",
+    "r8_added": 1,
+    "r8_removed": 1,
+    "entry_sha256": "629088ea085ea86707748155cdb2df439c28024a33e94285deef9f4cac382080",
+    "entry_added": 24,
+    "entry_removed": 0,
+    "old_tests_retained_in_order": true,
+    "old_assert_calls": 63,
+    "final_assert_calls": 63
+  },
+  {
+    "file": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r8/sub2api-evidence-r2/quote-aware-r8/quote-breakout.test.mjs",
+    "r8_sha256": "528b4ec96c27de9ebe31550addd828bd698a13cc1bb6a256dab872eb8fbc0522",
+    "r8_added": 15,
+    "r8_removed": 0,
+    "entry_added": 15,
+    "entry_removed": 0
+  }
+]

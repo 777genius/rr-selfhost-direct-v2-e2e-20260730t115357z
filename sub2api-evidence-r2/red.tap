@@ -1,0 +1,40 @@
+✔ numeric proof accepts the existing complete JSON object (1.334038ms)
+✖ numeric proof accepts canary two-object JSON array matching either reported example (0.730287ms)
+✔ numeric proof preserves existing direct and shell-wrapped Node command matching (0.206061ms)
+✔ numeric proof requires exact finite numbers in all three actual fields (0.243671ms)
+✔ numeric proof parses the complete output and never scans fragments or nested objects (0.191603ms)
+✔ numeric proof rejects failed or incomplete tools, reasoning, and wrong commands (0.156365ms)
+✔ A06 successful separate shell-wrapped rules read validates actual source and finding (0.689322ms)
+✔ A06 malformed and fabricated financial success fail inherited validator (0.167568ms)
+✔ A10 E04 streamed UTF8 and missing native terminal rejected (4.667224ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 8
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67.241563
+
+✖ failing tests:
+
+test at sub2api-spike/evidence.test.mjs:12:1
+✖ numeric proof accepts canary two-object JSON array matching either reported example (0.730287ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/evidence-r3/sub2api-spike/evidence.test.mjs:14:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

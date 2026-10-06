@@ -1,0 +1,156 @@
+{
+  "started_utc": "2026-10-01T14:26:21Z",
+  "finished_utc": "2026-10-01T14:34:25.226831+00:00",
+  "time_budget_seconds": 900,
+  "ownership": "sub2api-transport-r4/ only",
+  "candidate_job": "transport-r3 (user supplied)",
+  "inherited_candidate_directory": "sub2api-transport-r2",
+  "original_review": "transport-review-r4 REQUESTCHANGES (preserved)",
+  "versions": {
+    "node": "v24.21.0",
+    "python": "3.12.3"
+  },
+  "historical": {
+    "FAIL": 11,
+    "NOT RUN": 9,
+    "synthetic_attempts": 686,
+    "effects": 686,
+    "cleanup_failures": 0,
+    "remaining_owned_resources": 0
+  },
+  "canonical_overlay_loc": {
+    "added": 64,
+    "deleted": 21,
+    "changed": 85
+  },
+  "frozen_root_overlay_loc": {
+    "added": 64,
+    "deleted": 21,
+    "changed": 85
+  },
+  "candidate_delta_loc": {
+    "added": 22,
+    "deleted": 8,
+    "changed": 30
+  },
+  "patch_sha256": {
+    "lab-overlay.patch": "e991506378bbe3c51dd193bf6b48b9eaa9257c15b084aaeed7d7e52a886d2b26",
+    "frozen-root-overlay.patch": "e991506378bbe3c51dd193bf6b48b9eaa9257c15b084aaeed7d7e52a886d2b26"
+  },
+  "checks": {
+    "node_behavioral": {
+      "pass": 23,
+      "fail": 0,
+      "skipped": 0,
+      "evidence": "evidence/node-tests.tap"
+    },
+    "load_numeric_jsonl": {
+      "pass": 4,
+      "fail": 0,
+      "invalid_numeric_cases": 93,
+      "evidence": "evidence/load-tests.tap"
+    },
+    "independent_before": {
+      "pass": 4,
+      "fail": 4,
+      "expected_exit": 1,
+      "evidence": "evidence/independent-before.tap"
+    },
+    "independent_after": {
+      "pass": 8,
+      "fail": 0,
+      "evidence": "evidence/node-tests.tap"
+    },
+    "python_collector": {
+      "pass": 9,
+      "fail": 0,
+      "evidence": "evidence/python-tests.txt"
+    },
+    "two_exact_patches": {
+      "files_each": 6,
+      "zero_fuzz": true,
+      "zero_offset": true,
+      "exact_hashes": true,
+      "actual_load_tests_each": 4,
+      "evidence": "evidence/overlay-verification.json"
+    },
+    "provenance": {
+      "status": "PASS",
+      "supplied_files": 150,
+      "reviewed_candidate_files": 34,
+      "evidence": "evidence/provenance.json"
+    },
+    "standalone_plan": {
+      "status": "PASS",
+      "evidence": "evidence/standalone-plan.json"
+    },
+    "collector_help": {
+      "status": "PASS",
+      "evidence": "evidence/collector-help.txt"
+    },
+    "local_socket_tests": {
+      "status": "NOT RUN",
+      "reason": "Offline lane; preserved client.test.mjs not invoked"
+    }
+  },
+  "matrix": {
+    "cancel": 12,
+    "uncertainty": 8,
+    "memory": 18,
+    "soak": 2,
+    "soak_requests_each": 250,
+    "soak_concurrency": 5,
+    "global_attempt_cap": 2000,
+    "retries": 0
+  },
+  "limits": {
+    "wire_mib": [
+      8,
+      32,
+      64
+    ],
+    "frame_lower_bytes_inclusive": 1992294.4,
+    "frame_integer_minimum_bytes": 1992295,
+    "frame_upper_bytes_exclusive": 2097152,
+    "slow_bytes_per_second": 2097152,
+    "sample_period_ms": 100,
+    "max_gap_or_read_ms": 250,
+    "full_tail_read_start_min_ms": 5000,
+    "final_sample_completed_max_ms": 5250,
+    "done_poll_deadline_ms": 5500,
+    "return_deadline_ms": 5000,
+    "rss_absolute_mib": 512,
+    "rss_delta_mib": "128+16N",
+    "rss_return_delta_mib": 32,
+    "cgroup_lifetime_peak_mib_exclusive": 768
+  },
+  "new_engine_gates": "NOT RUN",
+  "full_real_kernel_tail": "NOT RUN",
+  "physical_absolute_intersample_bound": "NOTPROVEN",
+  "current_goroutines": "NOT RUN: unavailable instantaneous PID sample",
+  "semantic_byte_normalization": "NONE: no independent contract proof; mismatches remain FAIL",
+  "historical_reexecuted": false,
+  "git_mutations": false,
+  "subagents": false,
+  "network": false,
+  "docker": false,
+  "go": false,
+  "provider_credentials": false,
+  "external_gates_waited": false,
+  "risks": [
+    "Real engine framing conversion can fail exact-volume/frame gate",
+    "35\u201345MiB residual can fail unchanged32MiB gate",
+    "Physical intersample RSS bound remains unproven",
+    "Fresh dedicated cgroup provenance and actual telemetry require coordinator"
+  ],
+  "completion_scope": "bounded edit/test/handoff; coordinator engine/kernel/load explicitly excluded",
+  "elapsed_seconds": 484.226831,
+  "legacy_prior_provenance": {
+    "different_source_hashes": 2,
+    "absent_telemetry_analysis_references": 8,
+    "authority": "exact provided INPUT-HASHES.json",
+    "legacy_baseline_reconstructed": false,
+    "historical_driver_association_newly_verified": false,
+    "evidence": "evidence/provenance.json"
+  }
+}

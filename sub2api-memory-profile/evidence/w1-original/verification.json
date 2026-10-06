@@ -1,0 +1,36 @@
+{
+  "status": "SOURCE_OFFLINE_HANDOFF_COMPLETE",
+  "inputs_verified": 4817,
+  "combined_native_probe_files_verified": 21,
+  "source_after_files": 3323,
+  "node": {
+    "tests": 26,
+    "passed": 26,
+    "failed": 0
+  },
+  "python": {
+    "tests": 10,
+    "passed": 10,
+    "failed": 0
+  },
+  "staged_syntax": "PASS",
+  "after_hashes": "PASS",
+  "patch_reproducibility": "PASS",
+  "standalone_gofmt": "PASS",
+  "historical_summaries": 20,
+  "historical_exact_raw_replays": 18,
+  "historical_rss_return": "FAIL_UNCHANGED",
+  "runtime_profiling": "NOT RUN",
+  "go_build_and_tests": "NOT RUN",
+  "root_docker_network_auth_providers_subagents": "NOT RUN",
+  "owned_scope": "sub2api-memory-profile/",
+  "changes": "new test-only instrumentation, disposable driver/runner/collector overlay, strict analyzer, offline tests, runbook/report/manifests",
+  "risks": [
+    "runtime compilation/execution unverified by worker",
+    "requires frozen private synthetic DB fixture and exact toolchain/service pins",
+    "sampled heap weighted/delayed; no fresh GC",
+    "instrumentation perturbs allocations/timing",
+    "exact reader/body-owner/slot/billing counters and pending/cancel lane unavailable"
+  ],
+  "git_writes": "NONE"
+}

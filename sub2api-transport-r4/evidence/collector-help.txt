@@ -1,0 +1,6 @@
+usage: collector.py [-h] --spec SPEC --output OUTPUT
+
+options:
+  -h, --help       show this help message and exit
+  --spec SPEC
+  --output OUTPUT

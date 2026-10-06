@@ -1,0 +1,104 @@
+name: rr-sub2-spike-20260930
+# No published ports; coordinator attaches a sealed Actions runner to runner only.
+# All image variables must be reviewed image@sha256 digests; check-images.mjs enforces.
+services:
+  postgres:
+    image: ${POSTGRES_IMAGE:?immutable image required}
+    env_file: ${PRIVATE_DIR:?private directory required}/postgres.env
+    volumes: [postgres-data:/var/lib/postgresql/data]
+    networks: [state]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U rrsub2 -d rrsub2']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  redis:
+    image: ${REDIS_IMAGE:?immutable image required}
+    command: [redis-server, --appendonly, 'yes']
+    volumes: [redis-data:/data]
+    networks: [state]
+    security_opt: [no-new-privileges:true]
+  sub2api:
+    image: ${SUB2API_IMAGE:?immutable image required}
+    env_file: ${PRIVATE_DIR}/sub2api.env
+    volumes:
+      - sub2-data:/app/data
+      - ${ENGINE_CONFIG:?reviewed synthetic/live config required}:/app/data/config.yaml:ro
+    networks: [state, engine, outbound]
+    depends_on:
+      postgres: {condition: service_healthy}
+      redis: {condition: service_started}
+    security_opt: [no-new-privileges:true]
+  broker:
+    image: ${NODE_IMAGE:?immutable Node24 image required}
+    user: '${HARNESS_UID:?unprivileged UID}:${HARNESS_GID:?unprivileged GID}'
+    working_dir: /checkout
+    command: [node, sub2api-spike/serve.mjs, /private/broker.json]
+    volumes:
+      - ${CHECKOUT:?reviewed checkout required}:/checkout:ro
+      - ${PRIVATE_DIR}:/private:ro
+      - ${BROKER_STATE:?precreated owned writable state directory required}:/state
+    networks:
+      runner: {aliases: [broker]}
+      engine: {}
+      outbound: {}
+      control: {ipv4_address: '${BROKER_CONTROL_IP:?approved unused control IP required}'}
+    read_only: true
+    tmpfs: [/tmp:size=32m]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+  control:
+    image: ${NODE_IMAGE}
+    user: '${HARNESS_UID}:${HARNESS_GID}'
+    working_dir: /checkout
+    entrypoint: [node]
+    command: [sub2api-spike/operator/check-images.mjs]
+    volumes:
+      - ${CHECKOUT}:/checkout:ro
+      - ${PRIVATE_DIR}:/private
+      - ${BROKER_STATE}:/state
+      - ${RECEIPT_DIR:?precreated receipt directory required}:/receipts
+    networks: [engine, control, outbound]
+    read_only: true
+    tmpfs: [/tmp:size=128m]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+  mock-a:
+    profiles: [synthetic]
+    image: ${NODE_IMAGE}
+    user: '${HARNESS_UID}:${HARNESS_GID}'
+    working_dir: /checkout
+    command: [node, sub2api-spike/mock-upstream.mjs]
+    environment: {SYNTHETIC_IDENTITY: synthetic-upstream-a}
+    volumes: ['${CHECKOUT}:/checkout:ro']
+    networks: [engine]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+  mock-b:
+    profiles: [synthetic]
+    image: ${NODE_IMAGE}
+    user: '${HARNESS_UID}:${HARNESS_GID}'
+    working_dir: /checkout
+    command: [node, sub2api-spike/mock-upstream.mjs]
+    environment: {SYNTHETIC_IDENTITY: synthetic-upstream-b}
+    volumes: ['${CHECKOUT}:/checkout:ro']
+    networks: [engine]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+networks:
+  runner: {internal: true, name: rr-sub2-spike-20260930-runner}
+  engine: {internal: true, name: rr-sub2-spike-20260930-engine}
+  state: {internal: true, name: rr-sub2-spike-20260930-state}
+  outbound: {name: rr-sub2-spike-20260930-outbound}
+  control:
+    internal: true
+    name: rr-sub2-spike-20260930-control
+    ipam:
+      config: [{subnet: '${CONTROL_SUBNET:?approved unused subnet required}'}]
+volumes:
+  postgres-data: {name: rr-sub2-spike-20260930-postgres-data}
+  redis-data: {name: rr-sub2-spike-20260930-redis-data}
+  sub2-data: {name: rr-sub2-spike-20260930-sub2-data}

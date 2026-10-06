@@ -1,0 +1,19 @@
+{
+  "kind": "actual-Go1271-final-OAuth-bulk",
+  "suite": "import-unit",
+  "image": "golang:1.27.1-alpine@sha256:8a5910f31396cd4d89662f56c68b3ae31d374308270a1c3bd96672ee5ed43414",
+  "exit": 0,
+  "duration_s": 3.43,
+  "compile_failed": false,
+  "failed_tests": [],
+  "passed_tests": [
+    "TestOAuthForkW7ImportIdentityTypes"
+  ],
+  "skipped_tests": [],
+  "receipts": 0,
+  "observations": 0,
+  "effects": 0,
+  "bulk_patch_sha256": "21193e4b555de7be8f32576c824077955a017464a82f17863d3a4f45f435d420",
+  "admin_fix_sha256": "a112ca698941dd2f3b24cee2e27deb7615eeaaee3b3d964e32caabe397e1d58b",
+  "provider_requests": 0
+}

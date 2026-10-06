@@ -1,0 +1,11 @@
+--- a/backend/internal/service/openai_gateway_passthrough.go
++++ b/backend/internal/service/openai_gateway_passthrough.go
+@@ -461,7 +461,7 @@
+ 		}
+ 
+ 		if reqStream {
+-			result, handleErr := s.handleStreamingResponsePassthrough(upstreamCtx, resp, c, account, startTime, reqModel, upstreamPassthroughModel)
++			result, handleErr := s.handleStreamingResponsePassthrough(ctx, resp, c, account, startTime, reqModel, upstreamPassthroughModel)
+ 			if handleErr != nil {
+ 				if account.CancelsNativeAPIKeyOnDisconnect() {
+ 					_ = resp.Body.Close()

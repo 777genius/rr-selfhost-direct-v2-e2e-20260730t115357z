@@ -1,0 +1,23 @@
+{
+  "REPORT.md": "c6755971c5a03afdc64d3a86739e242e152a6bb9cc75432c5810be8d15270c1f",
+  "assembly-hashes.json": "ec6fba877c55e0081b2e7173fe6eb360b6c6d3f9c9fb5336ce79891809d16936",
+  "evidence/audit.json": "20ba050381e61f1dcd8bb56df561401e368589adc57df9267ab542bb9e0229b0",
+  "evidence/goal-canonical.tap": "4a2e04f9bf8e6fd5bf677024f3339f1db840a1b3e2d7729a18787aae4d13fb35",
+  "evidence/goal-independent.tap": "d1ff107f62e81c8199afb0ab22bf71eab6710d9ae2fc8c6f75b2e3e9519c6e9b",
+  "evidence/integrity-cli.json": "028bda541241b8b5262de6afe1a8d0ef6925871d45fa36887ee9e1cd90386b9e",
+  "evidence/integrity-tests.txt": "09cca1c038dc517dfa47516d59d733756f05ebb88f10ff163a9d8b77a4ad4ded",
+  "evidence/no-overwrite.txt": "9c2e6025ffefdbe3a625ae34f3b64d11c60d1d7dae6a64a938f1816347a78f4b",
+  "evidence/node-packaging.tap": "b77e6ae992e767af5154a1e85f8f71bf7a2626c86f40343319948e891d332b53",
+  "evidence/plan.json": "743c86e02d898565e38c3473703a452183c2246ecf1727c5d51d5c09da14e0ec",
+  "evidence/python-tests.txt": "dca28c9662fff1b4493e4eea1eef1153931438bb10f95501d52eb2c75ac10436",
+  "evidence/run-review.txt": "430986d958f0d9adfd6b38ee895e2c9238ac108b59ce921264054849d723044d",
+  "evidence/structural-tests.txt": "fdb4076d4773b1f56784eae1bf7de8643f390a600fe6a82046307417ea57ecc4",
+  "evidence/verification.json": "430986d958f0d9adfd6b38ee895e2c9238ac108b59ce921264054849d723044d",
+  "evidence/verify-provenance.json": "64ef3bee1e4718063e68b823f5d1b5363ff68739e6a073d7738f368020746849",
+  "finalize-review.py": "e050b039d7b78b3ec2d1f0883f4a45baee6a040f64a43871c37f5e898e8e543e",
+  "frozen-input-hashes.json": "4807ef3aefaa2a6ee683d5bf590136a17a535c0203202c44b65d4da19bc64604",
+  "integrity-checks.py": "875f7771bcd15f5053999c89a5b795214ca32ee6ed3d14624a09c4ee2d6624f3",
+  "review.json": "ce9064f3becb2645f5b1949a8b3a5cbc3c6bdff3d5dc29a02d4b8c954bba00dd",
+  "run-review.py": "e6f37819aee15fcb102e3d9a4a11e35fdb5b2a4b37435e6a31689574f4899ae9",
+  "structural-checks.py": "3cfa5d6b48f1f410b116d83ce84381f54cf16e588efa83848e732aacc44326f4"
+}

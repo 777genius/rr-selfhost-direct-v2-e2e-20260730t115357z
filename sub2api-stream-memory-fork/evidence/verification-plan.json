@@ -1,0 +1,52 @@
+{
+  "execution": "NOT RUN; Go execution prohibited for this worker",
+  "old_red": {
+    "suite": "red",
+    "required_failures": [
+      "TestStreamMemoryMessagesReadAhead/passthrough",
+      "TestStreamMemoryMessagesReadAhead/native",
+      "TestStreamMemoryResponsesPrefixOverflow",
+      "TestStreamMemoryResponsesPrefixCancellationClosesReader"
+    ],
+    "compile_failure_is_behavioral_red": false
+  },
+  "old_and_new_controls": {
+    "suite": "controls",
+    "required": "PASS with identical predetermined bytes/SHA-256/flush/usage/tool-ID oracles"
+  },
+  "patched_green": {
+    "suite": "green",
+    "required": "35 PASS entries: original 32 plus independent handoff parent/two cases; race; zero skips"
+  },
+  "native_preservation": {
+    "suite": "native",
+    "required_pass_count": 292,
+    "historical_receipt": "sub2api-fork/checks/coordinator-w5-exact.json",
+    "historical_receipt_sha256": "c8667685621c522b7e184a2fb41c52fce6f451a999e84663cb60fa7c076e9026",
+    "additional_unchanged_boundary_fixture": "sub2api-fork-review-v2/independent_boundary_test.go.txt",
+    "fixture_sha256": "3ca97c2d50f0c3c498c51d1fb0af9b7fa5352089953f84d1224e6ea5e03887ce",
+    "required_skip_count": 0
+  },
+  "probe_preservation": {
+    "suite": "probe",
+    "source_entries_verified": 4,
+    "requested": "original capability-disable controls PASS",
+    "required_pass_count": 63,
+    "required_skip_count": 0
+  },
+  "new_RSS_and_leak_attribution": "NOT RUN and NOT CLAIMED; old 20 empirical failures preserved",
+  "commands": "ROOT-COMMANDS.md",
+  "prefix_handoff": {
+    "suite": "handoff",
+    "required": "3 PASS entries, zero skips on old and W2, unchanged observed terminal usage 7/5 assertions with native flag absent",
+    "supplied_W1": "old 3 PASS / W1 both cases RED; exact receipt hashes in w2-verification.json",
+    "repaired_Go": "NOT RUN by W2"
+  },
+  "supplied_controller_gates": {
+    "W1_green": 32,
+    "W1_native": 292,
+    "W1_probe": 63,
+    "skip_count": 0,
+    "repaired_or_merged_status": "NOT RUN by W2"
+  }
+}

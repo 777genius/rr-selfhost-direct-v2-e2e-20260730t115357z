@@ -1,0 +1,17 @@
+{
+  "run_id": "",
+  "admin_bearer": "",
+  "control_token": "",
+  "sentinels": { "responses": "", "messages": "" },
+  "mock_url": "http://mock:8099",
+  "engine_url": "http://sub2api:8080",
+  "deployment": {
+    "source_sha": "96f4c115c9749078f90cbf210a01d39baf3f53b6",
+    "image": "weishaw/sub2api@sha256:2e3b7fab1e84d2e862cde664d09c1ae84fc897093357cf200cbeb0f64b2f2390",
+    "variant": "original",
+    "patch_sha256": null,
+    "source_manifest_sha256": "",
+    "instance": "",
+    "cgroup_limit_bytes": 805306368
+  }
+}

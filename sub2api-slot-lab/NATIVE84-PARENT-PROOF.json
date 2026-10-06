@@ -1,0 +1,84 @@
+{
+  "kind": "actual-native84-root-operator-proof",
+  "real_provider": false,
+  "status": "PASS",
+  "rows": 84,
+  "groups": {
+    "responses:account": 21,
+    "responses:user": 21,
+    "messages:account": 21,
+    "messages:user": 21
+  },
+  "provider_requests": 168,
+  "provider_effects": 168,
+  "active": 0,
+  "duplicate_or_rejected_dispatches": 0,
+  "owned_redis_key_checks": 420,
+  "owned_cleanup": true,
+  "original_deadlines": {
+    "setup_ms": 70000,
+    "active_ms": 35000,
+    "supervisor_ms": 1200000,
+    "cancel_observation_ms": 1250
+  },
+  "native_image": "sha256:c656447c1b79706e67f71fe49ada0f0f840e26eba798597e6751917ddc691bd1",
+  "native_binary_sha256": "5e28306e531eac0abea49811f116dbbddb233c4e52ce3f7d63f9c71d949632fd",
+  "original_production_patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+  "build_header_adapted_patch_sha256": "b6c84836b4bc76f7613936f65767a30deaad468c6046d31d269028ce99d0d4ba",
+  "runtime_critical_source_bindings": {
+    "root-driver.py": "ba31a676fcc2d59a8d1077162dd7886c4f7fd244ad2ccc461806015986a0ecde",
+    "adapter.mjs": "7c5200d2f7d86ec11f2be6050ccfb35da55021ee1c34cf76de273a8c91b1e6be",
+    "prepare.py": "a24fc17e632ef578f289d7384b451d90fbe46ff6753c49d46cda17bf8a51116d",
+    "contracts.mjs": "adf4f64e2ae9d320a743c2657290bc72be0adb3919bfdca87657b292f7977245",
+    "redis.mjs": "b335a7d3eb3b062232ec71ac7132f48b11a89a00ec39e289011665fb6463634c",
+    "run.mjs": "e32258026ee0675635a216f1ba6578770fbc553bf72b11b17a716587c666ed35",
+    "native-sse.mjs": "a82680bbc8e62bed8ccb3fc39c6e4aad8e57431071f30d38c7cd295d594a8527",
+    "build-gate.py": "165e05a342d7f53e16122a9be1f27097251005bdd1516f6ab172ab64d4739b9a",
+    "build-manifest.json": "a1d9c2d8303aee2f6c748d52b57c0411bffe86c959628d5a5cd71c92056c4d9d",
+    "tls-server.ext": "50234c98fdeb8757d10c747e852ca78555b2123aaef9f1fda78e0f4b91b8dafc"
+  },
+  "original_receipt_sha256": {
+    "result.json": "dc3cd8644b645724e03c3874179e6165a732d952f2a0435916fad0953d86631d",
+    "final-provider.json": "c31f0f928240ee32025d1473b3e39c9ff7ebb9d9b998bef057779209d37eb66e",
+    "final-zero.json": "17e2c7d7060950a4e645b664bf682599dd53610258f1692fda949a28247b00e5",
+    "deployment.json": "d6e6aa6964e4cb83991a6ea69eff06d90901fc4d880a03e7b6c42af7d56df147"
+  },
+  "root_result_sha256": "221030d05c2506ca816e5459eb8dfc22e930fd29dc8fa446bb26200072cc4db5",
+  "expired_supervisor_recovery": {
+    "status": "PASS",
+    "kind": "actual-expired-root-negative-and-independent-owned-compensation",
+    "native_operator_started": false,
+    "inference_workload_started": false,
+    "harness_expiry_cleanup_original": "FAIL preserved",
+    "parent_compensation_bound_ms": 15000,
+    "parent_elapsed_ms": 1673.34,
+    "removed_exact_owned_ids": [
+      {
+        "name": "slot-367031b8bd5b-engine",
+        "id": "cdf7662dd62effe5de3e65ec5f95034e4b0afffe67b4ad7d0b3edbe35396aae2"
+      },
+      {
+        "name": "slot-367031b8bd5b-mock",
+        "id": "bd59d08ecff594925723ced5ed45f457e3bcf99c3fa08470d1c4011010271fa3"
+      },
+      {
+        "name": "slot-367031b8bd5b-redis",
+        "id": "cbbfa75fd396d047b42783fa045f79e0bc2b4f9adf7804bb946f2e71166af9ea"
+      },
+      {
+        "name": "slot-367031b8bd5b-postgres",
+        "id": "1f6c7016bae3aadc8228379d07625776c77c9759a532ced3a75ac8b8a034cba1"
+      }
+    ],
+    "absent_ambiguous_intention": [
+      "slot-367031b8bd5b-operator"
+    ],
+    "own_network_id": "df996f2dbefecf30fe8b7fba96c61217e5fcf9c2c6ed23e76f817631419d9589",
+    "original_failure_journal_preserved": true,
+    "no_lease_deletes_or_global_prune": true,
+    "scope": "Root operator recovery, not automated production guarantee"
+  },
+  "production_GO": false,
+  "memory_gate": "20/20 strict RSS-return FAIL unchanged",
+  "live_OAuth": "NOT RUN"
+}

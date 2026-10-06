@@ -1,0 +1,49 @@
+{
+  "constraints": "Supply read-only public artifacts only; no credentials, request bodies, provider calls, replacement runs, production modifications, forced GC or runtime tuning. No complete input-tree copy required.",
+  "diagnostic_runs": [
+    {
+      "needed_files": [
+        "run.json",
+        "profiles/runtime.ndjson",
+        "profiles/checkpoint-000.json",
+        "profiles/checkpoint-010.json",
+        "profiles/checkpoint-000-heap.pb.gz",
+        "profiles/checkpoint-010-heap.pb.gz",
+        "burst end/DONE boundaries and all checkpoint acknowledgements for checkpoints 001-010",
+        "original burst RSS/READY/DONE receipts",
+        "matched idle-control raw runtime/profile/RSS records"
+      ],
+      "needed_for": "Authenticate natural-GC boundaries and decoded profile samples against the exact run; retain no-forced-GC semantics.",
+      "protocol": "responses",
+      "run_json_expected_sha256": "0ea2847e2cfb72e9d0e1e9d2bc46c330d4c02a99e9eb9f760a2f1df71882a270"
+    },
+    {
+      "needed_files": [
+        "run.json",
+        "profiles/runtime.ndjson",
+        "profiles/checkpoint-000.json",
+        "profiles/checkpoint-010.json",
+        "profiles/checkpoint-000-heap.pb.gz",
+        "profiles/checkpoint-010-heap.pb.gz",
+        "burst end/DONE boundaries and all checkpoint acknowledgements for checkpoints 001-010",
+        "original burst RSS/READY/DONE receipts",
+        "matched idle-control raw runtime/profile/RSS records"
+      ],
+      "needed_for": "Authenticate natural-GC boundaries and decoded profile samples against the exact run; retain no-forced-GC semantics.",
+      "protocol": "messages",
+      "run_json_expected_sha256": "fd8b5532345ae903b79a8046adff006726c4f7a2568c41242f13d13bda433907"
+    }
+  ],
+  "identity": [
+    "Full diagnostic binary SHA-256 beginning 798 plus exact build/source/overlay and matching runtime profiler source receipts. A text pprof Build ID is not binary custody.",
+    "Final native c656/5e exact original twenty functional/RSS rows with burst baseline and qualifying five-second endpoint observations."
+  ],
+  "schema": "memory-final-missing-evidence-v1",
+  "source": [
+    {
+      "expected_sha256": "5e10557e70be455a904bd40f3a695fd39d2aad5fe3b01eb1cb639d829ac11954",
+      "needed_for": "Inspect actual best-effort queue and batch flush/reset/clearing ownership; header source is insufficient.",
+      "path": "backend/internal/repository/usage_log_repo_insert.go"
+    }
+  ]
+}

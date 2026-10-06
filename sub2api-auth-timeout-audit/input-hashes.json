@@ -1,0 +1,139 @@
+{
+  "algorithm": "SHA256",
+  "scope": "Bytes of audit-consumed source and evidence; null expected means locally hashed with no supplied pin, not externally authenticated. Parent run IDs and workflow prefix are user handoff facts, not downloaded receipts.",
+  "inputs": [
+    {
+      "path": ".spike-inputs/INPUT-HASHES.json",
+      "sha256": "25a0e2b04a590500bff5990c9d07bd95482e26a5a48d7f71d728213fe75efb2a",
+      "supplied_sha256": null,
+      "matches_supplied": null
+    },
+    {
+      "path": ".spike-inputs/timeout120-and-expiry.json",
+      "sha256": "0b504012a17812f70e808f32fa8ddd9c464db89c5a54ecf8981ed3cae97c9e08",
+      "supplied_sha256": "0b504012a17812f70e808f32fa8ddd9c464db89c5a54ecf8981ed3cae97c9e08",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/final-usage-observation.json",
+      "sha256": "edba3e6264186634a5ce9e2c7972c3d95561b875042b994a603facf0e849e147",
+      "supplied_sha256": "edba3e6264186634a5ce9e2c7972c3d95561b875042b994a603facf0e849e147",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/actual-usage-after.json",
+      "sha256": "4e164df03731eac1c46c6e06a6011500dadfe9bc84027761d5aa7ef752f42ba9",
+      "supplied_sha256": "4e164df03731eac1c46c6e06a6011500dadfe9bc84027761d5aa7ef752f42ba9",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/native84-proof.json",
+      "sha256": "f61286c9bf277647d0fa3103bb6fcfb4cdc8b4f9fc7bc97ab64c1bf23451d97e",
+      "supplied_sha256": "f61286c9bf277647d0fa3103bb6fcfb4cdc8b4f9fc7bc97ab64c1bf23451d97e",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/broker.mjs",
+      "sha256": "742b1d166670a18eae27475c5cd5ab5fb3e770bbbb92706e885ee11d33aa900a",
+      "supplied_sha256": "742b1d166670a18eae27475c5cd5ab5fb3e770bbbb92706e885ee11d33aa900a",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/oidc.mjs",
+      "sha256": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647",
+      "supplied_sha256": "223366fec778ad8f64cec925431b71a36eccea6ee9e662d4bdf23d34cde6f647",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/granted-run.mjs",
+      "sha256": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+      "supplied_sha256": "fcc538a3c28e97ce0fd2b4724615fd4484fd94f3c1c4fe5cfbc2f91021a0c047",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/run-client.mjs",
+      "sha256": "3308b5cbaaf2b5be10d616ace4a1e47a24e013fa944514ae61054fd37d7fb490",
+      "supplied_sha256": "3308b5cbaaf2b5be10d616ace4a1e47a24e013fa944514ae61054fd37d7fb490",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/broker.test.mjs",
+      "sha256": "d9320ab9e2e08c5381328723dfc03f79a73c34da0d64c84b0e84cb6512a75051",
+      "supplied_sha256": "d9320ab9e2e08c5381328723dfc03f79a73c34da0d64c84b0e84cb6512a75051",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/oidc.test.mjs",
+      "sha256": "f2854c96fc6a513f6af713f027f61b68cb738688a519d2910334a5844f0b9716",
+      "supplied_sha256": "f2854c96fc6a513f6af713f027f61b68cb738688a519d2910334a5844f0b9716",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/granted-run.test.mjs",
+      "sha256": "e2a7bbd115b4a3588692a2f483ab44c24f738f10fd08822bce4e5ec2344444ed",
+      "supplied_sha256": "e2a7bbd115b4a3588692a2f483ab44c24f738f10fd08822bce4e5ec2344444ed",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/run-client.test.mjs",
+      "sha256": "68dbead2d26c2dd9154f5bde23d9c1cbbe9769ee4ed8692eb40615c443e17f45",
+      "supplied_sha256": "68dbead2d26c2dd9154f5bde23d9c1cbbe9769ee4ed8692eb40615c443e17f45",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/test-support.mjs",
+      "sha256": "a6d9d9e1b9445f481c7097bcf7cd5aad1d81f68485b10dcd8349b6422ad61ff5",
+      "supplied_sha256": "a6d9d9e1b9445f481c7097bcf7cd5aad1d81f68485b10dcd8349b6422ad61ff5",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/serve.mjs",
+      "sha256": "fb2ec7e3aa5eadb60cde72d25f2004d77e8ece52de318d5c53abca14a190275c",
+      "supplied_sha256": "fb2ec7e3aa5eadb60cde72d25f2004d77e8ece52de318d5c53abca14a190275c",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/serve.test.mjs",
+      "sha256": "a5f1908d5bab1579deb7ed80273868d87ec3c14bf1c818a0cd0e966eb765047c",
+      "supplied_sha256": "a5f1908d5bab1579deb7ed80273868d87ec3c14bf1c818a0cd0e966eb765047c",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/util.mjs",
+      "sha256": "1dc20fa471b4e2784ff45748bd0a517ff6fd5517aa5b325c8467430cbb22bed4",
+      "supplied_sha256": "1dc20fa471b4e2784ff45748bd0a517ff6fd5517aa5b325c8467430cbb22bed4",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/broker.config.example.json",
+      "sha256": "8ae18dd7573cd4edb62ef0574437dd033461afa09099d7778d2e0dfb807580e8",
+      "supplied_sha256": "8ae18dd7573cd4edb62ef0574437dd033461afa09099d7778d2e0dfb807580e8",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/REPORT.md",
+      "sha256": "f02ca763b409766b743f3bc322e83b1b66fbcf6d5e63a48289d1b65d69153361",
+      "supplied_sha256": "f02ca763b409766b743f3bc322e83b1b66fbcf6d5e63a48289d1b65d69153361",
+      "matches_supplied": true
+    },
+    {
+      "path": ".spike-inputs/spike/operator/stack.mjs",
+      "sha256": "1774cad9fe6adc50d1e479da773695ae4f580ab49848d71d46ad378cda5b362d",
+      "supplied_sha256": "1774cad9fe6adc50d1e479da773695ae4f580ab49848d71d46ad378cda5b362d",
+      "matches_supplied": true
+    },
+    {
+      "path": "gateway-spike/oidc.mjs",
+      "sha256": "6827d0d0726d8a12582da22c5b3f7497c3f35fdbe58fcf69b0f3ffe98a603cca",
+      "supplied_sha256": null,
+      "matches_supplied": null
+    },
+    {
+      "path": ".github/workflows/sub2api-gateway-spike.yml",
+      "sha256": "b32954d364424d91734d5d080abebd68d57c7ba7b5e9a08a3352aa2cff578c40",
+      "supplied_sha256": null,
+      "matches_supplied": null
+    }
+  ],
+  "pinned_inputs_verified": 19
+}

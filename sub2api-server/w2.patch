@@ -1,0 +1,89 @@
+--- a/sub2api-spike/broker.mjs
++++ b/sub2api-spike/broker.mjs
+@@ -16,14 +16,22 @@
+   // coordinator proves the old broker terminal and removes only this lock.
+   await mkdir(dirname(ledgerPath), { recursive: true, mode: 0o700 });
+   const ledgerLock = await open(`${ledgerPath}.lock`, 'wx', 0o600);
+-  await ledgerLock.writeFile(String(process.pid)); await ledgerLock.sync();
+   const releaseLock = () => { try { unlinkSync(`${ledgerPath}.lock`); } catch {} };
+-  const disk = await loadJSON(ledgerPath, { schema: 1, runs: {} });
+-  if (disk.schema !== 1 || !disk.runs || Array.isArray(disk.runs)) throw Error('Invalid ledger');
++  let disk;
+   const grants = new Map(), byRun = new Map(), lock = serial(); let active = 0, poisoned = false;
+   async function persist() { try { await atomicJSON(ledgerPath, disk); } catch { poisoned = true; throw fault(503, 'ledger_unavailable'); } }
+-  try { await persist(); } catch (e) { await ledgerLock.close(); releaseLock(); throw e; } // Before admission.
+-  await ledgerLock.close();
++  // Only successful exclusive acquisition owns cleanup. A rejected constructor
++  // must not strand its lock, even when writing, reading or closing fails.
++  try {
++    await ledgerLock.writeFile(String(process.pid)); await ledgerLock.sync();
++    disk = await loadJSON(ledgerPath, { schema: 1, runs: {} });
++    if (disk.schema !== 1 || !disk.runs || Array.isArray(disk.runs)) throw Error('Invalid ledger');
++    await persist(); // Before admission.
++    await ledgerLock.close();
++  } catch (e) {
++    try { await ledgerLock.close(); } finally { releaseLock(); }
++    throw e;
++  }
+   function close(g) { g.closed = true; for (const c of g.controllers) c.abort(); clearTimeout(g.timer); }
+   const server = http.createServer({ maxHeaderSize: 16384 }, async (req, res) => {
+     const started = Date.now(); let code = 'ok';
+--- a/sub2api-spike/broker.test.mjs
++++ b/sub2api-spike/broker.test.mjs
+@@ -1,11 +1,55 @@
+ import test from 'node:test';
+ import assert from 'node:assert/strict';
+-import { mkdir, rename } from 'node:fs/promises';
++import { mkdir, rename, mkdtemp, writeFile, readFile, access, rm, stat } from 'node:fs/promises';
+ import { join } from 'node:path';
+ import { rig, token } from './test-support.mjs';
+ import { createBroker } from './broker.mjs';
+ import { nativeEvents } from './evidence.mjs';
+ import { listen, stop } from './util.mjs';
++
++// SR1: failed initialization must release its own lock so repaired disk state
++// can restart. These are actual filesystem failures; no listener is opened.
++for (const kind of ['malformed JSON', 'invalid schema', 'read EISDIR', 'persist failure']) {
++  test(`SR1 constructor recovers after ${kind}`, async t => {
++    const dir = await mkdtemp(new URL('../sub2api-server/sr1-fs-', import.meta.url).pathname);
++    t.after(() => rm(dir, { recursive: true, force: true }));
++    const ledgerPath = join(dir, 'ledger.json');
++    const config = { ledgerPath, scopes: {} };
++    let error;
++    if (kind === 'malformed JSON') { await writeFile(ledgerPath, '{'); error = SyntaxError; }
++    if (kind === 'invalid schema') { await writeFile(ledgerPath, '{"schema":0,"runs":{}}'); error = /Invalid ledger/; }
++    if (kind === 'read EISDIR') { await mkdir(ledgerPath); error = { code: 'EISDIR' }; }
++    if (kind === 'persist failure') { await mkdir(ledgerPath + '.new'); error = { code: 'ledger_unavailable' }; }
++    await assert.rejects(createBroker(config), error);
++    await assert.rejects(access(ledgerPath + '.lock'), { code: 'ENOENT' });
++
++    if (kind === 'read EISDIR') await rm(ledgerPath, { recursive: true });
++    if (kind === 'persist failure') await rm(ledgerPath + '.new', { recursive: true });
++    const repaired = { schema: 1, runs: { '123': { attempt: '1', workspace: 'a', state: 'issued' } } };
++    await writeFile(ledgerPath, JSON.stringify(repaired));
++    const server = await createBroker(config);
++    t.after(() => stop(server));
++    await access(ledgerPath + '.lock');
++    assert.deepEqual(JSON.parse(await readFile(ledgerPath, 'utf8')), repaired);
++    await stop(server);
++    await assert.rejects(access(ledgerPath + '.lock'), { code: 'ENOENT' });
++  });
++}
++
++// EEXIST may represent another owner or a crashed broker. Never remove it or
++// touch the ledger when exclusive acquisition fails.
++test('SR1 constructor preserves an existing foreign or crash lock', async t => {
++  const dir = await mkdtemp(new URL('../sub2api-server/sr1-fs-', import.meta.url).pathname);
++  t.after(() => rm(dir, { recursive: true, force: true }));
++  const ledgerPath = join(dir, 'ledger.json');
++  await writeFile(ledgerPath, '{');
++  await writeFile(ledgerPath + '.lock', 'foreign-or-crashed-owner');
++  const before = await stat(ledgerPath + '.lock');
++  await assert.rejects(createBroker({ ledgerPath, scopes: {} }), { code: 'EEXIST' });
++  assert.equal(await readFile(ledgerPath + '.lock', 'utf8'), 'foreign-or-crashed-owner');
++  assert.equal((await stat(ledgerPath + '.lock')).ino, before.ino);
++  assert.equal(await readFile(ledgerPath, 'utf8'), '{');
++});
+ // Regression: concurrent exchanges issue two capabilities or server access keys.
+ test('B06 concurrent grants idempotent before upstream effects', async t => {
+   const r = await rig(t); const responses = await Promise.all(Array.from({ length: 12 }, () => r.grant()));

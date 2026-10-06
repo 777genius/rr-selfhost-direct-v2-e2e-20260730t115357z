@@ -1,0 +1,263 @@
+{
+  "tests": 4,
+  "failures": 0,
+  "errors": 0,
+  "receipts": [
+    {
+      "kind": "root",
+      "location": "helper",
+      "program": "verify-provenance.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmp3_1jz6on/real/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 46, in <module>\n    a=p.parse_args(); print(json.dumps(verify(a.package_root,a.base_root,a.repo),indent=2))\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "root",
+      "location": "installed",
+      "program": "verify-provenance.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/verify-provenance.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmp3_1jz6on/real/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/verify-provenance.py\", line 7, in <module>\n    runpy.run_path(str(helper), run_name='__main__')\n  File \"<frozen runpy>\", line 286, in run_path\n  File \"<frozen runpy>\", line 98, in _run_module_code\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 46, in <module>\n    a=p.parse_args(); print(json.dumps(verify(a.package_root,a.base_root,a.repo),indent=2))\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "root",
+      "location": "helper",
+      "program": "audit.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmp3_1jz6on/real/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py\", line 11, in <module>\n    proof=v.verify(package,a.base_root,a.repo)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "root",
+      "location": "installed",
+      "program": "audit.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/audit.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmp3_1jz6on/real/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/audit.py\", line 7, in <module>\n    runpy.run_path(str(helper), run_name='__main__')\n  File \"<frozen runpy>\", line 286, in run_path\n  File \"<frozen runpy>\", line 98, in _run_module_code\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py\", line 11, in <module>\n    proof=v.verify(package,a.base_root,a.repo)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "package-ancestor",
+      "location": "helper",
+      "program": "verify-provenance.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmpi8uol3xw/alias",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 46, in <module>\n    a=p.parse_args(); print(json.dumps(verify(a.package_root,a.base_root,a.repo),indent=2))\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "package-ancestor",
+      "location": "installed",
+      "program": "verify-provenance.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/verify-provenance.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmpi8uol3xw/alias",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/verify-provenance.py\", line 7, in <module>\n    runpy.run_path(str(helper), run_name='__main__')\n  File \"<frozen runpy>\", line 286, in run_path\n  File \"<frozen runpy>\", line 98, in _run_module_code\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 46, in <module>\n    a=p.parse_args(); print(json.dumps(verify(a.package_root,a.base_root,a.repo),indent=2))\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "package-ancestor",
+      "location": "helper",
+      "program": "audit.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmpi8uol3xw/alias",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py\", line 11, in <module>\n    proof=v.verify(package,a.base_root,a.repo)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "package-ancestor",
+      "location": "installed",
+      "program": "audit.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/audit.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmpi8uol3xw/alias",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/audit.py\", line 7, in <module>\n    runpy.run_path(str(helper), run_name='__main__')\n  File \"<frozen runpy>\", line 286, in run_path\n  File \"<frozen runpy>\", line 98, in _run_module_code\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py\", line 11, in <module>\n    proof=v.verify(package,a.base_root,a.repo)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "higher-ancestor",
+      "location": "helper",
+      "program": "verify-provenance.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmp3mcly261/alias/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 46, in <module>\n    a=p.parse_args(); print(json.dumps(verify(a.package_root,a.base_root,a.repo),indent=2))\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "higher-ancestor",
+      "location": "installed",
+      "program": "verify-provenance.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/verify-provenance.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmp3mcly261/alias/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/verify-provenance.py\", line 7, in <module>\n    runpy.run_path(str(helper), run_name='__main__')\n  File \"<frozen runpy>\", line 286, in run_path\n  File \"<frozen runpy>\", line 98, in _run_module_code\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 46, in <module>\n    a=p.parse_args(); print(json.dumps(verify(a.package_root,a.base_root,a.repo),indent=2))\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "higher-ancestor",
+      "location": "helper",
+      "program": "audit.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmp3mcly261/alias/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py\", line 11, in <module>\n    proof=v.verify(package,a.base_root,a.repo)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "higher-ancestor",
+      "location": "installed",
+      "program": "audit.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/audit.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmp3mcly261/alias/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/audit.py\", line 7, in <module>\n    runpy.run_path(str(helper), run_name='__main__')\n  File \"<frozen runpy>\", line 286, in run_path\n  File \"<frozen runpy>\", line 98, in _run_module_code\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py\", line 11, in <module>\n    proof=v.verify(package,a.base_root,a.repo)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 38, in checked_read\n    raise ValueError('historical symlink root or ancestor')\nValueError: historical symlink root or ancestor\n"
+    },
+    {
+      "kind": "manifest",
+      "location": "helper",
+      "program": "verify-provenance.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmpji1xnmgc/real/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 46, in <module>\n    a=p.parse_args(); print(json.dumps(verify(a.package_root,a.base_root,a.repo),indent=2))\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 41, in checked_read\n    if target.is_symlink(): raise ValueError('historical symlink')\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: historical symlink\n"
+    },
+    {
+      "kind": "manifest",
+      "location": "installed",
+      "program": "verify-provenance.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/verify-provenance.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmpji1xnmgc/real/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/verify-provenance.py\", line 7, in <module>\n    runpy.run_path(str(helper), run_name='__main__')\n  File \"<frozen runpy>\", line 286, in run_path\n  File \"<frozen runpy>\", line 98, in _run_module_code\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 46, in <module>\n    a=p.parse_args(); print(json.dumps(verify(a.package_root,a.base_root,a.repo),indent=2))\n                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 41, in checked_read\n    if target.is_symlink(): raise ValueError('historical symlink')\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: historical symlink\n"
+    },
+    {
+      "kind": "manifest",
+      "location": "helper",
+      "program": "audit.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmpji1xnmgc/real/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py\", line 11, in <module>\n    proof=v.verify(package,a.base_root,a.repo)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 41, in checked_read\n    if target.is_symlink(): raise ValueError('historical symlink')\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: historical symlink\n"
+    },
+    {
+      "kind": "manifest",
+      "location": "installed",
+      "program": "audit.py",
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/audit.py",
+        "--package-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/sub2api-transport-packaging-review/tmpji1xnmgc/real/package",
+        "--base-root",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/public-base"
+      ],
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-r4/audit.py\", line 7, in <module>\n    runpy.run_path(str(helper), run_name='__main__')\n  File \"<frozen runpy>\", line 286, in run_path\n  File \"<frozen runpy>\", line 98, in _run_module_code\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/audit.py\", line 11, in <module>\n    proof=v.verify(package,a.base_root,a.repo)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 14, in verify\n    manifest=json.loads(checked_read(frozen,'INPUT-HASHES.json'))\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/transport-packaging-review-r2/.spike-inputs/candidate/sub2api-transport-packaging/verify-provenance.py\", line 41, in checked_read\n    if target.is_symlink(): raise ValueError('historical symlink')\n                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: historical symlink\n"
+    }
+  ]
+}

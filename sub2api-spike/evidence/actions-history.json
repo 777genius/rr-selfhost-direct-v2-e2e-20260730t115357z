@@ -1,0 +1,51 @@
+{
+  "schema": "rr-sub2-actions-history/v1",
+  "runs": [
+    {
+      "id": "36775047872",
+      "url": "https://github.com/777genius/rr-selfhost-direct-v2-e2e-20260730t115357z/actions/runs/36775047872",
+      "provider": "mimo",
+      "agent": "codex",
+      "head_sha": "222c6d89900e06e38586100ca2d1cfb978a915a7",
+      "conclusion": "failure",
+      "observation": "Valid JSON array, genuine reads/reproduction; old evidence adapter required object."
+    },
+    {
+      "id": "36775051456",
+      "url": "https://github.com/777genius/rr-selfhost-direct-v2-e2e-20260730t115357z/actions/runs/36775051456",
+      "provider": "openrouter",
+      "agent": "codex",
+      "head_sha": "222c6d89900e06e38586100ca2d1cfb978a915a7",
+      "conclusion": "success",
+      "observation": "Genuine tool reads and independently reproduced financial finding."
+    },
+    {
+      "id": "36775055709",
+      "url": "https://github.com/777genius/rr-selfhost-direct-v2-e2e-20260730t115357z/actions/runs/36775055709",
+      "provider": "mimo",
+      "agent": "claude",
+      "head_sha": "222c6d89900e06e38586100ca2d1cfb978a915a7",
+      "conclusion": "success",
+      "observation": "Genuine Read tools and independently reproduced financial finding."
+    },
+    {
+      "id": "36777060737",
+      "url": "https://github.com/777genius/rr-selfhost-direct-v2-e2e-20260730t115357z/actions/runs/36777060737",
+      "provider": "mimo",
+      "agent": "codex",
+      "head_sha": "abb59b47f58558a25f4e6c100433d12ceb74faf9",
+      "conclusion": "cancelled",
+      "observation": "Cancelled before runner/provider effects after sentinel SSE custody failure."
+    },
+    {
+      "id": "36778603368",
+      "url": "https://github.com/777genius/rr-selfhost-direct-v2-e2e-20260730t115357z/actions/runs/36778603368",
+      "provider": "mimo",
+      "agent": "codex",
+      "head_sha": "f05e6a4f451a45681c0bbc7b4b0ced17199ff339",
+      "conclusion": "failure",
+      "observation": "Genuine reads and two numeric commands; turn completed without final assistant text, review.txt zero bytes. Root cause not isolated to gateway or provider."
+    }
+  ],
+  "paid_run_policy": "Distinct planned runs after inspecting prior terminal results; no automatic replay of ambiguous outcome. Account creation triggered two separately accounted native probes."
+}

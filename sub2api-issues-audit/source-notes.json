@@ -1,0 +1,192 @@
+[
+  {
+    "id": "S01",
+    "path": "backend/internal/repository/scheduler_cache.go",
+    "line": 953,
+    "issues": [
+      7758,
+      7225
+    ],
+    "observation": "Credentials whitelist excludes openai_capabilities/base_url; Extra now retains base_rpm/rpm_strategy/rpm_sticky_buffer. Different projection bugs must be assessed separately.",
+    "evidence": "source audit; no runtime reproduction",
+    "inspected_sha256": "31afbc2c7b46e4f464b7f49ecc8f5ddf7674ec9b582f3da10ab63089b62d5778"
+  },
+  {
+    "id": "S02",
+    "path": "backend/internal/repository/scheduler_cache_unit_test.go",
+    "line": 1173,
+    "issues": [
+      7225
+    ],
+    "observation": "TestBuildSchedulerMetadataAccount_KeepsRPMFieldsForRPMGate compares real schedulability before/after metadata projection; unit build tag. v0.2.8 release corroborates fix; not executed here.",
+    "evidence": "source/test inspection plus release claim",
+    "inspected_sha256": "52d1106eea654f7b88186266d09a2a71391001f6ac3e310f7f31df2d7f5fbb63"
+  },
+  {
+    "id": "S03",
+    "path": "backend/internal/service/oauth_refresh_api.go",
+    "line": 168,
+    "issues": [
+      1035,
+      1381,
+      4414
+    ],
+    "observation": "Unified refresh acquires local/distributed lock and rereads DB; lock error explicitly degrades to local mutex. This is not distributed exclusivity during Redis failure.",
+    "evidence": "source audit; live rotating identity NOT RUN",
+    "inspected_sha256": "60e98afb0fecb99ad27adb197ac311d78d65a42a7e752f5aabf9be7cc1566270"
+  },
+  {
+    "id": "S04",
+    "path": "backend/internal/service/token_refresh_service.go",
+    "line": 869,
+    "issues": [
+      1035
+    ],
+    "observation": "Background executor uses shared OAuthRefreshAPI; Claude request provider does too when injected. Old separate-entry claim has source mitigation, not proof of all refresh failure branches.",
+    "evidence": "source audit",
+    "inspected_sha256": "030445d6638fc209485282ea3715647f3302bf302cd632a9c4c2d0fdf38d6131"
+  },
+  {
+    "id": "S05",
+    "path": "backend/internal/service/openai_images.go",
+    "line": 1641,
+    "issues": [
+      6169
+    ],
+    "observation": "Downloader invokes Get(downloadURL) without a local target validator. Cannot infer entire attack reachability or shared transport protections from this helper alone; keep image route inaccessible.",
+    "evidence": "source risk corroboration; exploit NOT RUN",
+    "inspected_sha256": "d8bf04fb6f9e8d712a65a84f4d3ff7b1b7c4e19484d418745400be1e6b4a62cf"
+  },
+  {
+    "id": "S06",
+    "path": "backend/internal/config/config.go",
+    "line": 2115,
+    "issues": [
+      6112
+    ],
+    "observation": "Legacy forwarded IP trust defaults true. ip.go legacy resolver prioritizes CF-Connecting-IP; trusted-proxy path is available when mode disabled. Must deploy explicit edge/header policy.",
+    "evidence": "source/config audit",
+    "inspected_sha256": "c46cafc4a9821d15a2d24934d9beab411c1963ba9dae0888aad53f523b672f41"
+  },
+  {
+    "id": "S07",
+    "path": "backend/ent/schema/account.go",
+    "line": 74,
+    "issues": [
+      4469,
+      4002
+    ],
+    "observation": "Credential map is JSONB. account_repo UpdateCredentials JSON-marshals directly to credentials JSONB, scheduler projection can contain api_key. No application-encryption claim is supported by these paths; DB/Redis/exports/backups belong in operator custody.",
+    "evidence": "source custody audit",
+    "inspected_sha256": "dfc1cd50c5d0736234fe5c5553f49a12e8153801a7a06a9ccd6ffa4dc7917ff2"
+  },
+  {
+    "id": "S08",
+    "path": "backend/internal/repository/usage_billing_repo.go",
+    "line": 243,
+    "issues": [
+      7002,
+      7034
+    ],
+    "observation": "Final debit retries insufficient-balance update without balance predicate, allowing overdraft. v0.2.11 inflight reservation mitigates concurrent admission but is not a strict DB spend cap.",
+    "evidence": "source audit and bounded release claim",
+    "inspected_sha256": "0ab1ae66cf4d70e6de51605574a7ecf988e514a1b965df39859456796f93a71d"
+  },
+  {
+    "id": "S09",
+    "path": "backend/internal/service/billing_inflight_reservation.go",
+    "line": 238,
+    "issues": [
+      7002
+    ],
+    "observation": "Redis/cache read/reserve failure returns no reservation (fail-open); subscription path bypasses balance reservation. Unpriced fail-open defaults false for fail_closed_on_unpriced in config. Need hard ReviewRouter budget admission outside engine.",
+    "evidence": "source audit; load/cancellation NOT RUN",
+    "inspected_sha256": "1388a30510c50e081a15bd45b48eb03f688b330ecd50e9c99cb70dac66386e19"
+  },
+  {
+    "id": "S10",
+    "path": "backend/internal/service/channel_service.go",
+    "line": 396,
+    "issues": [
+      6232
+    ],
+    "observation": "Cache invalidation rebuilds locally and notifies pub/sub; subscription clears other process cache. TestInvalidateCachePublishesToOtherInstances uses two real service instances but mock pub/sub, so does not prove Redis notification delivery or outage behavior.",
+    "evidence": "source mitigation; service-boundary test inspected only",
+    "inspected_sha256": "d6d20aa60576a05153e56926347eafbd02609357adc4c56c56776cd6186e959b"
+  },
+  {
+    "id": "S11",
+    "path": "backend/internal/service/payment_refund_test.go",
+    "line": 505,
+    "issues": [
+      5188
+    ],
+    "observation": "Tests reject stale finalize before second deduction and roll back DB deduction after injected error. They inspect transactional DB state, not live payment provider/restart recovery. Partial mitigation only.",
+    "evidence": "test source inspection; not executed",
+    "inspected_sha256": "fad2766c4df874d37112a01fd76e50f7c5cd57d33fa5cc93b825e6fa1f3a9319"
+  },
+  {
+    "id": "S12",
+    "path": "backend/migrations/026_ops_metrics_aggregation_tables.sql",
+    "line": 50,
+    "issues": [
+      7030
+    ],
+    "observation": "Unconditional error_rate column comment; migration 033 drops/rebuilds metrics tables. Replaying old migrations against later schema needs full restored ledger, not assumed idempotency.",
+    "evidence": "source corroboration; PostgreSQL reproducer NOT RUN",
+    "inspected_sha256": "d5af7c763da6360a29b6fd7e70222ace76cb20f9493aed25fd219891d13e91f6"
+  },
+  {
+    "id": "S13",
+    "path": "backend/internal/service/gateway_structured_outputs_beta_test.go",
+    "line": 49,
+    "issues": [
+      7633
+    ],
+    "observation": "BuildUpstreamRequestStructuredOutputsBeta inspects outgoing header/body; v0.2.9 release says beta retained. This supports scoped fix and is not full native Claude E2E.",
+    "evidence": "source/test and release corroboration; execution NOT RUN",
+    "inspected_sha256": "af91e9c301daf14695e8ee74cb13e99fa8f77f296508457028ff27fd2b5fc128"
+  },
+  {
+    "id": "S14",
+    "path": "backend/internal/service/service_tier_billing.go",
+    "line": 69,
+    "issues": [
+      7770
+    ],
+    "observation": "OAuth-like account retains outbound tier when response is default; API-key path uses response-tier downgrade. Chained accounting consistency requires compositional test.",
+    "evidence": "source corroboration; provider bill not independently verified",
+    "inspected_sha256": "bc395dc855d98635228f5d19b19a03904096201d99f94475dc5d1d1292bfe9fc"
+  },
+  {
+    "id": "S15",
+    "path": "backend/internal/handler/auth_oidc_oauth.go",
+    "line": 36,
+    "issues": [
+      3712
+    ],
+    "observation": "Browser OIDC state/nonce/verifier/intent/bind-user cookies implement human auth. Not evidence for GitHub Actions repository/workflow/run capability checks.",
+    "evidence": "source audit",
+    "inspected_sha256": "2c1e77c6c3afffd11ee6eee9b1961e9416334fcef564a3f8e6d10a50ea6c9616"
+  },
+  {
+    "id": "S16",
+    "path": "LICENSE",
+    "line": 1,
+    "issues": [],
+    "observation": "LGPL v3 text present; README says v3 or later. Preserve notices and request distribution/linking review for chosen packaging; no legal conclusion. README sponsorship is not independent availability evidence.",
+    "evidence": "licence/community source inspection",
+    "inspected_sha256": "a5681bf9b05db14d86776930017c647ad9e6e56ff6bbcfdf21e5848288dfaf1b"
+  },
+  {
+    "id": "S17",
+    "path": "backend/internal/pkg/apicompat/responses_client_tools.go",
+    "line": 328,
+    "issues": [
+      6146
+    ],
+    "observation": "Known fc_/ctc_/tsc_ prefixes are retyped when restoring custom/tool_search items, preserving suffix. restoreClientToolValue applies the helper. This source mitigation contradicts assuming the still-open historical restoration report remains unchanged on pin; full SSE/replay still untested.",
+    "evidence": "source mitigation; no independent runtime reproduction",
+    "inspected_sha256": "3017206885d49ff886b7369914b21e54d9bdacd645fe9f49ce0c21e205db3e4c"
+  }
+]

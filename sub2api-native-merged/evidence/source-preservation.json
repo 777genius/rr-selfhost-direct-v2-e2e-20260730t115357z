@@ -1,0 +1,33 @@
+{
+  "W2_to_W3_patch_sha256": "f582207e622753a953d271197b1690a069a42777813f67c46a7d53da75596d1f",
+  "actual_W2_tree_sha256": "fa660b8178f63dd9c385274c2f01608368227b202881ab9cc8cba29c364d96f1",
+  "changed_files": [
+    {
+      "added": 61,
+      "after_LOC": 150,
+      "after_sha256": "94ef8c31470dd8af1f1a23393ab0659d540fbfb0307663080bb399e3959fd6bc",
+      "before_LOC": 101,
+      "before_sha256": "2c97f68725ebfd580b34bc59eebd316e1c20ab889b239895e333320cefba666e",
+      "path": "backend/internal/service/native_stream_merged_interaction_test.go",
+      "removed": 12
+    },
+    {
+      "added": 1,
+      "after_LOC": 2587,
+      "after_sha256": "23a326cb8213bc5b2c61c477f3863ed5c1a5b792a30965e7ef407661735ec6ff",
+      "before_LOC": 2587,
+      "before_sha256": "f60a05cb9d0261227049a7d7eb33a31a1bce91f6f1a9a4e5ca80f91df88fdca4",
+      "path": "backend/internal/service/openai_gateway_passthrough.go",
+      "removed": 1
+    }
+  ],
+  "historical_W1_W2_inputs": "Immutable .spike-inputs/original-inputs and .spike-inputs/candidate; no history rewritten",
+  "raw_gate_references": {
+    ".spike-inputs/actual-gates/interaction-red-receipt.json": "338e11858c800589c37460510e70eaaad55c21e00c93712e8f933ec22ff97c36",
+    ".spike-inputs/actual-gates/interaction-red.jsonl": "531d8e1b035dbdcc2216a409533716739b9ee7e975f735124152447d7d831b17",
+    ".spike-inputs/actual-gates/normal-receipt.json": "a1df3c6691d2810eb5f089158d9414fe55d63e33cfcb7b7f7ecfb6bf48b580fb",
+    ".spike-inputs/actual-gates/normal.jsonl": "18b94d9f867153ca7a8f682986cf41d27c03348ecdd4ee66bba6e7593e9eb7f5"
+  },
+  "status": "SOURCE VERIFIED; W3 runtime PENDING",
+  "unchanged_backend_files": 3330
+}

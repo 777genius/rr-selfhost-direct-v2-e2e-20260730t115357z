@@ -1,0 +1,529 @@
+{
+  "numbers": [
+    7774,
+    7708,
+    7700,
+    7633,
+    7629,
+    7637,
+    7285,
+    4245,
+    5542,
+    1381,
+    1035,
+    4414,
+    3757,
+    3707,
+    3647,
+    7000,
+    7758,
+    7757,
+    7574,
+    7506,
+    7225,
+    7458,
+    6992,
+    6319,
+    6169,
+    6112,
+    3086,
+    6548,
+    4469,
+    4002,
+    3712,
+    6610,
+    7770,
+    7205,
+    7002,
+    5188,
+    6515,
+    6646,
+    7034,
+    7582,
+    7030,
+    6412,
+    6232,
+    6780,
+    7146,
+    6877,
+    1009,
+    2108,
+    2337,
+    6146,
+    6185,
+    6402
+  ],
+  "metadata": [
+    {
+      "number": 7774,
+      "category": "native_protocols",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7774",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7708,
+      "category": "native_protocols",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7708",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7700,
+      "category": "native_protocols",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 2,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7700",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7633,
+      "category": "native_protocols",
+      "priority": 2,
+      "state": "closed",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7633",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7629,
+      "category": "native_protocols",
+      "priority": 2,
+      "state": "closed",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7629",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7637,
+      "category": "native_protocols",
+      "priority": 2,
+      "state": "closed",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7637",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7285,
+      "category": "native_protocols",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 6,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7285",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 4245,
+      "category": "native_protocols",
+      "priority": 2,
+      "state": "closed",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/4245",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 5542,
+      "category": "oauth_provider",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 5,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/5542",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 1381,
+      "category": "oauth_provider",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/1381",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 1035,
+      "category": "oauth_provider",
+      "priority": 1,
+      "state": "closed",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/1035",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 4414,
+      "category": "oauth_provider",
+      "priority": 1,
+      "state": "closed",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/4414",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 3757,
+      "category": "oauth_provider",
+      "priority": 1,
+      "state": "closed",
+      "comment_count_at_snapshot": 8,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/3757",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 3707,
+      "category": "oauth_provider",
+      "priority": 1,
+      "state": "closed",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/3707",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 3647,
+      "category": "oauth_provider",
+      "priority": 1,
+      "state": "closed",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/3647",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7000,
+      "category": "oauth_provider",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 6,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7000",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7758,
+      "category": "scheduling",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7758",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7757,
+      "category": "scheduling",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7757",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7574,
+      "category": "scheduling",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7574",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7506,
+      "category": "scheduling",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7506",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7225,
+      "category": "scheduling",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7225",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7458,
+      "category": "scheduling",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7458",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6992,
+      "category": "scheduling",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6992",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6319,
+      "category": "scheduling",
+      "priority": 2,
+      "state": "closed",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6319",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6169,
+      "category": "security_custody",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6169",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6112,
+      "category": "security_custody",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6112",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 3086,
+      "category": "security_custody",
+      "priority": 1,
+      "state": "closed",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/3086",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6548,
+      "category": "security_custody",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6548",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 4469,
+      "category": "security_custody",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 2,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/4469",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 4002,
+      "category": "security_custody",
+      "priority": 1,
+      "state": "closed",
+      "comment_count_at_snapshot": 5,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/4002",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 3712,
+      "category": "security_custody",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/3712",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6610,
+      "category": "security_custody",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 3,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6610",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7770,
+      "category": "billing",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7770",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7205,
+      "category": "billing",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 2,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7205",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7002,
+      "category": "billing",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7002",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 5188,
+      "category": "billing",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/5188",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6515,
+      "category": "billing",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6515",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6646,
+      "category": "billing",
+      "priority": 1,
+      "state": "closed",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6646",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7034,
+      "category": "billing",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7034",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7582,
+      "category": "billing",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7582",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7030,
+      "category": "deployment",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7030",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6412,
+      "category": "deployment",
+      "priority": 2,
+      "state": "closed",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6412",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6232,
+      "category": "deployment",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6232",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6780,
+      "category": "deployment",
+      "priority": 2,
+      "state": "closed",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6780",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 7146,
+      "category": "deployment",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 4,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/7146",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 6877,
+      "category": "deployment",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 4,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6877",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 1009,
+      "category": "deployment",
+      "priority": 2,
+      "state": "closed",
+      "comment_count_at_snapshot": 7,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/1009",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 2108,
+      "category": "deployment",
+      "priority": 2,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/2108",
+      "why": "Need complete comment pages to distinguish maintainer diagnosis, version/fix evidence, workaround and reporter-only claims; closure alone is insufficient."
+    },
+    {
+      "number": 2337,
+      "category": "native_tool_ids_and_session_isolation",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 0,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/2337",
+      "why": "Focused tool ID/session integrity follow-up; need exact maintainer fix/release evidence, including closed issues. Original 48 comments were received and interpreted."
+    },
+    {
+      "number": 6146,
+      "category": "native_tool_ids_and_session_isolation",
+      "priority": 1,
+      "state": "open",
+      "comment_count_at_snapshot": 3,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6146",
+      "why": "Focused tool ID/session integrity follow-up; need exact maintainer fix/release evidence, including closed issues. Original 48 comments were received and interpreted."
+    },
+    {
+      "number": 6185,
+      "category": "native_tool_ids_and_session_isolation",
+      "priority": 1,
+      "state": "closed",
+      "comment_count_at_snapshot": 1,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6185",
+      "why": "Focused tool ID/session integrity follow-up; need exact maintainer fix/release evidence, including closed issues. Original 48 comments were received and interpreted."
+    },
+    {
+      "number": 6402,
+      "category": "native_tool_ids_and_session_isolation",
+      "priority": 1,
+      "state": "closed",
+      "comment_count_at_snapshot": 10,
+      "url": "https://github.com/Wei-Shaw/sub2api/issues/6402",
+      "why": "Focused tool ID/session integrity follow-up; need exact maintainer fix/release evidence, including closed issues. Original 48 comments were received and interpreted."
+    }
+  ],
+  "requested_input": ".spike-inputs/comments.json",
+  "limit": 60,
+  "status": "Original 48 issues received (66 comments); 4 focused tool-ID/session follow-ups requested. No direct network access."
+}

@@ -1,0 +1,67 @@
+{
+  "command": [
+    "python3",
+    "sub2api-native-merged/prepare.py",
+    "--source",
+    "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/native-merge-fix-w3/.spike-inputs/original-inputs/original-inputs/actual-source",
+    "--out",
+    "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-native-merge-fix-w3/tmp/agent/native-merge-fix-w3-prepared-held-read-final"
+  ],
+  "historical_W1_W2_preparation_evidence": ".spike-inputs/candidate/sub2api-native-merged/evidence/full-preparation-check.json",
+  "negative_CLI": [
+    {
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/native-merge-fix-w3/sub2api-native-merged/prepare.py",
+        "--source",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/native-merge-fix-w3/.spike-inputs/original-inputs/original-inputs/actual-source",
+        "--out",
+        "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-native-merge-fix-w3/tmp/agent/native-merge-fix-w3-prepared-held-read-final"
+      ],
+      "exit": 1,
+      "stderr": "output already exists: /srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-native-merge-fix-w3/tmp/agent/native-merge-fix-w3-prepared-held-read-final\n"
+    },
+    {
+      "command": [
+        "python3",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/native-merge-fix-w3/sub2api-native-merged/prepare.py",
+        "--source",
+        "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/native-merge-fix-w3/.spike-inputs/actual-source",
+        "--out",
+        "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-native-merge-fix-w3/tmp/agent/native-merge-fix-w3-wrong-source-held-read"
+      ],
+      "exit": 1,
+      "stderr": "combined backend is not exact; mismatches=15: backend/internal/service/gateway_anthropic_passthrough.go, backend/internal/service/independent_boundary_test.go, backend/internal/service/native_api_key_cancellation.go, backend/internal/service/native_api_key_cancellation_gaps_test.go, backend/internal/service/native_api_key_cancellation_test.go, backend/internal/service/native_stream_merged_interaction_test.go, backend/internal/service/openai_compact_sse_keepalive.go, backend/internal/service/openai_first_output_timeout.go\n"
+    }
+  ],
+  "receipt": {
+    "backend_files": 3332,
+    "components": {
+      "cancel_W3_approved_gap_test_sha256": "c43c8569d205da65679cacf975607dfbf20741a82d43929acbc9efc912caf9e5",
+      "cancel_W3_complete_sha256": "6befb28012ae72e00676acf445cce3e0074cd8680588f9586cf3441a018eb8fb",
+      "cancel_W3_original_gap_test_sha256": "89807c417d2f62126088620014661588d2bd0fc29888056f8a4ff340c902ac0f",
+      "cancel_W3_production_sha256": "46b48c5ad31ebf6c1f1f524af4f7a62a8d5e886a7b3d1132a6bc3fb2e99b6baa",
+      "memory_W2_production_sha256": "12d8302bbaae05518c284dbad41c2ef089f364a97713331348854ecd546fb239"
+    },
+    "manifest_sha256": "a5e265dbde32d70046e07863a4d3abeff15088673d6232768ff4eac913b50440",
+    "output": "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-native-merge-fix-w3/tmp/agent/native-merge-fix-w3-prepared-held-read-final",
+    "output_tree_sha256": "82662b8666b05b6a0a95c76c79bde630ba73a27e2ae89e72363908a1f2117c42",
+    "production_only": false,
+    "production_patch_sha256": "16bc1644e564847f0565dffd765af6c7e0c7a70ac5677147d3166e20c90923a5",
+    "regression_patch_sha256": "f6909228e016be8817057f2f3c5bd5f460550d9139dff19810c8df59d22d466d",
+    "runtime_verification": "NOT RUN",
+    "source": "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/native-merge-fix-w3/.spike-inputs/original-inputs/original-inputs/actual-source",
+    "source_kind": "combined",
+    "source_tree_sha256": "0268c0eec94f4f404d0ffdbbbce62251d9c2bbeaf5d1e125a27bc1aa1d654566"
+  },
+  "scope": "actual full offline external CLI, revised held-Read fixture; no Go",
+  "source_and_output_before_after": {
+    "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-native-merge-fix-w3/tmp/agent/native-merge-fix-w3-prepared-held-read-final": "82662b8666b05b6a0a95c76c79bde630ba73a27e2ae89e72363908a1f2117c42",
+    "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/native-merge-fix-w3/.spike-inputs/actual-source": "fa660b8178f63dd9c385274c2f01608368227b202881ab9cc8cba29c364d96f1",
+    "/srv/workers/jobs/review-router-gateway-spike/poc-20260930/workspaces/native-merge-fix-w3/.spike-inputs/original-inputs/original-inputs/actual-source": "0268c0eec94f4f404d0ffdbbbce62251d9c2bbeaf5d1e125a27bc1aa1d654566"
+  },
+  "status": "PASS",
+  "successful_exit": 0,
+  "superseded_W3_preparation_output": "/srv/worker-state/jobs/review-router-gateway-spike/poc-20260930/rr-gateway-spike-20260930-native-merge-fix-w3/tmp/agent/native-merge-fix-w3-prepared-final",
+  "unchanged": true
+}
