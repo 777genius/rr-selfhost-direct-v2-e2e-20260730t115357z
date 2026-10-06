@@ -13,9 +13,9 @@ jobs:
       contents: read
       pull-requests: read
       id-token: write
-    uses: 777genius/review-router/.github/workflows/reviewrouter-t0-reusable.yml@9d30879b333c6474d104f5911f548419702b758b
+    uses: 777genius/review-router/.github/workflows/reviewrouter-t0-reusable.yml@7cfa77bf6c926e8f69328970fb0d00f095c91ef6
     with:
-      runtime_ref: "9d30879b333c6474d104f5911f548419702b758b"
+      runtime_ref: "7cfa77bf6c926e8f69328970fb0d00f095c91ef6"
       api_url: "https://aberdeen-say-beverages-testimony.trycloudflare.com"
       pr_number: ${{ format('{0}', github.event.pull_request.number) }}
       review_head_sha: ${{ github.event.pull_request.head.sha }}
