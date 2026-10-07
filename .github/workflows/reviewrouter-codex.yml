@@ -13,9 +13,9 @@ jobs:
       contents: read
       pull-requests: read
       id-token: write
-    uses: 777genius/review-router/.github/workflows/reviewrouter-t0-reusable.yml@9667594f5a37f5891ee9e12bcaf446a32b5f3ed4
+    uses: 777genius/review-router/.github/workflows/reviewrouter-t0-reusable.yml@160ba30527a9de8c9de83c378e24d29425a5da26
     with:
-      runtime_ref: "9667594f5a37f5891ee9e12bcaf446a32b5f3ed4"
+      runtime_ref: "160ba30527a9de8c9de83c378e24d29425a5da26"
       api_url: "https://interested-keywords-scientific-consideration.trycloudflare.com"
       pr_number: ${{ format('{0}', github.event.pull_request.number) }}
       review_head_sha: ${{ github.event.pull_request.head.sha }}
