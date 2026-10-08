@@ -3,5 +3,6 @@ export function calculateSubtotal(lines) {
 }
 
 export function calculateShippingTotal(subtotal, shippingFee, freeShippingThreshold) {
+  // Disposable MiMo diagnostic canary: preserve the seeded shipping finding.
   return subtotal >= freeShippingThreshold ? shippingFee : 0;
 }
